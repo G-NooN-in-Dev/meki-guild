@@ -184,19 +184,14 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 								<TableCell>{comparison.job}</TableCell>
 								<TableCell>
 									<div>{comparison.level.current}</div>
-									<GrowthDelta
-										value={
-											comparison.level.diff === null
-												? null
-												: comparison.level.diff === 0
-													? '0'
-													: `${comparison.level.diff > 0 ? '+' : ''}${comparison.level.diff}`
-										}
-									/>
+									<GrowthDelta value={comparison.level.diffLabel} />
 								</TableCell>
 								<TableCell>
 									<div>{comparison.combatPower.currentLabel}</div>
-									<GrowthDelta value={comparison.combatPower.diffLabel} />
+									<GrowthDelta
+										value={comparison.combatPower.diffLabel}
+										percentLabel={comparison.combatPower.diffPercentLabel}
+									/>
 								</TableCell>
 								<TableCell>
 									<div>{comparison.expeditionGrade.current}</div>
@@ -204,19 +199,31 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 								</TableCell>
 								<TableCell>
 									<div>{comparison.expeditionScore.currentLabel}</div>
-									<GrowthDelta value={comparison.expeditionScore.diffLabel} />
+									<GrowthDelta
+										value={comparison.expeditionScore.diffLabel}
+										percentLabel={comparison.expeditionScore.diffPercentLabel}
+									/>
 								</TableCell>
 								<TableCell>
 									<div>{comparison.rivalry.currentLabel}</div>
-									<GrowthDelta value={comparison.rivalry.diffLabel} />
+									<GrowthDelta
+										value={comparison.rivalry.diffLabel}
+										percentLabel={comparison.rivalry.diffPercentLabel}
+									/>
 								</TableCell>
 								<TableCell>
 									<div>{comparison.training.currentLabel}</div>
-									<GrowthDelta value={comparison.training.diffLabel} />
+									<GrowthDelta
+										value={comparison.training.diffLabel}
+										percentLabel={comparison.training.diffPercentLabel}
+									/>
 								</TableCell>
 								<TableCell>
 									<div>{comparison.guildBoss.currentLabel}</div>
-									<GrowthDelta value={comparison.guildBoss.diffLabel} />
+									<GrowthDelta
+										value={comparison.guildBoss.diffLabel}
+										percentLabel={comparison.guildBoss.diffPercentLabel}
+									/>
 								</TableCell>
 							</TableRow>
 						))}

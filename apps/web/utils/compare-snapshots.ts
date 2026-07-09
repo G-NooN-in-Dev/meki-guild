@@ -8,7 +8,12 @@ import type {
 	ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
 import { formatExpeditionGradeDelta, getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
-import { formatKoreanDelta, formatTrainingDelta, formatTrainingScore } from '@/utils/format-korean-number'
+import {
+	formatDeltaPercent,
+	formatKoreanDelta,
+	formatTrainingDelta,
+	formatTrainingScore
+} from '@/utils/format-korean-number'
 import { parseKoreanNumber } from '@/utils/parse-korean-number'
 
 function toKoreanLabel(value: string | number): string {
@@ -62,6 +67,7 @@ function createGuildBossDelta(
 			currentLabel: '-',
 			previousLabel: null,
 			diffLabel: null,
+			diffPercentLabel: null,
 			hasValue: false
 		}
 	}
@@ -101,7 +107,8 @@ function createNumericDelta(
 			diff: null,
 			currentLabel,
 			previousLabel: null,
-			diffLabel: null
+			diffLabel: null,
+			diffPercentLabel: null
 		}
 	}
 
@@ -114,7 +121,8 @@ function createNumericDelta(
 		diff,
 		currentLabel,
 		previousLabel: getLabel(previous),
-		diffLabel: formatKoreanDelta(diff)
+		diffLabel: formatKoreanDelta(diff),
+		diffPercentLabel: formatDeltaPercent(diff, previousValue)
 	}
 }
 
@@ -143,19 +151,31 @@ function createExpeditionGradeDelta(
 	}
 }
 
+function formatLevelDelta(diff: number | null): string | null {
+	if (diff === null || diff === 0) {
+		return null
+	}
+
+	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
+}
+
 function createLevelDelta(current: number, previous: number | null): LevelDelta {
 	if (previous === null) {
 		return {
 			current,
 			previous: null,
-			diff: null
+			diff: null,
+			diffLabel: null
 		}
 	}
+
+	const diff = current - previous
 
 	return {
 		current,
 		previous,
-		diff: current - previous
+		diff,
+		diffLabel: formatLevelDelta(diff)
 	}
 }
 
@@ -216,7 +236,8 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			diff: -previous.combatPower,
 			currentLabel: '-',
 			previousLabel: previous.combatPowerLabel,
-			diffLabel: formatKoreanDelta(-previous.combatPower)
+			diffLabel: formatKoreanDelta(-previous.combatPower),
+			diffPercentLabel: formatDeltaPercent(-previous.combatPower, previous.combatPower)
 		},
 		expeditionScore: {
 			current: 0n,
@@ -224,7 +245,8 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			diff: -previous.expedition.score,
 			currentLabel: '-',
 			previousLabel: previous.expedition.scoreLabel,
-			diffLabel: formatKoreanDelta(-previous.expedition.score)
+			diffLabel: formatKoreanDelta(-previous.expedition.score),
+			diffPercentLabel: formatDeltaPercent(-previous.expedition.score, previous.expedition.score)
 		},
 		expeditionGrade: {
 			current: '-',
@@ -239,7 +261,8 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			diff: -previous.rivalry,
 			currentLabel: '-',
 			previousLabel: previous.rivalryLabel,
-			diffLabel: formatKoreanDelta(-previous.rivalry)
+			diffLabel: formatKoreanDelta(-previous.rivalry),
+			diffPercentLabel: formatDeltaPercent(-previous.rivalry, previous.rivalry)
 		},
 		training: withTrainingDelta({
 			current: 0n,
@@ -247,7 +270,8 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			diff: -previous.training,
 			currentLabel: '-',
 			previousLabel: previous.trainingLabel,
-			diffLabel: formatTrainingDelta(-previous.training)
+			diffLabel: formatTrainingDelta(-previous.training),
+			diffPercentLabel: formatDeltaPercent(-previous.training, previous.training)
 		}),
 		guildBoss: previous.hasGuildBoss
 			? {
@@ -257,6 +281,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 					currentLabel: '-',
 					previousLabel: previous.guildBossLabel,
 					diffLabel: formatKoreanDelta(-previous.guildBoss),
+					diffPercentLabel: formatDeltaPercent(-previous.guildBoss, previous.guildBoss),
 					hasValue: false
 				}
 			: {
@@ -266,6 +291,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 					currentLabel: '-',
 					previousLabel: null,
 					diffLabel: null,
+					diffPercentLabel: null,
 					hasValue: false
 				}
 	}

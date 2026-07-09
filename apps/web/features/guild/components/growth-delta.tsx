@@ -6,6 +6,8 @@ import type { ReactNode } from 'react'
 
 type GrowthDeltaProps = {
 	value: string | null
+	/** 이전 값 대비 증감 비율. value 옆에 함께 표시 */
+	percentLabel?: string | null
 	className?: string
 }
 
@@ -32,10 +34,15 @@ const toneClassNames = {
 	muted: 'text-grayscale-400'
 } as const
 
-function GrowthDelta({ value, className }: GrowthDeltaProps) {
+function GrowthDelta({ value, percentLabel, className }: GrowthDeltaProps) {
 	const tone = getDeltaTone(value)
 
-	return <span className={cn('text-xs font-medium', toneClassNames[tone], className)}>{value ?? '-'}</span>
+	return (
+		<span className={cn('text-xs font-medium', toneClassNames[tone], className)}>
+			{value ?? '-'}
+			{percentLabel ? <span className="ml-1 opacity-80">({percentLabel})</span> : null}
+		</span>
+	)
 }
 
 type MemberStatusBadgeProps = {

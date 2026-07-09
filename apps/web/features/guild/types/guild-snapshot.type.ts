@@ -47,12 +47,16 @@ export type NumericDelta = {
 	currentLabel: string
 	previousLabel: string | null
 	diffLabel: string | null
+	/** 이전 값 대비 증감 비율. 비교 불가(신규·이전값 0)면 null */
+	diffPercentLabel: string | null
 }
 
 export type LevelDelta = {
 	current: number
 	previous: number | null
 	diff: number | null
+	/** 레벨 증감 표시. 상승=▲, 하락=▼, 변동 없으면 null */
+	diffLabel: string | null
 }
 
 export type MemberComparisonStatus = 'active' | 'new' | 'left'

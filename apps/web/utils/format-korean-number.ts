@@ -105,3 +105,26 @@ export function formatTrainingDelta(diff: bigint): string {
 
 	return `${sign}${formatTrainingScore(diff > 0n ? diff : -diff)}`
 }
+
+/**
+ * 이전 값 대비 증감 비율(%)을 포맷합니다.
+ * 이전 값이 0이면 비율을 계산할 수 없어 null을 반환합니다.
+ */
+export function formatDeltaPercent(diff: bigint, previous: bigint): string | null {
+	if (previous === 0n) {
+		return null
+	}
+
+	if (diff === 0n) {
+		return '0%'
+	}
+
+	// 소수점 1자리: (diff / previous) * 100 을 bigint 정수 연산으로 계산
+	const scaled = (diff * 1000n) / previous
+	const sign = scaled >= 0n ? '+' : '-'
+	const absScaled = scaled < 0n ? -scaled : scaled
+	const intPart = absScaled / 10n
+	const decPart = absScaled % 10n
+
+	return `${sign}${intPart}.${decPart}%`
+}
