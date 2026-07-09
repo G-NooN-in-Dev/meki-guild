@@ -13,3 +13,12 @@ export function formatGuildContentDate(date: string): string {
 export function getGuildContentUpdatedAtLabel(date: string | null): string {
 	return `최근 업데이트 : ${date ? formatGuildContentDate(date) : '없음'}`
 }
+
+/** 1 vs 1 비교 테이블 등에서 쓸 컨텐츠 기준일 안내 문구 */
+export function getGuildContentCriteriaLabel(date: string | null): string {
+	if (!date) {
+		return '기준 : 아직 업데이트 없음'
+	}
+
+	return `기준 : ${formatGuildContentDate(date)}`
+}

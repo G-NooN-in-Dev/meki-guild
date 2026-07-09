@@ -2,8 +2,8 @@ import type { GuildMemberComparison } from '@/features/guild/types/guild-snapsho
 import {
 	getJobClassLine,
 	JOB_CLASS_LINE_ORDER,
-	JOBS_BY_CLASS_LINE,
-	type JobClassLine
+	type JobClassLine,
+	JOBS_BY_CLASS_LINE
 } from '@/libs/job-class.constants'
 
 export type JobDistributionRow = {
