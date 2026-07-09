@@ -1,7 +1,7 @@
 import { GrowthDelta } from '@/features/guild/components/growth-delta'
 import GuildMemberTable from '@/features/guild/components/guild-member-table'
 import type { GuildDashboardData } from '@/features/guild/types/guild-snapshot.type'
-import { formatWeekLabel } from '@/utils/format-week-label'
+import { formatGuildContentDate } from '@/libs/guild-content-dates.constants'
 import { calculateGuildSummaryMetrics } from '@/utils/guild-summary'
 
 type GuildDashboardSectionProps = {
@@ -64,10 +64,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				<p className="text-grayscale-500 text-sm">길드 종합 현황</p>
 				<h1 className="text-grayscale-900 text-3xl font-semibold">메이플키우기 게임즈 길드</h1>
 				<p className="text-grayscale-600 text-sm">
-					{formatWeekLabel(data.currentWeek.weekLabel)} (업데이트 날짜 : {data.currentWeek.updatedAt})
-				</p>
-				<p className="text-grayscale-600 text-sm">
-					직전 업데이트 : {formatWeekLabel(data.previousWeek.weekLabel)} ({data.previousWeek.updatedAt})
+					최근 업데이트 : {formatGuildContentDate(data.currentWeek.updatedAt)}
 				</p>
 			</header>
 

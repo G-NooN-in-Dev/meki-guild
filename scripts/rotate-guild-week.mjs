@@ -12,7 +12,6 @@ copyFileSync(currentWeekPath, previousWeekPath)
 const currentWeek = JSON.parse(readFileSync(currentWeekPath, 'utf8'))
 
 const nextWeek = {
-	weekLabel: 'YYYY-Www',
 	updatedAt: new Date().toISOString().slice(0, 10),
 	members: currentWeek.members.map((member) => ({
 		...member,
@@ -29,4 +28,4 @@ writeFileSync(currentWeekPath, `${JSON.stringify(nextWeek, null, '\t')}\n`, 'utf
 
 console.log('✅ current-week.json → previous-week.json 복사 완료')
 console.log('✅ current-week.json 템플릿 생성 완료')
-console.log('📝 weekLabel, updatedAt, members 데이터를 이번 주 값으로 수정하세요.')
+console.log('📝 updatedAt, members 데이터를 최신 값으로 수정하세요.')

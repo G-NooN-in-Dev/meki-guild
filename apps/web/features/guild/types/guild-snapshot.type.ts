@@ -14,7 +14,6 @@ export type GuildMemberInput = {
 }
 
 export type GuildWeekSnapshot = {
-	weekLabel: string
 	updatedAt: string
 	members: GuildMemberInput[]
 }
