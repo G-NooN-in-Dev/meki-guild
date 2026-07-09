@@ -1,0 +1,31 @@
+---
+description: apps/web services·utils 레이어 구분 (service/loader, .server.ts)
+globs: apps/web/{services,utils}/**/*
+alwaysApply: false
+---
+
+# apps/web — service · loader · server 레이어
+
+상세·다이어그램: `apps/web/ARCHITECTURE.md` → **레이어 구분 패턴** 섹션
+
+## `*.service.ts` vs `*.loader.ts`
+
+- **service**: 외부 API 엔드포인트 1건 (`getRealtimeWeather`). URL·캐시·에러 변환 담당.
+- **loader**: 화면/API가 쓰는 조합 (`loadWeatherSummary`). 여러 service를 묶고 앱 기본값·도메인 타입 반환.
+- **의존**: `loader → service`만 허용. `page.tsx`, `route.ts`는 **loader**를 import (service 직접 호출 지양).
+- **네이밍**: `get*()` = service, `load*()` = loader.
+- 클라이언트 refetch는 `/api/*` Route Handler 경유. 훅은 loader **상수**만 가져와도 됨.
+
+## `*.ts` vs `*.server.ts`
+
+- **공통** (`{name}.ts`): `parse*`, `format*`, `normalize*` — 서버·클라이언트 공용.
+- **클라이언트** (`{name}.ts`): `document.cookie` 읽기/쓰기 (`read*Cookie`, `write*Cookie`).
+- **서버** (`{name}.server.ts`): `cookies()` 읽기만. raw 값 → 공통 `parse*` 재사용.
+- `{name}.server.ts`에 `document` 사용 금지. `{name}.ts`에 `next/headers` import 금지.
+- 도메인 정책(쿠키 → 기본값)은 `utils/resolve-*.ts` 등 짧은 오케스트레이션에 둠.
+
+## 새 파일 추가 체크
+
+1. API 엔드포인트 여러 개 + 화면에서 묶어 씀 → `service` + `loader`
+2. 쿠키/스토리지 → `parse` 공통 + 환경별 read/write 파일 분리
+3. 환경 변수·API 키는 `service`에만 두고 loader/UI로 노출하지 않음

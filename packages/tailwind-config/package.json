@@ -1,0 +1,15 @@
+{
+	"name": "@shared/tailwind-config",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"exports": {
+		"./postcss": "./postcss.config.mjs",
+		"./theme.css": "./theme.css",
+		"./base.css": "./base.css"
+	},
+	"dependencies": {
+		"@tailwindcss/postcss": "^4.2.2",
+		"tailwindcss": "^4.2.2"
+	}
+}

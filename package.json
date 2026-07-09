@@ -1,0 +1,32 @@
+{
+	"name": "meki-guild",
+	"private": true,
+	"scripts": {
+		"prepare": "husky",
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"lint": "turbo run lint",
+		"format": "prettier --cache --write .",
+		"check-types": "turbo run check-types"
+	},
+	"lint-staged": {
+		"*": "prettier --cache --write --ignore-unknown"
+	},
+	"devDependencies": {
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7",
+		"prettier": "^3.8.3",
+		"prettier-plugin-tailwindcss": "^0.7.2",
+		"turbo": "^2.9.6",
+		"typescript": "6.0.3"
+	},
+	"packageManager": "pnpm@10.32.1",
+	"engines": {
+		"node": ">=18"
+	},
+	"pnpm": {
+		"overrides": {
+			"resolve": "^1.22.11"
+		}
+	}
+}

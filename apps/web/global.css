@@ -1,0 +1,6 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import 'tailwindcss';
+@import '@shared/tailwind-config/base.css';
+
+/* @shared/ui 등 워크스페이스 패키지 클래스 스캔 (앱 global.css 기준 상대 경로) */
+@source '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}';

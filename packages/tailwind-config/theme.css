@@ -1,0 +1,265 @@
+/**
+ * Tailwind CSS v4 공통 디자인 토큰 (@theme)
+ * 새 토큰 추가·수정은 이 파일을 단일 소스로 관리합니다.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@keyframes accordion-down {
+	from {
+		height: 0;
+	}
+	to {
+		height: var(--radix-accordion-content-height);
+	}
+}
+
+@keyframes accordion-up {
+	from {
+		height: var(--radix-accordion-content-height);
+	}
+	to {
+		height: 0;
+	}
+}
+
+@theme {
+	--breakpoint-xxs: 320px;
+	--breakpoint-xs: 480px;
+	--breakpoint-sm: 640px;
+	--breakpoint-md: 768px;
+	--breakpoint-lg: 1024px;
+	--breakpoint-xl: 1280px;
+	--breakpoint-2xl: 1536px;
+
+	--container-center: true;
+	--container-padding: 0.875rem;
+	--container-padding-xxs: 0.875rem;
+	--container-padding-xs: 1rem;
+	--container-padding-sm: 1.25rem;
+	--container-padding-md: 1.5rem;
+	--container-padding-lg: 1.5rem;
+	--container-padding-xl: 2rem;
+	--container-padding-2xl: 2.5rem;
+
+	--font-sans: Pretendard, Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
+
+	--color-pastel-red: #ff87c2;
+	--color-pastel-red-50: #fff7fb;
+	--color-pastel-red-100: #ffeaf4;
+	--color-pastel-red-200: #ffd7ea;
+	--color-pastel-red-300: #ffbddf;
+	--color-pastel-red-400: #ffa0d1;
+	--color-pastel-red-500: #ff87c2;
+	--color-pastel-red-600: #f06fb0;
+	--color-pastel-red-700: #d95a9a;
+	--color-pastel-red-800: #be4b83;
+	--color-pastel-red-900: #9f3f6d;
+	--color-pastel-red-950: #6a2a48;
+
+	--color-pastel-orange: #ffb784;
+	--color-pastel-orange-50: #fff9f3;
+	--color-pastel-orange-100: #fff0e2;
+	--color-pastel-orange-200: #ffe2cc;
+	--color-pastel-orange-300: #ffd1ad;
+	--color-pastel-orange-400: #ffc08f;
+	--color-pastel-orange-500: #ffb784;
+	--color-pastel-orange-600: #f2a16c;
+	--color-pastel-orange-700: #d98958;
+	--color-pastel-orange-800: #b8724b;
+	--color-pastel-orange-900: #955d3f;
+	--color-pastel-orange-950: #613b29;
+
+	--color-pastel-yellow: #ffe38a;
+	--color-pastel-yellow-50: #fffdf3;
+	--color-pastel-yellow-100: #fff8df;
+	--color-pastel-yellow-200: #ffefbf;
+	--color-pastel-yellow-300: #ffe79f;
+	--color-pastel-yellow-400: #ffdf90;
+	--color-pastel-yellow-500: #ffe38a;
+	--color-pastel-yellow-600: #f1cf72;
+	--color-pastel-yellow-700: #d7b45e;
+	--color-pastel-yellow-800: #b7964f;
+	--color-pastel-yellow-900: #947a42;
+	--color-pastel-yellow-950: #62512c;
+
+	--color-pastel-green: #93e57f;
+	--color-pastel-green-50: #f7fff5;
+	--color-pastel-green-100: #e9ffe1;
+	--color-pastel-green-200: #d7ffcb;
+	--color-pastel-green-300: #c0f7b0;
+	--color-pastel-green-400: #a6ef92;
+	--color-pastel-green-500: #93e57f;
+	--color-pastel-green-600: #7fd56a;
+	--color-pastel-green-700: #6cbd58;
+	--color-pastel-green-800: #5b9f4b;
+	--color-pastel-green-900: #4c843f;
+	--color-pastel-green-950: #305528;
+
+	--color-pastel-blue: #84caff;
+	--color-pastel-blue-50: #f3fbff;
+	--color-pastel-blue-100: #e5f5ff;
+	--color-pastel-blue-200: #d2ecff;
+	--color-pastel-blue-300: #b9e2ff;
+	--color-pastel-blue-400: #9ad5ff;
+	--color-pastel-blue-500: #84caff;
+	--color-pastel-blue-600: #6eb8f2;
+	--color-pastel-blue-700: #5b9fd4;
+	--color-pastel-blue-800: #4d85b2;
+	--color-pastel-blue-900: #426e93;
+	--color-pastel-blue-950: #2a4660;
+
+	--color-pastel-purple: #c6a7ff;
+	--color-pastel-purple-50: #faf6ff;
+	--color-pastel-purple-100: #f2eaff;
+	--color-pastel-purple-200: #e5d7ff;
+	--color-pastel-purple-300: #d7c1ff;
+	--color-pastel-purple-400: #cdb0ff;
+	--color-pastel-purple-500: #c6a7ff;
+	--color-pastel-purple-600: #b08eea;
+	--color-pastel-purple-700: #9674cd;
+	--color-pastel-purple-800: #7d60ab;
+	--color-pastel-purple-900: #664e8a;
+	--color-pastel-purple-950: #42325a;
+
+	--color-grayscale-50: #f8fafc;
+	--color-grayscale-100: #f1f5f9;
+	--color-grayscale-200: #e2e8f0;
+	--color-grayscale-300: #cbd5e1;
+	--color-grayscale-400: #94a3b8;
+	--color-grayscale-500: #64748b;
+	--color-grayscale-600: #475569;
+	--color-grayscale-700: #334155;
+	--color-grayscale-800: #1e293b;
+	--color-grayscale-900: #0f172a;
+	--color-grayscale-950: #020617;
+
+	--color-success: #22c55e;
+	--color-success-50: #f0fdf4;
+	--color-success-100: #dcfce7;
+	--color-success-500: #22c55e;
+	--color-success-700: #15803d;
+
+	--color-warning: #f59e0b;
+	--color-warning-50: #fffbeb;
+	--color-warning-100: #fef3c7;
+	--color-warning-500: #f59e0b;
+	--color-warning-700: #b45309;
+
+	--color-danger: #ef4444;
+	--color-danger-50: #fef2f2;
+	--color-danger-100: #fee2e2;
+	--color-danger-500: #ef4444;
+	--color-danger-700: #b91c1c;
+
+	--color-info: #7eaefe;
+	--color-info-50: #f3fbff;
+	--color-info-100: #e5f5ff;
+	--color-info-500: #7eaefe;
+	--color-info-700: #5b9fd4;
+
+	/* RGB·CMY 원색 (Tailwind 기본·커스텀 팔레트와 겹치지 않는 순색) */
+	--color-pure-red: #ff0000;
+	--color-pure-green: #00ff00;
+	--color-pure-blue: #0000ff;
+	--color-pure-yellow: #ffff00;
+	--color-pure-cyan: #00ffff;
+	--color-pure-magenta: #ff00ff;
+
+	--text-xs: 0.75rem;
+	--text-xs--line-height: 1rem;
+	--text-sm: 0.875rem;
+	--text-sm--line-height: 1.25rem;
+	--text-base: 1rem;
+	--text-base--line-height: 1.5rem;
+	--text-lg: 1.125rem;
+	--text-lg--line-height: 1.75rem;
+	--text-xl: 1.25rem;
+	--text-xl--line-height: 1.75rem;
+	--text-2xl: 1.5rem;
+	--text-2xl--line-height: 2rem;
+	--text-3xl: 1.875rem;
+	--text-3xl--line-height: 2.25rem;
+
+	--radius-md: 0.5rem;
+	--radius-lg: 0.75rem;
+	--radius-xl: 1rem;
+	--radius-2xl: 1.25rem;
+	--radius-3xl: 1.5rem;
+	--radius-4xl: 2rem;
+	--radius-pill: 9999px;
+
+	--spacing-18: 4.5rem;
+	--spacing-22: 5.5rem;
+	--spacing-26: 6.5rem;
+	--spacing-30: 7.5rem;
+	--spacing-34: 8.5rem;
+
+	--shadow-soft: 0 2px 12px rgb(15 23 42 / 0.08);
+	--shadow-card: 0 8px 30px rgb(15 23 42 / 0.12);
+	--shadow-xs: 0 1px 2px rgb(15 23 42 / 0.05);
+
+	/* @shared/ui (shadcn) 시맨틱 색상 */
+	--color-background: var(--color-grayscale-50);
+	--color-foreground: var(--color-grayscale-900);
+	--color-primary: var(--color-grayscale-900);
+	--color-primary-foreground: #ffffff;
+	--color-secondary: var(--color-grayscale-100);
+	--color-secondary-foreground: var(--color-grayscale-900);
+	--color-muted: var(--color-grayscale-100);
+	--color-muted-foreground: var(--color-grayscale-500);
+	--color-destructive: var(--color-danger-500);
+	--color-border: var(--color-grayscale-200);
+	--color-input: var(--color-grayscale-200);
+	--color-ring: var(--color-grayscale-900);
+
+	/* @shared/ui 오버레이·플로팅 표면 (Dialog, Popover, Select 등) */
+	--color-popover: #ffffff;
+	--color-popover-foreground: var(--color-grayscale-900);
+	--color-card: #ffffff;
+	--color-card-foreground: var(--color-grayscale-900);
+	--color-accent: var(--color-grayscale-100);
+	--color-accent-foreground: var(--color-grayscale-900);
+
+	/* @shared/ui Sidebar 전용 시맨틱 색상 */
+	--color-sidebar: var(--color-grayscale-50);
+	--color-sidebar-foreground: var(--color-grayscale-900);
+	--color-sidebar-primary: var(--color-grayscale-900);
+	--color-sidebar-primary-foreground: #ffffff;
+	--color-sidebar-accent: var(--color-grayscale-100);
+	--color-sidebar-accent-foreground: var(--color-grayscale-900);
+	--color-sidebar-border: var(--color-grayscale-200);
+	--color-sidebar-ring: var(--color-grayscale-900);
+
+	--max-width-prose: 70ch;
+	--max-width-content: 72rem;
+	--max-width-reading: 65ch;
+
+	--min-height-screen-safe: 100dvh;
+
+	--z-index-dropdown: 1000;
+	--z-index-sticky: 1100;
+	--z-index-modal: 1200;
+	--z-index-toast: 1300;
+
+	--ease-emphasized-in: cubic-bezier(0.3, 0, 1, 1);
+	--ease-emphasized-out: cubic-bezier(0, 0, 0, 1);
+	--ease-standard-productive: cubic-bezier(0.2, 0, 0, 1);
+
+	--transition-duration-0: 0ms;
+	--transition-duration-400: 400ms;
+
+	--background-image-radial-pastel-blue: radial-gradient(circle at top, rgb(132 202 255 / 0.2), transparent 45%);
+	--background-image-radial-pastel-red: radial-gradient(circle at top, rgb(255 135 194 / 0.22), transparent 45%);
+	--background-image-radial-pastel-purple: radial-gradient(circle at top, rgb(198 167 255 / 0.22), transparent 45%);
+	--background-image-linear-sky: linear-gradient(135deg, rgb(243 251 255), rgb(229 245 255), rgb(210 236 255));
+	--background-image-linear-sunrise: linear-gradient(135deg, rgb(255 247 251), rgb(255 240 226), rgb(255 253 243));
+	--background-image-linear-mint: linear-gradient(135deg, rgb(247 255 245), rgb(233 255 225), rgb(210 236 255));
+	--background-image-mesh-soft:
+		radial-gradient(circle at 20% 20%, rgb(255 135 194 / 0.18), transparent 40%),
+		radial-gradient(circle at 80% 0%, rgb(132 202 255 / 0.18), transparent 42%),
+		radial-gradient(circle at 50% 80%, rgb(147 229 127 / 0.16), transparent 42%);
+
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+}

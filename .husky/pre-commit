@@ -1,0 +1,15 @@
+echo "🔎 Checking Lint Before Commit..."
+
+pnpm exec lint-staged && \
+pnpm lint && \
+pnpm check-types
+
+status=$?
+
+if [ $status -eq 0 ]; then
+  echo "✅ Lint Check Completed"
+  exit 0
+else
+  echo "❌ Lint Check Failed"
+  exit $status
+fi

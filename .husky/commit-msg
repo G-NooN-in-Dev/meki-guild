@@ -1,0 +1,27 @@
+msg_file="$1"
+subject_line="$(sed -n '1p' "$msg_file")"
+
+# Expected format:
+# [project-name] type: summary
+# JIRA-KEY type: summary (JIRA 연동)
+# type: summary (for common work)
+# Examples:
+# [my-app] feat: init project
+# WEATHER-1 feat: 헤더 UI 컴포넌트 추가
+# feat: 공통 설정 정리
+pattern='^(\[[^][]+\] )?([A-Za-z][A-Za-z0-9]*-[0-9]+ )?((feat|fix|docs|refactor|chore|test|style|revert)(\/(feat|fix|docs|refactor|chore|test|style|revert))?|!HOTFIX): .+$'
+
+if [[ ! "$subject_line" =~ $pattern ]]; then
+	echo "❌ 커밋 메시지 형식이 올바르지 않습니다."
+	echo "형식1: [프로젝트명] type: 대표 내용"
+	echo "형식2: JIRA-KEY type: 대표 내용 (예: WEATHER-1 feat: ...)"
+	echo "형식3: type: 대표 내용 (공통 작업)"
+	echo "예시: [my-app] feat: tailwind 공통 설정 추가"
+	echo "예시: WEATHER-1 feat: 헤더 UI 컴포넌트 추가"
+	echo "예시: feat: 공통 설정 정리"
+	echo "허용 type: feat, fix, docs, refactor, chore, test, style, revert, !HOTFIX"
+	echo "복합 type 허용: type/type (예: feat/docs, docs/chore)"
+	exit 1
+fi
+
+echo "✅ 커밋 메시지 형식 확인 완료"

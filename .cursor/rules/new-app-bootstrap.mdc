@@ -1,0 +1,19 @@
+---
+description: apps 신규 프로젝트 초기 세팅 체크리스트
+globs: "apps/**/{package.json,postcss.config.mjs,global.css,app/layout.tsx,README.md}"
+alwaysApply: false
+---
+
+# 신규 앱 세팅 규칙
+
+- 사용자가 `apps/*`에 새 프로젝트 추가를 요청하면 `APP_SETUP.md`를 기준으로 초기 세팅을 적용한다.
+- 공통 설정은 반드시 공유 패키지(`@shared/*`)를 재사용하고 앱별 중복 정의를 피한다.
+- 스타일은 `@shared/tailwind-config`를 사용하고 기본 폰트는 Pretendard 우선 스택을 유지한다.
+- 반응형 구현은 데스크탑 우선으로 진행하되, 최종 코드는 mobile-first 클래스로 작성한다.
+
+# 완료 체크
+
+- `pnpm --filter <app-name> lint`
+- `pnpm --filter <app-name> check-types`
+- `pnpm --filter <app-name> dev` 실행 가능 여부 확인
+- `README.md` 문서(루트/앱) 한글 기준 갱신
