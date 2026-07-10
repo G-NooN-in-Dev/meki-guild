@@ -1,10 +1,7 @@
+import guildContentDatesJson from '@/data/guild-content-dates.json'
+
 /** 길드 컨텐츠별 최근 데이터 수집일 (YYYY-MM-DD). 없으면 null */
-export const GUILD_CONTENT_UPDATED_AT = {
-	expedition: '2026-07-05',
-	rivalry: '2026-07-06',
-	training: '2026-07-01',
-	guildBoss: null
-} as const
+export const GUILD_CONTENT_UPDATED_AT = guildContentDatesJson
 
 /** 컨텐츠 업데이트일을 화면 표기용(2026.07.05)으로 변환합니다. */
 export function formatGuildContentDate(date: string): string {

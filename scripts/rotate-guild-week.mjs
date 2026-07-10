@@ -1,4 +1,4 @@
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -6,26 +6,160 @@ const scriptDirectory = dirname(fileURLToPath(import.meta.url))
 const dataDirectory = join(scriptDirectory, '../apps/web/data')
 const currentWeekPath = join(dataDirectory, 'current-week.json')
 const previousWeekPath = join(dataDirectory, 'previous-week.json')
+const contentDatesPath = join(dataDirectory, 'guild-content-dates.json')
 
-copyFileSync(currentWeekPath, previousWeekPath)
-
-const currentWeek = JSON.parse(readFileSync(currentWeekPath, 'utf8'))
-
-const nextWeek = {
-	updatedAt: new Date().toISOString().slice(0, 10),
-	members: currentWeek.members.map((member) => ({
-		...member,
-		level: member.level,
-		combatPower: member.combatPower,
-		expedition: { ...member.expedition },
-		rivalry: member.rivalry,
-		training: member.training,
-		...(member.guildBoss !== undefined ? { guildBoss: member.guildBoss } : {})
-	}))
+/** CLI 인자로 받는 이월 대상 */
+const ROTATION_MODES = {
+	all: ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss'],
+	'combat-power': ['combatPower'],
+	expedition: ['expedition'],
+	rivalry: ['rivalry'],
+	training: ['training'],
+	'guild-boss': ['guildBoss']
 }
 
-writeFileSync(currentWeekPath, `${JSON.stringify(nextWeek, null, '\t')}\n`, 'utf8')
+const CONTENT_DATE_KEYS = {
+	combatPower: 'combatPower',
+	expedition: 'expedition',
+	rivalry: 'rivalry',
+	training: 'training',
+	guildBoss: 'guildBoss'
+}
 
-console.log('✅ current-week.json → previous-week.json 복사 완료')
-console.log('✅ current-week.json 템플릿 생성 완료')
-console.log('📝 updatedAt, members 데이터를 최신 값으로 수정하세요.')
+const MODE_LABELS = {
+	all: '전체',
+	'combat-power': '전투력·레벨',
+	expedition: '토벌전(등급·점수)',
+	rivalry: '대항전',
+	training: '수련장',
+	'guild-boss': '길드보스'
+}
+
+function readJson(path) {
+	return JSON.parse(readFileSync(path, 'utf8'))
+}
+
+function writeJson(path, data) {
+	writeFileSync(path, `${JSON.stringify(data, null, '\t')}\n`, 'utf8')
+}
+
+function getToday() {
+	return new Date().toISOString().slice(0, 10)
+}
+
+function findMemberByName(members, name) {
+	return members.find((member) => member.name === name)
+}
+
+/** current → previous 로 복사할 필드만 반영합니다. 멤버 구성은 동일하다고 가정합니다. */
+function copyFieldsToPrevious(currentMember, previousMember, fields) {
+	for (const field of fields) {
+		switch (field) {
+			case 'combatPower':
+				previousMember.level = currentMember.level
+				previousMember.combatPower = currentMember.combatPower
+				break
+			case 'expedition':
+				previousMember.expedition = {
+					grade: currentMember.expedition.grade,
+					score: currentMember.expedition.score
+				}
+				break
+			case 'rivalry':
+				previousMember.rivalry = currentMember.rivalry
+				break
+			case 'training':
+				previousMember.training = currentMember.training
+				break
+			case 'guildBoss':
+				if (currentMember.guildBoss !== undefined) {
+					previousMember.guildBoss = currentMember.guildBoss
+				} else {
+					delete previousMember.guildBoss
+				}
+				break
+			default:
+				throw new Error(`알 수 없는 이월 필드: ${field}`)
+		}
+	}
+}
+
+/** current-week 에서 입력 대기 상태로 비울 필드만 초기화합니다. */
+function clearFieldsInCurrent(member, fields) {
+	const nextMember = { ...member }
+
+	for (const field of fields) {
+		switch (field) {
+			case 'combatPower':
+				nextMember.level = 0
+				nextMember.combatPower = ''
+				break
+			case 'expedition':
+				nextMember.expedition = { grade: '', score: '' }
+				break
+			case 'rivalry':
+				nextMember.rivalry = ''
+				break
+			case 'training':
+				nextMember.training = ''
+				break
+			case 'guildBoss':
+				delete nextMember.guildBoss
+				break
+			default:
+				throw new Error(`알 수 없는 이월 필드: ${field}`)
+		}
+	}
+
+	return nextMember
+}
+
+function rotateGuildWeek(mode) {
+	const fields = ROTATION_MODES[mode]
+
+	if (!fields) {
+		console.error('❌ 사용법: pnpm guild:rotate <대상>')
+		console.error('')
+		console.error('대상:')
+		for (const [key, label] of Object.entries(MODE_LABELS)) {
+			console.error(`  ${key.padEnd(14)} ${label}`)
+		}
+		process.exit(1)
+	}
+
+	const currentWeek = readJson(currentWeekPath)
+	const previousWeek = readJson(previousWeekPath)
+	const contentDates = readJson(contentDatesPath)
+	const today = getToday()
+
+	for (const currentMember of currentWeek.members) {
+		const previousMember = findMemberByName(previousWeek.members, currentMember.name)
+
+		if (!previousMember) {
+			throw new Error(`previous-week.json 에 "${currentMember.name}" 멤버가 없습니다.`)
+		}
+
+		copyFieldsToPrevious(currentMember, previousMember, fields)
+	}
+
+	currentWeek.members = currentWeek.members.map((member) => clearFieldsInCurrent(member, fields))
+	currentWeek.updatedAt = today
+
+	for (const field of fields) {
+		const dateKey = CONTENT_DATE_KEYS[field]
+		contentDates[dateKey] = today
+	}
+
+	writeJson(previousWeekPath, previousWeek)
+	writeJson(currentWeekPath, currentWeek)
+	writeJson(contentDatesPath, contentDates)
+
+	console.log(`✅ ${MODE_LABELS[mode]} 이월 완료`)
+	console.log(`   previous-week.json ← current 값 반영`)
+	console.log(`   current-week.json 해당 항목 초기화`)
+	console.log(`   guild-content-dates.json 수집일 갱신 (${today})`)
+}
+
+const mode = process.argv[2]
+
+rotateGuildWeek(mode)

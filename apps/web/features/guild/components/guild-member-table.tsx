@@ -9,6 +9,7 @@ import ExpeditionTierGuide from '@/features/guild/components/expedition-tier-gui
 import { GrowthDelta, MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_CONTENT_UPDATED_AT, getGuildContentUpdatedAtLabel } from '@/libs/guild-content-dates.constants'
 
 type SortKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss' | 'level'
@@ -21,22 +22,25 @@ type GuildMemberTableProps = {
 function getSortValue(comparison: GuildMemberComparison, key: SortKey): bigint | number {
 	switch (key) {
 		case 'combatPower':
-			return comparison.combatPower.current
+			return comparison.combatPower.hasValue ? comparison.combatPower.current : -1n
 		case 'expeditionScore':
-			return comparison.expeditionScore.current
+			return comparison.expeditionScore.hasValue ? comparison.expeditionScore.current : -1n
 		case 'rivalry':
-			return comparison.rivalry.current
+			return comparison.rivalry.hasValue ? comparison.rivalry.current : -1n
 		case 'training':
-			return comparison.training.current
+			return comparison.training.hasValue ? comparison.training.current : -1n
 		case 'guildBoss':
-			// 값이 없는 멤버는 정렬 시 항상 하단으로 보냄
 			return comparison.guildBoss.hasValue ? comparison.guildBoss.current : -1n
 		case 'level':
-			return comparison.level.current
+			return comparison.level.hasValue ? comparison.level.current : -1
 	}
 }
 
 type SortHandler = (sortKey: SortKey) => void
+
+function getValueClassName(label: string): string {
+	return label === GUILD_UNENTERED_LABEL ? 'text-grayscale-400' : ''
+}
 
 type SortableHeadProps = {
 	label: string
@@ -170,6 +174,7 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 									activeSortKey={sortKey}
 									sortDirection={sortDirection}
 									onSort={handleSort}
+									contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.combatPower}
 								/>
 								<SortableHead
 									label="전투력"
@@ -177,6 +182,7 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 									activeSortKey={sortKey}
 									sortDirection={sortDirection}
 									onSort={handleSort}
+									contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.combatPower}
 								/>
 								<ContentDateHead label="토벌전 (등급)" contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.expedition} />
 								<SortableHead
@@ -223,43 +229,57 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 									</TableCell>
 									<TableCell>{comparison.job}</TableCell>
 									<TableCell>
-										<div>{comparison.level.current}</div>
+										<div className={getValueClassName(comparison.level.currentLabel)}>
+											{comparison.level.currentLabel}
+										</div>
 										<GrowthDelta value={comparison.level.diffLabel} />
 									</TableCell>
 									<TableCell>
-										<div>{comparison.combatPower.currentLabel}</div>
+										<div className={getValueClassName(comparison.combatPower.currentLabel)}>
+											{comparison.combatPower.currentLabel}
+										</div>
 										<GrowthDelta
 											value={comparison.combatPower.diffLabel}
 											percentLabel={comparison.combatPower.diffPercentLabel}
 										/>
 									</TableCell>
 									<TableCell>
-										<div>{comparison.expeditionGrade.current}</div>
+										<div className={getValueClassName(comparison.expeditionGrade.currentLabel)}>
+											{comparison.expeditionGrade.currentLabel}
+										</div>
 										<GrowthDelta value={comparison.expeditionGrade.diffLabel} />
 									</TableCell>
 									<TableCell>
-										<div>{comparison.expeditionScore.currentLabel}</div>
+										<div className={getValueClassName(comparison.expeditionScore.currentLabel)}>
+											{comparison.expeditionScore.currentLabel}
+										</div>
 										<GrowthDelta
 											value={comparison.expeditionScore.diffLabel}
 											percentLabel={comparison.expeditionScore.diffPercentLabel}
 										/>
 									</TableCell>
 									<TableCell>
-										<div>{comparison.rivalry.currentLabel}</div>
+										<div className={getValueClassName(comparison.rivalry.currentLabel)}>
+											{comparison.rivalry.currentLabel}
+										</div>
 										<GrowthDelta
 											value={comparison.rivalry.diffLabel}
 											percentLabel={comparison.rivalry.diffPercentLabel}
 										/>
 									</TableCell>
 									<TableCell>
-										<div>{comparison.training.currentLabel}</div>
+										<div className={getValueClassName(comparison.training.currentLabel)}>
+											{comparison.training.currentLabel}
+										</div>
 										<GrowthDelta
 											value={comparison.training.diffLabel}
 											percentLabel={comparison.training.diffPercentLabel}
 										/>
 									</TableCell>
 									<TableCell>
-										<div>{comparison.guildBoss.currentLabel}</div>
+										<div className={getValueClassName(comparison.guildBoss.currentLabel)}>
+											{comparison.guildBoss.currentLabel}
+										</div>
 										<GrowthDelta
 											value={comparison.guildBoss.diffLabel}
 											percentLabel={comparison.guildBoss.diffPercentLabel}

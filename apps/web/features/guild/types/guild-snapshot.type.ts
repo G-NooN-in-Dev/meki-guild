@@ -18,24 +18,32 @@ export type GuildWeekSnapshot = {
 	members: GuildMemberInput[]
 }
 
+/** 아직 입력되지 않은 항목의 화면 표기 */
+export const GUILD_UNENTERED_LABEL = '미입력'
+
 export type ParsedGuildMember = {
 	name: string
 	level: number
 	job: string
 	combatPower: bigint
 	combatPowerLabel: string
+	hasCombatPower: boolean
+	hasLevel: boolean
 	expedition: {
 		grade: string
 		score: bigint
 		scoreLabel: string
+		hasGrade: boolean
+		hasScore: boolean
 	}
 	rivalry: bigint
 	rivalryLabel: string
+	hasRivalry: boolean
 	training: bigint
 	trainingLabel: string
+	hasTraining: boolean
 	guildBoss: bigint
 	guildBossLabel: string
-	/** JSON에 guildBoss 필드가 있는지 여부 */
 	hasGuildBoss: boolean
 }
 
@@ -48,6 +56,8 @@ export type NumericDelta = {
 	diffLabel: string | null
 	/** 이전 값 대비 증감 비율. 비교 불가(신규·이전값 0)면 null */
 	diffPercentLabel: string | null
+	/** false면 아직 입력 전(미입력) */
+	hasValue: boolean
 }
 
 export type LevelDelta = {
@@ -56,6 +66,9 @@ export type LevelDelta = {
 	diff: number | null
 	/** 레벨 증감 표시. 상승=▲, 하락=▼, 변동 없으면 null */
 	diffLabel: string | null
+	currentLabel: string
+	/** false면 아직 입력 전(미입력) */
+	hasValue: boolean
 }
 
 export type MemberComparisonStatus = 'active' | 'new' | 'left'
@@ -70,15 +83,17 @@ export type GuildMemberComparison = {
 	expeditionGrade: {
 		current: string
 		previous: string | null
+		currentLabel: string
 		/** 양수=등급 상승, 음수=등급 하락. 이전 주 데이터가 없으면 null */
 		diff: number | null
 		diffLabel: string | null
 		changed: boolean
+		/** false면 아직 입력 전(미입력) */
+		hasValue: boolean
 	}
 	rivalry: NumericDelta
 	training: NumericDelta
-	/** hasValue가 false면 UI에 '-' 표시, 정렬 시 하단 배치 */
-	guildBoss: NumericDelta & { hasValue: boolean }
+	guildBoss: NumericDelta
 }
 
 export type GuildDashboardData = {

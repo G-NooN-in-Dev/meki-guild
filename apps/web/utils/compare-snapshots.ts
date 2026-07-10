@@ -7,6 +7,7 @@ import type {
 	NumericDelta,
 	ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
+import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import { formatExpeditionGradeDelta, getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
 import {
 	formatDeltaPercent,
@@ -15,6 +16,18 @@ import {
 	formatTrainingScore
 } from '@/utils/format-korean-number'
 import { parseKoreanNumber } from '@/utils/parse-korean-number'
+
+function isEmptyInput(value: string | number | undefined): boolean {
+	if (value === undefined || value === null) {
+		return true
+	}
+
+	if (typeof value === 'string') {
+		return value.trim() === ''
+	}
+
+	return false
+}
 
 function toKoreanLabel(value: string | number): string {
 	if (typeof value === 'number') {
@@ -25,82 +38,76 @@ function toKoreanLabel(value: string | number): string {
 }
 
 export function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
-	const combatPower = parseKoreanNumber(member.combatPower)
-	const expeditionScore = parseKoreanNumber(member.expedition.score)
-	const rivalry = parseKoreanNumber(member.rivalry)
-	const training = parseKoreanNumber(member.training)
-	const hasGuildBoss = member.guildBoss !== undefined && member.guildBoss !== ''
+	const hasCombatPower = !isEmptyInput(member.combatPower)
+	const hasLevel = member.level > 0
+	const hasExpeditionGrade = !isEmptyInput(member.expedition.grade)
+	const hasExpeditionScore = !isEmptyInput(member.expedition.score)
+	const hasRivalry = !isEmptyInput(member.rivalry)
+	const hasTraining = !isEmptyInput(member.training)
+	const hasGuildBoss = member.guildBoss !== undefined && !isEmptyInput(member.guildBoss)
+
+	const combatPower = hasCombatPower ? parseKoreanNumber(member.combatPower) : 0n
+	const expeditionScore = hasExpeditionScore ? parseKoreanNumber(member.expedition.score) : 0n
+	const rivalry = hasRivalry ? parseKoreanNumber(member.rivalry) : 0n
+	const training = hasTraining ? parseKoreanNumber(member.training) : 0n
 	const guildBossValue = member.guildBoss
 	const guildBoss = hasGuildBoss && guildBossValue !== undefined ? parseKoreanNumber(guildBossValue) : 0n
-	const guildBossLabel = hasGuildBoss && guildBossValue !== undefined ? toKoreanLabel(guildBossValue) : '-'
 
 	return {
 		name: member.name,
 		level: member.level,
 		job: member.job,
 		combatPower,
-		combatPowerLabel: toKoreanLabel(member.combatPower),
+		combatPowerLabel: hasCombatPower ? toKoreanLabel(member.combatPower) : GUILD_UNENTERED_LABEL,
+		hasCombatPower,
+		hasLevel,
 		expedition: {
 			grade: member.expedition.grade,
 			score: expeditionScore,
-			scoreLabel: toKoreanLabel(member.expedition.score)
+			scoreLabel: hasExpeditionScore ? toKoreanLabel(member.expedition.score) : GUILD_UNENTERED_LABEL,
+			hasGrade: hasExpeditionGrade,
+			hasScore: hasExpeditionScore
 		},
 		rivalry,
-		rivalryLabel: toKoreanLabel(member.rivalry),
+		rivalryLabel: hasRivalry ? toKoreanLabel(member.rivalry) : GUILD_UNENTERED_LABEL,
+		hasRivalry,
 		training,
-		trainingLabel: formatTrainingScore(training),
+		trainingLabel: hasTraining ? formatTrainingScore(training) : GUILD_UNENTERED_LABEL,
+		hasTraining,
 		guildBoss,
-		guildBossLabel,
+		guildBossLabel:
+			hasGuildBoss && guildBossValue !== undefined ? toKoreanLabel(guildBossValue) : GUILD_UNENTERED_LABEL,
 		hasGuildBoss
 	}
 }
 
-function createGuildBossDelta(
-	current: ParsedGuildMember,
-	previous: ParsedGuildMember | null
-): GuildMemberComparison['guildBoss'] {
-	if (!current.hasGuildBoss) {
-		return {
-			current: 0n,
-			previous: null,
-			diff: null,
-			currentLabel: '-',
-			previousLabel: null,
-			diffLabel: null,
-			diffPercentLabel: null,
-			hasValue: false
-		}
-	}
-
-	const previousMember = previous?.hasGuildBoss ? previous : null
-
+function createEmptyNumericDelta(): NumericDelta {
 	return {
-		...createNumericDelta(
-			current.guildBoss,
-			current.guildBossLabel,
-			previousMember,
-			(member) => member.guildBoss,
-			(member) => member.guildBossLabel
-		),
-		hasValue: true
-	}
-}
-
-function withTrainingDelta(delta: NumericDelta): NumericDelta {
-	return {
-		...delta,
-		diffLabel: delta.diff === null ? null : formatTrainingDelta(delta.diff)
+		current: 0n,
+		previous: null,
+		diff: null,
+		currentLabel: GUILD_UNENTERED_LABEL,
+		previousLabel: null,
+		diffLabel: null,
+		diffPercentLabel: null,
+		hasValue: false
 	}
 }
 
 function createNumericDelta(
 	current: bigint,
 	currentLabel: string,
+	hasValue: boolean,
 	previous: ParsedGuildMember | null,
 	getValue: (_member: ParsedGuildMember) => bigint,
-	getLabel: (_member: ParsedGuildMember) => string
+	getLabel: (_member: ParsedGuildMember) => string,
+	hasPreviousValue: (_member: ParsedGuildMember) => boolean
 ): NumericDelta {
-	if (!previous) {
+	if (!hasValue) {
+		return createEmptyNumericDelta()
+	}
+
+	if (!previous || !hasPreviousValue(previous)) {
 		return {
 			current,
 			previous: null,
@@ -108,7 +115,8 @@ function createNumericDelta(
 			currentLabel,
 			previousLabel: null,
 			diffLabel: null,
-			diffPercentLabel: null
+			diffPercentLabel: null,
+			hasValue: true
 		}
 	}
 
@@ -122,32 +130,58 @@ function createNumericDelta(
 		currentLabel,
 		previousLabel: getLabel(previous),
 		diffLabel: formatKoreanDelta(diff),
-		diffPercentLabel: formatDeltaPercent(diff, previousValue)
+		diffPercentLabel: formatDeltaPercent(diff, previousValue),
+		hasValue: true
+	}
+}
+
+function withTrainingDelta(delta: NumericDelta): NumericDelta {
+	return {
+		...delta,
+		diffLabel: delta.diff === null ? null : formatTrainingDelta(delta.diff)
 	}
 }
 
 function createExpeditionGradeDelta(
-	current: string,
-	previous: string | null
+	current: ParsedGuildMember,
+	previous: ParsedGuildMember | null
 ): GuildMemberComparison['expeditionGrade'] {
-	if (!previous) {
+	if (!current.expedition.hasGrade) {
 		return {
-			current,
+			current: current.expedition.grade,
 			previous: null,
+			currentLabel: GUILD_UNENTERED_LABEL,
 			diff: null,
 			diffLabel: null,
-			changed: false
+			changed: false,
+			hasValue: false
 		}
 	}
 
-	const diff = getExpeditionGradeDiff(previous, current)
+	const previousGrade = previous?.expedition.hasGrade ? previous.expedition.grade : null
+
+	if (!previousGrade) {
+		return {
+			current: current.expedition.grade,
+			previous: null,
+			currentLabel: current.expedition.grade,
+			diff: null,
+			diffLabel: null,
+			changed: false,
+			hasValue: true
+		}
+	}
+
+	const diff = getExpeditionGradeDiff(previousGrade, current.expedition.grade)
 
 	return {
-		current,
-		previous,
+		current: current.expedition.grade,
+		previous: previousGrade,
+		currentLabel: current.expedition.grade,
 		diff,
 		diffLabel: formatExpeditionGradeDelta(diff),
-		changed: previous !== current
+		changed: previousGrade !== current.expedition.grade,
+		hasValue: true
 	}
 }
 
@@ -159,23 +193,38 @@ function formatLevelDelta(diff: number | null): string | null {
 	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
 }
 
-function createLevelDelta(current: number, previous: number | null): LevelDelta {
-	if (previous === null) {
+function createLevelDelta(current: ParsedGuildMember, previous: ParsedGuildMember | null): LevelDelta {
+	if (!current.hasLevel) {
 		return {
-			current,
+			current: current.level,
 			previous: null,
 			diff: null,
-			diffLabel: null
+			diffLabel: null,
+			currentLabel: GUILD_UNENTERED_LABEL,
+			hasValue: false
 		}
 	}
 
-	const diff = current - previous
+	if (!previous?.hasLevel) {
+		return {
+			current: current.level,
+			previous: null,
+			diff: null,
+			diffLabel: null,
+			currentLabel: String(current.level),
+			hasValue: true
+		}
+	}
+
+	const diff = current.level - previous.level
 
 	return {
-		current,
-		previous,
+		current: current.level,
+		previous: previous.level,
 		diff,
-		diffLabel: formatLevelDelta(diff)
+		diffLabel: formatLevelDelta(diff),
+		currentLabel: String(current.level),
+		hasValue: true
 	}
 }
 
@@ -188,39 +237,55 @@ function buildComparison(
 		name: current.name,
 		job: current.job,
 		status,
-		level: createLevelDelta(current.level, previous?.level ?? null),
+		level: createLevelDelta(current, previous),
 		combatPower: createNumericDelta(
 			current.combatPower,
 			current.combatPowerLabel,
+			current.hasCombatPower,
 			previous,
 			(member) => member.combatPower,
-			(member) => member.combatPowerLabel
+			(member) => member.combatPowerLabel,
+			(member) => member.hasCombatPower
 		),
 		expeditionScore: createNumericDelta(
 			current.expedition.score,
 			current.expedition.scoreLabel,
+			current.expedition.hasScore,
 			previous,
 			(member) => member.expedition.score,
-			(member) => member.expedition.scoreLabel
+			(member) => member.expedition.scoreLabel,
+			(member) => member.expedition.hasScore
 		),
-		expeditionGrade: createExpeditionGradeDelta(current.expedition.grade, previous?.expedition.grade ?? null),
+		expeditionGrade: createExpeditionGradeDelta(current, previous),
 		rivalry: createNumericDelta(
 			current.rivalry,
 			current.rivalryLabel,
+			current.hasRivalry,
 			previous,
 			(member) => member.rivalry,
-			(member) => member.rivalryLabel
+			(member) => member.rivalryLabel,
+			(member) => member.hasRivalry
 		),
 		training: withTrainingDelta(
 			createNumericDelta(
 				current.training,
-				formatTrainingScore(current.training),
+				current.trainingLabel,
+				current.hasTraining,
 				previous,
 				(member) => member.training,
-				(member) => member.trainingLabel
+				(member) => member.trainingLabel,
+				(member) => member.hasTraining
 			)
 		),
-		guildBoss: createGuildBossDelta(current, previous)
+		guildBoss: createNumericDelta(
+			current.guildBoss,
+			current.guildBossLabel,
+			current.hasGuildBoss,
+			previous,
+			(member) => member.guildBoss,
+			(member) => member.guildBossLabel,
+			(member) => member.hasGuildBoss
+		)
 	}
 }
 
@@ -229,71 +294,77 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 		name: previous.name,
 		job: previous.job,
 		status: 'left',
-		level: createLevelDelta(previous.level, previous.level),
+		level: {
+			current: 0,
+			previous: previous.hasLevel ? previous.level : null,
+			diff: previous.hasLevel ? -previous.level : null,
+			currentLabel: GUILD_UNENTERED_LABEL,
+			diffLabel: previous.hasLevel ? formatLevelDelta(-previous.level) : null,
+			hasValue: false
+		},
 		combatPower: {
 			current: 0n,
-			previous: previous.combatPower,
-			diff: -previous.combatPower,
-			currentLabel: '-',
-			previousLabel: previous.combatPowerLabel,
-			diffLabel: formatKoreanDelta(-previous.combatPower),
-			diffPercentLabel: formatDeltaPercent(-previous.combatPower, previous.combatPower)
+			previous: previous.hasCombatPower ? previous.combatPower : null,
+			diff: previous.hasCombatPower ? -previous.combatPower : null,
+			currentLabel: GUILD_UNENTERED_LABEL,
+			previousLabel: previous.hasCombatPower ? previous.combatPowerLabel : null,
+			diffLabel: previous.hasCombatPower ? formatKoreanDelta(-previous.combatPower) : null,
+			diffPercentLabel: previous.hasCombatPower
+				? formatDeltaPercent(-previous.combatPower, previous.combatPower)
+				: null,
+			hasValue: false
 		},
 		expeditionScore: {
 			current: 0n,
-			previous: previous.expedition.score,
-			diff: -previous.expedition.score,
-			currentLabel: '-',
-			previousLabel: previous.expedition.scoreLabel,
-			diffLabel: formatKoreanDelta(-previous.expedition.score),
-			diffPercentLabel: formatDeltaPercent(-previous.expedition.score, previous.expedition.score)
+			previous: previous.expedition.hasScore ? previous.expedition.score : null,
+			diff: previous.expedition.hasScore ? -previous.expedition.score : null,
+			currentLabel: GUILD_UNENTERED_LABEL,
+			previousLabel: previous.expedition.hasScore ? previous.expedition.scoreLabel : null,
+			diffLabel: previous.expedition.hasScore ? formatKoreanDelta(-previous.expedition.score) : null,
+			diffPercentLabel: previous.expedition.hasScore
+				? formatDeltaPercent(-previous.expedition.score, previous.expedition.score)
+				: null,
+			hasValue: false
 		},
 		expeditionGrade: {
-			current: '-',
-			previous: previous.expedition.grade,
+			current: previous.expedition.grade,
+			previous: previous.expedition.hasGrade ? previous.expedition.grade : null,
+			currentLabel: GUILD_UNENTERED_LABEL,
 			diff: null,
 			diffLabel: null,
-			changed: true
+			changed: previous.expedition.hasGrade,
+			hasValue: false
 		},
 		rivalry: {
 			current: 0n,
-			previous: previous.rivalry,
-			diff: -previous.rivalry,
-			currentLabel: '-',
-			previousLabel: previous.rivalryLabel,
-			diffLabel: formatKoreanDelta(-previous.rivalry),
-			diffPercentLabel: formatDeltaPercent(-previous.rivalry, previous.rivalry)
+			previous: previous.hasRivalry ? previous.rivalry : null,
+			diff: previous.hasRivalry ? -previous.rivalry : null,
+			currentLabel: GUILD_UNENTERED_LABEL,
+			previousLabel: previous.hasRivalry ? previous.rivalryLabel : null,
+			diffLabel: previous.hasRivalry ? formatKoreanDelta(-previous.rivalry) : null,
+			diffPercentLabel: previous.hasRivalry ? formatDeltaPercent(-previous.rivalry, previous.rivalry) : null,
+			hasValue: false
 		},
 		training: withTrainingDelta({
 			current: 0n,
-			previous: previous.training,
-			diff: -previous.training,
-			currentLabel: '-',
-			previousLabel: previous.trainingLabel,
-			diffLabel: formatTrainingDelta(-previous.training),
-			diffPercentLabel: formatDeltaPercent(-previous.training, previous.training)
+			previous: previous.hasTraining ? previous.training : null,
+			diff: previous.hasTraining ? -previous.training : null,
+			currentLabel: GUILD_UNENTERED_LABEL,
+			previousLabel: previous.hasTraining ? previous.trainingLabel : null,
+			diffLabel: previous.hasTraining ? formatTrainingDelta(-previous.training) : null,
+			diffPercentLabel: previous.hasTraining ? formatDeltaPercent(-previous.training, previous.training) : null,
+			hasValue: false
 		}),
-		guildBoss: previous.hasGuildBoss
-			? {
-					current: 0n,
-					previous: previous.guildBoss,
-					diff: -previous.guildBoss,
-					currentLabel: '-',
-					previousLabel: previous.guildBossLabel,
-					diffLabel: formatKoreanDelta(-previous.guildBoss),
-					diffPercentLabel: formatDeltaPercent(-previous.guildBoss, previous.guildBoss),
-					hasValue: false
-				}
-			: {
-					current: 0n,
-					previous: null,
-					diff: null,
-					currentLabel: '-',
-					previousLabel: null,
-					diffLabel: null,
-					diffPercentLabel: null,
-					hasValue: false
-				}
+		guildBoss: {
+			current: 0n,
+			previous: previous.hasGuildBoss ? previous.guildBoss : null,
+			diff: previous.hasGuildBoss ? -previous.guildBoss : null,
+			currentLabel: GUILD_UNENTERED_LABEL,
+			previousLabel: previous.hasGuildBoss ? previous.guildBossLabel : null,
+			diffLabel: previous.hasGuildBoss ? formatKoreanDelta(-previous.guildBoss) : null,
+			diffPercentLabel: previous.hasGuildBoss ? formatDeltaPercent(-previous.guildBoss, previous.guildBoss) : null,
+			hasValue: false
+		}
 	}
 }
 
@@ -327,8 +398,8 @@ export function compareSnapshots(
 			return -1
 		}
 
-		const leftPower = left.combatPower.current
-		const rightPower = right.combatPower.current
+		const leftPower = left.combatPower.hasValue ? left.combatPower.current : -1n
+		const rightPower = right.combatPower.hasValue ? right.combatPower.current : -1n
 
 		if (leftPower === rightPower) {
 			return left.name.localeCompare(right.name, 'ko')

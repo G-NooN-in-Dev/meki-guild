@@ -2,16 +2,19 @@ import type { GuildMemberComparison } from '@/features/guild/types/guild-snapsho
 import { sumExpeditionGradePoints } from '@/libs/expedition-guild-tier.constants'
 import { formatKoreanDelta, formatTrainingDelta } from '@/utils/format-korean-number'
 
-type NumericFieldSelector = (_comparison: GuildMemberComparison) => {
+type NumericFieldSelector = (_comparison: GuildMemberComparison) => NumericDeltaLike
+
+type NumericDeltaLike = {
 	current: bigint
 	previous: bigint | null
 	diff: bigint | null
+	hasValue: boolean
 }
 
 /**
  * 신규·이탈을 반영한 길드 전체 수치 변화를 합산합니다.
- * - active: diff
- * - new: current(전주 데이터 없음)
+ * - active: diff (입력된 값만)
+ * - new: current(전주 데이터 없음, 입력된 값만)
  * - left: diff(음수)
  */
 export function calculateTotalNumericChange(
@@ -27,10 +30,10 @@ export function calculateTotalNumericChange(
 		const field = getField(comparison)
 
 		if (comparison.status === 'new') {
-			return sum + field.current
+			return field.hasValue ? sum + field.current : sum
 		}
 
-		if (field.diff === null) {
+		if (!field.hasValue || field.diff === null) {
 			return sum
 		}
 
@@ -38,10 +41,10 @@ export function calculateTotalNumericChange(
 	}, 0n)
 }
 
-/** 이번 주 기준 길드원 평균 레벨(이탈 멤버 제외) */
+/** 이번 주 기준 길드원 평균 레벨(이탈·미입력 멤버 제외) */
 export function calculateAverageLevel(comparisons: GuildMemberComparison[]): string {
 	const levels = comparisons
-		.filter((comparison) => comparison.status !== 'left')
+		.filter((comparison) => comparison.status !== 'left' && comparison.level.hasValue)
 		.map((comparison) => comparison.level.current)
 
 	if (levels.length === 0) {
@@ -65,13 +68,18 @@ function formatPointsDelta(diff: number): string | null {
 
 function getCurrentExpeditionGrades(comparisons: GuildMemberComparison[]): string[] {
 	return comparisons
-		.filter((comparison) => comparison.status !== 'left')
+		.filter((comparison) => comparison.status !== 'left' && comparison.expeditionGrade.hasValue)
 		.map((comparison) => comparison.expeditionGrade.current)
 }
 
 function getPreviousExpeditionGrades(comparisons: GuildMemberComparison[]): string[] {
 	return comparisons
-		.filter((comparison) => comparison.status !== 'new' && comparison.expeditionGrade.previous !== null)
+		.filter(
+			(comparison) =>
+				comparison.status !== 'new' &&
+				comparison.expeditionGrade.hasValue &&
+				comparison.expeditionGrade.previous !== null
+		)
 		.map((comparison) => comparison.expeditionGrade.previous as string)
 }
 
