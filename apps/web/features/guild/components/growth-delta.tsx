@@ -11,8 +11,24 @@ type GrowthDeltaProps = {
 	className?: string
 }
 
+function isZeroDelta(value: string | null): value is null | '0' | '+0' | '-0' | '▲0' | '▼0' {
+	if (!value) {
+		return true
+	}
+
+	return value === '0' || value === '+0' || value === '-0' || value === '▲0' || value === '▼0'
+}
+
+function formatDeltaDisplayValue(value: string | null): string {
+	if (isZeroDelta(value)) {
+		return '-'
+	}
+
+	return value
+}
+
 function getDeltaTone(value: string | null): 'positive' | 'negative' | 'neutral' | 'muted' {
-	if (!value || value === '0' || value === '+0' || value === '-0') {
+	if (isZeroDelta(value)) {
 		return 'muted'
 	}
 
@@ -39,7 +55,7 @@ function GrowthDelta({ value, percentLabel, className }: GrowthDeltaProps) {
 
 	return (
 		<span className={cn('text-xs font-medium', toneClassNames[tone], className)}>
-			{value ?? '-'}
+			{formatDeltaDisplayValue(value)}
 			{percentLabel ? <span className="ml-1 opacity-80">({percentLabel})</span> : null}
 		</span>
 	)

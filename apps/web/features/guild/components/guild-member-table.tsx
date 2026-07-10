@@ -10,7 +10,7 @@ import { GrowthDelta, MemberStatusBadge } from '@/features/guild/components/grow
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { GUILD_CONTENT_UPDATED_AT, getGuildContentUpdatedAtLabel } from '@/libs/guild-content-dates.constants'
+import { getGuildContentUpdatedAtLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
 
 type SortKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss' | 'level'
 type SortDirection = 'asc' | 'desc'
@@ -223,7 +223,7 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 							{sortedComparisons.map((comparison, index) => (
 								<TableRow key={comparison.name} className={cn(comparison.status === 'left' && 'opacity-60')}>
 									<TableCell className="text-grayscale-400">{index + 1}</TableCell>
-									<TableCell className="font-medium">
+									<TableCell className="font-bold">
 										{comparison.name}
 										<MemberStatusBadge status={comparison.status} />
 									</TableCell>

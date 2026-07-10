@@ -45,7 +45,7 @@ export function formatKoreanNumber(value: bigint): string {
  */
 export function formatKoreanDelta(diff: bigint): string {
 	if (diff === 0n) {
-		return '0'
+		return '-'
 	}
 
 	const sign = diff > 0n ? '+' : '-'
@@ -63,7 +63,7 @@ export function formatKoreanDelta(diff: bigint): string {
  */
 export function formatTrainingScore(value: bigint): string {
 	if (value === 0n) {
-		return '0'
+		return '-'
 	}
 
 	const isNegative = value < 0n
@@ -98,7 +98,7 @@ export function formatTrainingScore(value: bigint): string {
  */
 export function formatTrainingDelta(diff: bigint): string {
 	if (diff === 0n) {
-		return '0'
+		return '-'
 	}
 
 	const sign = diff > 0n ? '+' : '-'

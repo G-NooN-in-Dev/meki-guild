@@ -11,7 +11,7 @@ type GuildDashboardSectionProps = {
 type SummaryCard = {
 	label: string
 	value: string
-	description: string
+	description?: string
 	/** 토벌전 카드 하단: 등급 점수 합계 */
 	subValue?: string
 	subDelta?: string | null
@@ -24,12 +24,12 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		{
 			label: '총 전투력 변화',
 			value: metrics.combatPowerChange,
-			description: '지난주 대비'
+			description: '직전 대비'
 		},
 		{
 			label: '평균 레벨',
 			value: metrics.averageLevel,
-			description: '이번 주 기준'
+			description: ''
 		}
 	]
 
@@ -39,22 +39,22 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 			value: metrics.expeditionScoreChange,
 			subValue: metrics.expeditionGradePointsTotal,
 			subDelta: metrics.expeditionGradePointsChange,
-			description: '지난주 대비'
+			description: '직전 대비'
 		},
 		{
 			label: '대항전',
 			value: metrics.rivalryChange,
-			description: '지난주 대비'
+			description: '직전 대비'
 		},
 		{
 			label: '수련장',
 			value: metrics.trainingChange,
-			description: '지난주 대비'
+			description: '직전 대비'
 		},
 		{
 			label: '길드보스',
 			value: metrics.guildBossChange,
-			description: '지난주 대비'
+			description: '직전 대비'
 		}
 	]
 
@@ -72,9 +72,11 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				<div className="grid gap-4 md:grid-cols-2">
 					{topSummaryCards.map((card) => (
 						<div key={card.label} className="border-grayscale-200 bg-card shadow-soft rounded-xl border p-4">
-							<p className="text-grayscale-500 text-sm">{card.label}</p>
+							<p className="flex items-center gap-1">
+								<span className="text-grayscale-500 text-sm">{card.label}</span>
+								{card.description && <span className="text-grayscale-400 text-xs">({card.description})</span>}
+							</p>
 							<p className="text-grayscale-900 mt-2 text-2xl font-semibold">{card.value}</p>
-							<p className="text-grayscale-400 mt-1 text-xs">{card.description}</p>
 						</div>
 					))}
 				</div>
@@ -82,15 +84,18 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
 					{bottomSummaryCards.map((card) => (
 						<div key={card.label} className="border-grayscale-200 bg-card shadow-soft rounded-xl border p-4">
-							<p className="text-grayscale-500 text-sm">{card.label}</p>
+							<p className="flex items-center gap-1">
+								<span className="text-grayscale-500 text-sm">{card.label}</span>
+								{card.description && <span className="text-grayscale-400 text-xs">({card.description})</span>}
+							</p>
 							<p className="text-grayscale-900 mt-2 text-2xl font-semibold">{card.value}</p>
 							{card.subValue ? (
 								<div className="mt-1 flex items-baseline gap-2">
-									<span className="text-grayscale-600 text-sm font-medium">등급 점수 {card.subValue}</span>
+									<span className="text-grayscale-500 text-sm font-semibold">길드 점수</span>
+									<span className="text-grayscale-500 text-sm font-medium">{card.subValue}</span>
 									<GrowthDelta value={card.subDelta ?? null} />
 								</div>
 							) : null}
-							<p className="text-grayscale-400 mt-1 text-xs">{card.description}</p>
 						</div>
 					))}
 				</div>

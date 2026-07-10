@@ -1,5 +1,4 @@
 export type ExpeditionGuildTier = {
-	position: number
 	rank: string
 	points: number
 }
@@ -9,25 +8,25 @@ export type ExpeditionGuildTier = {
  * 1위부터 순서대로 적용됩니다.
  */
 export const EXPEDITION_GUILD_TIERS = [
-	{ position: 1, rank: '챌린저1', points: 500_000 },
-	{ position: 2, rank: '챌린저2', points: 450_000 },
-	{ position: 3, rank: '챌린저3', points: 400_000 },
-	{ position: 4, rank: '챌린저4', points: 350_000 },
-	{ position: 5, rank: '챌린저5', points: 300_000 },
-	{ position: 6, rank: '그랜드마스터1', points: 250_000 },
-	{ position: 7, rank: '그랜드마스터2', points: 225_000 },
-	{ position: 8, rank: '그랜드마스터3', points: 200_000 },
-	{ position: 9, rank: '그랜드마스터4', points: 175_000 },
-	{ position: 10, rank: '그랜드마스터5', points: 150_000 },
-	{ position: 11, rank: '마스터1', points: 125_000 },
-	{ position: 12, rank: '마스터2', points: 110_000 },
-	{ position: 13, rank: '마스터3', points: 95_000 },
-	{ position: 14, rank: '마스터4', points: 80_000 },
-	{ position: 15, rank: '마스터5', points: 65_000 }
+	{ rank: '챌린저1', points: 500_000 },
+	{ rank: '챌린저2', points: 450_000 },
+	{ rank: '챌린저3', points: 400_000 },
+	{ rank: '챌린저4', points: 350_000 },
+	{ rank: '챌린저5', points: 300_000 },
+	{ rank: '그랜드마스터1', points: 250_000 },
+	{ rank: '그랜드마스터2', points: 225_000 },
+	{ rank: '그랜드마스터3', points: 200_000 },
+	{ rank: '그랜드마스터4', points: 175_000 },
+	{ rank: '그랜드마스터5', points: 150_000 },
+	{ rank: '마스터1', points: 125_000 },
+	{ rank: '마스터2', points: 110_000 },
+	{ rank: '마스터3', points: 95_000 },
+	{ rank: '마스터4', points: 80_000 },
+	{ rank: '마스터5', points: 65_000 }
 ] as const satisfies readonly ExpeditionGuildTier[]
 
 export function getExpeditionGuildTier(position: number): ExpeditionGuildTier | null {
-	return EXPEDITION_GUILD_TIERS.find((tier) => tier.position === position) ?? null
+	return EXPEDITION_GUILD_TIERS[position - 1] ?? null
 }
 
 /**
@@ -35,11 +34,13 @@ export function getExpeditionGuildTier(position: number): ExpeditionGuildTier | 
  * 길드원 개인 등급·길드 순위 등급 모두 동일한 명칭 체계를 사용합니다.
  */
 export function getExpeditionGradeRank(grade: string): number | null {
-	return EXPEDITION_GUILD_TIERS.find((tier) => tier.rank === grade)?.position ?? null
+	const index = EXPEDITION_GUILD_TIERS.findIndex((tier) => tier.rank === grade)
+
+	return index === -1 ? null : index + 1
 }
 
 /**
- * 지난주 대비 등급 변화 단계.
+ * 직전 대비 등급 변화 단계.
  * 양수=상승(챌린저1 방향), 음수=하락(마스터5 방향), 0=동일.
  */
 export function getExpeditionGradeDiff(previous: string, current: string): number | null {
