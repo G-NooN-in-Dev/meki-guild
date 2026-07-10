@@ -11,9 +11,5 @@ export function formatGuildContentDate(date: string): string {
 
 /** 툴팁·헤더에 쓸 컨텐츠 업데이트 안내 문구 */
 export function getGuildContentUpdatedAtLabel(date: string | null): string {
-	if (!date) {
-		return '아직 업데이트 없음'
-	}
-
-	return `최근 업데이트 : ${formatGuildContentDate(date)}`
+	return `최근 업데이트 : ${date ? formatGuildContentDate(date) : '없음'}`
 }
