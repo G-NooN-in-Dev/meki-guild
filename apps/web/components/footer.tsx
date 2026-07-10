@@ -28,7 +28,7 @@ function Footer() {
 					))}
 				</nav>
 
-				<p className="text-grayscale-400 text-xs">2026 G-NooN Jo All Rights Reserved.</p>
+				<p className="text-grayscale-400 text-xs">2026 G-NooN All Rights Reserved.</p>
 			</div>
 		</footer>
 	)
