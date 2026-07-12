@@ -83,3 +83,28 @@ const FALLBACK_JOB_TEXT_CLASS = 'text-grayscale-700'
 export function getJobTextClass(job: string): string {
 	return JOB_TEXT_CLASS[job as keyof typeof JOB_TEXT_CLASS] ?? FALLBACK_JOB_TEXT_CLASS
 }
+
+/**
+ * 직업명 Badge 클래스.
+ * JOB_TEXT_CLASS 톤과 맞추되, 배경(100) + 글자색으로 테이블·상세에서 한눈에 구분합니다.
+ */
+export const JOB_BADGE_CLASS = {
+	다크나이트: 'border-transparent bg-grayscale-100 text-grayscale-700',
+	팔라딘: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
+	히어로: 'border-transparent bg-pastel-orange-100 text-pastel-orange-700',
+	불독: 'border-transparent bg-pastel-red-100 text-pastel-red-700',
+	비숍: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-700',
+	썬콜: 'border-transparent bg-pastel-blue-100 text-pastel-blue-700',
+	보우마스터: 'border-transparent bg-pastel-green-100 text-pastel-green-700',
+	신궁: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
+	나이트로드: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800',
+	섀도어: 'border-transparent bg-pastel-purple-100 text-pastel-purple-700',
+	바이퍼: 'border-transparent bg-pastel-red-100 text-pastel-red-800',
+	캡틴: 'border-transparent bg-grayscale-100 text-grayscale-700'
+} as const satisfies Record<keyof typeof JOB_TO_CLASS_LINE, string>
+
+const FALLBACK_JOB_BADGE_CLASS = 'border-transparent bg-grayscale-100 text-grayscale-600'
+
+export function getJobBadgeClass(job: string): string {
+	return JOB_BADGE_CLASS[job as keyof typeof JOB_BADGE_CLASS] ?? FALLBACK_JOB_BADGE_CLASS
+}

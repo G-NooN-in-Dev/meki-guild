@@ -19,22 +19,25 @@ function PopoverContent({
 	alignOffset = 0,
 	side = 'bottom',
 	sideOffset = 4,
+	collisionPadding,
 	...props
 }: PopoverPrimitive.Popup.Props &
-	Pick<PopoverPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>) {
+	Pick<PopoverPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset' | 'collisionPadding'>) {
 	return (
 		<PopoverPrimitive.Portal>
+			{/* sticky 헤더(z-sticky=1100)보다 위에 올려 잘리지 않게 합니다 */}
 			<PopoverPrimitive.Positioner
 				align={align}
 				alignOffset={alignOffset}
 				side={side}
 				sideOffset={sideOffset}
-				className="isolate z-50"
+				collisionPadding={collisionPadding}
+				className="z-modal isolate"
 			>
 				<PopoverPrimitive.Popup
 					data-slot="popover-content"
 					className={cn(
-						'bg-popover text-popover-foreground ring-foreground/10 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 z-50 flex w-72 origin-(--transform-origin) flex-col gap-4 rounded-md p-4 text-sm shadow-md ring-1 outline-hidden duration-100',
+						'bg-popover text-popover-foreground ring-foreground/10 data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 z-modal flex w-72 origin-(--transform-origin) flex-col gap-4 rounded-md p-4 text-sm shadow-md ring-1 outline-hidden duration-100',
 						className
 					)}
 					{...props}
@@ -62,4 +65,9 @@ function PopoverDescription({ className, ...props }: PopoverPrimitive.Descriptio
 	)
 }
 
-export { Popover, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger }
+/** 팝오버를 수동으로 닫는 버튼 */
+function PopoverClose({ className, ...props }: PopoverPrimitive.Close.Props) {
+	return <PopoverPrimitive.Close data-slot="popover-close" className={cn(className)} {...props} />
+}
+
+export { Popover, PopoverClose, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger }

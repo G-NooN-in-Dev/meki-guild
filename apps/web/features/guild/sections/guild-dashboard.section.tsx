@@ -101,7 +101,11 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				</div>
 			</div>
 
-			<GuildMemberTable comparisons={data.comparisons} />
+			<GuildMemberTable
+				comparisons={data.comparisons}
+				currentUpdatedAt={data.currentWeek.updatedAt}
+				previousUpdatedAt={data.previousWeek.updatedAt}
+			/>
 		</section>
 	)
 }
