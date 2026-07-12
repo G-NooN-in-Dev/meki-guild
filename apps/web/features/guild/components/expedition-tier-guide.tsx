@@ -22,7 +22,8 @@ function ExpeditionTierGuide() {
 			<DialogContent className="sm:max-w-lg">
 				<DialogHeader>
 					<DialogTitle>토벌전 길드 포인트</DialogTitle>
-					<DialogDescription>
+					{/* DialogDescription 기본 태그는 <p>라서, 문단이 둘 이상이면 div로 렌더해야 hydration 오류가 없다 */}
+					<DialogDescription render={<div />} className="space-y-1">
 						<p>토벌전 순위와 점수에 따른 길드 포인트입니다.</p>
 						<p>자격 등수 이내에 들어야 해당 포인트를 받을 수 있습니다.</p>
 					</DialogDescription>
