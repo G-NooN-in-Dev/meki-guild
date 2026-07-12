@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover'
 
 import { GrowthDelta } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
+import MemberDisplayName from '@/features/guild/components/member-display-name'
 import type { MemberVsMemberComparison, MemberVsWinner } from '@/features/guild/types/guild-snapshot.type'
 import { getGuildContentCriteriaLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
 
@@ -289,7 +290,10 @@ function MemberSummaryCard({ role, name, job }: { role: '나' | '상대방'; nam
 	return (
 		<div className="border-grayscale-200 bg-card shadow-soft min-w-0 rounded-xl border p-3 text-center md:p-4">
 			<p className="text-grayscale-500 text-[11px] md:text-xs">{role}</p>
-			<p className="text-grayscale-900 mt-1 truncate text-base font-semibold md:text-xl">{name}</p>
+			{/* 잠금 시 별칭 — 비교 로직의 name 키는 실명 그대로 */}
+			<p className="text-grayscale-900 mt-1 truncate text-base font-semibold md:text-xl">
+				<MemberDisplayName name={name} />
+			</p>
 			{/* 멤버 테이블·상세와 동일하게 직업별 색상 Badge로 표시 */}
 			<div className="mt-1.5 flex justify-center">
 				<JobBadge job={job} />

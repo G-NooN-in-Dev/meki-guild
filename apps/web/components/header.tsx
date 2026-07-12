@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import Nav, { MobileNav } from '@/components/nav'
+import NameRevealUnlock from '@/features/guild/components/name-reveal-unlock'
 import { formatAppVersionLabel } from '@/libs/app-version.constants'
 
 function Header() {
@@ -15,12 +16,16 @@ function Header() {
 					</Link>
 					<Nav />
 				</div>
-				<span
-					className="text-grayscale-400 shrink-0 text-xs font-medium tabular-nums md:text-sm"
-					aria-label={`현재 버전 ${formatAppVersionLabel()}`}
-				>
-					{formatAppVersionLabel()}
-				</span>
+				<div className="flex shrink-0 items-center gap-2 md:gap-3">
+					{/* 대외 공개 시 실명 가림 / 길드원 비밀번호로 해제 */}
+					<NameRevealUnlock />
+					<span
+						className="text-grayscale-400 shrink-0 text-xs font-medium tabular-nums md:text-sm"
+						aria-label={`현재 버전 ${formatAppVersionLabel()}`}
+					>
+						{formatAppVersionLabel()}
+					</span>
+				</div>
 			</div>
 		</header>
 	)

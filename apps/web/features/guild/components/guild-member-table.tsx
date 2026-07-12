@@ -11,6 +11,7 @@ import GuildMemberFilters from '@/features/guild/components/guild-member-filters
 import JobBadge from '@/features/guild/components/job-badge'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import MemberDetailDialog from '@/features/guild/components/member-detail-dialog'
+import MemberDisplayName from '@/features/guild/components/member-display-name'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import { getGuildContentUpdatedAtLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
@@ -284,7 +285,8 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 										{/* 이름은 주 정보, 자세히 보기는 이름 아래 보조 링크로 배치 */}
 										<div className="flex flex-col items-start gap-0.5">
 											<span className="inline-flex items-center font-bold">
-												{comparison.name}
+												{/* 잠금 시 별칭, 해제 시 실명 — row key는 실명 유지 */}
+												<MemberDisplayName name={comparison.name} />
 												<MemberStatusBadge status={comparison.status} />
 											</span>
 											<MemberDetailDialog

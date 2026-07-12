@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 import { GrowthDelta, MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
+import MemberDisplayName, { useMemberDisplayName } from '@/features/guild/components/member-display-name'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import { formatGuildContentDate } from '@/libs/guild-content-dates.constants'
@@ -114,6 +115,7 @@ function PeriodHead({ label, updatedAt, align = 'right' }: PeriodHeadProps) {
 
 function MemberDetailDialog({ comparison, currentUpdatedAt, previousUpdatedAt }: MemberDetailDialogProps) {
 	const rows = buildDetailRows(comparison)
+	const displayName = useMemberDisplayName(comparison.name)
 
 	return (
 		<Dialog>
@@ -123,7 +125,7 @@ function MemberDetailDialog({ comparison, currentUpdatedAt, previousUpdatedAt }:
 					<button
 						type="button"
 						className="text-grayscale-500 hover:text-grayscale-800 text-xs font-normal underline decoration-dotted underline-offset-4 transition-colors hover:cursor-pointer"
-						aria-label={`${comparison.name} 자세히 보기`}
+						aria-label={`${displayName} 자세히 보기`}
 					>
 						자세히 보기
 					</button>
@@ -133,7 +135,7 @@ function MemberDetailDialog({ comparison, currentUpdatedAt, previousUpdatedAt }:
 				<DialogHeader>
 					{/* 이름·상태·직업을 한 줄로 나란히 표시 */}
 					<DialogTitle className="flex flex-wrap items-center gap-1.5">
-						{comparison.name}
+						<MemberDisplayName name={comparison.name} />
 						<MemberStatusBadge status={comparison.status} />
 						<JobBadge job={comparison.job} />
 					</DialogTitle>

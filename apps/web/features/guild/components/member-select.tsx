@@ -4,6 +4,7 @@ import { cn } from '@shared/ui/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/select'
 
 import JobBadge from '@/features/guild/components/job-badge'
+import MemberDisplayName from '@/features/guild/components/member-display-name'
 
 export type MemberSelectOption = {
 	name: string
@@ -59,7 +60,8 @@ function MemberSelect({
 
 							return (
 								<span className="flex min-w-0 items-center gap-1.5">
-									<span className="truncate font-medium">{member.name}</span>
+									{/* value는 실명 유지, 라벨만 잠금 시 별칭 */}
+									<MemberDisplayName name={member.name} className="truncate font-medium" />
 									<JobBadge job={member.job} className="max-w-[36%] truncate text-[11px]" />
 									<span className="text-grayscale-500 truncate text-xs">{member.combatPowerLabel}</span>
 								</span>
@@ -75,7 +77,7 @@ function MemberSelect({
 					{options.map((member) => (
 						<SelectItem key={member.name} value={member.name} className="items-start whitespace-normal">
 							<span className="flex min-w-0 flex-col gap-1">
-								<span className="font-medium break-keep">{member.name}</span>
+								<MemberDisplayName name={member.name} className="font-medium break-keep" />
 								<span className="flex min-w-0 flex-wrap items-center gap-1.5">
 									<JobBadge job={member.job} className="text-[11px]" />
 									<span className="text-grayscale-500 text-xs break-words">{member.combatPowerLabel}</span>

@@ -5,6 +5,7 @@ import { PropsWithChildren } from 'react'
 
 import Footer from '@/components/footer'
 import Header from '@/components/header'
+import { NameRevealProvider } from '@/features/guild/context/name-reveal.context'
 
 export const metadata: Metadata = {
 	title: {
@@ -24,9 +25,12 @@ function RootLayout({ children }: PropsWithChildren) {
 					style={{ backgroundImage: "url('/games.png')" }}
 				/>
 				<div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-white/78 backdrop-blur-[2px]" />
-				<Header />
-				{children}
-				<Footer />
+				{/* 메인·비교 페이지에서 이름 공개 상태를 공유 */}
+				<NameRevealProvider>
+					<Header />
+					{children}
+					<Footer />
+				</NameRevealProvider>
 			</body>
 		</html>
 	)
