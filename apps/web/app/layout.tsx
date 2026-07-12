@@ -7,12 +7,30 @@ import Footer from '@/components/footer'
 import Header from '@/components/header'
 import { NameRevealProvider } from '@/features/guild/context/name-reveal.context'
 
+// 카카오톡 등 링크 미리보기용 Open Graph 메타
+const SITE_URL = 'https://meki-games.vercel.app'
+
 export const metadata: Metadata = {
+	metadataBase: new URL(SITE_URL),
 	title: {
 		default: '메이플키우기 게임즈 길드',
 		template: '%s | 메이플키우기 게임즈 길드'
 	},
-	description: '메이플키우기 게임즈 길드'
+	description: '메이플키우기 1서버 게임즈 길드입니다',
+	openGraph: {
+		title: '메이플키우기 게임즈 길드',
+		description: '메이플키우기 1서버 게임즈 길드입니다',
+		url: SITE_URL,
+		siteName: '메이플키우기 게임즈 길드',
+		images: [
+			{
+				url: '/games.png',
+				alt: '메이플키우기 게임즈 길드'
+			}
+		],
+		locale: 'ko_KR',
+		type: 'website'
+	}
 }
 
 function RootLayout({ children }: PropsWithChildren) {
