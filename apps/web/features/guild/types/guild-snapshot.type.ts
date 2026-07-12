@@ -13,8 +13,8 @@ export type GuildMemberInput = {
 	guildBoss?: string | number
 }
 
+/** 한 시점의 길드원 스냅샷. 수집일은 guild-content-dates.json 에서 분야별로 관리합니다. */
 export type GuildWeekSnapshot = {
-	updatedAt: string
 	members: GuildMemberInput[]
 }
 

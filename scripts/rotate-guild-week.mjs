@@ -43,8 +43,14 @@ function writeJson(path, data) {
 	writeFileSync(path, `${JSON.stringify(data, null, '\t')}\n`, 'utf8')
 }
 
+/** 한국(Asia/Seoul) 기준 오늘 날짜(YYYY-MM-DD). UTC toISOString 은 새벽 KST에 하루 밀립니다. */
 function getToday() {
-	return new Date().toISOString().slice(0, 10)
+	return new Intl.DateTimeFormat('en-CA', {
+		timeZone: 'Asia/Seoul',
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit'
+	}).format(new Date())
 }
 
 function findMemberByName(members, name) {

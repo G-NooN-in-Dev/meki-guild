@@ -1,6 +1,6 @@
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { sumExpeditionGradePoints } from '@/libs/expedition-guild-tier.constants'
-import { formatKoreanDelta, formatTrainingDelta } from '@/utils/format-korean-number'
+import { formatDeltaPercent, formatKoreanDelta, formatTrainingDelta } from '@/utils/format-korean-number'
 
 type NumericFieldSelector = (_comparison: GuildMemberComparison) => NumericDeltaLike
 
@@ -39,6 +39,46 @@ export function calculateTotalNumericChange(
 
 		return sum + field.diff
 	}, 0n)
+}
+
+/**
+ * 증감율 분모용 직전 주 합산값.
+ * calculateTotalNumericChange와 같은 멤버 포함 규칙을 따릅니다(신규는 이전값 없음 → 제외).
+ */
+export function calculateTotalPrevious(
+	comparisons: GuildMemberComparison[],
+	getField: NumericFieldSelector,
+	shouldInclude?: (_comparison: GuildMemberComparison) => boolean
+): bigint {
+	return comparisons.reduce((sum, comparison) => {
+		if (shouldInclude && !shouldInclude(comparison)) {
+			return sum
+		}
+
+		const field = getField(comparison)
+
+		if (comparison.status === 'new') {
+			return sum
+		}
+
+		if (!field.hasValue || field.diff === null || field.previous === null) {
+			return sum
+		}
+
+		return sum + field.previous
+	}, 0n)
+}
+
+/** 길드 합산 변화량 ÷ 직전 합산 → 증감율 라벨 */
+function calculateTotalChangePercent(
+	comparisons: GuildMemberComparison[],
+	getField: NumericFieldSelector,
+	shouldInclude?: (_comparison: GuildMemberComparison) => boolean
+): string | null {
+	const diff = calculateTotalNumericChange(comparisons, getField, shouldInclude)
+	const previous = calculateTotalPrevious(comparisons, getField, shouldInclude)
+
+	return formatDeltaPercent(diff, previous)
 }
 
 /** 이번 주 기준 길드원 평균 레벨(이탈·미입력 멤버 제외) */
@@ -119,20 +159,27 @@ function hasGuildBossContribution(comparison: GuildMemberComparison): boolean {
 }
 
 export function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[]) {
+	const combatPowerField = (comparison: GuildMemberComparison) => comparison.combatPower
+	const expeditionScoreField = (comparison: GuildMemberComparison) => comparison.expeditionScore
+	const rivalryField = (comparison: GuildMemberComparison) => comparison.rivalry
+	const trainingField = (comparison: GuildMemberComparison) => comparison.training
+	const guildBossField = (comparison: GuildMemberComparison) => comparison.guildBoss
+
 	return {
-		combatPowerChange: formatKoreanDelta(
-			calculateTotalNumericChange(comparisons, (comparison) => comparison.combatPower)
-		),
+		combatPowerChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, combatPowerField)),
+		combatPowerChangePercent: calculateTotalChangePercent(comparisons, combatPowerField),
 		averageLevel: calculateAverageLevel(comparisons),
-		expeditionScoreChange: formatKoreanDelta(
-			calculateTotalNumericChange(comparisons, (comparison) => comparison.expeditionScore)
-		),
+		expeditionScoreChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, expeditionScoreField)),
+		expeditionScoreChangePercent: calculateTotalChangePercent(comparisons, expeditionScoreField),
 		expeditionGradePointsTotal: calculateExpeditionGradePointsTotal(comparisons),
 		expeditionGradePointsChange: calculateExpeditionGradePointsChange(comparisons),
-		rivalryChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, (comparison) => comparison.rivalry)),
-		trainingChange: formatTrainingDelta(calculateTotalNumericChange(comparisons, (comparison) => comparison.training)),
+		rivalryChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, rivalryField)),
+		rivalryChangePercent: calculateTotalChangePercent(comparisons, rivalryField),
+		trainingChange: formatTrainingDelta(calculateTotalNumericChange(comparisons, trainingField)),
+		trainingChangePercent: calculateTotalChangePercent(comparisons, trainingField),
 		guildBossChange: formatKoreanDelta(
-			calculateTotalNumericChange(comparisons, (comparison) => comparison.guildBoss, hasGuildBossContribution)
-		)
+			calculateTotalNumericChange(comparisons, guildBossField, hasGuildBossContribution)
+		),
+		guildBossChangePercent: calculateTotalChangePercent(comparisons, guildBossField, hasGuildBossContribution)
 	}
 }

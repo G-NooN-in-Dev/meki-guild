@@ -11,9 +11,30 @@ type SummaryCard = {
 	label: string
 	value: string
 	description?: string
-	/** 토벌전 카드 하단: 등급 점수 합계 */
+	/**
+	 * 직전 대비 증감율. 멤버 테이블과 동일하게 GrowthDelta에 전달.
+	 * undefined면 증감율 UI 미표시(평균 레벨 등).
+	 */
+	percentLabel?: string | null
+	/** 토벌전 카드 하단: 등급 점수 합계(증감율 미표시) */
 	subValue?: string
 	subDelta?: string | null
+}
+
+/** 요약 카드 본문: 변화량은 크게, 증감율만 GrowthDelta로 옆에 표시 */
+function SummaryCardValue({ value, percentLabel }: { value: string; percentLabel?: string | null }) {
+	if (percentLabel === undefined) {
+		return <p className="text-grayscale-900 mt-2 text-2xl font-semibold">{value}</p>
+	}
+
+	return (
+		<p className="mt-2 flex flex-wrap items-baseline gap-x-2">
+			<span className="text-grayscale-900 text-2xl font-semibold">{value}</span>
+			{percentLabel ? (
+				<GrowthDelta value={value === '-' ? null : value} percentLabel={percentLabel} hideValue className="text-sm" />
+			) : null}
+		</p>
+	)
 }
 
 function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
@@ -23,6 +44,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		{
 			label: '총 전투력 변화',
 			value: metrics.combatPowerChange,
+			percentLabel: metrics.combatPowerChangePercent,
 			description: '직전 대비'
 		},
 		{
@@ -36,6 +58,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		{
 			label: '토벌전',
 			value: metrics.expeditionScoreChange,
+			percentLabel: metrics.expeditionScoreChangePercent,
 			subValue: metrics.expeditionGradePointsTotal,
 			subDelta: metrics.expeditionGradePointsChange,
 			description: '직전 대비'
@@ -43,16 +66,19 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		{
 			label: '대항전',
 			value: metrics.rivalryChange,
+			percentLabel: metrics.rivalryChangePercent,
 			description: '직전 대비'
 		},
 		{
 			label: '수련장',
 			value: metrics.trainingChange,
+			percentLabel: metrics.trainingChangePercent,
 			description: '직전 대비'
 		},
 		{
 			label: '길드보스',
 			value: metrics.guildBossChange,
+			percentLabel: metrics.guildBossChangePercent,
 			description: '직전 대비'
 		}
 	]
@@ -72,7 +98,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 								<span className="text-grayscale-500 text-sm">{card.label}</span>
 								{card.description && <span className="text-grayscale-400 text-xs">({card.description})</span>}
 							</p>
-							<p className="text-grayscale-900 mt-2 text-2xl font-semibold">{card.value}</p>
+							<SummaryCardValue value={card.value} percentLabel={card.percentLabel} />
 						</div>
 					))}
 				</div>
@@ -84,11 +110,12 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 								<span className="text-grayscale-500 text-sm">{card.label}</span>
 								{card.description && <span className="text-grayscale-400 text-xs">({card.description})</span>}
 							</p>
-							<p className="text-grayscale-900 mt-2 text-2xl font-semibold">{card.value}</p>
+							<SummaryCardValue value={card.value} percentLabel={card.percentLabel} />
 							{card.subValue ? (
 								<div className="mt-1 flex items-baseline gap-2">
 									<span className="text-grayscale-500 text-sm font-semibold">길드 점수</span>
 									<span className="text-grayscale-500 text-sm font-medium">{card.subValue}</span>
+									{/* 토벌전 길드점수는 증감량만 표시(증감율 제외) */}
 									<GrowthDelta value={card.subDelta ?? null} />
 								</div>
 							) : null}

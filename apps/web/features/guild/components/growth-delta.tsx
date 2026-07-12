@@ -9,6 +9,8 @@ type GrowthDeltaProps = {
 	/** 이전 값 대비 증감 비율. value 옆에 함께 표시 */
 	percentLabel?: string | null
 	className?: string
+	/** true면 증감량 텍스트는 숨기고 증감율만 표시(요약 카드처럼 값이 이미 따로 있을 때) */
+	hideValue?: boolean
 }
 
 function isZeroDelta(value: string | null): value is null | '0' | '+0' | '-0' | '▲0' | '▼0' {
@@ -50,13 +52,13 @@ const toneClassNames = {
 	muted: 'text-grayscale-400'
 } as const
 
-function GrowthDelta({ value, percentLabel, className }: GrowthDeltaProps) {
+function GrowthDelta({ value, percentLabel, className, hideValue = false }: GrowthDeltaProps) {
 	const tone = getDeltaTone(value)
 
 	return (
 		<span className={cn('text-xs font-medium', toneClassNames[tone], className)}>
-			{formatDeltaDisplayValue(value)}
-			{percentLabel ? <span className="ml-1 opacity-80">({percentLabel})</span> : null}
+			{hideValue ? null : formatDeltaDisplayValue(value)}
+			{percentLabel ? <span className={cn(!hideValue && 'ml-1', 'opacity-80')}>({percentLabel})</span> : null}
 		</span>
 	)
 }

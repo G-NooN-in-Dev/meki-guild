@@ -1,5 +1,4 @@
 {
-	"updatedAt": "2026-07-09",
 	"members": [
 		{
 			"name": "크르릉캉캉",
@@ -7,8 +6,8 @@
 			"job": "히어로",
 			"combatPower": "1739조 115억",
 			"expedition": {
-				"grade": "챌린저5",
-				"score": "2362억 3592만"
+				"grade": "그랜드마스터1",
+				"score": "2834억 4624만"
 			},
 			"rivalry": "1360억 9396만",
 			"training": "15246720"
@@ -20,7 +19,7 @@
 			"combatPower": "932조 7053억",
 			"expedition": {
 				"grade": "그랜드마스터1",
-				"score": "2216억 2363만"
+				"score": "2410억 5593만"
 			},
 			"rivalry": "1192억 4658만",
 			"training": "19639689"
@@ -32,7 +31,7 @@
 			"combatPower": "365조 5693억",
 			"expedition": {
 				"grade": "그랜드마스터2",
-				"score": "1592억 5910만"
+				"score": "1726억 3549만"
 			},
 			"rivalry": "858억 2342만",
 			"training": "18013131"
@@ -44,7 +43,7 @@
 			"combatPower": "258조 4678억",
 			"expedition": {
 				"grade": "그랜드마스터4",
-				"score": "1135억 8816만"
+				"score": "1255억 7576만"
 			},
 			"rivalry": "536억 5323만",
 			"training": "14195256"
@@ -56,7 +55,7 @@
 			"combatPower": "176조 6497억",
 			"expedition": {
 				"grade": "그랜드마스터5",
-				"score": "853억 1281만"
+				"score": "1014억 2554만"
 			},
 			"rivalry": "480억 1405만",
 			"training": "8158329"
@@ -67,8 +66,8 @@
 			"job": "다크나이트",
 			"combatPower": "144조 2513억",
 			"expedition": {
-				"grade": "그랜드마스터4",
-				"score": "936억 9294만"
+				"grade": "그랜드마스터5",
+				"score": "1013억 6634만"
 			},
 			"rivalry": "492억 1859만",
 			"training": "9919635"
@@ -80,7 +79,7 @@
 			"combatPower": "128조 7570억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "475억 5058만"
+				"score": "536억 4507만"
 			},
 			"rivalry": "301억 8377만",
 			"training": "11613768"
@@ -92,7 +91,7 @@
 			"combatPower": "79조 8628억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "440억 4250만"
+				"score": "445억 1667만"
 			},
 			"rivalry": "244억 353만",
 			"training": "5590524"
@@ -104,7 +103,7 @@
 			"combatPower": "104조 3537억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "496억 9990만"
+				"score": "705억 9333만"
 			},
 			"rivalry": "258억 4830만",
 			"training": "8648160"
@@ -116,7 +115,7 @@
 			"combatPower": "111조 6371억",
 			"expedition": {
 				"grade": "그랜드마스터5",
-				"score": "652억 7994만"
+				"score": "890억 9474만"
 			},
 			"rivalry": "351억 5811만",
 			"training": "10824882"
@@ -128,7 +127,7 @@
 			"combatPower": "84조 1532억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "374억 2796만"
+				"score": "414억 9719만"
 			},
 			"rivalry": "190억 2319만",
 			"training": "6205803"
@@ -139,8 +138,8 @@
 			"job": "히어로",
 			"combatPower": "147조 7908억",
 			"expedition": {
-				"grade": "마스터1",
-				"score": "528억 7103만"
+				"grade": "그랜드마스터5",
+				"score": "781억 5171만"
 			},
 			"rivalry": "243억 5577만",
 			"training": "6715524"
@@ -152,7 +151,7 @@
 			"combatPower": "63조 690억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "418억 2680만"
+				"score": "441억 4176만"
 			},
 			"rivalry": "142억 2600만",
 			"training": "3948132"
@@ -163,8 +162,8 @@
 			"job": "나이트로드",
 			"combatPower": "68조 6398억",
 			"expedition": {
-				"grade": "마스터2",
-				"score": "251억 6667만"
+				"grade": "마스터1",
+				"score": "396억 9940만"
 			},
 			"rivalry": "176억 4382만",
 			"training": "4273233"
@@ -176,7 +175,7 @@
 			"combatPower": "83조 9380억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "415억 9908만"
+				"score": "425억 660만"
 			},
 			"rivalry": "214억 3347만",
 			"training": "4387227"
@@ -188,7 +187,7 @@
 			"combatPower": "64조 4774억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "327억 2803만"
+				"score": "409억 9082만"
 			},
 			"rivalry": "147억 2109만",
 			"training": "5440041"
@@ -199,8 +198,8 @@
 			"job": "비숍",
 			"combatPower": "52조 7349억",
 			"expedition": {
-				"grade": "마스터1",
-				"score": "341억 3276만"
+				"grade": "마스터2",
+				"score": "303억 2214만"
 			},
 			"rivalry": "173억 7843만",
 			"training": "0"
@@ -212,7 +211,7 @@
 			"combatPower": "44조 2343억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "383억 570만"
+				"score": "463억 3184만"
 			},
 			"rivalry": "191억 9052만",
 			"training": "6264822"
@@ -224,7 +223,7 @@
 			"combatPower": "69조 7907억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "310억 134만"
+				"score": "430억 7765만"
 			},
 			"rivalry": "192억 7748만",
 			"training": "5275797"
@@ -236,7 +235,7 @@
 			"combatPower": "48조 295억",
 			"expedition": {
 				"grade": "마스터2",
-				"score": "244억 8677만"
+				"score": "288억 9756만"
 			},
 			"rivalry": "172억 9084만",
 			"training": "4731909"
@@ -248,7 +247,7 @@
 			"combatPower": "43조 6441억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "406억 968만"
+				"score": "438억 5812만"
 			},
 			"rivalry": "172억 8102만",
 			"training": "10412691"
@@ -259,8 +258,8 @@
 			"job": "섀도어",
 			"combatPower": "55조 8405억",
 			"expedition": {
-				"grade": "마스터2",
-				"score": "260억 8523만"
+				"grade": "마스터1",
+				"score": "463억 1448만"
 			},
 			"rivalry": "196억 5281만",
 			"training": "6431025"
@@ -271,8 +270,8 @@
 			"job": "신궁",
 			"combatPower": "20조 9956억",
 			"expedition": {
-				"grade": "마스터2",
-				"score": "149억 7094만"
+				"grade": "마스터3",
+				"score": "158억 56만"
 			},
 			"rivalry": "122억 3457만",
 			"training": "3852567"
@@ -284,7 +283,7 @@
 			"combatPower": "32조 6469억",
 			"expedition": {
 				"grade": "마스터1",
-				"score": "350억 177만"
+				"score": "373억 9038만"
 			},
 			"rivalry": "160억 4149만",
 			"training": "5212101"
@@ -296,7 +295,7 @@
 			"combatPower": "32조 7732억",
 			"expedition": {
 				"grade": "마스터2",
-				"score": "173억 7928만"
+				"score": "195억 4820만"
 			},
 			"rivalry": "106억 307만",
 			"training": "3441399"
@@ -308,7 +307,7 @@
 			"combatPower": "36조 7580억",
 			"expedition": {
 				"grade": "마스터2",
-				"score": "196억 5835만"
+				"score": "246억 7145만"
 			},
 			"rivalry": "116억 5348만",
 			"training": "4791756"
@@ -320,7 +319,7 @@
 			"combatPower": "25조 4051억",
 			"expedition": {
 				"grade": "마스터2",
-				"score": "237억 2178만"
+				"score": "272억 8451만"
 			},
 			"rivalry": "135억 3654만",
 			"training": "3530961"
@@ -332,7 +331,7 @@
 			"combatPower": "36조 5412억",
 			"expedition": {
 				"grade": "마스터2",
-				"score": "293억 792만"
+				"score": "291억 7623만"
 			},
 			"rivalry": "172억 7529만",
 			"training": "5091648"
@@ -343,8 +342,8 @@
 			"job": "비숍",
 			"combatPower": "17조 6349억",
 			"expedition": {
-				"grade": "마스터2",
-				"score": "151억 8517만"
+				"grade": "마스터3",
+				"score": "165억 5157만"
 			},
 			"rivalry": "101억 1231만",
 			"training": "2949726"
@@ -356,7 +355,7 @@
 			"combatPower": "15조 4820억",
 			"expedition": {
 				"grade": "마스터3",
-				"score": "122억 8878만"
+				"score": "153억 2208만"
 			},
 			"rivalry": "106억 6539만",
 			"training": "3143724"
