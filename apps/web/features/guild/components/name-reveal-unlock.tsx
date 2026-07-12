@@ -90,9 +90,8 @@ function NameRevealUnlock() {
 						<EyeIcon className="size-4" />
 						길드원 이름 보기
 					</DialogTitle>
-					<DialogDescription>
-						<p>비밀번호를 아는 사람에게만 그 자격이 주어집니다.</p>
-					</DialogDescription>
+					{/* DialogDescription은 기본이 <p>라서 안에 또 <p>를 넣으면 hydration 오류가 난다 */}
+					<DialogDescription>비밀번호를 아는 사람에게만 그 자격이 주어집니다.</DialogDescription>
 				</DialogHeader>
 				<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 					<div className="flex flex-col gap-2">
