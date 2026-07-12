@@ -1,7 +1,22 @@
 {
-	"combatPower": "2026-07-09",
-	"expedition": "2026-07-05",
-	"rivalry": "2026-07-06",
-	"training": "2026-07-01",
-	"guildBoss": null
+	"combatPower": {
+		"current": "2026-07-09",
+		"previous": "2026-07-02"
+	},
+	"expedition": {
+		"current": "2026-07-05",
+		"previous": "2026-07-02"
+	},
+	"rivalry": {
+		"current": "2026-07-06",
+		"previous": "2026-06-22"
+	},
+	"training": {
+		"current": "2026-07-01",
+		"previous": null
+	},
+	"guildBoss": {
+		"current": null,
+		"previous": null
+	}
 }

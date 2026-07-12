@@ -143,11 +143,16 @@ function rotateGuildWeek(mode) {
 	}
 
 	currentWeek.members = currentWeek.members.map((member) => clearFieldsInCurrent(member, fields))
-	currentWeek.updatedAt = today
 
+	// 분야별 수집일: 기존 current → previous 로 밀고, current 는 오늘(새 수집 시작일)
 	for (const field of fields) {
 		const dateKey = CONTENT_DATE_KEYS[field]
-		contentDates[dateKey] = today
+		const existing = contentDates[dateKey] ?? { current: null, previous: null }
+
+		contentDates[dateKey] = {
+			previous: existing.current ?? null,
+			current: today
+		}
 	}
 
 	writeJson(previousWeekPath, previousWeek)
@@ -157,7 +162,7 @@ function rotateGuildWeek(mode) {
 	console.log(`✅ ${MODE_LABELS[mode]} 이월 완료`)
 	console.log(`   previous-week.json ← current 값 반영`)
 	console.log(`   current-week.json 해당 항목 초기화`)
-	console.log(`   guild-content-dates.json 수집일 갱신 (${today})`)
+	console.log(`   guild-content-dates.json 최근→직전 이월, 최근=${today}`)
 }
 
 const mode = process.argv[2]

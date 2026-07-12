@@ -26,6 +26,7 @@ type CompareRow = {
 	diffLabel: string | null
 	diffPercentLabel?: string | null
 	winner: MemberVsWinner
+	/** 최근 수집일. 있으면 항목 라벨에 기준일 안내 표시 */
 	contentUpdatedAt?: string | null
 	/** 직업 행은 텍스트 대신 JobBadge로 표시합니다 */
 	valueKind?: 'text' | 'job'
@@ -224,7 +225,7 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.level.diffLabel,
 			winner: comparison.level.winner,
 			// 레벨·전투력은 동일 스냅샷 기준일을 사용합니다
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower.current
 		},
 		{
 			label: '전투력',
@@ -233,7 +234,7 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.combatPower.diffLabel,
 			diffPercentLabel: comparison.combatPower.diffPercentLabel,
 			winner: comparison.combatPower.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower.current
 		},
 		{
 			label: '토벌전 등급',
@@ -241,7 +242,7 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			opponentValue: comparison.expeditionGrade.right,
 			diffLabel: comparison.expeditionGrade.diffLabel,
 			winner: comparison.expeditionGrade.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current
 		},
 		{
 			label: '토벌전 점수',
@@ -250,7 +251,7 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.expeditionScore.diffLabel,
 			diffPercentLabel: comparison.expeditionScore.diffPercentLabel,
 			winner: comparison.expeditionScore.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current
 		},
 		{
 			label: '대항전',
@@ -259,7 +260,7 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.rivalry.diffLabel,
 			diffPercentLabel: comparison.rivalry.diffPercentLabel,
 			winner: comparison.rivalry.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.rivalry
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.rivalry.current
 		},
 		{
 			label: '수련장',
@@ -268,7 +269,7 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.training.diffLabel,
 			diffPercentLabel: comparison.training.diffPercentLabel,
 			winner: comparison.training.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.training
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.training.current
 		},
 		{
 			label: '길드보스',
@@ -281,7 +282,7 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 					? comparison.guildBoss.diffPercentLabel
 					: null,
 			winner: comparison.guildBoss.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.guildBoss
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.guildBoss.current
 		}
 	]
 }

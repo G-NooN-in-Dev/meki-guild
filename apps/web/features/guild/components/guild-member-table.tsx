@@ -14,7 +14,11 @@ import MemberDetailDialog from '@/features/guild/components/member-detail-dialog
 import MemberDisplayName from '@/features/guild/components/member-display-name'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { getGuildContentUpdatedAtLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
+import {
+	getGuildContentUpdatedAtLines,
+	GUILD_CONTENT_UPDATED_AT,
+	type GuildContentDateRange
+} from '@/libs/guild-content-dates.constants'
 import {
 	createEmptyGuildMemberFilter,
 	filterGuildMembers,
@@ -27,10 +31,6 @@ type SortDirection = 'asc' | 'desc'
 
 type GuildMemberTableProps = {
 	comparisons: GuildMemberComparison[]
-	/** 최근 주 스냅샷 수집일 (YYYY-MM-DD) */
-	currentUpdatedAt: string
-	/** 직전 주 스냅샷 수집일 (YYYY-MM-DD) */
-	previousUpdatedAt: string
 }
 
 function getSortValue(comparison: GuildMemberComparison, key: SortKey): bigint | number {
@@ -66,16 +66,28 @@ type SortableHeadProps = {
 	activeSortKey: SortKey
 	sortDirection: SortDirection
 	onSort: SortHandler
-	/** 컨텐츠별 최근 수집일. 있으면 헤더에 수집일 안내 표시 */
-	contentUpdatedAt?: string | null
+	/** 컨텐츠별 최근·직전 수집일. 있으면 헤더에 수집일 안내 표시 */
+	contentDates?: GuildContentDateRange
 }
 
 type ContentDateHeadProps = {
 	label: string
-	contentUpdatedAt: string | null
+	contentDates: GuildContentDateRange
 }
 
-function ContentDateHead({ label, contentUpdatedAt }: ContentDateHeadProps) {
+/** 최근·직전 수집일을 Popover 본문으로 표시합니다 */
+function ContentDatePopoverBody({ contentDates }: { contentDates: GuildContentDateRange }) {
+	const lines = getGuildContentUpdatedAtLines(contentDates)
+
+	return (
+		<div className="flex flex-col gap-0.5">
+			<p>{lines.current}</p>
+			<p>{lines.previous}</p>
+		</div>
+	)
+}
+
+function ContentDateHead({ label, contentDates }: ContentDateHeadProps) {
 	return (
 		<TableHead className="text-grayscale-500">
 			<Popover>
@@ -85,23 +97,23 @@ function ContentDateHead({ label, contentUpdatedAt }: ContentDateHeadProps) {
 					render={
 						<button
 							type="button"
-							className="inline-flex items-center gap-1 underline decoration-dotted underline-offset-4"
+							className="inline-flex items-center gap-1 underline decoration-dotted underline-offset-4 hover:cursor-pointer"
 						>
 							{label}
 						</button>
 					}
 				/>
 				<PopoverContent side="top" className={contentDatePopoverClassName}>
-					{getGuildContentUpdatedAtLabel(contentUpdatedAt)}
+					<ContentDatePopoverBody contentDates={contentDates} />
 				</PopoverContent>
 			</Popover>
 		</TableHead>
 	)
 }
 
-function SortableHead({ label, sortKey, activeSortKey, sortDirection, onSort, contentUpdatedAt }: SortableHeadProps) {
+function SortableHead({ label, sortKey, activeSortKey, sortDirection, onSort, contentDates }: SortableHeadProps) {
 	const isActive = activeSortKey === sortKey
-	const hasContentDate = contentUpdatedAt !== undefined
+	const hasContentDate = contentDates !== undefined
 
 	const sortButton = (
 		<button
@@ -128,14 +140,14 @@ function SortableHead({ label, sortKey, activeSortKey, sortDirection, onSort, co
 			<Popover>
 				<PopoverTrigger openOnHover delay={0} render={sortButton} />
 				<PopoverContent side="top" className={contentDatePopoverClassName}>
-					{getGuildContentUpdatedAtLabel(contentUpdatedAt)}
+					<ContentDatePopoverBody contentDates={contentDates} />
 				</PopoverContent>
 			</Popover>
 		</TableHead>
 	)
 }
 
-function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: GuildMemberTableProps) {
+function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 	const [sortKey, setSortKey] = useState<SortKey>('combatPower')
 	const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
 	const [filter, setFilter] = useState<GuildMemberFilterState>(createEmptyGuildMemberFilter)
@@ -225,7 +237,7 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 								activeSortKey={sortKey}
 								sortDirection={sortDirection}
 								onSort={handleSort}
-								contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.combatPower}
+								contentDates={GUILD_CONTENT_UPDATED_AT.combatPower}
 							/>
 							<SortableHead
 								label="전투력"
@@ -233,16 +245,16 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 								activeSortKey={sortKey}
 								sortDirection={sortDirection}
 								onSort={handleSort}
-								contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.combatPower}
+								contentDates={GUILD_CONTENT_UPDATED_AT.combatPower}
 							/>
-							<ContentDateHead label="토벌전 (등급)" contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.expedition} />
+							<ContentDateHead label="토벌전 (등급)" contentDates={GUILD_CONTENT_UPDATED_AT.expedition} />
 							<SortableHead
 								label="토벌전 (점수)"
 								sortKey="expeditionScore"
 								activeSortKey={sortKey}
 								sortDirection={sortDirection}
 								onSort={handleSort}
-								contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.expedition}
+								contentDates={GUILD_CONTENT_UPDATED_AT.expedition}
 							/>
 							<SortableHead
 								label="대항전"
@@ -250,7 +262,7 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 								activeSortKey={sortKey}
 								sortDirection={sortDirection}
 								onSort={handleSort}
-								contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.rivalry}
+								contentDates={GUILD_CONTENT_UPDATED_AT.rivalry}
 							/>
 							<SortableHead
 								label="수련장"
@@ -258,7 +270,7 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 								activeSortKey={sortKey}
 								sortDirection={sortDirection}
 								onSort={handleSort}
-								contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.training}
+								contentDates={GUILD_CONTENT_UPDATED_AT.training}
 							/>
 							<SortableHead
 								label="길드보스"
@@ -266,7 +278,7 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 								activeSortKey={sortKey}
 								sortDirection={sortDirection}
 								onSort={handleSort}
-								contentUpdatedAt={GUILD_CONTENT_UPDATED_AT.guildBoss}
+								contentDates={GUILD_CONTENT_UPDATED_AT.guildBoss}
 							/>
 						</TableRow>
 					</TableHeader>
@@ -289,11 +301,7 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 												<MemberDisplayName name={comparison.name} />
 												<MemberStatusBadge status={comparison.status} />
 											</span>
-											<MemberDetailDialog
-												comparison={comparison}
-												currentUpdatedAt={currentUpdatedAt}
-												previousUpdatedAt={previousUpdatedAt}
-											/>
+											<MemberDetailDialog comparison={comparison} />
 										</div>
 									</TableCell>
 									<TableCell>
