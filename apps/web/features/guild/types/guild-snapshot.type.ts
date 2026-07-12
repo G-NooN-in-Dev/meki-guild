@@ -146,6 +146,5 @@ export type MemberVsMemberComparison = {
 }
 
 export type GuildComparePageData = {
-	updatedAt: string
 	members: GuildMemberInput[]
 }

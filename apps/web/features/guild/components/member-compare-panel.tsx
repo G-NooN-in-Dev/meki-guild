@@ -1,11 +1,16 @@
 'use client'
 
 import { cn } from '@shared/ui/lib/utils'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@shared/ui/tooltip'
+import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover'
 
 import { GrowthDelta } from '@/features/guild/components/growth-delta'
+import JobBadge from '@/features/guild/components/job-badge'
 import type { MemberVsMemberComparison, MemberVsWinner } from '@/features/guild/types/guild-snapshot.type'
 import { getGuildContentCriteriaLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
+
+/** Tooltip은 터치에서 비활성이라, 수집일 안내는 Popover(hover+탭)로 표시합니다 */
+const contentDatePopoverClassName =
+	'bg-foreground text-background w-auto max-w-xs gap-0 px-3 py-1.5 text-xs shadow-none ring-0'
 
 type MemberComparePanelProps = {
 	comparison: MemberVsMemberComparison
@@ -21,6 +26,8 @@ type CompareRow = {
 	diffPercentLabel?: string | null
 	winner: MemberVsWinner
 	contentUpdatedAt?: string | null
+	/** 직업 행은 텍스트 대신 JobBadge로 표시합니다 */
+	valueKind?: 'text' | 'job'
 }
 
 /** 비교 행 그리드 — 모바일·데스크탑 공통 3열, 항목 열 수직 중앙 정렬 */
@@ -105,15 +112,26 @@ type CompareValueProps = {
 	winner: MemberVsWinner
 	diffLabel: string | null
 	diffPercentLabel?: string | null
+	valueKind?: 'text' | 'job'
 }
 
-function CompareValue({ side, value, winner, diffLabel, diffPercentLabel }: CompareValueProps) {
+function CompareValue({ side, value, winner, diffLabel, diffPercentLabel, valueKind = 'text' }: CompareValueProps) {
 	const winnerDiffLabel = getWinnerDiffLabel(winner, side, diffLabel)
 	const winnerDiffPercentLabel = getWinnerDiffPercentLabel(winner, side, diffPercentLabel)
+	const isJob = valueKind === 'job'
 
 	return (
-		<div className={cn('flex min-w-0 flex-col items-center gap-0.5 text-center', getWinnerClassName(side, winner))}>
-			<span className="text-xs leading-snug font-medium break-words md:text-sm">{value}</span>
+		<div
+			className={cn(
+				'flex min-w-0 flex-col items-center gap-0.5 text-center',
+				!isJob && getWinnerClassName(side, winner)
+			)}
+		>
+			{isJob ? (
+				<JobBadge job={value} />
+			) : (
+				<span className="text-xs leading-snug font-medium break-words md:text-sm">{value}</span>
+			)}
 			{winnerDiffLabel ? (
 				<GrowthDelta
 					value={winnerDiffLabel}
@@ -133,16 +151,23 @@ type CompareLabelProps = {
 function CompareLabel({ label, contentUpdatedAt }: CompareLabelProps) {
 	if (contentUpdatedAt !== undefined) {
 		return (
-			<Tooltip>
-				<TooltipTrigger
+			<Popover>
+				<PopoverTrigger
+					openOnHover
+					delay={0}
 					render={
-						<span className="text-grayscale-500 px-1 text-xs underline decoration-dotted underline-offset-4">
+						<button
+							type="button"
+							className="text-grayscale-500 px-1 text-xs underline decoration-dotted underline-offset-4"
+						>
 							{label}
-						</span>
+						</button>
 					}
 				/>
-				<TooltipContent>{getGuildContentCriteriaLabel(contentUpdatedAt)}</TooltipContent>
-			</Tooltip>
+				<PopoverContent side="top" className={contentDatePopoverClassName}>
+					{getGuildContentCriteriaLabel(contentUpdatedAt)}
+				</PopoverContent>
+			</Popover>
 		)
 	}
 
@@ -163,6 +188,7 @@ function CompareRowItem({ row }: CompareRowItemProps) {
 					winner={row.winner}
 					diffLabel={row.diffLabel}
 					diffPercentLabel={row.diffPercentLabel}
+					valueKind={row.valueKind}
 				/>
 				<div className="flex items-center justify-center self-stretch px-0.5 md:px-1">
 					<CompareLabel label={row.label} contentUpdatedAt={row.contentUpdatedAt} />
@@ -173,6 +199,7 @@ function CompareRowItem({ row }: CompareRowItemProps) {
 					winner={row.winner}
 					diffLabel={row.diffLabel}
 					diffPercentLabel={row.diffPercentLabel}
+					valueKind={row.valueKind}
 				/>
 			</div>
 		</div>
@@ -186,14 +213,17 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			selfValue: comparison.left.job,
 			opponentValue: comparison.right.job,
 			diffLabel: null,
-			winner: 'tie'
+			winner: 'tie',
+			valueKind: 'job'
 		},
 		{
 			label: '레벨',
 			selfValue: `${comparison.level.left}`,
 			opponentValue: `${comparison.level.right}`,
 			diffLabel: comparison.level.diffLabel,
-			winner: comparison.level.winner
+			winner: comparison.level.winner,
+			// 레벨·전투력은 동일 스냅샷 기준일을 사용합니다
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower
 		},
 		{
 			label: '전투력',
@@ -201,7 +231,8 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			opponentValue: comparison.combatPower.rightLabel,
 			diffLabel: comparison.combatPower.diffLabel,
 			diffPercentLabel: comparison.combatPower.diffPercentLabel,
-			winner: comparison.combatPower.winner
+			winner: comparison.combatPower.winner,
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower
 		},
 		{
 			label: '토벌전 등급',
@@ -259,7 +290,10 @@ function MemberSummaryCard({ role, name, job }: { role: '나' | '상대방'; nam
 		<div className="border-grayscale-200 bg-card shadow-soft min-w-0 rounded-xl border p-3 text-center md:p-4">
 			<p className="text-grayscale-500 text-[11px] md:text-xs">{role}</p>
 			<p className="text-grayscale-900 mt-1 truncate text-base font-semibold md:text-xl">{name}</p>
-			<p className="text-grayscale-500 mt-0.5 truncate text-xs md:text-sm">{job}</p>
+			{/* 멤버 테이블·상세와 동일하게 직업별 색상 Badge로 표시 */}
+			<div className="mt-1.5 flex justify-center">
+				<JobBadge job={job} />
+			</div>
 		</div>
 	)
 }
@@ -268,28 +302,26 @@ function MemberComparePanel({ comparison }: MemberComparePanelProps) {
 	const rows = buildCompareRows(comparison)
 
 	return (
-		<TooltipProvider>
-			<div className="flex flex-col gap-3 md:gap-4">
-				{/* 모바일: 2열 카드 / 데스크탑: 나 | VS | 상대방 */}
-				<div className="grid grid-cols-2 gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
-					<MemberSummaryCard role="나" name={comparison.left.name} job={comparison.left.job} />
+		<div className="flex flex-col gap-3 md:gap-4">
+			{/* 모바일: 2열 카드 / 데스크탑: 나 | VS | 상대방 */}
+			<div className="grid grid-cols-2 gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
+				<MemberSummaryCard role="나" name={comparison.left.name} job={comparison.left.job} />
 
-					<div className="text-grayscale-400 hidden items-center justify-center text-sm font-semibold md:flex md:px-2">
-						VS
-					</div>
-
-					<MemberSummaryCard role="상대방" name={comparison.right.name} job={comparison.right.job} />
+				<div className="text-grayscale-400 hidden items-center justify-center text-sm font-semibold md:flex md:px-2">
+					VS
 				</div>
 
-				<div className="border-grayscale-200 bg-card shadow-soft overflow-hidden rounded-xl border">
-					<div className="bg-card min-w-0">
-						{rows.map((row) => (
-							<CompareRowItem key={row.label} row={row} />
-						))}
-					</div>
+				<MemberSummaryCard role="상대방" name={comparison.right.name} job={comparison.right.job} />
+			</div>
+
+			<div className="border-grayscale-200 bg-card shadow-soft overflow-hidden rounded-xl border">
+				<div className="bg-card min-w-0">
+					{rows.map((row) => (
+						<CompareRowItem key={row.label} row={row} />
+					))}
 				</div>
 			</div>
-		</TooltipProvider>
+		</div>
 	)
 }
 

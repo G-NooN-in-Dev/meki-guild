@@ -3,6 +3,8 @@
 import { cn } from '@shared/ui/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/select'
 
+import JobBadge from '@/features/guild/components/job-badge'
+
 export type MemberSelectOption = {
 	name: string
 	job: string
@@ -47,7 +49,23 @@ function MemberSelect({
 				}}
 			>
 				<SelectTrigger className="w-full min-w-0">
-					<SelectValue placeholder="길드원을 선택하세요" />
+					{/* 트리거에는 이름·직업 Badge·전투력을 한 줄로 압축해 표시 */}
+					<SelectValue placeholder="길드원을 선택하세요">
+						{(selectedName: string | null) => {
+							const member = options.find((item) => item.name === selectedName)
+							if (!member) {
+								return null
+							}
+
+							return (
+								<span className="flex min-w-0 items-center gap-1.5">
+									<span className="truncate font-medium">{member.name}</span>
+									<JobBadge job={member.job} className="max-w-[36%] truncate text-[11px]" />
+									<span className="text-grayscale-500 truncate text-xs">{member.combatPowerLabel}</span>
+								</span>
+							)
+						}}
+					</SelectValue>
 				</SelectTrigger>
 				{/* 2줄 항목 기준 약 6명 노출, 이후 스크롤 */}
 				<SelectContent
@@ -56,10 +74,11 @@ function MemberSelect({
 				>
 					{options.map((member) => (
 						<SelectItem key={member.name} value={member.name} className="items-start whitespace-normal">
-							<span className="flex min-w-0 flex-col gap-0.5">
+							<span className="flex min-w-0 flex-col gap-1">
 								<span className="font-medium break-keep">{member.name}</span>
-								<span className="text-grayscale-500 text-xs break-words">
-									{member.job} · {member.combatPowerLabel}
+								<span className="flex min-w-0 flex-wrap items-center gap-1.5">
+									<JobBadge job={member.job} className="text-[11px]" />
+									<span className="text-grayscale-500 text-xs break-words">{member.combatPowerLabel}</span>
 								</span>
 							</span>
 						</SelectItem>

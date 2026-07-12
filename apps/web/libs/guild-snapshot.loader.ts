@@ -26,7 +26,6 @@ export function loadGuildComparePageData(): GuildComparePageData {
 	)
 
 	return {
-		updatedAt: currentWeek.updatedAt,
 		members: currentWeek.members.filter((member) => activeNames.has(member.name))
 	}
 }

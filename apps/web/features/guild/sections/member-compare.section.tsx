@@ -8,12 +8,10 @@ import { useEffect, useMemo, useState } from 'react'
 import MemberComparePanel from '@/features/guild/components/member-compare-panel'
 import MemberSelect, { type MemberSelectOption } from '@/features/guild/components/member-select'
 import type { GuildMemberInput, MemberVsMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { formatGuildContentDate } from '@/libs/guild-content-dates.constants'
 import { compareMembers } from '@/utils/compare-members'
 import { parseGuildMember } from '@/utils/compare-snapshots'
 
 type MemberCompareSectionProps = {
-	updatedAt: string
 	members: GuildMemberInput[]
 }
 
@@ -41,7 +39,7 @@ type LoadedComparison = {
 	comparison: MemberVsMemberComparison | null
 }
 
-function MemberCompareSection({ updatedAt, members }: MemberCompareSectionProps) {
+function MemberCompareSection({ members }: MemberCompareSectionProps) {
 	const [selfName, setSelfName] = useState<string | null>(null)
 	const [opponentName, setOpponentName] = useState<string | null>(null)
 	const [loadedComparison, setLoadedComparison] = useState<LoadedComparison | null>(null)
@@ -101,7 +99,6 @@ function MemberCompareSection({ updatedAt, members }: MemberCompareSectionProps)
 			<header className="flex flex-col gap-2">
 				<p className="text-grayscale-500 text-sm">길드원 스펙 비교</p>
 				<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">1 vs 1 비교</h1>
-				<p className="text-grayscale-600 text-sm">최근 업데이트 : {formatGuildContentDate(updatedAt)}</p>
 			</header>
 
 			<div className="border-grayscale-200 bg-card shadow-soft grid gap-3 rounded-xl border p-3 md:grid-cols-[1fr_auto_1fr] md:items-end md:gap-4 md:p-4">
