@@ -7,11 +7,12 @@ import type {
 	NumericDelta,
 	ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
-import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import { formatExpeditionGradeDelta, getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
 import {
 	formatDeltaPercent,
 	formatKoreanDelta,
+	formatPlacementRank,
 	formatTrainingDelta,
 	formatTrainingScore
 } from '@/utils/format-korean-number'
@@ -37,11 +38,25 @@ function toKoreanLabel(value: string | number): string {
 	return value
 }
 
+/** 토벌전 등수 입력값을 정수로 파싱. null·0 이하는 미입력 */
+function parsePlacementInput(value: number | null | undefined): { hasPlacement: boolean; placement: number } {
+	if (value === null || value === undefined) {
+		return { hasPlacement: false, placement: 0 }
+	}
+
+	if (!Number.isFinite(value) || value <= 0) {
+		return { hasPlacement: false, placement: 0 }
+	}
+
+	return { hasPlacement: true, placement: Math.floor(value) }
+}
+
 export function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
 	const hasCombatPower = !isEmptyInput(member.combatPower)
 	const hasLevel = member.level > 0
 	const hasExpeditionGrade = !isEmptyInput(member.expedition.grade)
 	const hasExpeditionScore = !isEmptyInput(member.expedition.score)
+	const { hasPlacement, placement } = parsePlacementInput(member.expedition.placement)
 	const hasRivalry = !isEmptyInput(member.rivalry)
 	const hasTraining = !isEmptyInput(member.training)
 	const hasGuildBoss = member.guildBoss !== undefined && !isEmptyInput(member.guildBoss)
@@ -58,25 +73,29 @@ export function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
 		level: member.level,
 		job: member.job,
 		combatPower,
-		combatPowerLabel: hasCombatPower ? toKoreanLabel(member.combatPower) : GUILD_UNENTERED_LABEL,
+		combatPowerLabel: hasCombatPower ? toKoreanLabel(member.combatPower) : GUILD_EMPTY_VALUE_LABEL,
 		hasCombatPower,
 		hasLevel,
 		expedition: {
 			grade: member.expedition.grade,
 			score: expeditionScore,
-			scoreLabel: hasExpeditionScore ? toKoreanLabel(member.expedition.score) : GUILD_UNENTERED_LABEL,
+			scoreLabel: hasExpeditionScore ? toKoreanLabel(member.expedition.score) : GUILD_EMPTY_VALUE_LABEL,
 			hasGrade: hasExpeditionGrade,
-			hasScore: hasExpeditionScore
+			hasScore: hasExpeditionScore,
+			placement,
+			// 메인 테이블·1vs1·상세 Dialog가 같은 `N위` 표기를 쓰도록 여기서 통일
+			placementLabel: hasPlacement ? formatPlacementRank(placement) : GUILD_EMPTY_VALUE_LABEL,
+			hasPlacement
 		},
 		rivalry,
-		rivalryLabel: hasRivalry ? toKoreanLabel(member.rivalry) : GUILD_UNENTERED_LABEL,
+		rivalryLabel: hasRivalry ? toKoreanLabel(member.rivalry) : GUILD_EMPTY_VALUE_LABEL,
 		hasRivalry,
 		training,
-		trainingLabel: hasTraining ? formatTrainingScore(training) : GUILD_UNENTERED_LABEL,
+		trainingLabel: hasTraining ? formatTrainingScore(training) : GUILD_EMPTY_VALUE_LABEL,
 		hasTraining,
 		guildBoss,
 		guildBossLabel:
-			hasGuildBoss && guildBossValue !== undefined ? toKoreanLabel(guildBossValue) : GUILD_UNENTERED_LABEL,
+			hasGuildBoss && guildBossValue !== undefined ? toKoreanLabel(guildBossValue) : GUILD_EMPTY_VALUE_LABEL,
 		hasGuildBoss
 	}
 }
@@ -86,7 +105,7 @@ function createEmptyNumericDelta(): NumericDelta {
 		current: 0n,
 		previous: null,
 		diff: null,
-		currentLabel: GUILD_UNENTERED_LABEL,
+		currentLabel: GUILD_EMPTY_VALUE_LABEL,
 		previousLabel: null,
 		diffLabel: null,
 		diffPercentLabel: null,
@@ -150,7 +169,7 @@ function createExpeditionGradeDelta(
 		return {
 			current: current.expedition.grade,
 			previous: null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			diff: null,
 			diffLabel: null,
 			changed: false,
@@ -193,6 +212,18 @@ function formatLevelDelta(diff: number | null): string | null {
 	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
 }
 
+/**
+ * 토벌전 등수 증감 라벨.
+ * 등수는 숫자가 작아질수록 상승이므로 raw diff 부호를 뒤집어 ▲/▼를 붙입니다.
+ */
+function formatPlacementDelta(diff: number | null): string | null {
+	if (diff === null || diff === 0) {
+		return null
+	}
+
+	return diff < 0 ? `▲${Math.abs(diff)}` : `▼${diff}`
+}
+
 function createLevelDelta(current: ParsedGuildMember, previous: ParsedGuildMember | null): LevelDelta {
 	if (!current.hasLevel) {
 		return {
@@ -200,7 +231,7 @@ function createLevelDelta(current: ParsedGuildMember, previous: ParsedGuildMembe
 			previous: null,
 			diff: null,
 			diffLabel: null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			hasValue: false
 		}
 	}
@@ -224,6 +255,44 @@ function createLevelDelta(current: ParsedGuildMember, previous: ParsedGuildMembe
 		diff,
 		diffLabel: formatLevelDelta(diff),
 		currentLabel: String(current.level),
+		hasValue: true
+	}
+}
+
+/** 최신이 미입력이어도 직전 등수는 남겨, 상세 Dialog에서 직전만 입력한 경우를 지원합니다. */
+function createExpeditionPlacementDelta(current: ParsedGuildMember, previous: ParsedGuildMember | null): LevelDelta {
+	const previousPlacement = previous?.expedition.hasPlacement ? previous.expedition.placement : null
+
+	if (!current.expedition.hasPlacement) {
+		return {
+			current: 0,
+			previous: previousPlacement,
+			diff: null,
+			diffLabel: null,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
+			hasValue: false
+		}
+	}
+
+	if (previousPlacement === null) {
+		return {
+			current: current.expedition.placement,
+			previous: null,
+			diff: null,
+			diffLabel: null,
+			currentLabel: current.expedition.placementLabel,
+			hasValue: true
+		}
+	}
+
+	const diff = current.expedition.placement - previousPlacement
+
+	return {
+		current: current.expedition.placement,
+		previous: previousPlacement,
+		diff,
+		diffLabel: formatPlacementDelta(diff),
+		currentLabel: current.expedition.placementLabel,
 		hasValue: true
 	}
 }
@@ -257,6 +326,7 @@ function buildComparison(
 			(member) => member.expedition.hasScore
 		),
 		expeditionGrade: createExpeditionGradeDelta(current, previous),
+		expeditionPlacement: createExpeditionPlacementDelta(current, previous),
 		rivalry: createNumericDelta(
 			current.rivalry,
 			current.rivalryLabel,
@@ -298,7 +368,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			current: 0,
 			previous: previous.hasLevel ? previous.level : null,
 			diff: previous.hasLevel ? -previous.level : null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			diffLabel: previous.hasLevel ? formatLevelDelta(-previous.level) : null,
 			hasValue: false
 		},
@@ -306,7 +376,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			current: 0n,
 			previous: previous.hasCombatPower ? previous.combatPower : null,
 			diff: previous.hasCombatPower ? -previous.combatPower : null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			previousLabel: previous.hasCombatPower ? previous.combatPowerLabel : null,
 			diffLabel: previous.hasCombatPower ? formatKoreanDelta(-previous.combatPower) : null,
 			diffPercentLabel: previous.hasCombatPower
@@ -318,7 +388,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			current: 0n,
 			previous: previous.expedition.hasScore ? previous.expedition.score : null,
 			diff: previous.expedition.hasScore ? -previous.expedition.score : null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			previousLabel: previous.expedition.hasScore ? previous.expedition.scoreLabel : null,
 			diffLabel: previous.expedition.hasScore ? formatKoreanDelta(-previous.expedition.score) : null,
 			diffPercentLabel: previous.expedition.hasScore
@@ -329,17 +399,25 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 		expeditionGrade: {
 			current: previous.expedition.grade,
 			previous: previous.expedition.hasGrade ? previous.expedition.grade : null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			diff: null,
 			diffLabel: null,
 			changed: previous.expedition.hasGrade,
+			hasValue: false
+		},
+		expeditionPlacement: {
+			current: 0,
+			previous: previous.expedition.hasPlacement ? previous.expedition.placement : null,
+			diff: null,
+			diffLabel: null,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			hasValue: false
 		},
 		rivalry: {
 			current: 0n,
 			previous: previous.hasRivalry ? previous.rivalry : null,
 			diff: previous.hasRivalry ? -previous.rivalry : null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			previousLabel: previous.hasRivalry ? previous.rivalryLabel : null,
 			diffLabel: previous.hasRivalry ? formatKoreanDelta(-previous.rivalry) : null,
 			diffPercentLabel: previous.hasRivalry ? formatDeltaPercent(-previous.rivalry, previous.rivalry) : null,
@@ -349,7 +427,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			current: 0n,
 			previous: previous.hasTraining ? previous.training : null,
 			diff: previous.hasTraining ? -previous.training : null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			previousLabel: previous.hasTraining ? previous.trainingLabel : null,
 			diffLabel: previous.hasTraining ? formatTrainingDelta(-previous.training) : null,
 			diffPercentLabel: previous.hasTraining ? formatDeltaPercent(-previous.training, previous.training) : null,
@@ -359,7 +437,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			current: 0n,
 			previous: previous.hasGuildBoss ? previous.guildBoss : null,
 			diff: previous.hasGuildBoss ? -previous.guildBoss : null,
-			currentLabel: GUILD_UNENTERED_LABEL,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
 			previousLabel: previous.hasGuildBoss ? previous.guildBossLabel : null,
 			diffLabel: previous.hasGuildBoss ? formatKoreanDelta(-previous.guildBoss) : null,
 			diffPercentLabel: previous.hasGuildBoss ? formatDeltaPercent(-previous.guildBoss, previous.guildBoss) : null,

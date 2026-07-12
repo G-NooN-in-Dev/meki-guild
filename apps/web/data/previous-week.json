@@ -7,6 +7,7 @@
 			"combatPower": "1680조 5000억",
 			"expedition": {
 				"grade": "챌린저5",
+				"placement": 101,
 				"score": "2362억 3592만"
 			},
 			"rivalry": "1320억 5000만",
@@ -19,6 +20,7 @@
 			"combatPower": "900조 2000억",
 			"expedition": {
 				"grade": "그랜드마스터1",
+				"placement": 117,
 				"score": "2216억 2363만"
 			},
 			"rivalry": "1160억 3000만",
@@ -31,6 +33,7 @@
 			"combatPower": "355조 2000억",
 			"expedition": {
 				"grade": "그랜드마스터2",
+				"placement": 175,
 				"score": "1592억 5910만"
 			},
 			"rivalry": "840억 1000만",
@@ -43,6 +46,7 @@
 			"combatPower": "250조 3000억",
 			"expedition": {
 				"grade": "그랜드마스터4",
+				"placement": 265,
 				"score": "1135억 8816만"
 			},
 			"rivalry": "520억 8000만",
@@ -55,6 +59,7 @@
 			"combatPower": "170조 9000억",
 			"expedition": {
 				"grade": "그랜드마스터5",
+				"placement": 383,
 				"score": "853억 1281만"
 			},
 			"rivalry": "465억 2000만",
@@ -67,6 +72,7 @@
 			"combatPower": "140조 5000억",
 			"expedition": {
 				"grade": "그랜드마스터4",
+				"placement": 384,
 				"score": "936억 9294만"
 			},
 			"rivalry": "478억 5000만",
@@ -79,6 +85,7 @@
 			"combatPower": "125조 2000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 679,
 				"score": "475억 5058만"
 			},
 			"rivalry": "295억 6000만",
@@ -91,6 +98,7 @@
 			"combatPower": "77조 5000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 808,
 				"score": "440억 4250만"
 			},
 			"rivalry": "238억 9000만",
@@ -103,6 +111,7 @@
 			"combatPower": "101조 8000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 530,
 				"score": "496억 9990만"
 			},
 			"rivalry": "252억 1000만",
@@ -115,6 +124,7 @@
 			"combatPower": "108조 9000억",
 			"expedition": {
 				"grade": "그랜드마스터5",
+				"placement": 433,
 				"score": "652억 7994만"
 			},
 			"rivalry": "342억 8000만",
@@ -127,6 +137,7 @@
 			"combatPower": "81조 6000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 863,
 				"score": "374억 2796만"
 			},
 			"rivalry": "185억 7000만",
@@ -139,6 +150,7 @@
 			"combatPower": "143조 5000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 481,
 				"score": "528억 7103만"
 			},
 			"rivalry": "238억 2000만",
@@ -151,6 +163,7 @@
 			"combatPower": "62조 1000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 816,
 				"score": "418억 2680만"
 			},
 			"rivalry": "138억 9000만",
@@ -163,6 +176,7 @@
 			"combatPower": "66조 8000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 914,
 				"score": "251억 6667만"
 			},
 			"rivalry": "172억 5000만",
@@ -175,6 +189,7 @@
 			"combatPower": "81조 5000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 844,
 				"score": "415억 9908만"
 			},
 			"rivalry": "209억 6000만",
@@ -187,6 +202,7 @@
 			"combatPower": "62조 7000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 877,
 				"score": "327억 2803만"
 			},
 			"rivalry": "143억 8000만",
@@ -199,6 +215,7 @@
 			"combatPower": "51조 2000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 1149,
 				"score": "341억 3276만"
 			},
 			"rivalry": "169억 5000만",
@@ -211,6 +228,7 @@
 			"combatPower": "43조 1000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 781,
 				"score": "383억 570만"
 			},
 			"rivalry": "187억 3000만",
@@ -223,6 +241,7 @@
 			"combatPower": "68조 1000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 833,
 				"score": "310억 134만"
 			},
 			"rivalry": "188억 4000만",
@@ -235,6 +254,7 @@
 			"combatPower": "47조 1000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 1202,
 				"score": "244억 8677만"
 			},
 			"rivalry": "169억 2000만",
@@ -247,6 +267,7 @@
 			"combatPower": "42조 5000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 823,
 				"score": "406억 968만"
 			},
 			"rivalry": "169억 1000만",
@@ -259,6 +280,7 @@
 			"combatPower": "54조 3000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 782,
 				"score": "260억 8523만"
 			},
 			"rivalry": "192억 4000만",
@@ -271,6 +293,7 @@
 			"combatPower": "20조 4000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 2107,
 				"score": "149억 7094만"
 			},
 			"rivalry": "119억 8000만",
@@ -283,6 +306,7 @@
 			"combatPower": "31조 9000억",
 			"expedition": {
 				"grade": "마스터1",
+				"placement": 954,
 				"score": "350억 177만"
 			},
 			"rivalry": "157억 2000만",
@@ -295,6 +319,7 @@
 			"combatPower": "31조 9000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 1720,
 				"score": "173억 7928만"
 			},
 			"rivalry": "104억 2000만",
@@ -307,6 +332,7 @@
 			"combatPower": "35조 7000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 1393,
 				"score": "196억 5835만"
 			},
 			"rivalry": "113억 9000만",
@@ -319,6 +345,7 @@
 			"combatPower": "24조 7000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 1259,
 				"score": "237억 2178만"
 			},
 			"rivalry": "132억 4000만",
@@ -331,6 +358,7 @@
 			"combatPower": "35조 5000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 1186,
 				"score": "293억 792만"
 			},
 			"rivalry": "168억 9000만",
@@ -343,6 +371,7 @@
 			"combatPower": "17조 1000억",
 			"expedition": {
 				"grade": "마스터2",
+				"placement": 2017,
 				"score": "151억 8517만"
 			},
 			"rivalry": "99억 2000만",
@@ -355,6 +384,7 @@
 			"combatPower": "15조 1000억",
 			"expedition": {
 				"grade": "마스터3",
+				"placement": 2162,
 				"score": "122억 8878만"
 			},
 			"rivalry": "104억 5000만",

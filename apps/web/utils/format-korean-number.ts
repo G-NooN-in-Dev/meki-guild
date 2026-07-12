@@ -1,3 +1,5 @@
+import { GUILD_EMPTY_VALUE_LABEL, GUILD_ZERO_DELTA_LABEL } from '@/features/guild/types/guild-snapshot.type'
+
 const KOREAN_UNITS = [
 	['경', 10_000_000_000_000_000n],
 	['조', 1_000_000_000_000n],
@@ -45,7 +47,7 @@ export function formatKoreanNumber(value: bigint): string {
  */
 export function formatKoreanDelta(diff: bigint): string {
 	if (diff === 0n) {
-		return '-'
+		return GUILD_ZERO_DELTA_LABEL
 	}
 
 	const sign = diff > 0n ? '+' : '-'
@@ -63,7 +65,7 @@ export function formatKoreanDelta(diff: bigint): string {
  */
 export function formatTrainingScore(value: bigint): string {
 	if (value === 0n) {
-		return '-'
+		return GUILD_EMPTY_VALUE_LABEL
 	}
 
 	const isNegative = value < 0n
@@ -98,12 +100,24 @@ export function formatTrainingScore(value: bigint): string {
  */
 export function formatTrainingDelta(diff: bigint): string {
 	if (diff === 0n) {
-		return '-'
+		return GUILD_ZERO_DELTA_LABEL
 	}
 
 	const sign = diff > 0n ? '+' : '-'
 
 	return `${sign}${formatTrainingScore(diff > 0n ? diff : -diff)}`
+}
+
+/**
+ * 토벌전 등수를 `1,234위` 형태로 표시합니다.
+ * 미입력이면 빈 값 표기를 반환합니다.
+ */
+export function formatPlacementRank(value: number | null): string {
+	if (value === null) {
+		return GUILD_EMPTY_VALUE_LABEL
+	}
+
+	return `${value.toLocaleString('ko-KR')}위`
 }
 
 /**

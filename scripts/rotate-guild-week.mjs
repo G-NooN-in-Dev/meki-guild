@@ -29,7 +29,7 @@ const CONTENT_DATE_KEYS = {
 const MODE_LABELS = {
 	all: '전체',
 	'combat-power': '전투력·레벨',
-	expedition: '토벌전(등급·점수)',
+	expedition: '토벌전(등급·등수·점수)',
 	rivalry: '대항전',
 	training: '수련장',
 	'guild-boss': '길드보스'
@@ -68,6 +68,10 @@ function copyFieldsToPrevious(currentMember, previousMember, fields) {
 			case 'expedition':
 				previousMember.expedition = {
 					grade: currentMember.expedition.grade,
+					placement:
+						typeof currentMember.expedition.placement === 'number' && currentMember.expedition.placement > 0
+							? currentMember.expedition.placement
+							: null,
 					score: currentMember.expedition.score
 				}
 				break
@@ -101,7 +105,7 @@ function clearFieldsInCurrent(member, fields) {
 				nextMember.combatPower = ''
 				break
 			case 'expedition':
-				nextMember.expedition = { grade: '', score: '' }
+				nextMember.expedition = { grade: '', placement: null, score: '' }
 				break
 			case 'rivalry':
 				nextMember.rivalry = ''

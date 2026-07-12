@@ -1,4 +1,4 @@
-import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { sumExpeditionGradePoints } from '@/libs/expedition-guild-tier.constants'
 import { formatDeltaPercent, formatKoreanDelta, formatTrainingDelta } from '@/utils/format-korean-number'
 
@@ -88,7 +88,7 @@ export function calculateAverageLevel(comparisons: GuildMemberComparison[]): str
 		.map((comparison) => comparison.level.current)
 
 	if (levels.length === 0) {
-		return '-'
+		return GUILD_EMPTY_VALUE_LABEL
 	}
 
 	const average = Math.round(levels.reduce((sum, level) => sum + level, 0) / levels.length)
@@ -128,7 +128,7 @@ export function calculateExpeditionGradePointsTotal(comparisons: GuildMemberComp
 	const grades = getCurrentExpeditionGrades(comparisons)
 
 	if (grades.length === 0) {
-		return '-'
+		return GUILD_EMPTY_VALUE_LABEL
 	}
 
 	return sumExpeditionGradePoints(grades).toLocaleString('ko-KR')

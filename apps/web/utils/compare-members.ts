@@ -1,10 +1,12 @@
-import type {
-	MemberVsExpeditionGradeField,
-	MemberVsLevelField,
-	MemberVsMemberComparison,
-	MemberVsNumericField,
-	MemberVsWinner,
-	ParsedGuildMember
+import {
+	GUILD_EMPTY_VALUE_LABEL,
+	type MemberVsExpeditionGradeField,
+	type MemberVsLevelField,
+	type MemberVsMemberComparison,
+	type MemberVsNumericField,
+	type MemberVsPlacementField,
+	type MemberVsWinner,
+	type ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
 import { formatExpeditionGradeDelta, getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
 import {
@@ -30,12 +32,36 @@ function getLevelWinner(left: number, right: number): MemberVsWinner {
 	return left > right ? 'left' : 'right'
 }
 
+/** 등수는 숫자가 작을수록 우세 */
+function getPlacementWinner(left: number, right: number): MemberVsWinner {
+	if (left === right) {
+		return 'tie'
+	}
+
+	return left < right ? 'left' : 'right'
+}
+
 function formatLevelDiff(diff: number): string | null {
 	if (diff === 0) {
 		return null
 	}
 
 	return diff > 0 ? `+${diff}` : `${diff}`
+}
+
+/**
+ * 1vs1 등수 차이 라벨.
+ * 양수 = left가 더 상위(등수 숫자가 작음). GrowthDelta·우세 쪽 뒤집기와 맞춤.
+ */
+function formatPlacementDiff(left: number, right: number): string | null {
+	const improvement = right - left
+
+	if (improvement === 0) {
+		return null
+	}
+
+	// 전투력 등과 같이 +/- 대신 ▲/▼로 표시 (상승=▲, 하락=▼)
+	return improvement > 0 ? `▲${improvement}` : `▼${Math.abs(improvement)}`
 }
 
 function createNumericField(left: bigint, right: bigint, leftLabel: string, rightLabel: string): MemberVsNumericField {
@@ -97,6 +123,53 @@ function createLevelField(left: number, right: number): MemberVsLevelField {
 	}
 }
 
+function createExpeditionPlacementField(left: ParsedGuildMember, right: ParsedGuildMember): MemberVsPlacementField {
+	const leftHasValue = left.expedition.hasPlacement
+	const rightHasValue = right.expedition.hasPlacement
+
+	if (!leftHasValue && !rightHasValue) {
+		return {
+			left: 0,
+			right: 0,
+			leftLabel: GUILD_EMPTY_VALUE_LABEL,
+			rightLabel: GUILD_EMPTY_VALUE_LABEL,
+			diff: 0,
+			diffLabel: null,
+			winner: 'tie',
+			leftHasValue: false,
+			rightHasValue: false
+		}
+	}
+
+	if (!leftHasValue || !rightHasValue) {
+		const winner: MemberVsWinner = leftHasValue ? 'left' : rightHasValue ? 'right' : 'tie'
+
+		return {
+			left: left.expedition.placement,
+			right: right.expedition.placement,
+			leftLabel: leftHasValue ? left.expedition.placementLabel : GUILD_EMPTY_VALUE_LABEL,
+			rightLabel: rightHasValue ? right.expedition.placementLabel : GUILD_EMPTY_VALUE_LABEL,
+			diff: left.expedition.placement - right.expedition.placement,
+			diffLabel: null,
+			winner,
+			leftHasValue,
+			rightHasValue
+		}
+	}
+
+	return {
+		left: left.expedition.placement,
+		right: right.expedition.placement,
+		leftLabel: left.expedition.placementLabel,
+		rightLabel: right.expedition.placementLabel,
+		diff: left.expedition.placement - right.expedition.placement,
+		diffLabel: formatPlacementDiff(left.expedition.placement, right.expedition.placement),
+		winner: getPlacementWinner(left.expedition.placement, right.expedition.placement),
+		leftHasValue: true,
+		rightHasValue: true
+	}
+}
+
 function createGuildBossField(
 	left: ParsedGuildMember,
 	right: ParsedGuildMember
@@ -108,8 +181,8 @@ function createGuildBossField(
 		return {
 			left: 0n,
 			right: 0n,
-			leftLabel: '-',
-			rightLabel: '-',
+			leftLabel: GUILD_EMPTY_VALUE_LABEL,
+			rightLabel: GUILD_EMPTY_VALUE_LABEL,
 			diff: 0n,
 			diffLabel: null,
 			winner: 'tie',
@@ -151,6 +224,7 @@ export function compareMembers(left: ParsedGuildMember, right: ParsedGuildMember
 		level: createLevelField(left.level, right.level),
 		combatPower: createNumericField(left.combatPower, right.combatPower, left.combatPowerLabel, right.combatPowerLabel),
 		expeditionGrade: createExpeditionGradeField(left.expedition.grade, right.expedition.grade),
+		expeditionPlacement: createExpeditionPlacementField(left, right),
 		expeditionScore: createNumericField(
 			left.expedition.score,
 			right.expedition.score,

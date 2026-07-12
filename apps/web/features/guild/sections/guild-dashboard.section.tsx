@@ -1,6 +1,6 @@
 import { GrowthDelta } from '@/features/guild/components/growth-delta'
 import GuildMemberTable from '@/features/guild/components/guild-member-table'
-import type { GuildDashboardData } from '@/features/guild/types/guild-snapshot.type'
+import { GUILD_ZERO_DELTA_LABEL, type GuildDashboardData } from '@/features/guild/types/guild-snapshot.type'
 import { calculateGuildSummaryMetrics } from '@/utils/guild-summary'
 
 type GuildDashboardSectionProps = {
@@ -31,7 +31,12 @@ function SummaryCardValue({ value, percentLabel }: { value: string; percentLabel
 		<p className="mt-2 flex flex-wrap items-baseline gap-x-2">
 			<span className="text-grayscale-900 text-2xl font-semibold">{value}</span>
 			{percentLabel ? (
-				<GrowthDelta value={value === '-' ? null : value} percentLabel={percentLabel} hideValue className="text-sm" />
+				<GrowthDelta
+					value={value === GUILD_ZERO_DELTA_LABEL ? null : value}
+					percentLabel={percentLabel}
+					hideValue
+					className="text-sm"
+				/>
 			) : null}
 		</p>
 	)

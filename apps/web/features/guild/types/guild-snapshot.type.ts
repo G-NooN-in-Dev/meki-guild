@@ -6,6 +6,8 @@ export type GuildMemberInput = {
 	expedition: {
 		grade: string
 		score: string | number
+		/** 개인 토벌전 등수(1이 최상위). 미입력이면 null */
+		placement: number | null
 	}
 	rivalry: string | number
 	training: string | number
@@ -18,8 +20,11 @@ export type GuildWeekSnapshot = {
 	members: GuildMemberInput[]
 }
 
-/** 아직 입력되지 않은 항목의 화면 표기 */
-export const GUILD_UNENTERED_LABEL = '미입력'
+/** 표시할 값이 없을 때(미입력·비교 불가·집계 없음 등)의 화면 표기 */
+export const GUILD_EMPTY_VALUE_LABEL = '-'
+
+/** 증감이 0일 때의 화면 표기 (+0 대신) */
+export const GUILD_ZERO_DELTA_LABEL = '-'
 
 export type ParsedGuildMember = {
 	name: string
@@ -35,6 +40,10 @@ export type ParsedGuildMember = {
 		scoreLabel: string
 		hasGrade: boolean
 		hasScore: boolean
+		/** 개인 토벌전 등수. 미입력이면 0 + hasPlacement=false */
+		placement: number
+		placementLabel: string
+		hasPlacement: boolean
 	}
 	rivalry: bigint
 	rivalryLabel: string
@@ -91,6 +100,11 @@ export type GuildMemberComparison = {
 		/** false면 아직 입력 전(미입력) */
 		hasValue: boolean
 	}
+	/**
+	 * 토벌전 개인 등수. 숫자가 작을수록 상위.
+	 * 최신이 미입력이어도 previous는 직전 값을 유지해 Dialog에서 볼 수 있게 합니다.
+	 */
+	expeditionPlacement: LevelDelta
 	rivalry: NumericDelta
 	training: NumericDelta
 	guildBoss: NumericDelta
@@ -132,6 +146,19 @@ export type MemberVsExpeditionGradeField = {
 	winner: MemberVsWinner
 }
 
+/** 토벌전 등수 1vs1. 낮은 등수가 우세. 미입력 시 leftHasValue/rightHasValue로 구분 */
+export type MemberVsPlacementField = {
+	left: number
+	right: number
+	leftLabel: string
+	rightLabel: string
+	diff: number
+	diffLabel: string | null
+	winner: MemberVsWinner
+	leftHasValue: boolean
+	rightHasValue: boolean
+}
+
 /** 두 길드원 간 스펙 비교 결과 */
 export type MemberVsMemberComparison = {
 	left: Pick<ParsedGuildMember, 'name' | 'job'>
@@ -139,6 +166,7 @@ export type MemberVsMemberComparison = {
 	level: MemberVsLevelField
 	combatPower: MemberVsNumericField
 	expeditionGrade: MemberVsExpeditionGradeField
+	expeditionPlacement: MemberVsPlacementField
 	expeditionScore: MemberVsNumericField
 	rivalry: MemberVsNumericField
 	training: MemberVsNumericField

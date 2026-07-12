@@ -4,6 +4,8 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/lib/utils'
 import type { ReactNode } from 'react'
 
+import { GUILD_ZERO_DELTA_LABEL } from '@/features/guild/types/guild-snapshot.type'
+
 type GrowthDeltaProps = {
 	value: string | null
 	/** 이전 값 대비 증감 비율. value 옆에 함께 표시 */
@@ -13,17 +15,27 @@ type GrowthDeltaProps = {
 	hideValue?: boolean
 }
 
-function isZeroDelta(value: string | null): value is null | '0' | '+0' | '-0' | '▲0' | '▼0' {
+function isZeroDelta(
+	value: string | null
+): value is null | typeof GUILD_ZERO_DELTA_LABEL | '0' | '+0' | '-0' | '▲0' | '▼0' {
 	if (!value) {
 		return true
 	}
 
-	return value === '0' || value === '+0' || value === '-0' || value === '▲0' || value === '▼0'
+	// formatKoreanDelta 등이 반환하는 '변화 없음' 표기와 +0/-0 계열을 동일 취급
+	return (
+		value === GUILD_ZERO_DELTA_LABEL ||
+		value === '0' ||
+		value === '+0' ||
+		value === '-0' ||
+		value === '▲0' ||
+		value === '▼0'
+	)
 }
 
 function formatDeltaDisplayValue(value: string | null): string {
 	if (isZeroDelta(value)) {
-		return '-'
+		return GUILD_ZERO_DELTA_LABEL
 	}
 
 	return value

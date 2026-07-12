@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { CircleHelpIcon } from 'lucide-react'
 
+import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
 
 function ExpeditionTierGuide() {
@@ -41,7 +42,9 @@ function ExpeditionTierGuide() {
 									<TableCell className="text-center font-medium">{tier.rank}</TableCell>
 									{/* null = 마스터5처럼 등수 제한 없음 */}
 									<TableCell className="text-grayscale-700 text-center">
-										{tier.maxPlacement === null ? '-' : `${tier.maxPlacement.toLocaleString('ko-KR')} 위`}
+										{tier.maxPlacement === null
+											? GUILD_EMPTY_VALUE_LABEL
+											: `${tier.maxPlacement.toLocaleString('ko-KR')} 위`}
 									</TableCell>
 									<TableCell className="text-grayscale-900 text-center font-semibold">
 										{tier.points.toLocaleString('ko-KR')}

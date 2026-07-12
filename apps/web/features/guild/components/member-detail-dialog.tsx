@@ -7,29 +7,29 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { GrowthDelta, MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName, { useMemberDisplayName } from '@/features/guild/components/member-display-name'
-import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { GUILD_UNENTERED_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import {
 	formatGuildContentDateOrNone,
 	GUILD_CONTENT_UPDATED_AT,
 	type GuildContentDateRange
 } from '@/libs/guild-content-dates.constants'
+import { formatPlacementRank } from '@/utils/format-korean-number'
 
 type MemberDetailDialogProps = {
 	comparison: GuildMemberComparison
 }
 
-/** 직전 주 값이 없으면 '-'로 표시 (신규·미비교) */
+/** 직전 주 값이 없으면 빈 값 표기 (신규·미비교) */
 function formatPreviousValue(label: string | null | undefined): string {
 	if (!label) {
-		return '-'
+		return GUILD_EMPTY_VALUE_LABEL
 	}
 
 	return label
 }
 
 function getValueClassName(label: string): string {
-	return label === GUILD_UNENTERED_LABEL || label === '-' ? 'text-grayscale-400' : ''
+	return label === GUILD_EMPTY_VALUE_LABEL ? 'text-grayscale-400' : ''
 }
 
 type DetailRow = {
@@ -48,7 +48,7 @@ function buildDetailRows(comparison: GuildMemberComparison): DetailRow[] {
 		{
 			label: '레벨',
 			currentLabel: comparison.level.currentLabel,
-			previousLabel: comparison.level.previous !== null ? String(comparison.level.previous) : '-',
+			previousLabel: comparison.level.previous !== null ? String(comparison.level.previous) : GUILD_EMPTY_VALUE_LABEL,
 			diffLabel: comparison.level.diffLabel,
 			contentDates: GUILD_CONTENT_UPDATED_AT.combatPower
 		},
@@ -65,6 +65,14 @@ function buildDetailRows(comparison: GuildMemberComparison): DetailRow[] {
 			currentLabel: comparison.expeditionGrade.currentLabel,
 			previousLabel: formatPreviousValue(comparison.expeditionGrade.previous),
 			diffLabel: comparison.expeditionGrade.diffLabel,
+			contentDates: GUILD_CONTENT_UPDATED_AT.expedition
+		},
+		{
+			label: '토벌전 (등수)',
+			// currentLabel은 placementLabel(`N위`)을 그대로 사용. 직전만 숫자라 여기서 포맷
+			currentLabel: comparison.expeditionPlacement.currentLabel,
+			previousLabel: formatPlacementRank(comparison.expeditionPlacement.previous),
+			diffLabel: comparison.expeditionPlacement.diffLabel,
 			contentDates: GUILD_CONTENT_UPDATED_AT.expedition
 		},
 		{

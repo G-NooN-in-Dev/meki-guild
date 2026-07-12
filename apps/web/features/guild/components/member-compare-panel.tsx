@@ -1,17 +1,17 @@
 'use client'
 
 import { cn } from '@shared/ui/lib/utils'
-import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@shared/ui/tooltip'
 
 import { GrowthDelta } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
-import type { MemberVsMemberComparison, MemberVsWinner } from '@/features/guild/types/guild-snapshot.type'
+import {
+	GUILD_EMPTY_VALUE_LABEL,
+	type MemberVsMemberComparison,
+	type MemberVsWinner
+} from '@/features/guild/types/guild-snapshot.type'
 import { getGuildContentCriteriaLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
-
-/** Tooltip은 터치에서 비활성이라, 수집일 안내는 Popover(hover+탭)로 표시합니다 */
-const contentDatePopoverClassName =
-	'bg-foreground text-background w-auto max-w-xs gap-0 px-3 py-1.5 text-xs shadow-none ring-0'
 
 type MemberComparePanelProps = {
 	comparison: MemberVsMemberComparison
@@ -132,13 +132,13 @@ function CompareValue({ side, value, winner, diffLabel, diffPercentLabel, valueK
 			{isJob ? (
 				<JobBadge job={value} />
 			) : (
-				<span className="text-xs leading-snug font-medium break-words md:text-sm">{value}</span>
+				<span className="text-xs leading-snug font-medium wrap-break-word md:text-sm">{value}</span>
 			)}
 			{winnerDiffLabel ? (
 				<GrowthDelta
 					value={winnerDiffLabel}
 					percentLabel={winnerDiffPercentLabel}
-					className="max-w-full text-center break-words whitespace-normal"
+					className="max-w-full text-center wrap-break-word whitespace-normal"
 				/>
 			) : null}
 		</div>
@@ -153,23 +153,16 @@ type CompareLabelProps = {
 function CompareLabel({ label, contentUpdatedAt }: CompareLabelProps) {
 	if (contentUpdatedAt !== undefined) {
 		return (
-			<Popover>
-				<PopoverTrigger
-					openOnHover
-					delay={0}
+			<Tooltip>
+				<TooltipTrigger
 					render={
-						<button
-							type="button"
-							className="text-grayscale-500 px-1 text-xs underline decoration-dotted underline-offset-4"
-						>
+						<span className="text-grayscale-500 cursor-pointer px-1 text-xs underline decoration-dotted underline-offset-4">
 							{label}
-						</button>
+						</span>
 					}
 				/>
-				<PopoverContent side="top" className={contentDatePopoverClassName}>
-					{getGuildContentCriteriaLabel(contentUpdatedAt)}
-				</PopoverContent>
-			</Popover>
+				<TooltipContent>{getGuildContentCriteriaLabel(contentUpdatedAt)}</TooltipContent>
+			</Tooltip>
 		)
 	}
 
@@ -245,6 +238,21 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current
 		},
 		{
+			label: '토벌전 등수',
+			selfValue: comparison.expeditionPlacement.leftHasValue
+				? comparison.expeditionPlacement.leftLabel
+				: GUILD_EMPTY_VALUE_LABEL,
+			opponentValue: comparison.expeditionPlacement.rightHasValue
+				? comparison.expeditionPlacement.rightLabel
+				: GUILD_EMPTY_VALUE_LABEL,
+			diffLabel:
+				comparison.expeditionPlacement.leftHasValue && comparison.expeditionPlacement.rightHasValue
+					? comparison.expeditionPlacement.diffLabel
+					: null,
+			winner: comparison.expeditionPlacement.winner,
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current
+		},
+		{
 			label: '토벌전 점수',
 			selfValue: comparison.expeditionScore.leftLabel,
 			opponentValue: comparison.expeditionScore.rightLabel,
@@ -273,8 +281,8 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 		},
 		{
 			label: '길드보스',
-			selfValue: comparison.guildBoss.leftHasValue ? comparison.guildBoss.leftLabel : '-',
-			opponentValue: comparison.guildBoss.rightHasValue ? comparison.guildBoss.rightLabel : '-',
+			selfValue: comparison.guildBoss.leftHasValue ? comparison.guildBoss.leftLabel : GUILD_EMPTY_VALUE_LABEL,
+			opponentValue: comparison.guildBoss.rightHasValue ? comparison.guildBoss.rightLabel : GUILD_EMPTY_VALUE_LABEL,
 			diffLabel:
 				comparison.guildBoss.leftHasValue && comparison.guildBoss.rightHasValue ? comparison.guildBoss.diffLabel : null,
 			diffPercentLabel:
@@ -307,26 +315,28 @@ function MemberComparePanel({ comparison }: MemberComparePanelProps) {
 	const rows = buildCompareRows(comparison)
 
 	return (
-		<div className="flex flex-col gap-3 md:gap-4">
-			{/* 모바일: 2열 카드 / 데스크탑: 나 | VS | 상대방 */}
-			<div className="grid grid-cols-2 gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
-				<MemberSummaryCard role="나" name={comparison.left.name} job={comparison.left.job} />
+		<TooltipProvider>
+			<div className="flex flex-col gap-3 md:gap-4">
+				{/* 모바일: 2열 카드 / 데스크탑: 나 | VS | 상대방 */}
+				<div className="grid grid-cols-2 gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
+					<MemberSummaryCard role="나" name={comparison.left.name} job={comparison.left.job} />
 
-				<div className="text-grayscale-400 hidden items-center justify-center text-sm font-semibold md:flex md:px-2">
-					VS
+					<div className="text-grayscale-400 hidden items-center justify-center text-sm font-semibold md:flex md:px-2">
+						VS
+					</div>
+
+					<MemberSummaryCard role="상대방" name={comparison.right.name} job={comparison.right.job} />
 				</div>
 
-				<MemberSummaryCard role="상대방" name={comparison.right.name} job={comparison.right.job} />
-			</div>
-
-			<div className="border-grayscale-200 bg-card shadow-soft overflow-hidden rounded-xl border">
-				<div className="bg-card min-w-0">
-					{rows.map((row) => (
-						<CompareRowItem key={row.label} row={row} />
-					))}
+				<div className="border-grayscale-200 bg-card shadow-soft overflow-hidden rounded-xl border">
+					<div className="bg-card min-w-0">
+						{rows.map((row) => (
+							<CompareRowItem key={row.label} row={row} />
+						))}
+					</div>
 				</div>
 			</div>
-		</div>
+		</TooltipProvider>
 	)
 }
 
