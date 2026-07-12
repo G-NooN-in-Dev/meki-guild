@@ -101,3 +101,50 @@ export type GuildDashboardData = {
 	previousWeek: GuildWeekSnapshot
 	comparisons: GuildMemberComparison[]
 }
+
+/** 1 vs 1 비교에서 우세한 쪽 */
+export type MemberVsWinner = 'left' | 'right' | 'tie'
+
+export type MemberVsNumericField = {
+	left: bigint
+	right: bigint
+	leftLabel: string
+	rightLabel: string
+	diff: bigint
+	diffLabel: string | null
+	winner: MemberVsWinner
+	diffPercentLabel: string | null
+}
+
+export type MemberVsLevelField = {
+	left: number
+	right: number
+	diff: number
+	diffLabel: string | null
+	winner: MemberVsWinner
+}
+
+export type MemberVsExpeditionGradeField = {
+	left: string
+	right: string
+	diff: number | null
+	diffLabel: string | null
+	winner: MemberVsWinner
+}
+
+/** 두 길드원 간 스펙 비교 결과 */
+export type MemberVsMemberComparison = {
+	left: Pick<ParsedGuildMember, 'name' | 'job'>
+	right: Pick<ParsedGuildMember, 'name' | 'job'>
+	level: MemberVsLevelField
+	combatPower: MemberVsNumericField
+	expeditionGrade: MemberVsExpeditionGradeField
+	expeditionScore: MemberVsNumericField
+	rivalry: MemberVsNumericField
+	training: MemberVsNumericField
+	guildBoss: MemberVsNumericField & { leftHasValue: boolean; rightHasValue: boolean }
+}
+
+export type GuildComparePageData = {
+	members: GuildMemberInput[]
+}
