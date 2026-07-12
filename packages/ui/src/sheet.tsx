@@ -45,14 +45,19 @@ function SheetContent({
 	children,
 	side = 'right',
 	showCloseButton = true,
+	/** false면 배경 딤/블러 없이 뒤 콘텐츠가 그대로 보입니다 */
+	showOverlay = true,
+	overlayClassName,
 	...props
 }: SheetPrimitive.Popup.Props & {
 	side?: SheetSide
 	showCloseButton?: boolean
+	showOverlay?: boolean
+	overlayClassName?: string
 }) {
 	return (
 		<SheetPortal>
-			<SheetOverlay />
+			{showOverlay ? <SheetOverlay className={overlayClassName} /> : null}
 			<SheetPrimitive.Popup
 				data-slot="sheet-content"
 				data-side={side}

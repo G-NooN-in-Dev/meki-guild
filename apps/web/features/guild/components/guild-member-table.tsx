@@ -192,19 +192,26 @@ function GuildMemberTable({ comparisons, currentUpdatedAt, previousUpdatedAt }: 
 	}
 
 	return (
-		<div className="flex flex-col gap-3">
-			<div className="flex items-center justify-between gap-2">
-				{/* 필터 적용 시에만 인원 요약 표시 */}
-				<p className="text-grayscale-500 text-sm tabular-nums">
-					{isFilterActive ? `${sortedComparisons.length} / ${comparisons.length}명` : `${comparisons.length}명`}
-				</p>
-				<div className="flex items-center gap-2">
-					<GuildMemberFilters comparisons={comparisons} filter={filter} onFilterChange={setFilter} />
+		<div className="flex w-full min-w-0 flex-col gap-3">
+			{/*
+			  모바일: 1행 우측=가이드 / 2행 좌=인원·우=필터
+			  데스크탑: 좌=인원 / 우=필터·가이드 (한 줄)
+			*/}
+			<div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-2 md:grid-cols-[minmax(0,1fr)_auto_auto]">
+				<div className="col-start-2 row-start-1 flex flex-wrap items-center justify-end gap-2 md:col-start-3 md:row-start-1">
 					<JobDistributionGuide comparisons={comparisons} />
 					<ExpeditionTierGuide />
 				</div>
+				{/* 필터 적용 시에만 인원 요약 표시 */}
+				<p className="text-grayscale-500 col-start-1 row-start-2 text-sm tabular-nums md:col-start-1 md:row-start-1">
+					{isFilterActive ? `${sortedComparisons.length} / ${comparisons.length}명` : `${comparisons.length}명`}
+				</p>
+				<div className="col-start-2 row-start-2 flex justify-end md:col-start-2 md:row-start-1">
+					<GuildMemberFilters comparisons={comparisons} filter={filter} onFilterChange={setFilter} />
+				</div>
 			</div>
-			<div className="border-grayscale-200 bg-card shadow-soft overflow-hidden rounded-xl border">
+			{/* 가로 스크롤은 이 카드(테이블) 안에서만 — 페이지로는 전파되지 않음 */}
+			<div className="border-grayscale-200 bg-card shadow-soft w-full min-w-0 overflow-x-auto rounded-xl border">
 				<Table>
 					<TableHeader>
 						<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">

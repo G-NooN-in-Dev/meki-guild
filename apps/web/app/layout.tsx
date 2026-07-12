@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html lang="ko" className="h-full antialiased">
-			<body className="relative flex min-h-full w-full flex-col pt-14">
+			<body className="relative flex min-h-full w-full min-w-0 flex-col pt-14">
 				<div
 					aria-hidden
 					className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"

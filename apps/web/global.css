@@ -4,3 +4,12 @@
 
 /* @shared/ui 등 워크스페이스 패키지 클래스 스캔 (앱 global.css 기준 상대 경로) */
 @source '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}';
+
+/*
+  페이지 단위 가로 스크롤 방지.
+  멤버 테이블 등 내부 overflow-x-auto 영역은 그대로 스크롤됩니다.
+*/
+html,
+body {
+	overflow-x: clip;
+}

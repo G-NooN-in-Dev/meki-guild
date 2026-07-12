@@ -3,22 +3,15 @@
 import { Badge } from '@shared/ui/badge'
 import { Button } from '@shared/ui/button'
 import { cn } from '@shared/ui/lib/utils'
-import {
-	Popover,
-	PopoverClose,
-	PopoverContent,
-	PopoverDescription,
-	PopoverHeader,
-	PopoverTitle,
-	PopoverTrigger
-} from '@shared/ui/popover'
 import { Separator } from '@shared/ui/separator'
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@shared/ui/sheet'
 import { Slider } from '@shared/ui/slider'
 import { FilterIcon, XIcon } from 'lucide-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import JobBadge from '@/features/guild/components/job-badge'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import useMediaQuery from '@/hooks/use-media-query'
 import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
 import { JOB_CLASS_LINE_ORDER, JOBS_BY_CLASS_LINE } from '@/libs/job-class.constants'
 import {
@@ -56,6 +49,9 @@ const EXPEDITION_GRADE_BOUNDS = {
 	min: 1,
 	max: EXPEDITION_GUILD_TIERS.length
 } as const satisfies RangeBounds
+
+/** Tailwind `md` 브레이크포인트와 동일 (768px) */
+const DESKTOP_MEDIA_QUERY = '(min-width: 768px)'
 
 function getSliderFieldValue(member: GuildMemberComparison, key: SliderFieldKey): number | null {
 	switch (key) {
@@ -168,10 +164,14 @@ function chunkClassLines<T>(items: readonly T[], size: number): T[][] {
 	return chunks
 }
 
-/** 길드원 테이블용 필터 패널(직업 다중 선택 + 점수/등급 range) */
-function GuildMemberFilters({ comparisons, filter, onFilterChange }: GuildMemberFiltersProps) {
-	const activeCount = countActiveGuildMemberFilters(filter)
+type FilterPanelBodyProps = {
+	comparisons: GuildMemberComparison[]
+	filter: GuildMemberFilterState
+	onFilterChange: (next: GuildMemberFilterState) => void
+}
 
+/** Sheet/Drawer 공통 — 직업 선택 + range 슬라이더 본문 */
+function FilterPanelBody({ comparisons, filter, onFilterChange }: FilterPanelBodyProps) {
 	const sliderBoundsByKey = useMemo(() => {
 		const next = {} as Record<SliderFieldKey, RangeBounds | null>
 
@@ -203,175 +203,251 @@ function GuildMemberFilters({ comparisons, filter, onFilterChange }: GuildMember
 		onFilterChange({ ...filter, jobs: nextJobs })
 	}
 
-	function handleReset() {
-		onFilterChange(createEmptyGuildMemberFilter())
-	}
-
 	const gradeSliderValue = rangeToSliderValues(filter.expeditionGradeRank, EXPEDITION_GRADE_BOUNDS)
 	const gradeLow = gradeSliderValue[0] ?? EXPEDITION_GRADE_BOUNDS.min
 	const gradeHigh = gradeSliderValue[1] ?? EXPEDITION_GRADE_BOUNDS.max
 
 	return (
-		<Popover>
-			<PopoverTrigger
-				render={
-					<Button variant="outline" size="sm" className="text-grayscale-600 gap-1.5">
-						<FilterIcon className="size-4" />
-						필터
-						{activeCount > 0 ? (
-							<Badge variant="secondary" className="h-5 min-w-5 justify-center px-1.5">
-								{activeCount}
-							</Badge>
-						) : null}
-					</Button>
-				}
-			/>
-			{/* 헤더(h-14) 아래로 여유를 두고, sticky보다 높은 z-modal에서 표시 */}
-			<PopoverContent
-				align="end"
-				side="bottom"
-				sideOffset={8}
-				collisionPadding={{ top: 72, bottom: 16, left: 16, right: 16 }}
-				className="relative w-88 gap-3 p-4 sm:w-104"
-			>
-				<PopoverHeader className="flex-row items-start justify-between gap-2 pr-8">
-					<div className="flex flex-col gap-0.5">
-						<PopoverTitle>필터</PopoverTitle>
-						<PopoverDescription hidden />
-					</div>
-					<Button
-						type="button"
-						variant="ghost"
-						size="xs"
-						disabled={activeCount === 0}
-						onClick={handleReset}
-						className="text-grayscale-500"
-					>
-						초기화
-					</Button>
-				</PopoverHeader>
-				{/* 수동 닫기 — Dialog와 같은 X 버튼 */}
-				<PopoverClose render={<Button variant="ghost" size="icon-sm" className="absolute top-3 right-3" />}>
-					<XIcon />
-					<span className="sr-only">닫기</span>
-				</PopoverClose>
+		<div className="min-w-0 space-y-4">
+			<section className="min-w-0 space-y-2">
+				<p className="text-grayscale-700 text-sm font-medium">직업</p>
+				<p className="text-grayscale-400 text-xs">여러 개 선택 가능 · 선택 없으면 전체</p>
+				<div className="min-w-0 space-y-3">
+					{/* 계열 3열 → 그 아래 직업 세로 나열 (전사·마법사·궁수 / 도적·해적) */}
+					{chunkClassLines(JOB_CLASS_LINE_ORDER, 3).map((classLines) => (
+						<div key={classLines.join('-')} className="grid min-w-0 grid-cols-3 gap-x-2 gap-y-1">
+							{classLines.map((classLine) => (
+								<div key={classLine} className="flex min-w-0 flex-col gap-1.5">
+									<p className="text-grayscale-500 truncate text-xs font-medium">{classLine}</p>
+									<div className="flex min-w-0 flex-col gap-1">
+										{JOBS_BY_CLASS_LINE[classLine].map((job) => {
+											const checked = filter.jobs.includes(job)
+											// 직업 선택이 없으면 전체 활성처럼 보이게, 하나라도 고르면 선택분만 강조
+											const isDimmed = filter.jobs.length > 0 && !checked
 
-				<div className="max-h-[min(70vh,32rem)] space-y-4 overflow-y-auto pr-1">
-					<section className="space-y-2">
-						<p className="text-grayscale-700 text-sm font-medium">직업</p>
-						<p className="text-grayscale-400 text-xs">여러 개 선택 가능 · 선택 없으면 전체</p>
-						<div className="space-y-3">
-							{/* 계열 3열 → 그 아래 직업 세로 나열 (전사·마법사·궁수 / 도적·해적) */}
-							{chunkClassLines(JOB_CLASS_LINE_ORDER, 3).map((classLines) => (
-								<div key={classLines.join('-')} className="grid grid-cols-3 gap-x-2 gap-y-1">
-									{classLines.map((classLine) => (
-										<div key={classLine} className="flex flex-col gap-1.5">
-											<p className="text-grayscale-500 text-xs font-medium">{classLine}</p>
-											<div className="flex flex-col gap-1">
-												{JOBS_BY_CLASS_LINE[classLine].map((job) => {
-													const checked = filter.jobs.includes(job)
-													// 직업 선택이 없으면 전체 활성처럼 보이게, 하나라도 고르면 선택분만 강조
-													const isDimmed = filter.jobs.length > 0 && !checked
-
-													return (
-														<button
-															key={job}
-															type="button"
-															aria-pressed={checked}
-															onClick={() => toggleJob(job, !checked)}
-															className={cn(
-																'rounded-md text-left transition-opacity hover:cursor-pointer',
-																isDimmed && 'opacity-35 hover:opacity-70'
-															)}
-														>
-															<JobBadge
-																job={job}
-																className={cn(
-																	'w-full justify-center truncate px-1.5 text-[11px] sm:text-xs',
-																	checked && 'ring-primary/40 ring-2 ring-offset-1'
-																)}
-															/>
-														</button>
-													)
-												})}
-											</div>
-										</div>
-									))}
+											return (
+												<button
+													key={job}
+													type="button"
+													aria-pressed={checked}
+													onClick={() => toggleJob(job, !checked)}
+													className={cn(
+														'min-w-0 rounded-md text-left transition-opacity hover:cursor-pointer',
+														isDimmed && 'opacity-35 hover:opacity-70'
+													)}
+												>
+													<JobBadge
+														job={job}
+														className={cn(
+															'w-full max-w-full justify-center truncate px-1.5 text-[11px] sm:text-xs',
+															checked && 'ring-primary/40 ring-2 ring-offset-1'
+														)}
+													/>
+												</button>
+											)
+										})}
+									</div>
 								</div>
 							))}
 						</div>
-					</section>
+					))}
+				</div>
+			</section>
 
-					<Separator />
+			<Separator />
 
-					<section className="space-y-2">
+			<section className="space-y-2">
+				<div className="flex items-center justify-between gap-2">
+					<p className="text-grayscale-700 text-sm font-medium">토벌전 (등급)</p>
+					<p className="text-grayscale-500 max-w-[55%] truncate text-right text-xs tabular-nums">
+						{formatGradeRank(gradeLow)} ~ {formatGradeRank(gradeHigh)}
+					</p>
+				</div>
+				<Slider
+					min={EXPEDITION_GRADE_BOUNDS.min}
+					max={EXPEDITION_GRADE_BOUNDS.max}
+					step={1}
+					minStepsBetweenValues={0}
+					value={gradeSliderValue}
+					onValueChange={(nextValue) => {
+						if (!Array.isArray(nextValue) || nextValue.length < 2) {
+							return
+						}
+
+						patchGradeRange(sliderValuesToRange(nextValue, EXPEDITION_GRADE_BOUNDS))
+					}}
+				/>
+			</section>
+
+			{SLIDER_FIELDS.map(({ key, label }) => {
+				const bounds = sliderBoundsByKey[key]
+				const range = filter[key]
+
+				if (bounds === null) {
+					return (
+						<section key={key} className="space-y-1">
+							<p className="text-grayscale-700 text-sm font-medium">{label}</p>
+							<p className="text-grayscale-400 text-xs">입력된 값이 없어 조절할 수 없습니다.</p>
+						</section>
+					)
+				}
+
+				const sliderValue = rangeToSliderValues(range, bounds)
+				const step = getSliderStep(bounds)
+
+				return (
+					<section key={key} className="space-y-2">
 						<div className="flex items-center justify-between gap-2">
-							<p className="text-grayscale-700 text-sm font-medium">토벌전 (등급)</p>
-							<p className="text-grayscale-500 max-w-[55%] truncate text-right text-xs tabular-nums">
-								{formatGradeRank(gradeLow)} ~ {formatGradeRank(gradeHigh)}
+							<p className="text-grayscale-700 text-sm font-medium">{label}</p>
+							<p className="text-grayscale-500 max-w-[70%] truncate text-right text-xs tabular-nums">
+								{formatSliderBound(key, sliderValue[0] ?? bounds.min)} ~{' '}
+								{formatSliderBound(key, sliderValue[1] ?? bounds.max)}
 							</p>
 						</div>
 						<Slider
-							min={EXPEDITION_GRADE_BOUNDS.min}
-							max={EXPEDITION_GRADE_BOUNDS.max}
-							step={1}
-							minStepsBetweenValues={0}
-							value={gradeSliderValue}
+							min={bounds.min}
+							max={bounds.max}
+							step={step}
+							minStepsBetweenValues={1}
+							value={sliderValue}
 							onValueChange={(nextValue) => {
 								if (!Array.isArray(nextValue) || nextValue.length < 2) {
 									return
 								}
 
-								patchGradeRange(sliderValuesToRange(nextValue, EXPEDITION_GRADE_BOUNDS))
+								patchSliderRange(key, sliderValuesToRange(nextValue, bounds))
 							}}
 						/>
 					</section>
+				)
+			})}
+		</div>
+	)
+}
 
-					{SLIDER_FIELDS.map(({ key, label }) => {
-						const bounds = sliderBoundsByKey[key]
-						const range = filter[key]
+type FilterChromeProps = {
+	activeCount: number
+	onReset: () => void
+}
 
-						if (bounds === null) {
-							return (
-								<section key={key} className="space-y-1">
-									<p className="text-grayscale-700 text-sm font-medium">{label}</p>
-									<p className="text-grayscale-400 text-xs">입력된 값이 없어 조절할 수 없습니다.</p>
-								</section>
-							)
-						}
+/** 패널 상단 — 제목 / 초기화 / 닫기 (absolute 닫기는 가려질 수 있어 헤더에 직접 배치) */
+function FilterChrome({ activeCount, onReset }: FilterChromeProps) {
+	return (
+		<div className="flex flex-row items-center justify-between gap-2">
+			<SheetTitle>필터</SheetTitle>
+			<div className="flex shrink-0 items-center gap-1">
+				<Button
+					type="button"
+					variant="ghost"
+					size="xs"
+					disabled={activeCount === 0}
+					onClick={onReset}
+					className="text-grayscale-500"
+				>
+					초기화
+				</Button>
+				<SheetClose render={<Button type="button" variant="ghost" size="icon-sm" aria-label="필터 닫기" />}>
+					<XIcon className="size-4" />
+					<span className="sr-only">닫기</span>
+				</SheetClose>
+			</div>
+		</div>
+	)
+}
 
-						const sliderValue = rangeToSliderValues(range, bounds)
-						const step = getSliderStep(bounds)
+/** Sheet 너비와 맞춰 본문을 밀어 데이터가 가려지지 않게 합니다 (max-w-md = 28rem) */
+const FILTER_SHEET_WIDTH = '28rem'
 
-						return (
-							<section key={key} className="space-y-2">
-								<div className="flex items-center justify-between gap-2">
-									<p className="text-grayscale-700 text-sm font-medium">{label}</p>
-									<p className="text-grayscale-500 max-w-[70%] truncate text-right text-xs tabular-nums">
-										{formatSliderBound(key, sliderValue[0] ?? bounds.min)} ~{' '}
-										{formatSliderBound(key, sliderValue[1] ?? bounds.max)}
-									</p>
-								</div>
-								<Slider
-									min={bounds.min}
-									max={bounds.max}
-									step={step}
-									minStepsBetweenValues={1}
-									value={sliderValue}
-									onValueChange={(nextValue) => {
-										if (!Array.isArray(nextValue) || nextValue.length < 2) {
-											return
-										}
+/** 길드원 테이블용 필터 — 모바일 하단 / 데스크탑 오른쪽 Sheet (Base UI) */
+function GuildMemberFilters({ comparisons, filter, onFilterChange }: GuildMemberFiltersProps) {
+	const [open, setOpen] = useState(false)
+	// md 이상은 오른쪽, 미만은 아래에서 올라오는 Sheet
+	const isDesktop = useMediaQuery(DESKTOP_MEDIA_QUERY)
+	const activeCount = countActiveGuildMemberFilters(filter)
+	const sheetSide = isDesktop ? 'right' : 'bottom'
 
-										patchSliderRange(key, sliderValuesToRange(nextValue, bounds))
-									}}
-								/>
-							</section>
-						)
-					})}
-				</div>
-			</PopoverContent>
-		</Popover>
+	function handleReset() {
+		onFilterChange(createEmptyGuildMemberFilter())
+	}
+
+	// 데스크탑에서 오른쪽 Sheet가 열리면 body·헤더를 왼쪽으로 밀어 테이블이 Sheet 뒤에 가리지 않게 함
+	useEffect(() => {
+		const { body } = document
+		const header = document.querySelector('header')
+
+		function clearPush() {
+			body.style.removeProperty('padding-right')
+			body.style.removeProperty('transition')
+
+			if (header instanceof HTMLElement) {
+				header.style.removeProperty('right')
+				header.style.removeProperty('transition')
+			}
+		}
+
+		if (!open || !isDesktop) {
+			clearPush()
+			return clearPush
+		}
+
+		body.style.transition = 'padding-right 200ms ease-in-out'
+		body.style.paddingRight = FILTER_SHEET_WIDTH
+
+		// fixed 헤더는 inset-x-0 이라 right만 줄이면 Sheet와 겹치지 않음
+		if (header instanceof HTMLElement) {
+			header.style.transition = 'right 200ms ease-in-out'
+			header.style.right = FILTER_SHEET_WIDTH
+		}
+
+		return clearPush
+	}, [open, isDesktop])
+
+	return (
+		<>
+			<Button
+				type="button"
+				variant="outline"
+				size="sm"
+				className="text-grayscale-600 gap-1.5"
+				aria-expanded={open}
+				onClick={() => setOpen(true)}
+			>
+				<FilterIcon className="size-4" />
+				필터
+				{activeCount > 0 ? (
+					<Badge variant="secondary" className="h-5 min-w-5 justify-center px-1.5">
+						{activeCount}
+					</Badge>
+				) : null}
+			</Button>
+
+			{/*
+			  modal=false: 뒤 테이블 스크롤·확인 가능
+			  disablePointerDismissal: 테이블 클릭해도 패널이 바로 닫히지 않음
+			  showOverlay=false: 딤/블러 없이 데이터를 선명하게 봄
+			*/}
+			<Sheet open={open} onOpenChange={setOpen} modal={false} disablePointerDismissal>
+				<SheetContent
+					side={sheetSide}
+					showOverlay={false}
+					showCloseButton={false}
+					className={cn(
+						'max-w-full min-w-0 gap-0 overflow-x-hidden',
+						// 모바일: 높이 제한 + 본문만 세로 스크롤 / 데스크탑: 오른쪽 풀 높이
+						isDesktop ? 'w-full sm:max-w-md' : 'h-auto max-h-[50vh] w-full overflow-hidden'
+					)}
+				>
+					<SheetHeader className="border-border shrink-0 border-b">
+						<FilterChrome activeCount={activeCount} onReset={handleReset} />
+						<SheetDescription hidden />
+					</SheetHeader>
+					{/* min-h-0: flex 자식이 max-h 안에서 줄어들며 overflow-y 스크롤이 생기게 함 */}
+					<div className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain p-4">
+						<FilterPanelBody comparisons={comparisons} filter={filter} onFilterChange={onFilterChange} />
+					</div>
+				</SheetContent>
+			</Sheet>
+		</>
 	)
 }
 

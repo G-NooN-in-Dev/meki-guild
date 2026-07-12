@@ -59,7 +59,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 	]
 
 	return (
-		<section className="flex w-full flex-col gap-6">
+		<section className="flex w-full min-w-0 flex-col gap-6">
 			<header className="flex flex-col gap-2">
 				<p className="text-grayscale-500 text-sm">길드 종합 현황</p>
 				<h1 className="text-grayscale-900 text-3xl font-semibold">메이플키우기 게임즈 길드</h1>
