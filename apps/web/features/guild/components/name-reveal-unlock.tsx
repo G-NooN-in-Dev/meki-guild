@@ -10,7 +10,7 @@ import {
 	DialogTitle,
 	DialogTrigger
 } from '@shared/ui/dialog'
-import { Input } from '@shared/ui/input'
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@shared/ui/input-group'
 import { Label } from '@shared/ui/label'
 import { EyeIcon, EyeOffIcon, LockIcon } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
@@ -26,6 +26,8 @@ function NameRevealUnlock() {
 	const [open, setOpen] = useState(false)
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState<string | null>(null)
+	// 비밀번호 입력란 평문/마스킹 전환 (다이얼로그를 닫으면 다시 숨김)
+	const [showPassword, setShowPassword] = useState(false)
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault()
@@ -39,6 +41,7 @@ function NameRevealUnlock() {
 
 		setPassword('')
 		setError(null)
+		setShowPassword(false)
 		setOpen(false)
 	}
 
@@ -48,6 +51,7 @@ function NameRevealUnlock() {
 		if (!nextOpen) {
 			setPassword('')
 			setError(null)
+			setShowPassword(false)
 		}
 	}
 
@@ -96,20 +100,33 @@ function NameRevealUnlock() {
 				<form onSubmit={handleSubmit} className="flex flex-col gap-4">
 					<div className="flex flex-col gap-2">
 						<Label htmlFor="name-reveal-password">비밀번호</Label>
-						<Input
-							id="name-reveal-password"
-							type="password"
-							autoComplete="current-password"
-							placeholder="비밀번호 입력"
-							value={password}
-							onChange={(event) => {
-								setPassword(event.target.value)
-								if (error) {
-									setError(null)
-								}
-							}}
-							aria-invalid={Boolean(error)}
-						/>
+						<InputGroup>
+							<InputGroupInput
+								id="name-reveal-password"
+								type={showPassword ? 'text' : 'password'}
+								autoComplete="current-password"
+								placeholder="비밀번호 입력"
+								value={password}
+								onChange={(event) => {
+									setPassword(event.target.value)
+									if (error) {
+										setError(null)
+									}
+								}}
+								aria-invalid={Boolean(error)}
+							/>
+							<InputGroupAddon align="inline-end">
+								<InputGroupButton
+									type="button"
+									size="icon-xs"
+									aria-label={showPassword ? '비밀번호 숨기기' : '비밀번호 보기'}
+									aria-pressed={showPassword}
+									onClick={() => setShowPassword((prev) => !prev)}
+								>
+									{showPassword ? <EyeOffIcon className="size-3.5" /> : <EyeIcon className="size-3.5" />}
+								</InputGroupButton>
+							</InputGroupAddon>
+						</InputGroup>
 						{error ? <p className="text-destructive text-xs">{error}</p> : null}
 					</div>
 					<DialogFooter>
