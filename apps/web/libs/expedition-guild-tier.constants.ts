@@ -1,28 +1,31 @@
 export type ExpeditionGuildTier = {
 	rank: string
 	points: number
+	/** 해당 등급을 얻기 위해 들어야 하는 최대 등수. null이면 등수 제한 없음. */
+	maxPlacement: number | null
 }
 
 /**
  * 토벌전 점수 순위에 따른 길드 등급·포인트 기준표.
  * 1위부터 순서대로 적용됩니다.
+ * maxPlacement: 이 등수 이내에 들어야 해당 등급 최소 자격이 주어집니다.
  */
 export const EXPEDITION_GUILD_TIERS = [
-	{ rank: '챌린저1', points: 500_000 },
-	{ rank: '챌린저2', points: 450_000 },
-	{ rank: '챌린저3', points: 400_000 },
-	{ rank: '챌린저4', points: 350_000 },
-	{ rank: '챌린저5', points: 300_000 },
-	{ rank: '그랜드마스터1', points: 250_000 },
-	{ rank: '그랜드마스터2', points: 225_000 },
-	{ rank: '그랜드마스터3', points: 200_000 },
-	{ rank: '그랜드마스터4', points: 175_000 },
-	{ rank: '그랜드마스터5', points: 150_000 },
-	{ rank: '마스터1', points: 125_000 },
-	{ rank: '마스터2', points: 110_000 },
-	{ rank: '마스터3', points: 95_000 },
-	{ rank: '마스터4', points: 80_000 },
-	{ rank: '마스터5', points: 65_000 }
+	{ rank: '챌린저1', points: 500_000, maxPlacement: 10 },
+	{ rank: '챌린저2', points: 450_000, maxPlacement: 30 },
+	{ rank: '챌린저3', points: 400_000, maxPlacement: 50 },
+	{ rank: '챌린저4', points: 350_000, maxPlacement: 70 },
+	{ rank: '챌린저5', points: 300_000, maxPlacement: 100 },
+	{ rank: '그랜드마스터1', points: 250_000, maxPlacement: 150 },
+	{ rank: '그랜드마스터2', points: 225_000, maxPlacement: 200 },
+	{ rank: '그랜드마스터3', points: 200_000, maxPlacement: 250 },
+	{ rank: '그랜드마스터4', points: 175_000, maxPlacement: 350 },
+	{ rank: '그랜드마스터5', points: 150_000, maxPlacement: 500 },
+	{ rank: '마스터1', points: 125_000, maxPlacement: 1000 },
+	{ rank: '마스터2', points: 110_000, maxPlacement: 2000 },
+	{ rank: '마스터3', points: 95_000, maxPlacement: 3000 },
+	{ rank: '마스터4', points: 80_000, maxPlacement: 5000 },
+	{ rank: '마스터5', points: 65_000, maxPlacement: null }
 ] as const satisfies readonly ExpeditionGuildTier[]
 
 export function getExpeditionGuildTier(position: number): ExpeditionGuildTier | null {

@@ -21,13 +21,17 @@ function ExpeditionTierGuide() {
 			<DialogContent className="sm:max-w-lg">
 				<DialogHeader>
 					<DialogTitle>토벌전 길드 포인트</DialogTitle>
-					<DialogDescription>토벌전 순위와 점수에 따른 길드 포인트입니다.</DialogDescription>
+					<DialogDescription>
+						<p>토벌전 순위와 점수에 따른 길드 포인트입니다.</p>
+						<p>자격 등수 이내에 들어야 해당 포인트를 받을 수 있습니다.</p>
+					</DialogDescription>
 				</DialogHeader>
 				<div className="border-grayscale-200 max-h-80 overflow-y-auto rounded-lg border">
 					<Table>
 						<TableHeader>
 							<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">
 								<TableHead className="text-grayscale-500 text-center">등급</TableHead>
+								<TableHead className="text-grayscale-500 text-center">자격 등수</TableHead>
 								<TableHead className="text-grayscale-500 text-center">포인트</TableHead>
 							</TableRow>
 						</TableHeader>
@@ -35,6 +39,10 @@ function ExpeditionTierGuide() {
 							{EXPEDITION_GUILD_TIERS.map((tier) => (
 								<TableRow key={tier.rank}>
 									<TableCell className="text-center font-medium">{tier.rank}</TableCell>
+									{/* null = 마스터5처럼 등수 제한 없음 */}
+									<TableCell className="text-grayscale-700 text-center">
+										{tier.maxPlacement === null ? '-' : `${tier.maxPlacement.toLocaleString('ko-KR')} 위`}
+									</TableCell>
 									<TableCell className="text-grayscale-900 text-center font-semibold">
 										{tier.points.toLocaleString('ko-KR')}
 									</TableCell>
