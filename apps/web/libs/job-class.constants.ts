@@ -41,3 +41,45 @@ export const JOBS_BY_CLASS_LINE: Record<JobClassLine, readonly string[]> = {
 export function getJobClassLine(job: string): JobClassLine | null {
 	return JOB_TO_CLASS_LINE[job as keyof typeof JOB_TO_CLASS_LINE] ?? null
 }
+
+/**
+ * 직업 분포 UI용 계열 Badge 클래스.
+ * 셀 전체를 칠하지 않고, 디자인 토큰 pastel-* 로 은은하게 구분합니다.
+ */
+export const JOB_CLASS_LINE_BADGE_CLASS = {
+	전사: 'border-transparent bg-pastel-orange-100 text-pastel-orange-800',
+	마법사: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800',
+	궁수: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
+	도적: 'border-transparent bg-pastel-purple-100 text-pastel-purple-800',
+	해적: 'border-transparent bg-pastel-red-100 text-pastel-red-800',
+	미분류: 'border-transparent bg-grayscale-100 text-grayscale-600'
+} as const satisfies Record<JobClassLine | '미분류', string>
+
+export function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): string {
+	return JOB_CLASS_LINE_BADGE_CLASS[classLine]
+}
+
+/**
+ * 직업명 text 색.
+ * 스프레드시트 배경색 톤을 따르되, 밝은 테이블에서도 읽히도록 700~800 계열로 맞춥니다.
+ */
+export const JOB_TEXT_CLASS = {
+	다크나이트: 'text-grayscale-600',
+	팔라딘: 'text-pastel-yellow-800',
+	히어로: 'text-pastel-orange-700',
+	불독: 'text-pastel-red-700',
+	비숍: 'text-pastel-yellow-700',
+	썬콜: 'text-pastel-blue-700',
+	보우마스터: 'text-pastel-green-700',
+	신궁: 'text-pastel-green-800',
+	나이트로드: 'text-pastel-blue-800',
+	섀도어: 'text-pastel-purple-700',
+	바이퍼: 'text-pastel-red-800',
+	캡틴: 'text-grayscale-700'
+} as const satisfies Record<keyof typeof JOB_TO_CLASS_LINE, string>
+
+const FALLBACK_JOB_TEXT_CLASS = 'text-grayscale-700'
+
+export function getJobTextClass(job: string): string {
+	return JOB_TEXT_CLASS[job as keyof typeof JOB_TEXT_CLASS] ?? FALLBACK_JOB_TEXT_CLASS
+}

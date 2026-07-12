@@ -1,5 +1,6 @@
 'use client'
 
+import { Badge } from '@shared/ui/badge'
 import { Button } from '@shared/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog'
 import { cn } from '@shared/ui/lib/utils'
@@ -8,6 +9,7 @@ import { UsersIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import { getJobClassLineBadgeClass, getJobTextClass } from '@/libs/job-class.constants'
 import { calculateJobDistribution, type JobCountSortDirection, sortJobDistributionRows } from '@/utils/job-distribution'
 
 type JobDistributionGuideProps = {
@@ -40,24 +42,23 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 			/>
 			<DialogContent className="sm:max-w-lg">
 				<DialogHeader>
-					<DialogTitle>길드 직업 분포</DialogTitle>
-					<DialogDescription>
-						이번 주 길드원 기준 직업·계열별 인원 현황입니다. (총 {distribution.totalMembers}명)
-					</DialogDescription>
+					<DialogTitle>길드 직업 분포 (총 {distribution.totalMembers}명)</DialogTitle>
+					<DialogDescription hidden />
 				</DialogHeader>
-				<div className="border-grayscale-200 max-h-80 overflow-y-auto rounded-lg border">
+				{/* 순백 배경은 pastel text와 대비가 약해, 살짝 톤 내린 회색 배경으로 가독성을 맞춤 */}
+				<div className="border-grayscale-200 bg-grayscale-100 max-h-80 overflow-y-auto rounded-lg border">
 					<Table>
 						<TableHeader>
-							<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">
-								<TableHead className="text-grayscale-500 w-20">계열</TableHead>
-								<TableHead className="text-grayscale-500">직업</TableHead>
-								<TableHead className="text-grayscale-500 text-right">
+							<TableRow className="bg-grayscale-200/70 hover:bg-grayscale-200/70 border-grayscale-200">
+								<TableHead className="text-grayscale-600 w-24">계열</TableHead>
+								<TableHead className="text-grayscale-600">직업</TableHead>
+								<TableHead className="text-grayscale-600 text-right">
 									<button
 										type="button"
 										onClick={handleCountSort}
 										className={cn(
-											'hover:text-grayscale-900 ml-auto inline-flex items-center gap-1 transition-colors',
-											'text-grayscale-900'
+											'hover:text-grayscale-900 ml-auto inline-flex items-center gap-1 transition-colors hover:cursor-pointer',
+											'text-grayscale-800'
 										)}
 									>
 										인원수
@@ -67,13 +68,23 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{sortedRows.map((row) => (
-								<TableRow key={row.job}>
-									<TableCell className="text-grayscale-500">{row.classLine}</TableCell>
-									<TableCell className="font-medium">{row.job}</TableCell>
-									<TableCell className="text-right">{row.count}명</TableCell>
-								</TableRow>
-							))}
+							{sortedRows.map((row) => {
+								const { classLine, job, count } = row
+								const jobTextClass = getJobTextClass(job)
+
+								return (
+									<TableRow key={job} className="border-grayscale-200/80 bg-grayscale-100 hover:bg-grayscale-200/50">
+										{/* 계열: Badge / 직업·인원: 직업별 text 색 */}
+										<TableCell>
+											<Badge variant="outline" className={getJobClassLineBadgeClass(classLine)}>
+												{classLine}
+											</Badge>
+										</TableCell>
+										<TableCell className={cn('font-medium', jobTextClass)}>{job}</TableCell>
+										<TableCell className={cn('text-right tabular-nums', jobTextClass)}>{count}명</TableCell>
+									</TableRow>
+								)
+							})}
 						</TableBody>
 					</Table>
 				</div>

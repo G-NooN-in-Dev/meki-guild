@@ -87,7 +87,7 @@ function SortableHead({ label, sortKey, activeSortKey, sortDirection, onSort, co
 							type="button"
 							onClick={() => onSort(sortKey)}
 							className={cn(
-								'hover:text-grayscale-900 inline-flex items-center gap-1 transition-colors',
+								'hover:text-grayscale-900 inline-flex items-center gap-1 transition-colors hover:cursor-pointer',
 								isActive ? 'text-grayscale-900' : 'text-grayscale-500',
 								hasContentDate && 'underline decoration-dotted underline-offset-4'
 							)}
