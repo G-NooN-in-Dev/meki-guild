@@ -177,8 +177,8 @@ function MemberDetailDialog({ comparison }: MemberDetailDialogProps) {
 						<TableHeader className="bg-grayscale-100 sticky top-0 z-10">
 							<TableRow className="bg-grayscale-100 hover:bg-grayscale-100 border-grayscale-200">
 								<TableHead className="text-grayscale-500 w-[28%]">항목</TableHead>
-								<PeriodHead label="최근 데이터" />
 								<PeriodHead label="직전 데이터" />
+								<PeriodHead label="최근 데이터" />
 								<TableHead className="text-grayscale-500 text-right">증감</TableHead>
 							</TableRow>
 						</TableHeader>
@@ -189,11 +189,11 @@ function MemberDetailDialog({ comparison }: MemberDetailDialogProps) {
 									className={cn('border-grayscale-200', index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50')}
 								>
 									<TableCell className="text-grayscale-700 py-3 font-medium">{row.label}</TableCell>
-									<TableCell className="py-3 text-right">
-										<PeriodValueCell value={row.currentLabel} updatedAt={row.contentDates.current} emphasize />
-									</TableCell>
 									<TableCell className="text-grayscale-600 py-3 text-right">
 										<PeriodValueCell value={row.previousLabel} updatedAt={row.contentDates.previous} />
+									</TableCell>
+									<TableCell className="py-3 text-right">
+										<PeriodValueCell value={row.currentLabel} updatedAt={row.contentDates.current} emphasize />
 									</TableCell>
 									<TableCell className="py-3 text-right">
 										<GrowthDelta value={row.diffLabel} percentLabel={row.diffPercentLabel} />
