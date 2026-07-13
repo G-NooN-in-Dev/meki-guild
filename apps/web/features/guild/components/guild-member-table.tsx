@@ -1,6 +1,8 @@
 'use client'
 
+import { Label } from '@shared/ui/label'
 import { cn } from '@shared/ui/lib/utils'
+import { Switch } from '@shared/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@shared/ui/tooltip'
 import { useMemo, useState } from 'react'
@@ -12,7 +14,7 @@ import JobBadge from '@/features/guild/components/job-badge'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import MemberDetailDialog from '@/features/guild/components/member-detail-dialog'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
-import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import {
 	getGuildContentUpdatedAtLines,
@@ -33,7 +35,53 @@ type GuildMemberTableProps = {
 	comparisons: GuildMemberComparison[]
 }
 
-function getSortValue(comparison: GuildMemberComparison, key: SortKey): bigint | number {
+/** 증감율 비교 불가(신규·이전값 없음·0)일 때 쓰는 정렬용 센티널 — 내림차순에서 맨 아래 */
+const MISSING_PERCENT_SORT_VALUE = Number.NEGATIVE_INFINITY
+
+/**
+ * NumericDelta의 증감율을 정렬용 숫자로 변환합니다.
+ * (diff / previous) * 100 과 동일하되, bigint 정수 연산으로 소수 정밀도를 유지합니다.
+ */
+function getNumericPercentSortValue(delta: NumericDelta): number {
+	if (!delta.hasValue || delta.diff === null || delta.previous === null || delta.previous === 0n) {
+		return MISSING_PERCENT_SORT_VALUE
+	}
+
+	// 소수점 2자리까지 반영: (diff / previous) * 10000 → 나중에 /100 한 것과 같은 순서
+	return Number((delta.diff * 10000n) / delta.previous)
+}
+
+/** LevelDelta의 증감율을 정렬용 숫자로 변환합니다. */
+function getLevelPercentSortValue(delta: LevelDelta): number {
+	if (!delta.hasValue || delta.diff === null || delta.previous === null || delta.previous === 0) {
+		return MISSING_PERCENT_SORT_VALUE
+	}
+
+	return (delta.diff / delta.previous) * 100
+}
+
+/**
+ * 컬럼별 정렬 값을 뽑습니다.
+ * sortByPercent=true면 절대값 대신 증감율(%) 기준으로 비교합니다.
+ */
+function getSortValue(comparison: GuildMemberComparison, key: SortKey, sortByPercent: boolean): bigint | number {
+	if (sortByPercent) {
+		switch (key) {
+			case 'combatPower':
+				return getNumericPercentSortValue(comparison.combatPower)
+			case 'expeditionScore':
+				return getNumericPercentSortValue(comparison.expeditionScore)
+			case 'rivalry':
+				return getNumericPercentSortValue(comparison.rivalry)
+			case 'training':
+				return getNumericPercentSortValue(comparison.training)
+			case 'guildBoss':
+				return getNumericPercentSortValue(comparison.guildBoss)
+			case 'level':
+				return getLevelPercentSortValue(comparison.level)
+		}
+	}
+
 	switch (key) {
 		case 'combatPower':
 			return comparison.combatPower.hasValue ? comparison.combatPower.current : -1n
@@ -139,6 +187,8 @@ function SortableHead({ label, sortKey, activeSortKey, sortDirection, onSort, co
 function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 	const [sortKey, setSortKey] = useState<SortKey>('combatPower')
 	const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
+	/** ON이면 컬럼 헤더 정렬을 절대값이 아닌 증감율(%) 기준으로 적용 */
+	const [sortByPercent, setSortByPercent] = useState(false)
 	const [filter, setFilter] = useState<GuildMemberFilterState>(createEmptyGuildMemberFilter)
 
 	// 필터 → 정렬 순으로 적용해, 좁혀진 목록만 테이블에 표시
@@ -156,8 +206,8 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 				return -1
 			}
 
-			const leftValue = getSortValue(left, sortKey)
-			const rightValue = getSortValue(right, sortKey)
+			const leftValue = getSortValue(left, sortKey, sortByPercent)
+			const rightValue = getSortValue(right, sortKey, sortByPercent)
 
 			if (leftValue === rightValue) {
 				return left.name.localeCompare(right.name, 'ko')
@@ -179,7 +229,7 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 		})
 
 		return next
-	}, [filteredComparisons, sortDirection, sortKey])
+	}, [filteredComparisons, sortByPercent, sortDirection, sortKey])
 
 	const isFilterActive = isGuildMemberFilterActive(filter)
 
@@ -209,7 +259,21 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 					<p className="text-grayscale-500 col-start-1 row-start-2 text-sm tabular-nums md:col-start-1 md:row-start-1">
 						{isFilterActive ? `${sortedComparisons.length} / ${comparisons.length}명` : `${comparisons.length}명`}
 					</p>
-					<div className="col-start-2 row-start-2 flex justify-end md:col-start-2 md:row-start-1">
+					<div className="col-start-2 row-start-2 flex items-center justify-end gap-3 md:col-start-2 md:row-start-1">
+						{/* OFF=절대값 정렬, ON=증감율(%) 정렬 — 필터 버튼과 같은 outline 톤으로 대비 */}
+						<Label
+							htmlFor="sort-by-percent"
+							className="border-grayscale-200 bg-card gap-1.5 rounded-md border px-2.5 py-1.5 font-normal text-black shadow-xs"
+						>
+							<span className="text-sm">증감율</span>
+							<Switch
+								id="sort-by-percent"
+								size="sm"
+								checked={sortByPercent}
+								onCheckedChange={setSortByPercent}
+								aria-label="증감율 기준 정렬"
+							/>
+						</Label>
 						<GuildMemberFilters comparisons={comparisons} filter={filter} onFilterChange={setFilter} />
 					</div>
 				</div>

@@ -1,7 +1,6 @@
 'use client'
 
 import { cn } from '@shared/ui/lib/utils'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@shared/ui/tooltip'
 
 import { GrowthDelta } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
@@ -26,7 +25,7 @@ type CompareRow = {
 	diffLabel: string | null
 	diffPercentLabel?: string | null
 	winner: MemberVsWinner
-	/** 최근 수집일. 있으면 항목 라벨에 기준일 안내 표시 */
+	/** 최근 수집일. 있으면 항목 라벨 아래에 기준일 표시 */
 	contentUpdatedAt?: string | null
 	/** 직업 행은 텍스트 대신 JobBadge로 표시합니다 */
 	valueKind?: 'text' | 'job'
@@ -151,18 +150,15 @@ type CompareLabelProps = {
 }
 
 function CompareLabel({ label, contentUpdatedAt }: CompareLabelProps) {
+	// 기준일이 있으면 라벨 아래에 상시 표시 (Tooltip hover 대신)
 	if (contentUpdatedAt !== undefined) {
 		return (
-			<Tooltip>
-				<TooltipTrigger
-					render={
-						<span className="text-grayscale-500 cursor-pointer px-1 text-xs underline decoration-dotted underline-offset-4">
-							{label}
-						</span>
-					}
-				/>
-				<TooltipContent>{getGuildContentCriteriaLabel(contentUpdatedAt)}</TooltipContent>
-			</Tooltip>
+			<div className="flex flex-col items-center gap-0.5 px-1 text-center">
+				<span className="text-grayscale-500 text-xs">{label}</span>
+				<span className="text-grayscale-400 text-[10px] leading-tight">
+					{getGuildContentCriteriaLabel(contentUpdatedAt)}
+				</span>
+			</div>
 		)
 	}
 
@@ -315,28 +311,26 @@ function MemberComparePanel({ comparison }: MemberComparePanelProps) {
 	const rows = buildCompareRows(comparison)
 
 	return (
-		<TooltipProvider>
-			<div className="flex flex-col gap-3 md:gap-4">
-				{/* 모바일: 2열 카드 / 데스크탑: 나 | VS | 상대방 */}
-				<div className="grid grid-cols-2 gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
-					<MemberSummaryCard role="나" name={comparison.left.name} job={comparison.left.job} />
+		<div className="flex flex-col gap-3 md:gap-4">
+			{/* 모바일: 2열 카드 / 데스크탑: 나 | VS | 상대방 */}
+			<div className="grid grid-cols-2 gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
+				<MemberSummaryCard role="나" name={comparison.left.name} job={comparison.left.job} />
 
-					<div className="text-grayscale-400 hidden items-center justify-center text-sm font-semibold md:flex md:px-2">
-						VS
-					</div>
-
-					<MemberSummaryCard role="상대방" name={comparison.right.name} job={comparison.right.job} />
+				<div className="text-grayscale-400 hidden items-center justify-center text-sm font-semibold md:flex md:px-2">
+					VS
 				</div>
 
-				<div className="border-grayscale-200 bg-card shadow-soft overflow-hidden rounded-xl border">
-					<div className="bg-card min-w-0">
-						{rows.map((row) => (
-							<CompareRowItem key={row.label} row={row} />
-						))}
-					</div>
+				<MemberSummaryCard role="상대방" name={comparison.right.name} job={comparison.right.job} />
+			</div>
+
+			<div className="border-grayscale-200 bg-card shadow-soft overflow-hidden rounded-xl border">
+				<div className="bg-card min-w-0">
+					{rows.map((row) => (
+						<CompareRowItem key={row.label} row={row} />
+					))}
 				</div>
 			</div>
-		</TooltipProvider>
+		</div>
 	)
 }
 
