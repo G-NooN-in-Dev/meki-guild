@@ -370,19 +370,14 @@ function GuildMemberFilters({ comparisons, filter, onFilterChange }: GuildMember
 		onFilterChange(createEmptyGuildMemberFilter())
 	}
 
-	// 데스크탑에서 오른쪽 Sheet가 열리면 body·헤더를 왼쪽으로 밀어 테이블이 Sheet 뒤에 가리지 않게 함
+	// 데스크탑에서 오른쪽 Sheet가 열리면 body만 밀어 테이블이 가려지지 않게 함
+	// 사이트 헤더는 건드리지 않음 — Sheet는 헤더(h-14) 아래에서 열려 네비 연속성을 유지
 	useEffect(() => {
 		const { body } = document
-		const header = document.querySelector('header')
 
 		function clearPush() {
 			body.style.removeProperty('padding-right')
 			body.style.removeProperty('transition')
-
-			if (header instanceof HTMLElement) {
-				header.style.removeProperty('right')
-				header.style.removeProperty('transition')
-			}
 		}
 
 		if (!open || !isDesktop) {
@@ -392,12 +387,6 @@ function GuildMemberFilters({ comparisons, filter, onFilterChange }: GuildMember
 
 		body.style.transition = 'padding-right 200ms ease-in-out'
 		body.style.paddingRight = FILTER_SHEET_WIDTH
-
-		// fixed 헤더는 inset-x-0 이라 right만 줄이면 Sheet와 겹치지 않음
-		if (header instanceof HTMLElement) {
-			header.style.transition = 'right 200ms ease-in-out'
-			header.style.right = FILTER_SHEET_WIDTH
-		}
 
 		return clearPush
 	}, [open, isDesktop])
@@ -433,8 +422,11 @@ function GuildMemberFilters({ comparisons, filter, onFilterChange }: GuildMember
 					showCloseButton={false}
 					className={cn(
 						'max-w-full min-w-0 gap-0 overflow-x-hidden',
-						// 모바일: 높이 제한 + 본문만 세로 스크롤 / 데스크탑: 오른쪽 풀 높이
-						isDesktop ? 'w-full sm:max-w-md' : 'h-auto max-h-[50vh] w-full overflow-hidden'
+						// 모바일: 하단 시트 / 데스크탑: 사이트 헤더(h-14) 아래에서 열어 상단 네비가 잘리지 않게 함
+						// inset-y-0·h-full과 충돌하지 않도록 top/bottom·height를 개별 지정
+						isDesktop
+							? 'w-full data-[side=right]:inset-y-auto data-[side=right]:top-14 data-[side=right]:right-0 data-[side=right]:bottom-0 data-[side=right]:h-auto sm:max-w-md'
+							: 'h-auto max-h-[50vh] w-full overflow-hidden'
 					)}
 				>
 					<SheetHeader className="border-border shrink-0 border-b">

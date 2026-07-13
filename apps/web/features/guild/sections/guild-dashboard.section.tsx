@@ -10,7 +10,6 @@ type GuildDashboardSectionProps = {
 type SummaryCard = {
 	label: string
 	value: string
-	description?: string
 	/**
 	 * 직전 대비 증감율. 멤버 테이블과 동일하게 GrowthDelta에 전달.
 	 * undefined면 증감율 UI 미표시(평균 레벨 등).
@@ -49,42 +48,36 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		{
 			label: '총 전투력 변화',
 			value: metrics.combatPowerChange,
-			percentLabel: metrics.combatPowerChangePercent,
-			description: '직전 대비'
+			percentLabel: metrics.combatPowerChangePercent
 		},
 		{
 			label: '평균 레벨',
-			value: metrics.averageLevel,
-			description: ''
+			value: metrics.averageLevel
 		}
 	]
 
 	const bottomSummaryCards: SummaryCard[] = [
 		{
-			label: '토벌전',
+			label: '토벌전 변화',
 			value: metrics.expeditionScoreChange,
 			percentLabel: metrics.expeditionScoreChangePercent,
 			subValue: metrics.expeditionGradePointsTotal,
-			subDelta: metrics.expeditionGradePointsChange,
-			description: '직전 대비'
+			subDelta: metrics.expeditionGradePointsChange
 		},
 		{
-			label: '대항전',
+			label: '대항전 변화',
 			value: metrics.rivalryChange,
-			percentLabel: metrics.rivalryChangePercent,
-			description: '직전 대비'
+			percentLabel: metrics.rivalryChangePercent
 		},
 		{
-			label: '수련장',
+			label: '수련장 변화',
 			value: metrics.trainingChange,
-			percentLabel: metrics.trainingChangePercent,
-			description: '직전 대비'
+			percentLabel: metrics.trainingChangePercent
 		},
 		{
-			label: '길드보스',
+			label: '길드보스 변화',
 			value: metrics.guildBossChange,
-			percentLabel: metrics.guildBossChangePercent,
-			description: '직전 대비'
+			percentLabel: metrics.guildBossChangePercent
 		}
 	]
 
@@ -99,10 +92,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				<div className="grid gap-4 md:grid-cols-2">
 					{topSummaryCards.map((card) => (
 						<div key={card.label} className="border-grayscale-200 bg-card shadow-soft rounded-xl border p-4">
-							<p className="flex items-center gap-1">
-								<span className="text-grayscale-500 text-sm">{card.label}</span>
-								{card.description && <span className="text-grayscale-400 text-xs">({card.description})</span>}
-							</p>
+							<p className="text-grayscale-500 text-sm">{card.label}</p>
 							<SummaryCardValue value={card.value} percentLabel={card.percentLabel} />
 						</div>
 					))}
@@ -111,10 +101,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
 					{bottomSummaryCards.map((card) => (
 						<div key={card.label} className="border-grayscale-200 bg-card shadow-soft rounded-xl border p-4">
-							<p className="flex items-center gap-1">
-								<span className="text-grayscale-500 text-sm">{card.label}</span>
-								{card.description && <span className="text-grayscale-400 text-xs">({card.description})</span>}
-							</p>
+							<p className="text-grayscale-500 text-sm">{card.label}</p>
 							<SummaryCardValue value={card.value} percentLabel={card.percentLabel} />
 							{card.subValue ? (
 								<div className="mt-1 flex items-baseline gap-2">

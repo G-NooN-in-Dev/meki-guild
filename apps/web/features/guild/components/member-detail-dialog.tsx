@@ -177,8 +177,8 @@ function MemberDetailDialog({ comparison }: MemberDetailDialogProps) {
 						<TableHeader className="bg-grayscale-100 sticky top-0 z-10">
 							<TableRow className="bg-grayscale-100 hover:bg-grayscale-100 border-grayscale-200">
 								<TableHead className="text-grayscale-500 w-[28%]">항목</TableHead>
-								<PeriodHead label="직전 데이터" />
-								<PeriodHead label="최근 데이터" />
+								<PeriodHead label="직전" />
+								<PeriodHead label="최신" />
 								<TableHead className="text-grayscale-500 text-right">증감</TableHead>
 							</TableRow>
 						</TableHeader>

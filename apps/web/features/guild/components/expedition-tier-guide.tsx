@@ -13,9 +13,16 @@ function ExpeditionTierGuide() {
 		<Dialog>
 			<DialogTrigger
 				render={
-					<Button variant="outline" size="sm" className="text-grayscale-600 gap-1.5">
+					<Button
+						variant="outline"
+						size="sm"
+						className="text-grayscale-600 shrink-0 gap-1.5"
+						aria-label="토벌전 등급별 포인트"
+					>
 						<CircleHelpIcon className="size-4" />
-						토벌전 등급별 포인트
+						{/* 모바일은 짧은 라벨, md 이상에서 전체 문구 */}
+						<span className="md:hidden">토벌 등급</span>
+						<span className="hidden md:inline">토벌전 등급별 포인트</span>
 					</Button>
 				}
 			/>

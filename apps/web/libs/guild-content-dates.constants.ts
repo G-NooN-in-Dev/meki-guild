@@ -28,17 +28,6 @@ export function formatGuildContentDateOrNone(date: string | null): string {
 	return date ? formatGuildContentDate(date) : '없음'
 }
 
-/** 툴팁·헤더에 쓸 컨텐츠 업데이트 안내 문구 (최근 + 직전) */
-export function getGuildContentUpdatedAtLines(dates: GuildContentDateRange): {
-	current: string
-	previous: string
-} {
-	return {
-		current: `최근 업데이트 : ${formatGuildContentDateOrNone(dates.current)}`,
-		previous: `직전 업데이트 : ${formatGuildContentDateOrNone(dates.previous)}`
-	}
-}
-
 /** 1 vs 1 비교 테이블 등에서 쓸 컨텐츠 기준일 안내 문구 (최근 수집일 기준) */
 export function getGuildContentCriteriaLabel(date: string | null): string {
 	if (!date) {
