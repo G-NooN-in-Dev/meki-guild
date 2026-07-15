@@ -8,11 +8,13 @@ import { useEffect, useMemo, useState } from 'react'
 import MemberComparePanel from '@/features/guild/components/member-compare-panel'
 import MemberSelect, { type MemberSelectOption } from '@/features/guild/components/member-select'
 import type { GuildMemberInput, MemberVsMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import type { MemberRankings } from '@/utils/compute-member-rankings'
 import { compareMembers } from '@/utils/compare-members'
 import { parseGuildMember } from '@/utils/compare-snapshots'
 
 type MemberCompareSectionProps = {
 	members: GuildMemberInput[]
+	rankings: MemberRankings
 }
 
 /** 비교 계산을 비동기로 감싸 로딩 UI를 보여줍니다. 추후 API 연동 시에도 동일 패턴을 유지합니다. */
@@ -39,7 +41,7 @@ type LoadedComparison = {
 	comparison: MemberVsMemberComparison | null
 }
 
-function MemberCompareSection({ members }: MemberCompareSectionProps) {
+function MemberCompareSection({ members, rankings }: MemberCompareSectionProps) {
 	const [selfName, setSelfName] = useState<string | null>(null)
 	const [opponentName, setOpponentName] = useState<string | null>(null)
 	const [loadedComparison, setLoadedComparison] = useState<LoadedComparison | null>(null)
@@ -142,7 +144,9 @@ function MemberCompareSection({ members }: MemberCompareSectionProps) {
 				</div>
 			) : null}
 
-			{canCompare && !isLoading && comparison ? <MemberComparePanel comparison={comparison} /> : null}
+			{canCompare && !isLoading && comparison ? (
+				<MemberComparePanel comparison={comparison} rankings={rankings} />
+			) : null}
 		</section>
 	)
 }

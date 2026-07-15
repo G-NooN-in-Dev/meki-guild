@@ -114,6 +114,9 @@ export type GuildDashboardData = {
 	currentWeek: GuildWeekSnapshot
 	previousWeek: GuildWeekSnapshot
 	comparisons: GuildMemberComparison[]
+	rankings: import('@/utils/compute-member-rankings').MemberRankings
+	/** 직전 주 기준 순위. 순위 변동 표시에 사용 */
+	previousRankings: import('@/utils/compute-member-rankings').MemberRankings
 }
 
 /** 1 vs 1 비교에서 우세한 쪽 */
@@ -175,4 +178,5 @@ export type MemberVsMemberComparison = {
 
 export type GuildComparePageData = {
 	members: GuildMemberInput[]
+	rankings: import('@/utils/compute-member-rankings').MemberRankings
 }

@@ -11,9 +11,11 @@ import {
 	type MemberVsWinner
 } from '@/features/guild/types/guild-snapshot.type'
 import { getGuildContentCriteriaLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
+import { formatRankLabel, type MemberRankings } from '@/utils/compute-member-rankings'
 
 type MemberComparePanelProps = {
 	comparison: MemberVsMemberComparison
+	rankings: MemberRankings
 }
 
 type CompareSide = 'self' | 'opponent'
@@ -29,6 +31,10 @@ type CompareRow = {
 	contentUpdatedAt?: string | null
 	/** 직업 행은 텍스트 대신 JobBadge로 표시합니다 */
 	valueKind?: 'text' | 'job'
+	/** 나(왼쪽)의 길드 내 순위 라벨 */
+	selfRankLabel?: string | null
+	/** 상대방(오른쪽)의 길드 내 순위 라벨 */
+	opponentRankLabel?: string | null
 }
 
 /** 비교 행 그리드 — 모바일·데스크탑 공통 3열, 항목 열 수직 중앙 정렬 */
@@ -114,9 +120,18 @@ type CompareValueProps = {
 	diffLabel: string | null
 	diffPercentLabel?: string | null
 	valueKind?: 'text' | 'job'
+	rankLabel?: string | null
 }
 
-function CompareValue({ side, value, winner, diffLabel, diffPercentLabel, valueKind = 'text' }: CompareValueProps) {
+function CompareValue({
+	side,
+	value,
+	winner,
+	diffLabel,
+	diffPercentLabel,
+	valueKind = 'text',
+	rankLabel
+}: CompareValueProps) {
 	const winnerDiffLabel = getWinnerDiffLabel(winner, side, diffLabel)
 	const winnerDiffPercentLabel = getWinnerDiffPercentLabel(winner, side, diffPercentLabel)
 	const isJob = valueKind === 'job'
@@ -131,7 +146,10 @@ function CompareValue({ side, value, winner, diffLabel, diffPercentLabel, valueK
 			{isJob ? (
 				<JobBadge job={value} />
 			) : (
-				<span className="text-xs leading-snug font-medium wrap-break-word md:text-sm">{value}</span>
+				<span className="text-xs leading-snug font-medium wrap-break-word md:text-sm">
+					{value}
+					{rankLabel ? <span className="text-grayscale-600 ml-0.5 text-[10px] font-normal">({rankLabel})</span> : null}
+				</span>
 			)}
 			{winnerDiffLabel ? (
 				<GrowthDelta
@@ -180,6 +198,7 @@ function CompareRowItem({ row }: CompareRowItemProps) {
 					diffLabel={row.diffLabel}
 					diffPercentLabel={row.diffPercentLabel}
 					valueKind={row.valueKind}
+					rankLabel={row.selfRankLabel}
 				/>
 				<div className="flex items-center justify-center self-stretch px-0.5 md:px-1">
 					<CompareLabel label={row.label} contentUpdatedAt={row.contentUpdatedAt} />
@@ -191,13 +210,17 @@ function CompareRowItem({ row }: CompareRowItemProps) {
 					diffLabel={row.diffLabel}
 					diffPercentLabel={row.diffPercentLabel}
 					valueKind={row.valueKind}
+					rankLabel={row.opponentRankLabel}
 				/>
 			</div>
 		</div>
 	)
 }
 
-function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
+function buildCompareRows(comparison: MemberVsMemberComparison, rankings: MemberRankings): CompareRow[] {
+	const leftName = comparison.left.name
+	const rightName = comparison.right.name
+
 	return [
 		{
 			label: '직업',
@@ -213,7 +236,6 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			opponentValue: `${comparison.level.right}`,
 			diffLabel: comparison.level.diffLabel,
 			winner: comparison.level.winner,
-			// 레벨·전투력은 동일 스냅샷 기준일을 사용합니다
 			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower.current
 		},
 		{
@@ -223,7 +245,9 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.combatPower.diffLabel,
 			diffPercentLabel: comparison.combatPower.diffPercentLabel,
 			winner: comparison.combatPower.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower.current
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.combatPower.current,
+			selfRankLabel: formatRankLabel(rankings.combatPower, leftName),
+			opponentRankLabel: formatRankLabel(rankings.combatPower, rightName)
 		},
 		{
 			label: '토벌전 등급',
@@ -255,7 +279,9 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.expeditionScore.diffLabel,
 			diffPercentLabel: comparison.expeditionScore.diffPercentLabel,
 			winner: comparison.expeditionScore.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current,
+			selfRankLabel: formatRankLabel(rankings.expeditionScore, leftName),
+			opponentRankLabel: formatRankLabel(rankings.expeditionScore, rightName)
 		},
 		{
 			label: '대항전',
@@ -264,7 +290,9 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.rivalry.diffLabel,
 			diffPercentLabel: comparison.rivalry.diffPercentLabel,
 			winner: comparison.rivalry.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.rivalry.current
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.rivalry.current,
+			selfRankLabel: formatRankLabel(rankings.rivalry, leftName),
+			opponentRankLabel: formatRankLabel(rankings.rivalry, rightName)
 		},
 		{
 			label: '수련장',
@@ -273,7 +301,9 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 			diffLabel: comparison.training.diffLabel,
 			diffPercentLabel: comparison.training.diffPercentLabel,
 			winner: comparison.training.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.training.current
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.training.current,
+			selfRankLabel: formatRankLabel(rankings.training, leftName),
+			opponentRankLabel: formatRankLabel(rankings.training, rightName)
 		},
 		{
 			label: '길드보스',
@@ -286,7 +316,9 @@ function buildCompareRows(comparison: MemberVsMemberComparison): CompareRow[] {
 					? comparison.guildBoss.diffPercentLabel
 					: null,
 			winner: comparison.guildBoss.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.guildBoss.current
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.guildBoss.current,
+			selfRankLabel: comparison.guildBoss.leftHasValue ? formatRankLabel(rankings.guildBoss, leftName) : null,
+			opponentRankLabel: comparison.guildBoss.rightHasValue ? formatRankLabel(rankings.guildBoss, rightName) : null
 		}
 	]
 }
@@ -307,8 +339,8 @@ function MemberSummaryCard({ role, name, job }: { role: '나' | '상대방'; nam
 	)
 }
 
-function MemberComparePanel({ comparison }: MemberComparePanelProps) {
-	const rows = buildCompareRows(comparison)
+function MemberComparePanel({ comparison, rankings }: MemberComparePanelProps) {
+	const rows = buildCompareRows(comparison, rankings)
 
 	return (
 		<div className="flex flex-col gap-3 md:gap-4">

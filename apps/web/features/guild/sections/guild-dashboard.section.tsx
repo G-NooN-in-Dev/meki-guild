@@ -52,7 +52,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		},
 		{
 			label: '평균 레벨',
-			value: metrics.averageLevel
+			value: `Lv. ${metrics.averageLevel}`
 		}
 	]
 
@@ -116,7 +116,11 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				</div>
 			</div>
 
-			<GuildMemberTable comparisons={data.comparisons} />
+			<GuildMemberTable
+				comparisons={data.comparisons}
+				rankings={data.rankings}
+				previousRankings={data.previousRankings}
+			/>
 		</section>
 	)
 }

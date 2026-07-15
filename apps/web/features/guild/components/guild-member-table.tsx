@@ -16,6 +16,7 @@ import MemberDetailDialog from '@/features/guild/components/member-detail-dialog
 import MemberDisplayName from '@/features/guild/components/member-display-name'
 import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import type { MemberRankings } from '@/utils/compute-member-rankings'
 import {
 	createEmptyGuildMemberFilter,
 	filterGuildMembers,
@@ -28,6 +29,8 @@ type SortDirection = 'asc' | 'desc'
 
 type GuildMemberTableProps = {
 	comparisons: GuildMemberComparison[]
+	rankings: MemberRankings
+	previousRankings: MemberRankings
 }
 
 /** 증감율 비교 불가(신규·이전값 없음·0)일 때 쓰는 정렬용 센티널 — 내림차순에서 맨 아래 */
@@ -163,7 +166,7 @@ function SortableHead({ label, sortKey, activeSortKey, sortDirection, onSort }: 
 	)
 }
 
-function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
+function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemberTableProps) {
 	const [sortKey, setSortKey] = useState<SortKey>('combatPower')
 	const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
 	/** ON이면 컬럼 헤더 정렬을 절대값이 아닌 증감율(%) 기준으로 적용 */
@@ -329,7 +332,11 @@ function GuildMemberTable({ comparisons }: GuildMemberTableProps) {
 												<MemberDisplayName name={comparison.name} />
 												<MemberStatusBadge status={comparison.status} />
 											</span>
-											<MemberDetailDialog comparison={comparison} />
+											<MemberDetailDialog
+												comparison={comparison}
+												rankings={rankings}
+												previousRankings={previousRankings}
+											/>
 										</div>
 									</TableCell>
 									<TableCell>
