@@ -117,7 +117,7 @@ export function formatPlacementRank(value: number | null): string {
 		return GUILD_EMPTY_VALUE_LABEL
 	}
 
-	return `${value.toLocaleString('ko-KR')}위`
+	return `${value.toLocaleString('ko-KR')} 위`
 }
 
 /**
