@@ -287,6 +287,19 @@
 			"training": "7292736"
 		},
 		{
+			"name": "홍진영",
+			"level": 105,
+			"job": "썬콜",
+			"combatPower": "59조 2921억",
+			"expedition": {
+				"grade": "마스터3",
+				"placement": null,
+				"score": "162억 83만"
+			},
+			"rivalry": "",
+			"training": ""
+		},
+		{
 			"name": "누텔라토스트",
 			"level": 106,
 			"job": "팔라딘",
