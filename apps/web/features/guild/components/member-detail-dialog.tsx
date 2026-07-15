@@ -194,7 +194,8 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 					</button>
 				}
 			/>
-			<DialogContent className="sm:max-w-xl">
+			{/* 모바일: 좌우 여백 최소화하여 넓게, 데스크탑: 테이블 4컬럼 + 순위·날짜 정보가 여유롭게 들어갈 폭 */}
+			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-2xl sm:gap-6 sm:p-6">
 				<DialogHeader>
 					{/* 이름·상태·직업을 한 줄로 나란히 표시 */}
 					<DialogTitle className="flex flex-wrap items-center gap-1.5">
@@ -205,8 +206,8 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 					{/* DialogDescription은 a11y용으로 숨기고, 직업은 색상 Badge로 표시 */}
 					<DialogDescription className="sr-only">{comparison.job}</DialogDescription>
 				</DialogHeader>
-				{/* 회색 배경 + sticky 헤더로 숫자 대비·스크롤 가독성 확보 */}
-				<div className="border-grayscale-200 bg-grayscale-100 max-h-96 overflow-y-auto rounded-lg border">
+				{/* 회색 배경 + sticky 헤더로 숫자 대비·스크롤 가독성 확보. 뷰포트 대비 높이로 데이터가 많아도 편하게 스크롤 */}
+				<div className="border-grayscale-200 bg-grayscale-100 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">
 					<Table>
 						<TableHeader className="bg-grayscale-100 sticky top-0 z-10">
 							<TableRow className="bg-grayscale-100 hover:bg-grayscale-100 border-grayscale-200">

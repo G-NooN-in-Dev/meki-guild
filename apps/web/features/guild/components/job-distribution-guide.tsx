@@ -42,13 +42,13 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 					</Button>
 				}
 			/>
-			<DialogContent className="sm:max-w-lg">
+			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-lg sm:gap-6 sm:p-6">
 				<DialogHeader>
 					<DialogTitle>길드 직업 분포 (총 {distribution.totalMembers}명)</DialogTitle>
 					<DialogDescription hidden />
 				</DialogHeader>
 				{/* 순백 배경은 pastel text와 대비가 약해, 살짝 톤 내린 회색 배경으로 가독성을 맞춤 */}
-				<div className="border-grayscale-200 bg-grayscale-100 max-h-80 overflow-y-auto rounded-lg border">
+				<div className="border-grayscale-200 bg-grayscale-100 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">
 					<Table>
 						<TableHeader>
 							<TableRow className="bg-grayscale-200/70 hover:bg-grayscale-200/70 border-grayscale-200">

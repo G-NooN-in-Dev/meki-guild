@@ -26,7 +26,7 @@ function ExpeditionTierGuide() {
 					</Button>
 				}
 			/>
-			<DialogContent className="sm:max-w-lg">
+			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-lg sm:gap-6 sm:p-6">
 				<DialogHeader>
 					<DialogTitle>토벌전 길드 포인트</DialogTitle>
 					{/* DialogDescription 기본 태그는 <p>라서, 문단이 둘 이상이면 div로 렌더해야 hydration 오류가 없다 */}
@@ -35,7 +35,7 @@ function ExpeditionTierGuide() {
 						<p>자격 등수 이내에 들어야 해당 포인트를 받을 수 있습니다.</p>
 					</DialogDescription>
 				</DialogHeader>
-				<div className="border-grayscale-200 max-h-80 overflow-y-auto rounded-lg border">
+				<div className="border-grayscale-200 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">
 					<Table>
 						<TableHeader>
 							<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">
