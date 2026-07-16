@@ -207,13 +207,39 @@ export function aggregateEquipEffects(effects: readonly CompanionEquipEffect[]):
 	})
 }
 
+/**
+ * 직업 → public/tips/companions 파일명 키.
+ * 등급별 이미지는 없고 직업당 PNG 1장입니다.
+ */
+export const COMPANION_JOB_ICON_KEY = {
+	히어로: 'hero',
+	팔라딘: 'paladin',
+	다크나이트: 'darkknight',
+	썬콜: 'mage_sc',
+	불독: 'mage_fd',
+	비숍: 'bishop',
+	보우마스터: 'bowmaster',
+	신궁: 'marksman',
+	나이트로드: 'nightlord',
+	섀도어: 'shadower',
+	바이퍼: 'viper',
+	캡틴: 'captain'
+} as const satisfies Record<string, string>
+
+/** 직업 초상화 public 경로. 매핑이 없으면 빈 문자열. */
+export function getCompanionImageSrc(job: string) {
+	const iconKey = COMPANION_JOB_ICON_KEY[job as keyof typeof COMPANION_JOB_ICON_KEY]
+	return iconKey ? `/tips/companions/${iconKey}.png` : ''
+}
+
 /** 직업 × 등급 조합으로 동료 카탈로그를 만듭니다. */
 function createCompanion(job: string, grade: CompanionGrade): Companion {
 	return {
 		id: `${grade}-${job}`,
 		name: job,
 		job,
-		grade
+		grade,
+		imageSrc: getCompanionImageSrc(job)
 	}
 }
 

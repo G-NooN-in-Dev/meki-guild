@@ -8,6 +8,7 @@ import { cn } from '@shared/ui/utils'
 import { useEffect, useState } from 'react'
 
 import CompanionLevelStepper from '@/features/tips/components/companion-level-stepper'
+import CompanionPortrait from '@/features/tips/components/companion-portrait'
 import {
 	COMPANION_GRADE_BADGE_CLASS,
 	COMPANION_GRADE_MAX_LEVEL,
@@ -116,11 +117,14 @@ function CompanionSlotEditor({
 				<div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
 					{companion ? (
 						<div className="border-grayscale-200 bg-grayscale-50 flex flex-col gap-3 rounded-xl border p-3">
-							<div className="flex flex-wrap items-center gap-2">
-								<Badge className={COMPANION_GRADE_BADGE_CLASS[companion.grade]}>
-									{COMPANION_GRADE_META[companion.grade].tierLabel} ({COMPANION_GRADE_META[companion.grade].label})
-								</Badge>
-								<p className="text-grayscale-900 font-semibold">{companion.name}</p>
+							<div className="flex items-center gap-3">
+								<CompanionPortrait src={companion.imageSrc} alt={companion.name} grade={companion.grade} size="lg" />
+								<div className="min-w-0 space-y-1">
+									<Badge className={COMPANION_GRADE_BADGE_CLASS[companion.grade]}>
+										{COMPANION_GRADE_META[companion.grade].tierLabel} ({COMPANION_GRADE_META[companion.grade].label})
+									</Badge>
+									<p className="text-grayscale-900 font-semibold">{companion.name}</p>
+								</div>
 							</div>
 							<CompanionLevelStepper
 								level={level}
@@ -210,13 +214,14 @@ function CompanionGradeOptions({ grade, excludedIds, selectedCompanionId, onSele
 						disabled={excluded && !selected}
 						onClick={() => onSelect(item)}
 						className={cn(
-							'border-grayscale-200 cursor-pointer rounded-lg border px-2.5 py-2 text-left text-sm font-medium transition-colors',
+							'border-grayscale-200 flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm font-medium transition-colors',
 							'hover:border-grayscale-300 hover:bg-grayscale-50',
 							'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:outline-none',
 							'disabled:cursor-not-allowed disabled:opacity-35',
 							selected && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
 						)}
 					>
+						<CompanionPortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />
 						<span className="text-grayscale-800 truncate">{item.name}</span>
 					</button>
 				)

@@ -4,6 +4,7 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 import { PlusIcon } from 'lucide-react'
 
+import CompanionPortrait from '@/features/tips/components/companion-portrait'
 import { COMPANION_GRADE_BADGE_CLASS, COMPANION_GRADE_META } from '@/features/tips/lib/companion-setup.constants'
 import type { Companion, CompanionEquipEffect, CompanionSetupSlot } from '@/features/tips/types/companion.type'
 
@@ -43,13 +44,21 @@ function CompanionSlot({ slot, companion, level, equipEffects, isEditing = false
 			</div>
 
 			{companion && gradeMeta && primaryEffect ? (
-				<>
-					<div className="flex flex-wrap items-center gap-1.5">
-						<Badge className={COMPANION_GRADE_BADGE_CLASS[companion.grade]}>{gradeMeta.label}</Badge>
-						<p className="text-grayscale-900 text-sm font-semibold">{companion.name}</p>
+				<div className="flex items-start gap-2.5">
+					<CompanionPortrait
+						src={companion.imageSrc}
+						alt={companion.name}
+						grade={companion.grade}
+						size={isMain ? 'lg' : 'md'}
+					/>
+					<div className="min-w-0 flex-1 space-y-1">
+						<div className="flex flex-wrap items-center gap-1.5">
+							<Badge className={COMPANION_GRADE_BADGE_CLASS[companion.grade]}>{gradeMeta.label}</Badge>
+							<p className="text-grayscale-900 text-sm font-semibold">{companion.name}</p>
+						</div>
+						<p className="text-grayscale-600 truncate text-xs md:text-sm">{primaryEffect.displayText}</p>
 					</div>
-					<p className="text-grayscale-600 truncate text-xs md:text-sm">{primaryEffect.displayText}</p>
-				</>
+				</div>
 			) : (
 				<div className="text-grayscale-400 flex items-center gap-1.5 py-2 text-sm">
 					<PlusIcon className="size-4 shrink-0" />
