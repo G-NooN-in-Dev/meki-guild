@@ -24,7 +24,8 @@ export type NavItem = NavLinkItem | NavComingSoonItem
 /** 메뉴 추가 시 여기만 확장하면 인라인·모바일 Sheet에 함께 반영됩니다 */
 export const NAV_ITEMS: NavItem[] = [
 	{ type: 'link', href: '/', label: '메인' },
-	{ type: 'link', href: '/compare', label: '1 vs 1 비교' }
+	{ type: 'link', href: '/compare', label: '1 vs 1 비교' },
+	{ type: 'link', href: '/tips', label: '정보/팁' }
 ]
 
 function isNavActive(pathname: string, href: string) {
