@@ -16,7 +16,7 @@ function TipCard({ tip }: TipCardProps) {
 		<Link
 			href={tip.href}
 			className={cn(
-				'group focus-visible:ring-grayscale-900 block rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
+				'group focus-visible:ring-grayscale-900 block cursor-pointer rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
 			)}
 		>
 			<Card

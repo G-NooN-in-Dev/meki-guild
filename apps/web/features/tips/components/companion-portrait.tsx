@@ -55,7 +55,7 @@ function CompanionPortrait({ src, alt, grade, size = 'md', className }: Companio
 			height={PORTRAIT_HEIGHT}
 			draggable={false}
 			className={cn(
-				'bg-grayscale-50 border-grayscale-200 inline-block shrink-0 rounded-lg border object-contain',
+				'bg-grayscale-50 border-grayscale-200 inline-block shrink-0 cursor-pointer rounded-lg border object-contain',
 				SIZE_CLASS[size],
 				grade && 'ring-2 ring-offset-1',
 				grade && GRADE_RING_CLASS[grade],

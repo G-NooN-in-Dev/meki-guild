@@ -202,7 +202,8 @@ function CompanionGradeOptions({ grade, excludedIds, selectedCompanionId, onSele
 	const companions = COMPANIONS.filter((item) => item.grade === grade)
 
 	return (
-		<div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
+		// Sheet 폭이 좁아 데스크탑에서도 2열 유지
+		<div className="grid grid-cols-2 gap-1.5">
 			{companions.map((item) => {
 				const excluded = excludedIds.has(item.id)
 				const selected = selectedCompanionId === item.id

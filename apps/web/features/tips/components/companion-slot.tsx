@@ -33,6 +33,7 @@ function CompanionSlot({ slot, companion, level, equipEffects, isEditing = false
 				'group border-grayscale-200 bg-card shadow-soft flex w-full cursor-pointer flex-col gap-1.5 rounded-xl border p-3 text-left transition-colors',
 				'hover:border-grayscale-300 hover:bg-grayscale-50/70',
 				'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+				'[&_img]:cursor-pointer',
 				!companion && 'border-dashed',
 				isEditing && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1',
 				isMain && 'md:p-4'
