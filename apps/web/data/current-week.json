@@ -66,6 +66,19 @@
 			"training": "1464만 1872"
 		},
 		{
+			"name": "민무늬오징어",
+			"level": 108,
+			"job": "히어로",
+			"combatPower": "216조 4544억",
+			"expedition": {
+				"grade": "그랜드마스터5",
+				"placement": 425,
+				"score": "906억 4641만"
+			},
+			"rivalry": "",
+			"training": ""
+		},
+		{
 			"name": "교토",
 			"level": 107,
 			"job": "히어로",
@@ -194,19 +207,6 @@
 			},
 			"rivalry": "194억 2165만",
 			"training": "5337306"
-		},
-		{
-			"name": "악당지우",
-			"level": 106,
-			"job": "나이트로드",
-			"combatPower": "77조 155억",
-			"expedition": {
-				"grade": "마스터1",
-				"placement": 914,
-				"score": "396억 9940만"
-			},
-			"rivalry": "202억 9965만",
-			"training": "5007795"
 		},
 		{
 			"name": "코넛",
