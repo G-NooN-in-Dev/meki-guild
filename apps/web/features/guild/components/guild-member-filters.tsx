@@ -13,11 +13,17 @@ import JobBadge from '@/features/guild/components/job-badge'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import useMediaQuery from '@/hooks/use-media-query'
 import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
-import { JOB_CLASS_LINE_ORDER, JOBS_BY_CLASS_LINE } from '@/libs/job-class.constants'
+import {
+	getJobClassLine,
+	JOB_CLASS_LINE_ORDER,
+	type JobClassLine,
+	JOBS_BY_CLASS_LINE
+} from '@/libs/job-class.constants'
 import {
 	countActiveGuildMemberFilters,
 	createEmptyGuildMemberFilter,
 	type GuildMemberFilterState,
+	isJobTaxonomyFilterActive,
 	type NumberRange
 } from '@/utils/filter-guild-members'
 import { formatKoreanNumber, formatTrainingScore } from '@/utils/format-korean-number'
@@ -28,7 +34,7 @@ type GuildMemberFiltersProps = {
 	onFilterChange: (next: GuildMemberFilterState) => void
 }
 
-type SliderFieldKey = Exclude<keyof GuildMemberFilterState, 'jobs' | 'expeditionGradeRank'>
+type SliderFieldKey = Exclude<keyof GuildMemberFilterState, 'classLines' | 'jobs' | 'expeditionGradeRank'>
 
 type RangeBounds = {
 	min: number
@@ -153,7 +159,7 @@ function formatGradeRank(rank: number): string {
 	return EXPEDITION_GUILD_TIERS[Math.round(rank) - 1]?.rank ?? String(Math.round(rank))
 }
 
-/** 계열을 n개씩 묶어 그리드 행으로 씁니다. (예: 3 → 전사·마법사·궁수 / 도적·해적) */
+/** 직업군을 n개씩 묶어 그리드 행으로 씁니다. (예: 3 → 전사·마법사·궁수 / 도적·해적) */
 function chunkClassLines<T>(items: readonly T[], size: number): T[][] {
 	const chunks: T[][] = []
 
@@ -197,11 +203,51 @@ function FilterPanelBody({ comparisons, filter, onFilterChange }: FilterPanelBod
 	}
 
 	function toggleJob(job: string, checked: boolean) {
-		const { jobs } = filter
-		const nextJobs = checked ? [...jobs, job] : jobs.filter((item) => item !== job)
+		const { jobs, classLines } = filter
+		let nextJobs = checked ? [...jobs, job] : jobs.filter((item) => item !== job)
+		let nextClassLines = classLines
 
-		onFilterChange({ ...filter, jobs: nextJobs })
+		const classLine = getJobClassLine(job)
+		if (classLine !== null) {
+			const jobsInClassLine = JOBS_BY_CLASS_LINE[classLine]
+			const areAllJobsInClassLinePicked = jobsInClassLine.every((jobName) => nextJobs.includes(jobName))
+
+			// 직업군의 모든 직업이 선택되면 직업 개별 선택을 정리하고 직업군만 선택된 상태로 승격
+			if (areAllJobsInClassLinePicked) {
+				nextJobs = nextJobs.filter((jobName) => !jobsInClassLine.includes(jobName))
+				nextClassLines = classLines.includes(classLine) ? classLines : [...classLines, classLine]
+			}
+		}
+
+		onFilterChange({ ...filter, jobs: nextJobs, classLines: nextClassLines })
 	}
+
+	function toggleClassLine(classLine: JobClassLine, checked: boolean) {
+		const { classLines } = filter
+		const nextClassLines = checked ? [...classLines, classLine] : classLines.filter((item) => item !== classLine)
+
+		onFilterChange({ ...filter, classLines: nextClassLines })
+	}
+
+	/**
+	 * 표시용 하이라이트 계산.
+	 * 직업이 직접 선택됐거나, 해당 직업군이 선택된 경우 활성으로 보여줍니다.
+	 */
+	function isJobHighlighted(job: string, classLine: JobClassLine): boolean {
+		if (filter.jobs.includes(job)) {
+			return true
+		}
+
+		// 같은 직업군에 선택 직업이 있으면, 해당 직업군은 선택 직업만 강조해 실제 필터 결과와 맞춥니다.
+		const hasPickedJobsInClassLine = filter.jobs.some((pickedJob) => getJobClassLine(pickedJob) === classLine)
+		if (filter.classLines.includes(classLine) && hasPickedJobsInClassLine) {
+			return false
+		}
+
+		return filter.classLines.includes(classLine)
+	}
+
+	const hasJobTaxonomyFilter = isJobTaxonomyFilterActive(filter)
 
 	const gradeSliderValue = rangeToSliderValues(filter.expeditionGradeRank, EXPEDITION_GRADE_BOUNDS)
 	const gradeLow = gradeSliderValue[0] ?? EXPEDITION_GRADE_BOUNDS.min
@@ -210,10 +256,39 @@ function FilterPanelBody({ comparisons, filter, onFilterChange }: FilterPanelBod
 	return (
 		<div className="min-w-0 space-y-4">
 			<section className="min-w-0 space-y-2">
+				<p className="text-grayscale-700 text-sm font-medium">직업군</p>
+				<div className="flex flex-wrap gap-1.5">
+					{JOB_CLASS_LINE_ORDER.map((classLine) => {
+						const checked = filter.classLines.includes(classLine)
+						const isDimmed = hasJobTaxonomyFilter && !checked
+
+						return (
+							<button
+								key={classLine}
+								type="button"
+								aria-pressed={checked}
+								onClick={() => toggleClassLine(classLine, !checked)}
+								className={cn(
+									'rounded-md text-left transition-opacity hover:cursor-pointer',
+									isDimmed && 'opacity-35 hover:opacity-70'
+								)}
+							>
+								<Badge
+									variant="outline"
+									className={cn('px-2 py-0.5 text-xs font-medium', checked && 'ring-primary/40 ring-2 ring-offset-1')}
+								>
+									{classLine}
+								</Badge>
+							</button>
+						)
+					})}
+				</div>
+			</section>
+
+			<section className="min-w-0 space-y-2">
 				<p className="text-grayscale-700 text-sm font-medium">직업</p>
-				<p className="text-grayscale-400 text-xs">여러 개 선택 가능 · 선택 없으면 전체</p>
 				<div className="min-w-0 space-y-3">
-					{/* 계열 3열 → 그 아래 직업 세로 나열 (전사·마법사·궁수 / 도적·해적) */}
+					{/* 직업군 3열 → 그 아래 직업 세로 나열 (전사·마법사·궁수 / 도적·해적) */}
 					{chunkClassLines(JOB_CLASS_LINE_ORDER, 3).map((classLines) => (
 						<div key={classLines.join('-')} className="grid min-w-0 grid-cols-3 gap-x-2 gap-y-1">
 							{classLines.map((classLine) => (
@@ -222,8 +297,9 @@ function FilterPanelBody({ comparisons, filter, onFilterChange }: FilterPanelBod
 									<div className="flex min-w-0 flex-col gap-1">
 										{JOBS_BY_CLASS_LINE[classLine].map((job) => {
 											const checked = filter.jobs.includes(job)
-											// 직업 선택이 없으면 전체 활성처럼 보이게, 하나라도 고르면 선택분만 강조
-											const isDimmed = filter.jobs.length > 0 && !checked
+											const isHighlighted = isJobHighlighted(job, classLine)
+											// 직업군·직업 선택이 없으면 전체 활성처럼 보이게, 하나라도 고르면 선택분만 강조
+											const isDimmed = hasJobTaxonomyFilter && !isHighlighted
 
 											return (
 												<button

@@ -25,16 +25,18 @@ export const JOB_TO_CLASS_LINE = {
 	신궁: '궁수',
 	나이트로드: '도적',
 	섀도어: '도적',
+	나이트워커: '도적',
 	바이퍼: '해적',
-	캡틴: '해적'
+	캡틴: '해적',
+	윈드브레이커: '궁수'
 } as const satisfies Record<string, JobClassLine>
 
 /** 계열별 직업 목록. 인원 0인 직업도 분포표에 포함합니다. */
 export const JOBS_BY_CLASS_LINE: Record<JobClassLine, readonly string[]> = {
 	전사: ['다크나이트', '히어로', '팔라딘'],
 	마법사: ['불독', '썬콜', '비숍'],
-	궁수: ['보우마스터', '신궁'],
-	도적: ['나이트로드', '섀도어'],
+	궁수: ['보우마스터', '신궁', '윈드브레이커'],
+	도적: ['나이트로드', '섀도어', '나이트워커'],
 	해적: ['바이퍼', '캡틴']
 }
 
@@ -72,8 +74,10 @@ export const JOB_TEXT_CLASS = {
 	썬콜: 'text-pastel-blue-700',
 	보우마스터: 'text-pastel-green-700',
 	신궁: 'text-pastel-green-800',
+	윈드브레이커: 'text-pastel-green-700',
 	나이트로드: 'text-pastel-blue-800',
 	섀도어: 'text-pastel-purple-700',
+	나이트워커: 'text-pastel-purple-700',
 	바이퍼: 'text-pastel-red-800',
 	캡틴: 'text-grayscale-700'
 } as const satisfies Record<keyof typeof JOB_TO_CLASS_LINE, string>
@@ -97,8 +101,10 @@ export const JOB_BADGE_CLASS = {
 	썬콜: 'border-transparent bg-pastel-blue-100 text-pastel-blue-700',
 	보우마스터: 'border-transparent bg-pastel-green-100 text-pastel-green-700',
 	신궁: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
+	윈드브레이커: 'border-transparent bg-pastel-green-100 text-pastel-green-700',
 	나이트로드: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800',
 	섀도어: 'border-transparent bg-pastel-purple-100 text-pastel-purple-700',
+	나이트워커: 'border-transparent bg-pastel-purple-100 text-pastel-purple-700',
 	바이퍼: 'border-transparent bg-pastel-red-100 text-pastel-red-800',
 	캡틴: 'border-transparent bg-grayscale-100 text-grayscale-700'
 } as const satisfies Record<keyof typeof JOB_TO_CLASS_LINE, string>
