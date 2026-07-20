@@ -1,0 +1,15 @@
+import TipsHubSection from '@/features/tips/sections/tips-hub.section'
+
+function TipsPage() {
+	return (
+		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
+			<main className="flex w-full flex-1">
+				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
+					<TipsHubSection />
+				</div>
+			</main>
+		</div>
+	)
+}
+
+export default TipsPage
