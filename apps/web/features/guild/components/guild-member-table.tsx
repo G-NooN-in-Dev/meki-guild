@@ -24,7 +24,8 @@ import {
 	isGuildMemberFilterActive
 } from '@/utils/filter-guild-members'
 
-type SortKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss' | 'level'
+type SortKey =
+	'combatPower' | 'expeditionScore' | 'expeditionPlacement' | 'rivalry' | 'training' | 'guildBoss' | 'level'
 type SortDirection = 'asc' | 'desc'
 
 type GuildMemberTableProps = {
@@ -62,9 +63,21 @@ function getLevelChangeSortValue(delta: LevelDelta): number {
 }
 
 /**
+ * 토벌전 등수 증감 정렬 값.
+ * raw diff는 (현재−이전)이라 음수=상승이므로, desc에서 상승이 위로 오도록 부호를 뒤집습니다.
+ */
+function getPlacementChangeSortValue(delta: LevelDelta): number {
+	if (!delta.hasValue || delta.diff === null) {
+		return MISSING_PERCENT_SORT_VALUE
+	}
+
+	return -delta.diff
+}
+
+/**
  * 컬럼별 정렬 값을 뽑습니다.
  * sortByPercent=true면 절대값 대신 증감 기준으로 비교합니다.
- * (전투력 등은 %, 레벨은 증가량)
+ * (전투력 등은 %, 레벨은 증가량, 등수는 상승량)
  */
 function getSortValue(comparison: GuildMemberComparison, key: SortKey, sortByPercent: boolean): bigint | number {
 	if (sortByPercent) {
@@ -73,6 +86,8 @@ function getSortValue(comparison: GuildMemberComparison, key: SortKey, sortByPer
 				return getNumericPercentSortValue(comparison.combatPower)
 			case 'expeditionScore':
 				return getNumericPercentSortValue(comparison.expeditionScore)
+			case 'expeditionPlacement':
+				return getPlacementChangeSortValue(comparison.expeditionPlacement)
 			case 'rivalry':
 				return getNumericPercentSortValue(comparison.rivalry)
 			case 'training':
@@ -89,6 +104,11 @@ function getSortValue(comparison: GuildMemberComparison, key: SortKey, sortByPer
 			return comparison.combatPower.hasValue ? comparison.combatPower.current : -1n
 		case 'expeditionScore':
 			return comparison.expeditionScore.hasValue ? comparison.expeditionScore.current : -1n
+		case 'expeditionPlacement':
+			// 등수는 작을수록 상위. 부호를 뒤집어 desc=상위 등수 먼저가 됩니다.
+			return comparison.expeditionPlacement.hasValue
+				? -comparison.expeditionPlacement.current
+				: MISSING_PERCENT_SORT_VALUE
 		case 'rivalry':
 			return comparison.rivalry.hasValue ? comparison.rivalry.current : -1n
 		case 'training':
@@ -282,7 +302,13 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 								onSort={handleSort}
 							/>
 							<TableHead className="text-grayscale-500">토벌전 (등급)</TableHead>
-							<TableHead className="text-grayscale-500">토벌전 (등수)</TableHead>
+							<SortableHead
+								label="토벌전 (등수)"
+								sortKey="expeditionPlacement"
+								activeSortKey={sortKey}
+								sortDirection={sortDirection}
+								onSort={handleSort}
+							/>
 							<SortableHead
 								label="토벌전 (점수)"
 								sortKey="expeditionScore"
