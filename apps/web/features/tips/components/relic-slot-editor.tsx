@@ -36,6 +36,7 @@ type RelicSlotEditorProps = {
 	onPotentialChange: (potentialIds: readonly string[]) => void
 }
 
+/** Sheet 너비와 맞춰 본문을 밀어 보드가 가려지지 않게 합니다 (sm:max-w-md = 28rem) */
 const RELIC_SHEET_WIDTH = '28rem'
 
 function isRelicGrade(value: string | number | null): value is RelicGrade {

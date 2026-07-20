@@ -4,6 +4,7 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 import { PlusIcon } from 'lucide-react'
 
+import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
 import RelicPortrait from '@/features/tips/components/relic-portrait'
 import { RELIC_GRADE_BADGE_CLASS, RELIC_GRADE_META } from '@/features/tips/lib/relic.constants'
 import {
@@ -39,7 +40,7 @@ function RelicSlot({ label, relic, stage, potentialIds, resolvedEffects, isEditi
 		>
 			<div className="flex items-center justify-between gap-2">
 				<p className="text-grayscale-500 text-xs font-medium">{label}</p>
-				{relic ? <span className="text-grayscale-400 text-xs tabular-nums">각성 {stage}</span> : null}
+				{relic ? <RelicAwakeningStars stage={stage} /> : null}
 			</div>
 
 			{relic ? (

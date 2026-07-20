@@ -188,7 +188,8 @@ function RelicPotentialEditor({ relicGrade, potentialIds, onChange }: RelicPoten
 
 						{RELIC_POTENTIAL_GRADE_ORDER.map((grade) => (
 							<TabsContent key={grade} value={grade} className="mt-0">
-								<div className="grid max-h-48 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
+								{/* 긴 옵션명(+수치)이 잘리지 않도록 1열로 표시 */}
+								<div className="flex max-h-48 flex-col gap-1 overflow-y-auto">
 									{getRelicPotentialOptionsByGrade(grade).map((option) => (
 										<button
 											key={option.id}
@@ -200,7 +201,7 @@ function RelicPotentialEditor({ relicGrade, potentialIds, onChange }: RelicPoten
 												'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:outline-none'
 											)}
 										>
-											<span className="text-grayscale-800 truncate">{option.displayText}</span>
+											<span className="text-grayscale-800">{option.displayText}</span>
 										</button>
 									))}
 								</div>

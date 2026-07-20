@@ -6,6 +6,7 @@ import { ArrowLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
 
+import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
 import RelicSlot from '@/features/tips/components/relic-slot'
 import RelicSlotEditor from '@/features/tips/components/relic-slot-editor'
 import {
@@ -277,8 +278,9 @@ function RelicSetupTipSection() {
 
 									return (
 										<li key={slot.id}>
-											<p className="text-grayscale-900 text-xs font-semibold">
-												{relic.name} <span className="text-grayscale-500 font-normal">(각성 {loadout.stage})</span>
+											<p className="text-grayscale-900 flex items-center gap-1.5 text-xs font-semibold">
+												{relic.name}
+												<RelicAwakeningStars stage={loadout.stage} />
 											</p>
 											<ul className="text-grayscale-600 mt-1 list-inside list-disc text-xs">
 												{effects.lines.map((line) => (
