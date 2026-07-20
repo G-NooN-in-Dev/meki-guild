@@ -11,6 +11,12 @@ export const TIP_ENTRIES = [
 		description: '메인·서브 동료를 배치하고 장착 효과를 확인합니다.',
 		category: '동료',
 		href: '/tips/companion-setup'
+	},
+	{
+		slug: 'relic-setup',
+		title: '유물 세팅',
+		description: '유물 4개를 장착하고 각성 단계별 장착 효과를 확인합니다.',
+		category: '유물',
+		href: '/tips/relic-setup'
 	}
-	// 보류: guild-rivalry-hit-cut (길드대항전 명중컷)
 ] as const satisfies readonly TipEntry[]

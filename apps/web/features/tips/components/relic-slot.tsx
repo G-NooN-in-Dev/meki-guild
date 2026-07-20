@@ -1,0 +1,87 @@
+'use client'
+
+import { Badge } from '@shared/ui/badge'
+import { cn } from '@shared/ui/utils'
+import { PlusIcon } from 'lucide-react'
+
+import RelicPortrait from '@/features/tips/components/relic-portrait'
+import { RELIC_GRADE_BADGE_CLASS, RELIC_GRADE_META } from '@/features/tips/lib/relic.constants'
+import {
+	getRelicPotentialOptionById,
+	RELIC_POTENTIAL_GRADE_BADGE_CLASS
+} from '@/features/tips/lib/relic-potential.constants'
+import type { Relic, RelicResolvedEffects } from '@/features/tips/types/relic.type'
+
+type RelicSlotProps = {
+	label: string
+	relic: Relic | null
+	stage: number
+	potentialIds: readonly string[]
+	resolvedEffects: RelicResolvedEffects | null
+	isEditing?: boolean
+	onOpen: () => void
+}
+
+/** 세팅 보드에서 쓰는 유물 슬롯 카드 */
+function RelicSlot({ label, relic, stage, potentialIds, resolvedEffects, isEditing = false, onOpen }: RelicSlotProps) {
+	return (
+		<button
+			type="button"
+			onClick={onOpen}
+			aria-pressed={isEditing}
+			className={cn(
+				'group border-grayscale-200 bg-card shadow-soft flex w-full cursor-pointer flex-col gap-1.5 rounded-xl border p-3 text-left transition-colors',
+				'hover:border-grayscale-300 hover:bg-grayscale-50/70',
+				'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+				!relic && 'border-dashed',
+				isEditing && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
+			)}
+		>
+			<div className="flex items-center justify-between gap-2">
+				<p className="text-grayscale-500 text-xs font-medium">{label}</p>
+				{relic ? <span className="text-grayscale-400 text-xs tabular-nums">각성 {stage}</span> : null}
+			</div>
+
+			{relic ? (
+				<div className="flex items-start gap-2.5">
+					<RelicPortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="md" />
+					<div className="min-w-0 flex-1 space-y-1">
+						<div className="flex flex-wrap items-center gap-1.5">
+							<Badge className={RELIC_GRADE_BADGE_CLASS[relic.grade]}>{RELIC_GRADE_META[relic.grade].label}</Badge>
+							<p className="text-grayscale-900 text-sm font-semibold">{relic.name}</p>
+						</div>
+						<p className="text-grayscale-600 line-clamp-2 text-xs md:text-sm">
+							{resolvedEffects?.lines[0] ?? '효과 정보가 없습니다.'}
+						</p>
+						{potentialIds.length > 0 ? (
+							<div className="flex flex-wrap gap-1 pt-0.5">
+								{potentialIds.map((id, index) => {
+									const option = getRelicPotentialOptionById(id)
+									if (!option) {
+										return null
+									}
+
+									return (
+										<Badge
+											key={`${id}-${index}`}
+											className={cn('max-w-full truncate text-[10px]', RELIC_POTENTIAL_GRADE_BADGE_CLASS[option.grade])}
+										>
+											{option.displayText}
+										</Badge>
+									)
+								})}
+							</div>
+						) : null}
+					</div>
+				</div>
+			) : (
+				<div className="text-grayscale-400 flex items-center gap-1.5 py-2 text-sm">
+					<PlusIcon className="size-4 shrink-0" />
+					<span>유물 선택</span>
+				</div>
+			)}
+		</button>
+	)
+}
+
+export default RelicSlot
