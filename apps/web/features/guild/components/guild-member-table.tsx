@@ -14,6 +14,7 @@ import JobBadge from '@/features/guild/components/job-badge'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import MemberDetailDialog from '@/features/guild/components/member-detail-dialog'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
+import WeeklyGrowthLeaders from '@/features/guild/components/weekly-growth-leaders'
 import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import type { MemberRankings } from '@/utils/compute-member-rankings'
@@ -274,6 +275,7 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 				</div>
 				{/* 참고용 가이드 — 모바일은 보조 행, 좁으면 가로 스크롤 */}
 				<div className="flex scrollbar-none items-center gap-1.5 overflow-x-auto [-ms-overflow-style:none] md:overflow-visible [&::-webkit-scrollbar]:hidden">
+					<WeeklyGrowthLeaders comparisons={comparisons} />
 					<ContentUpdatedAtGuide />
 					<JobDistributionGuide comparisons={comparisons} />
 					<ExpeditionTierGuide />

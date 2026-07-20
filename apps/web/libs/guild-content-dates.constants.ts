@@ -36,3 +36,37 @@ export function getGuildContentCriteriaLabel(date: string | null): string {
 
 	return `기준 : ${formatGuildContentDate(date)}`
 }
+
+/**
+ * 이번 주 스냅샷에서 해당 컨텐츠 점수가 갱신됐는지 판별합니다.
+ * - 최신 수집일이 없으면 미갱신
+ * - 직전일이 없으면(첫 수집) 갱신으로 간주
+ * - 둘 다 있으면 current !== previous 일 때만 갱신
+ */
+export function isGuildContentUpdatedThisWeek({ current, previous }: GuildContentDateRange): boolean {
+	if (!current) {
+		return false
+	}
+
+	if (!previous) {
+		return true
+	}
+
+	return current !== previous
+}
+
+/** YYYY-MM-DD → UTC 자정 타임스탬프 (요일 계산용) */
+export function toGuildContentDateTimestamp(date: string): number {
+	const [yearText, monthText, dayText] = date.split('-')
+	const year = Number(yearText)
+	const month = Number(monthText)
+	const day = Number(dayText)
+
+	return Date.UTC(year, month - 1, day)
+}
+
+/** 두 수집일 사이의 일수 차이(절댓값) */
+export function getGuildContentDateDayDiff(left: string, right: string): number {
+	const msPerDay = 24 * 60 * 60 * 1000
+	return Math.abs(toGuildContentDateTimestamp(left) - toGuildContentDateTimestamp(right)) / msPerDay
+}
