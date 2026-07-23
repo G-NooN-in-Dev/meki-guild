@@ -6,7 +6,7 @@
  * 데이터·타입·스냅샷 로더는 그대로 두고, 화면 노출만 제어합니다.
  */
 export const GUILD_METRIC_VISIBILITY = {
-	training: false,
+	training: true,
 	guildBoss: false
 } as const
 
