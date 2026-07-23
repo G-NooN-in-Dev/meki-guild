@@ -92,7 +92,7 @@ const ALL_COMPANION_JOBS = JOB_CLASS_LINE_ORDER.flatMap((line) => JOBS_BY_CLASS_
  * 아직 출시되지 않아 동료 정보가 없는 직업.
  * 출시 후 COMPANION_EQUIP_EFFECT_BASE_BY_JOB에 수치를 넣고 여기서 제거합니다.
  */
-export const UNRELEASED_COMPANION_JOBS = ['윈드브레이커', '나이트워커'] as const
+export const UNRELEASED_COMPANION_JOBS = [] as const
 
 const UNRELEASED_COMPANION_JOB_SET = new Set<string>(UNRELEASED_COMPANION_JOBS)
 
@@ -101,7 +101,7 @@ export const COMPANION_JOBS = ALL_COMPANION_JOBS.filter((job) => !UNRELEASED_COM
 
 /**
  * 직업별 장착 효과 — 레전더리 1레벨 기준.
- * 미출시 직업(윈드브레이커·나이트워커)은 COMPANION_JOBS에서 제외합니다.
+ * 아이콘이 아직 없는 직업은 COMPANION_JOB_ICON_KEY에 넣지 않으면 플레이스홀더로 표시됩니다.
  */
 export const COMPANION_EQUIP_EFFECT_BASE_BY_JOB = {
 	히어로: { label: '최대 데미지 배율', legendaryLevel1Value: 20, unit: 'percent' },
@@ -112,8 +112,10 @@ export const COMPANION_EQUIP_EFFECT_BASE_BY_JOB = {
 	비숍: { label: '스킬 데미지', legendaryLevel1Value: 8, unit: 'percent' },
 	보우마스터: { label: '공격 속도', legendaryLevel1Value: 20, unit: 'percent' },
 	신궁: { label: '상태이상 데미지', legendaryLevel1Value: 32, unit: 'percent' },
+	윈드브레이커: { label: '보스 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },
 	나이트로드: { label: '보스 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },
 	섀도어: { label: '최소 데미지 배율', legendaryLevel1Value: 20, unit: 'percent' },
+	나이트워커: { label: '명중', legendaryLevel1Value: 24, unit: 'flat' },
 	바이퍼: { label: '주 스탯', legendaryLevel1Value: 12, unit: 'percent' },
 	캡틴: { label: '크리티컬 데미지', legendaryLevel1Value: 12, unit: 'percent' }
 } as const satisfies Record<string, CompanionEquipEffectBase>
