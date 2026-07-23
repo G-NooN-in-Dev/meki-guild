@@ -13,6 +13,7 @@ import JobBadge from '@/features/guild/components/job-badge'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import useMediaQuery from '@/hooks/use-media-query'
 import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
+import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 import {
 	getJobClassLine,
 	JOB_CLASS_LINE_ORDER,
@@ -41,14 +42,15 @@ type RangeBounds = {
 	max: number
 }
 
-const SLIDER_FIELDS = [
+/** 표시 중인 지표만 슬라이더로 노출 (숨김 지표는 필터 UI에서 제외) */
+const SLIDER_FIELDS: ReadonlyArray<{ key: SliderFieldKey; label: string }> = [
 	{ key: 'level', label: '레벨' },
 	{ key: 'combatPower', label: '전투력' },
 	{ key: 'expeditionScore', label: '토벌전 (점수)' },
 	{ key: 'rivalry', label: '대항전' },
-	{ key: 'training', label: '수련장' },
-	{ key: 'guildBoss', label: '길드보스' }
-] as const satisfies ReadonlyArray<{ key: SliderFieldKey; label: string }>
+	...(isGuildMetricVisible('training') ? [{ key: 'training' as const, label: '수련장' }] : []),
+	...(isGuildMetricVisible('guildBoss') ? [{ key: 'guildBoss' as const, label: '길드보스' }] : [])
+]
 
 /** 토벌 등급 슬라이더 전체 구간 (1=챌린저1 … 15=마스터5) */
 const EXPEDITION_GRADE_BOUNDS = {

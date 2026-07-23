@@ -17,6 +17,7 @@ import MemberDisplayName from '@/features/guild/components/member-display-name'
 import WeeklyGrowthLeaders from '@/features/guild/components/weekly-growth-leaders'
 import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 import type { MemberRankings } from '@/utils/compute-member-rankings'
 import {
 	createEmptyGuildMemberFilter,
@@ -28,6 +29,10 @@ import {
 type SortKey =
 	'combatPower' | 'expeditionScore' | 'expeditionPlacement' | 'rivalry' | 'training' | 'guildBoss' | 'level'
 type SortDirection = 'asc' | 'desc'
+
+/** 고정 컬럼 9개 + 표시 중인 수련장·길드보스 컬럼 수 (빈 행 colSpan용) */
+const GUILD_MEMBER_TABLE_COLUMN_COUNT =
+	9 + (isGuildMetricVisible('training') ? 1 : 0) + (isGuildMetricVisible('guildBoss') ? 1 : 0)
 
 type GuildMemberTableProps = {
 	comparisons: GuildMemberComparison[]
@@ -325,26 +330,30 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 								sortDirection={sortDirection}
 								onSort={handleSort}
 							/>
-							<SortableHead
-								label="수련장"
-								sortKey="training"
-								activeSortKey={sortKey}
-								sortDirection={sortDirection}
-								onSort={handleSort}
-							/>
-							<SortableHead
-								label="길드보스"
-								sortKey="guildBoss"
-								activeSortKey={sortKey}
-								sortDirection={sortDirection}
-								onSort={handleSort}
-							/>
+							{isGuildMetricVisible('training') ? (
+								<SortableHead
+									label="수련장"
+									sortKey="training"
+									activeSortKey={sortKey}
+									sortDirection={sortDirection}
+									onSort={handleSort}
+								/>
+							) : null}
+							{isGuildMetricVisible('guildBoss') ? (
+								<SortableHead
+									label="길드보스"
+									sortKey="guildBoss"
+									activeSortKey={sortKey}
+									sortDirection={sortDirection}
+									onSort={handleSort}
+								/>
+							) : null}
 						</TableRow>
 					</TableHeader>
 					<TableBody>
 						{sortedComparisons.length === 0 ? (
 							<TableRow className="hover:bg-transparent">
-								<TableCell colSpan={11} className="text-grayscale-400 h-24 text-center">
+								<TableCell colSpan={GUILD_MEMBER_TABLE_COLUMN_COUNT} className="text-grayscale-400 h-24 text-center">
 									{isFilterActive ? '조건에 맞는 길드원이 없습니다.' : '길드원이 없습니다.'}
 								</TableCell>
 							</TableRow>
@@ -415,24 +424,28 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 											percentLabel={comparison.rivalry.diffPercentLabel}
 										/>
 									</TableCell>
-									<TableCell>
-										<div className={getValueClassName(comparison.training.currentLabel)}>
-											{comparison.training.currentLabel}
-										</div>
-										<GrowthDelta
-											value={comparison.training.diffLabel}
-											percentLabel={comparison.training.diffPercentLabel}
-										/>
-									</TableCell>
-									<TableCell>
-										<div className={getValueClassName(comparison.guildBoss.currentLabel)}>
-											{comparison.guildBoss.currentLabel}
-										</div>
-										<GrowthDelta
-											value={comparison.guildBoss.diffLabel}
-											percentLabel={comparison.guildBoss.diffPercentLabel}
-										/>
-									</TableCell>
+									{isGuildMetricVisible('training') ? (
+										<TableCell>
+											<div className={getValueClassName(comparison.training.currentLabel)}>
+												{comparison.training.currentLabel}
+											</div>
+											<GrowthDelta
+												value={comparison.training.diffLabel}
+												percentLabel={comparison.training.diffPercentLabel}
+											/>
+										</TableCell>
+									) : null}
+									{isGuildMetricVisible('guildBoss') ? (
+										<TableCell>
+											<div className={getValueClassName(comparison.guildBoss.currentLabel)}>
+												{comparison.guildBoss.currentLabel}
+											</div>
+											<GrowthDelta
+												value={comparison.guildBoss.diffLabel}
+												percentLabel={comparison.guildBoss.diffPercentLabel}
+											/>
+										</TableCell>
+									) : null}
 								</TableRow>
 							))
 						)}

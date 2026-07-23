@@ -17,14 +17,15 @@ import {
 	GUILD_CONTENT_UPDATED_AT,
 	type GuildContentDateRange
 } from '@/libs/guild-content-dates.constants'
+import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 
-/** 팝오버 테이블에 보여줄 컨텐츠 행 (라벨 + 수집일) */
+/** 팝오버 테이블에 보여줄 컨텐츠 행 (라벨 + 수집일). 숨김 지표는 제외 */
 const CONTENT_UPDATED_AT_ROWS: { label: string; dates: GuildContentDateRange }[] = [
 	{ label: '전투력 · 레벨', dates: GUILD_CONTENT_UPDATED_AT.combatPower },
 	{ label: '토벌전', dates: GUILD_CONTENT_UPDATED_AT.expedition },
 	{ label: '대항전', dates: GUILD_CONTENT_UPDATED_AT.rivalry },
-	{ label: '수련장', dates: GUILD_CONTENT_UPDATED_AT.training },
-	{ label: '길드보스', dates: GUILD_CONTENT_UPDATED_AT.guildBoss }
+	...(isGuildMetricVisible('training') ? [{ label: '수련장', dates: GUILD_CONTENT_UPDATED_AT.training }] : []),
+	...(isGuildMetricVisible('guildBoss') ? [{ label: '길드보스', dates: GUILD_CONTENT_UPDATED_AT.guildBoss }] : [])
 ]
 
 function ContentUpdatedAtGuide() {

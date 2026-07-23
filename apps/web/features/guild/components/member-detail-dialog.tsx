@@ -13,6 +13,7 @@ import {
 	GUILD_CONTENT_UPDATED_AT,
 	type GuildContentDateRange
 } from '@/libs/guild-content-dates.constants'
+import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 import { formatRankDiffLabel, formatRankLabel, type MemberRankings } from '@/utils/compute-member-rankings'
 import { formatPlacementRank } from '@/utils/format-korean-number'
 
@@ -114,28 +115,36 @@ function buildDetailRows(
 			previousRankLabel: formatRankLabel(previousRankings.rivalry, name),
 			rankDiffLabel: formatRankDiffLabel(rankings.rivalry, previousRankings.rivalry, name)
 		},
-		{
-			label: '수련장',
-			currentLabel: comparison.training.currentLabel,
-			previousLabel: formatPreviousValue(comparison.training.previousLabel),
-			diffLabel: comparison.training.diffLabel,
-			diffPercentLabel: comparison.training.diffPercentLabel,
-			contentDates: GUILD_CONTENT_UPDATED_AT.training,
-			rankLabel: comparison.training.hasValue ? formatRankLabel(rankings.training, name) : null,
-			previousRankLabel: formatRankLabel(previousRankings.training, name),
-			rankDiffLabel: formatRankDiffLabel(rankings.training, previousRankings.training, name)
-		},
-		{
-			label: '길드보스',
-			currentLabel: comparison.guildBoss.currentLabel,
-			previousLabel: formatPreviousValue(comparison.guildBoss.previousLabel),
-			diffLabel: comparison.guildBoss.diffLabel,
-			diffPercentLabel: comparison.guildBoss.diffPercentLabel,
-			contentDates: GUILD_CONTENT_UPDATED_AT.guildBoss,
-			rankLabel: comparison.guildBoss.hasValue ? formatRankLabel(rankings.guildBoss, name) : null,
-			previousRankLabel: formatRankLabel(previousRankings.guildBoss, name),
-			rankDiffLabel: formatRankDiffLabel(rankings.guildBoss, previousRankings.guildBoss, name)
-		}
+		...(isGuildMetricVisible('training')
+			? [
+					{
+						label: '수련장',
+						currentLabel: comparison.training.currentLabel,
+						previousLabel: formatPreviousValue(comparison.training.previousLabel),
+						diffLabel: comparison.training.diffLabel,
+						diffPercentLabel: comparison.training.diffPercentLabel,
+						contentDates: GUILD_CONTENT_UPDATED_AT.training,
+						rankLabel: comparison.training.hasValue ? formatRankLabel(rankings.training, name) : null,
+						previousRankLabel: formatRankLabel(previousRankings.training, name),
+						rankDiffLabel: formatRankDiffLabel(rankings.training, previousRankings.training, name)
+					} satisfies DetailRow
+				]
+			: []),
+		...(isGuildMetricVisible('guildBoss')
+			? [
+					{
+						label: '길드보스',
+						currentLabel: comparison.guildBoss.currentLabel,
+						previousLabel: formatPreviousValue(comparison.guildBoss.previousLabel),
+						diffLabel: comparison.guildBoss.diffLabel,
+						diffPercentLabel: comparison.guildBoss.diffPercentLabel,
+						contentDates: GUILD_CONTENT_UPDATED_AT.guildBoss,
+						rankLabel: comparison.guildBoss.hasValue ? formatRankLabel(rankings.guildBoss, name) : null,
+						previousRankLabel: formatRankLabel(previousRankings.guildBoss, name),
+						rankDiffLabel: formatRankDiffLabel(rankings.guildBoss, previousRankings.guildBoss, name)
+					} satisfies DetailRow
+				]
+			: [])
 	]
 }
 

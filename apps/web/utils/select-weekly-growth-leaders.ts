@@ -6,6 +6,7 @@ import {
 	isGuildContentUpdatedThisWeek,
 	toGuildContentDateTimestamp
 } from '@/libs/guild-content-dates.constants'
+import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 
 /** 금주의 길드원 점수에 쓰는 지표 키 */
 export type WeeklyGrowthMetricKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss'
@@ -188,7 +189,12 @@ export function getWeeklyGrowthSelectionStatus(
 	/** 선정일에 쓸 수집일 — 점수에 실제로 들어간 지표의 current만 모음 */
 	const selectionDates: string[] = [...weeklyCurrentDates]
 
+	// UI에서 숨긴 지표는 금주의 길드원 점수에도 넣지 않음
 	for (const metricKey of ['training', 'guildBoss'] as const) {
+		if (!isGuildMetricVisible(metricKey)) {
+			continue
+		}
+
 		const dateKey = METRIC_TO_DATE_KEY[metricKey]
 		const dates: GuildContentDateRange = contentDates[dateKey]
 		const { current } = dates

@@ -1,6 +1,7 @@
 import { GrowthDelta } from '@/features/guild/components/growth-delta'
 import GuildMemberTable from '@/features/guild/components/guild-member-table'
 import { GUILD_ZERO_DELTA_LABEL, type GuildDashboardData } from '@/features/guild/types/guild-snapshot.type'
+import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 import { calculateGuildSummaryMetrics } from '@/utils/guild-summary'
 
 type GuildDashboardSectionProps = {
@@ -56,6 +57,7 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		}
 	]
 
+	// 수련장·길드보스는 수집 주기가 길어 표시 플래그가 켜진 경우만 요약 카드에 포함
 	const bottomSummaryCards: SummaryCard[] = [
 		{
 			label: '토벌전 변화',
@@ -69,16 +71,24 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 			value: metrics.rivalryChange,
 			percentLabel: metrics.rivalryChangePercent
 		},
-		{
-			label: '수련장 변화',
-			value: metrics.trainingChange,
-			percentLabel: metrics.trainingChangePercent
-		},
-		{
-			label: '길드보스 변화',
-			value: metrics.guildBossChange,
-			percentLabel: metrics.guildBossChangePercent
-		}
+		...(isGuildMetricVisible('training')
+			? [
+					{
+						label: '수련장 변화',
+						value: metrics.trainingChange,
+						percentLabel: metrics.trainingChangePercent
+					} satisfies SummaryCard
+				]
+			: []),
+		...(isGuildMetricVisible('guildBoss')
+			? [
+					{
+						label: '길드보스 변화',
+						value: metrics.guildBossChange,
+						percentLabel: metrics.guildBossChangePercent
+					} satisfies SummaryCard
+				]
+			: [])
 	]
 
 	return (
@@ -98,7 +108,12 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 					))}
 				</div>
 
-				<div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+				{/* 숨긴 지표가 있으면 카드 수에 맞춰 그리드 열 수를 줄임 */}
+				<div
+					className={
+						bottomSummaryCards.length <= 2 ? 'grid gap-4 md:grid-cols-2' : 'grid gap-4 md:grid-cols-2 xl:grid-cols-4'
+					}
+				>
 					{bottomSummaryCards.map((card) => (
 						<div key={card.label} className="border-grayscale-200 bg-card shadow-soft rounded-xl border p-4">
 							<p className="text-grayscale-500 text-sm">{card.label}</p>
