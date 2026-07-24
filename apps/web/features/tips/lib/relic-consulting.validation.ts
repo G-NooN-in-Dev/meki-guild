@@ -141,7 +141,8 @@ function assertPresetStats(value: unknown): ConsultingPresetStats {
 			throw new RelicConsultingValidationError(`${field.label}은(는) 0 이상이어야 합니다.`)
 		}
 
-		stats[field.id] = field.unit === 'percent' ? Math.round(fieldValue * 10) / 10 : Math.round(fieldValue)
+		// %·flat 모두 소수 1자리까지 허용합니다.
+		stats[field.id] = Math.round(fieldValue * 10) / 10
 	}
 
 	return stats

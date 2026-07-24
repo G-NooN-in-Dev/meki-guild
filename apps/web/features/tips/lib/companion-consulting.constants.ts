@@ -174,7 +174,7 @@ export function normalizePresetStats(value: Partial<ConsultingPresetStats> | nul
 }
 
 export function formatPresetStatValue(value: number, unit: ConsultingPresetStatUnit) {
-	const rounded = unit === 'percent' ? Math.round(value * 10) / 10 : Math.round(value)
+	const rounded = Math.round(value * 10) / 10
 	return unit === 'percent' ? `${rounded}%` : String(rounded)
 }
 

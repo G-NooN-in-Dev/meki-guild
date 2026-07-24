@@ -17,6 +17,7 @@ import CompanionPresetStatsFields from '@/features/tips/components/companion-pre
 import RelicConsultingShareBar from '@/features/tips/components/relic-consulting-share-bar'
 import RelicOwnershipGrid from '@/features/tips/components/relic-ownership-grid'
 import RelicSetupBoard from '@/features/tips/components/relic-setup-board'
+import { projectRelicPresetStats } from '@/features/tips/lib/consulting-preset-projection'
 import {
 	createRelicConsultingCommentAction,
 	deleteRelicConsultingCommentAction,
@@ -87,6 +88,17 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 	const [editLoadouts, setEditLoadouts] = useState<RelicConsultingLoadout>(() => createEmptyRelicConsultingLoadout())
 	const [verifiedCommentPassword, setVerifiedCommentPassword] = useState('')
 	const [editError, setEditError] = useState<string | null>(null)
+
+	// 추천 작성 중에도 적용 후 프리셋을 바로 보여 줍니다.
+	const recommendProjectedPresetStats = useMemo(
+		() => projectRelicPresetStats(post.presetStats, post.loadout, recommendLoadouts),
+		[post.presetStats, post.loadout, recommendLoadouts]
+	)
+
+	const editProjectedPresetStats = useMemo(
+		() => projectRelicPresetStats(post.presetStats, post.loadout, editLoadouts),
+		[post.presetStats, post.loadout, editLoadouts]
+	)
 
 	async function handleSubmitRecommend() {
 		setError(null)
@@ -386,6 +398,13 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 												stageByRelicId={stageByRelicId}
 											/>
 
+											<CompanionPresetStatsFields
+												title="예상 프리셋 스탯"
+												description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
+												stats={editProjectedPresetStats}
+												readOnly
+											/>
+
 											{editError ? <p className="text-destructive text-sm">{editError}</p> : null}
 
 											<div className="flex flex-wrap justify-end gap-2">
@@ -405,6 +424,12 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 										<>
 											{comment.note ? <p className="text-grayscale-700 text-sm">{comment.note}</p> : null}
 											<RelicSetupBoard title="추천 조합" loadouts={comment.loadout} readOnly />
+											<CompanionPresetStatsFields
+												title="예상 프리셋 스탯"
+												description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
+												stats={projectRelicPresetStats(post.presetStats, post.loadout, comment.loadout)}
+												readOnly
+											/>
 										</>
 									)}
 								</li>
@@ -455,6 +480,13 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 						onLoadoutsChange={setRecommendLoadouts}
 						allowedIds={allowedIds}
 						stageByRelicId={stageByRelicId}
+					/>
+
+					<CompanionPresetStatsFields
+						title="예상 프리셋 스탯"
+						description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
+						stats={recommendProjectedPresetStats}
+						readOnly
 					/>
 
 					{error ? <p className="text-destructive text-sm">{error}</p> : null}

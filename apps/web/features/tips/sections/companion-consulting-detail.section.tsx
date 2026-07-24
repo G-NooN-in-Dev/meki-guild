@@ -36,6 +36,7 @@ import {
 	ownershipEntriesToStateMap
 } from '@/features/tips/lib/companion-consulting.constants'
 import { storeConsultingPostEditPassword } from '@/features/tips/lib/companion-consulting-edit-password'
+import { projectCompanionPresetStats } from '@/features/tips/lib/consulting-preset-projection'
 import type {
 	CompanionConsultingComment,
 	CompanionConsultingLoadout,
@@ -90,6 +91,17 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 	/** Dialog에서 검증된 비밀번호 — 저장 시 재사용 */
 	const [verifiedCommentPassword, setVerifiedCommentPassword] = useState('')
 	const [editError, setEditError] = useState<string | null>(null)
+
+	// 추천 작성 중에도 적용 후 프리셋을 바로 보여 줍니다.
+	const recommendProjectedPresetStats = useMemo(
+		() => projectCompanionPresetStats(post.presetStats, post.loadout, recommendLoadouts),
+		[post.presetStats, post.loadout, recommendLoadouts]
+	)
+
+	const editProjectedPresetStats = useMemo(
+		() => projectCompanionPresetStats(post.presetStats, post.loadout, editLoadouts),
+		[post.presetStats, post.loadout, editLoadouts]
+	)
 
 	async function handleSubmitRecommend() {
 		setError(null)
@@ -389,6 +401,13 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 												levelByCompanionId={levelByCompanionId}
 											/>
 
+											<CompanionPresetStatsFields
+												title="예상 프리셋 스탯"
+												description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
+												stats={editProjectedPresetStats}
+												readOnly
+											/>
+
 											{editError ? <p className="text-destructive text-sm">{editError}</p> : null}
 
 											<div className="flex flex-wrap justify-end gap-2">
@@ -408,6 +427,12 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 										<>
 											{comment.note ? <p className="text-grayscale-700 text-sm">{comment.note}</p> : null}
 											<CompanionSetupBoard title="추천 조합" loadouts={comment.loadout} readOnly />
+											<CompanionPresetStatsFields
+												title="예상 프리셋 스탯"
+												description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
+												stats={projectCompanionPresetStats(post.presetStats, post.loadout, comment.loadout)}
+												readOnly
+											/>
 										</>
 									)}
 								</li>
@@ -456,6 +481,13 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 						onLoadoutsChange={setRecommendLoadouts}
 						allowedIds={allowedIds}
 						levelByCompanionId={levelByCompanionId}
+					/>
+
+					<CompanionPresetStatsFields
+						title="예상 프리셋 스탯"
+						description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
+						stats={recommendProjectedPresetStats}
+						readOnly
 					/>
 
 					{error ? <p className="text-destructive text-sm">{error}</p> : null}
