@@ -1,0 +1,91 @@
+import type { CompanionSlotLoadout } from '@/features/tips/types/companion.type'
+
+/**
+ * 보유 중인 동료 한 건.
+ * 미보유는 DB에 넣지 않고, 보유한 항목만 배열로 저장합니다.
+ */
+export type CompanionOwnershipEntry = {
+	companionId: string
+	level: number
+}
+
+/** 슬롯 id → 장착 동료 (메인·서브) */
+export type CompanionConsultingLoadout = Record<string, CompanionSlotLoadout>
+
+/** 프리셋 스탯 단위. percent=% / flat=절대값(명중·회피) */
+export type ConsultingPresetStatUnit = 'percent' | 'flat'
+
+/**
+ * 현재 프리셋 기준 전투 수치 키.
+ * UI·검증·저장 순서는 CONSULTING_PRESET_STAT_FIELDS를 따릅니다.
+ */
+export type ConsultingPresetStatId =
+	| 'critRate'
+	| 'critDamage'
+	| 'attackSpeed'
+	| 'bossDamage'
+	| 'normalDamage'
+	| 'accuracy'
+	| 'evasion'
+	| 'minDamageMultiplier'
+	| 'maxDamageMultiplier'
+
+/** 프리셋 스탯 수치 맵 */
+export type ConsultingPresetStats = Record<ConsultingPresetStatId, number>
+
+/**
+ * 게시글 작성·수정용 클라이언트 페이로드.
+ * password는 CUD용 단순 키이며, 서버에서만 해시로 저장합니다.
+ */
+export type CompanionConsultingPostInput = {
+	/** 목적/제목 한 줄 */
+	title: string
+	/** 현재 프리셋 기준 전투 수치 */
+	presetStats: ConsultingPresetStats
+	ownership: readonly CompanionOwnershipEntry[]
+	loadout: CompanionConsultingLoadout
+	/** 수정·삭제 시 다시 입력하는 CUD 비밀번호 */
+	password: string
+}
+
+/** 목록·상세에 쓰는 게시글 요약/본문 */
+export type CompanionConsultingPost = {
+	shortId: string
+	title: string
+	presetStats: ConsultingPresetStats
+	ownership: readonly CompanionOwnershipEntry[]
+	loadout: CompanionConsultingLoadout
+	/** ISO 문자열 */
+	createdAt: string
+	commentCount: number
+	/** 비밀번호가 저장된 글만 수정·삭제 UI를 엽니다 (예전 글은 false) */
+	hasPassword: boolean
+}
+
+/** 추천 세팅 댓글 입력 */
+export type CompanionConsultingCommentInput = {
+	postShortId: string
+	note: string
+	loadout: CompanionConsultingLoadout
+	/** 수정·삭제 시 다시 입력하는 CUD 비밀번호 */
+	password: string
+}
+
+/** 추천 세팅 댓글 */
+export type CompanionConsultingComment = {
+	shortId: string
+	postShortId: string
+	note: string
+	loadout: CompanionConsultingLoadout
+	createdAt: string
+	/** 비밀번호가 저장된 댓글만 수정·삭제 UI를 엽니다 */
+	hasPassword: boolean
+}
+
+/** 보유 UI용 로컬 상태 (미보유 포함) */
+export type CompanionOwnershipState = {
+	owned: boolean
+	level: number
+}
+
+export type CompanionOwnershipStateMap = Record<string, CompanionOwnershipState>

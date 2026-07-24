@@ -7,8 +7,8 @@ import type { TipEntry } from '@/features/tips/types/tip.type'
 export const TIP_ENTRIES = [
 	{
 		slug: 'companion-setup',
-		title: '동료 세팅',
-		description: '메인·서브 동료를 배치하고 장착 효과를 확인합니다.',
+		title: '동료 세팅 컨설팅',
+		description: '보유·세팅을 올리고, 추천 조합을 ID로 공유합니다.',
 		category: '동료',
 		href: '/tips/companion-setup'
 	},

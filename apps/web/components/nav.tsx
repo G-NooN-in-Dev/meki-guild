@@ -120,7 +120,7 @@ function MobileNavGroup({
 
 			<CollapsibleContent className="flex flex-col gap-0.5 pb-1 pl-3">
 				{item.children.map((child) => {
-					const childActive = pathname === child.href
+					const childActive = pathname === child.href || pathname.startsWith(`${child.href}/`)
 
 					return (
 						<Link
