@@ -30,6 +30,10 @@ type RelicSlotEditorProps = {
 	stage: number
 	potentialIds: readonly string[]
 	excludedIds: ReadonlySet<string>
+	/** 보유 유물만 선택 (컨설팅용). 없으면 전체 */
+	allowedIds?: ReadonlySet<string> | null
+	/** 보유 각성에 맞춰 슬롯 각성 고정 */
+	lockStage?: boolean
 	onSelect: (relic: Relic) => void
 	onClear: () => void
 	onStageChange: (stage: number) => void
@@ -56,6 +60,8 @@ function RelicSlotEditor({
 	stage,
 	potentialIds,
 	excludedIds,
+	allowedIds = null,
+	lockStage = false,
 	onSelect,
 	onClear,
 	onStageChange,
@@ -109,7 +115,10 @@ function RelicSlotEditor({
 			>
 				<SheetHeader className="border-grayscale-200 border-b">
 					<SheetTitle>{slotLabel ?? '유물 슬롯'}</SheetTitle>
-					<SheetDescription>등급을 고른 뒤 유물을 선택하고 각성·잠재옵션을 조절하세요.</SheetDescription>
+					<SheetDescription>
+						등급을 고른 뒤 유물을 선택하고 각성·잠재옵션을 조절하세요.
+						{lockStage ? ' 각성은 보유 현황에 맞춰 고정됩니다.' : ''}
+					</SheetDescription>
 				</SheetHeader>
 
 				<div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
@@ -126,7 +135,7 @@ function RelicSlotEditor({
 								</div>
 							</div>
 
-							<RelicAwakeningStepper stage={stage} onStageChange={onStageChange} />
+							<RelicAwakeningStepper stage={stage} onStageChange={onStageChange} disabled={lockStage} />
 
 							<ul className="text-grayscale-700 list-inside list-disc text-sm">
 								{resolved?.lines.map((line) => (
@@ -172,13 +181,15 @@ function RelicSlotEditor({
 								<div className="grid grid-cols-2 gap-1.5">
 									{getRelicsByGrade(grade).map((item) => {
 										const excluded = excludedIds.has(item.id)
+										const notAllowed = allowedIds !== null && !allowedIds.has(item.id)
 										const selected = relic?.id === item.id
+										const disabled = (excluded && !selected) || (notAllowed && !selected)
 
 										return (
 											<button
 												key={item.id}
 												type="button"
-												disabled={excluded && !selected}
+												disabled={disabled}
 												onClick={() => onSelect(item)}
 												className={cn(
 													'border-grayscale-200 flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm font-medium transition-colors',

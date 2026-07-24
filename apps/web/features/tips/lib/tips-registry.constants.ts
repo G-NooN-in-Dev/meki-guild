@@ -14,8 +14,8 @@ export const TIP_ENTRIES = [
 	},
 	{
 		slug: 'relic-setup',
-		title: '유물 세팅',
-		description: '유물 4개를 장착하고 각성 단계별 장착 효과를 확인합니다.',
+		title: '유물 세팅 컨설팅',
+		description: '보유·각성·세팅을 올리고, 잠재옵션 추천을 ID로 공유합니다.',
 		category: '유물',
 		href: '/tips/relic-setup'
 	}
