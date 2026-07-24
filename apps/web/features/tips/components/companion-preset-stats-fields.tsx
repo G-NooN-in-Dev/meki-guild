@@ -9,7 +9,7 @@ import {
 	CONSULTING_PRESET_STAT_GROUPS,
 	formatPresetStatValue,
 	getPresetStatFieldsByGroup
-} from '@/features/tips/lib/companion-consulting.constants'
+} from '@/features/tips/lib/consulting.constants'
 import type { ConsultingPresetStatId, ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
 
 type CompanionPresetStatsFieldsProps = {

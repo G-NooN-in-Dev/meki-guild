@@ -7,7 +7,7 @@ import {
 	CONSULTING_SHORT_ID_ALPHABET,
 	CONSULTING_SHORT_ID_LENGTH,
 	CONSULTING_TITLE_MAX_LENGTH
-} from '@/features/tips/lib/companion-consulting.constants'
+} from '@/features/tips/lib/consulting.constants'
 import { clampRelicAwakeningStage, getRelicById, RELIC_SETUP_SLOTS } from '@/features/tips/lib/relic.constants'
 import { clampPotentialIds, getRelicPotentialOptionById } from '@/features/tips/lib/relic-potential.constants'
 import type { ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'

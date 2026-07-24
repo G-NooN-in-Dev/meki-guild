@@ -1,12 +1,9 @@
 import {
-	CONSULTING_PRESET_STAT_FIELDS,
-	createEmptyPresetStats
-} from '@/features/tips/lib/companion-consulting.constants'
-import {
 	aggregateEquipEffects,
 	getCompanionById,
 	resolveEquipEffects
 } from '@/features/tips/lib/companion-setup.constants'
+import { CONSULTING_PRESET_STAT_FIELDS, createEmptyPresetStats } from '@/features/tips/lib/consulting.constants'
 import { aggregateRelicStats, resolveRelicEffects } from '@/features/tips/lib/relic.constants'
 import { resolvePotentialStats } from '@/features/tips/lib/relic-potential.constants'
 import type {

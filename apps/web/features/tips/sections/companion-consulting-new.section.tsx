@@ -12,23 +12,18 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useSyncExternalStore } from 'react'
 
-import CompanionConsultingPasswordDialog from '@/features/tips/components/companion-consulting-password-dialog'
 import CompanionOwnershipGrid from '@/features/tips/components/companion-ownership-grid'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
 import CompanionSetupBoard from '@/features/tips/components/companion-setup-board'
+import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
 import {
 	createConsultingPostAction,
 	updateConsultingPostAction,
 	verifyConsultingPostPasswordAction
 } from '@/features/tips/lib/companion-consulting.actions'
 import {
-	CONSULTING_CONTENT_MAX_LENGTH,
-	CONSULTING_PASSWORD_MAX_LENGTH,
-	CONSULTING_PASSWORD_MIN_LENGTH,
-	CONSULTING_TITLE_MAX_LENGTH,
 	createDefaultOwnershipStateMap,
 	createEmptyConsultingLoadout,
-	createEmptyPresetStats,
 	getConsultingPostPath,
 	ownershipEntriesToAllowedIds,
 	ownershipEntriesToLevelMap,
@@ -37,10 +32,17 @@ import {
 	syncLoadoutWithOwnership
 } from '@/features/tips/lib/companion-consulting.constants'
 import {
-	clearConsultingPostEditPassword,
-	readConsultingPostEditPassword,
-	storeConsultingPostEditPassword
-} from '@/features/tips/lib/companion-consulting-edit-password'
+	CONSULTING_CONTENT_MAX_LENGTH,
+	CONSULTING_PASSWORD_MAX_LENGTH,
+	CONSULTING_PASSWORD_MIN_LENGTH,
+	CONSULTING_TITLE_MAX_LENGTH,
+	createEmptyPresetStats
+} from '@/features/tips/lib/consulting.constants'
+import {
+	clearConsultingEditPassword,
+	readConsultingEditPassword,
+	storeConsultingEditPassword
+} from '@/features/tips/lib/consulting-edit-password'
 import type {
 	CompanionConsultingLoadout,
 	CompanionConsultingPost,
@@ -86,7 +88,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 	// 상세 → 수정 진입 시 sessionStorage에 남은 비밀번호를 effect 없이 읽습니다.
 	const storedPassword = useSyncExternalStore(
 		subscribeConsultingEditPassword,
-		() => (shortId ? readConsultingPostEditPassword(shortId) : null),
+		() => (shortId ? readConsultingEditPassword('companion', shortId) : null),
 		() => null
 	)
 
@@ -122,7 +124,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 				return
 			}
 
-			storeConsultingPostEditPassword(initialPost.shortId, nextPassword)
+			storeConsultingEditPassword('companion', initialPost.shortId, nextPassword)
 			setVerifiedPassword(nextPassword)
 		} finally {
 			setIsPending(false)
@@ -162,7 +164,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 
 			// 생성과 동일: toast → soft navigate. refresh는 push와 경합해 수정 페이지에 남을 수 있어 쓰지 않습니다.
 			if (isEdit && initialPost) {
-				clearConsultingPostEditPassword(initialPost.shortId)
+				clearConsultingEditPassword('companion', initialPost.shortId)
 			}
 			toast.success(isEdit ? '현황이 수정되었습니다.' : `현황이 등록되었습니다. ID: ${result.data.shortId}`)
 			router.push(getConsultingPostPath(result.data.shortId))
@@ -196,7 +198,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 					</header>
 				</div>
 
-				<CompanionConsultingPasswordDialog
+				<ConsultingPasswordDialog
 					open={unlockDialogOpen}
 					onOpenChange={handleUnlockDialogChange}
 					title="게시글 수정"
@@ -219,7 +221,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 					)}
 					onClick={() => {
 						if (initialPost) {
-							clearConsultingPostEditPassword(initialPost.shortId)
+							clearConsultingEditPassword('companion', initialPost.shortId)
 						}
 					}}
 				>
@@ -309,7 +311,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 					className={cn(buttonVariants({ variant: 'outline' }), 'justify-center')}
 					onClick={() => {
 						if (initialPost) {
-							clearConsultingPostEditPassword(initialPost.shortId)
+							clearConsultingEditPassword('companion', initialPost.shortId)
 						}
 					}}
 				>

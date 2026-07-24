@@ -12,22 +12,29 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useSyncExternalStore } from 'react'
 
-import CompanionConsultingPasswordDialog from '@/features/tips/components/companion-consulting-password-dialog'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
+import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
 import RelicOwnershipGrid from '@/features/tips/components/relic-ownership-grid'
 import RelicSetupBoard from '@/features/tips/components/relic-setup-board'
+import {
+	CONSULTING_CONTENT_MAX_LENGTH,
+	CONSULTING_PASSWORD_MAX_LENGTH,
+	CONSULTING_PASSWORD_MIN_LENGTH,
+	CONSULTING_TITLE_MAX_LENGTH,
+	createEmptyPresetStats
+} from '@/features/tips/lib/consulting.constants'
+import {
+	clearConsultingEditPassword,
+	readConsultingEditPassword,
+	storeConsultingEditPassword
+} from '@/features/tips/lib/consulting-edit-password'
 import {
 	createRelicConsultingPostAction,
 	updateRelicConsultingPostAction,
 	verifyRelicConsultingPostPasswordAction
 } from '@/features/tips/lib/relic-consulting.actions'
 import {
-	CONSULTING_CONTENT_MAX_LENGTH,
-	CONSULTING_PASSWORD_MAX_LENGTH,
-	CONSULTING_PASSWORD_MIN_LENGTH,
-	CONSULTING_TITLE_MAX_LENGTH,
 	createDefaultRelicOwnershipStateMap,
-	createEmptyPresetStats,
 	createEmptyRelicConsultingLoadout,
 	getRelicConsultingPostPath,
 	relicOwnershipEntriesToAllowedIds,
@@ -36,11 +43,6 @@ import {
 	relicOwnershipStateToEntries,
 	syncRelicLoadoutWithOwnership
 } from '@/features/tips/lib/relic-consulting.constants'
-import {
-	clearRelicConsultingPostEditPassword,
-	readRelicConsultingPostEditPassword,
-	storeRelicConsultingPostEditPassword
-} from '@/features/tips/lib/relic-consulting-edit-password'
 import type { ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
 import type {
 	RelicConsultingLoadout,
@@ -82,7 +84,7 @@ function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionPro
 
 	const storedPassword = useSyncExternalStore(
 		subscribeRelicConsultingEditPassword,
-		() => (shortId ? readRelicConsultingPostEditPassword(shortId) : null),
+		() => (shortId ? readConsultingEditPassword('relic', shortId) : null),
 		() => null
 	)
 
@@ -118,7 +120,7 @@ function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionPro
 				return
 			}
 
-			storeRelicConsultingPostEditPassword(initialPost.shortId, nextPassword)
+			storeConsultingEditPassword('relic', initialPost.shortId, nextPassword)
 			setVerifiedPassword(nextPassword)
 		} finally {
 			setIsPending(false)
@@ -156,7 +158,7 @@ function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionPro
 			}
 
 			if (isEdit && initialPost) {
-				clearRelicConsultingPostEditPassword(initialPost.shortId)
+				clearConsultingEditPassword('relic', initialPost.shortId)
 			}
 			toast.success(isEdit ? '현황이 수정되었습니다.' : `현황이 등록되었습니다. ID: ${result.data.shortId}`)
 			router.push(getRelicConsultingPostPath(result.data.shortId))
@@ -189,7 +191,7 @@ function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionPro
 					</header>
 				</div>
 
-				<CompanionConsultingPasswordDialog
+				<ConsultingPasswordDialog
 					open={unlockDialogOpen}
 					onOpenChange={handleUnlockDialogChange}
 					title="게시글 수정"
@@ -212,7 +214,7 @@ function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionPro
 					)}
 					onClick={() => {
 						if (initialPost) {
-							clearRelicConsultingPostEditPassword(initialPost.shortId)
+							clearConsultingEditPassword('relic', initialPost.shortId)
 						}
 					}}
 				>
@@ -301,7 +303,7 @@ function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionPro
 					className={cn(buttonVariants({ variant: 'outline' }), 'justify-center')}
 					onClick={() => {
 						if (initialPost) {
-							clearRelicConsultingPostEditPassword(initialPost.shortId)
+							clearConsultingEditPassword('relic', initialPost.shortId)
 						}
 					}}
 				>

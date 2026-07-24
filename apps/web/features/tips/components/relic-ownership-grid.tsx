@@ -5,9 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
 import { useMemo, useState } from 'react'
 
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
 import RelicAwakeningStepper from '@/features/tips/components/relic-awakening-stepper'
-import RelicPortrait from '@/features/tips/components/relic-portrait'
 import {
 	clampRelicAwakeningStage,
 	getRelicActivationCondition,
@@ -105,7 +105,7 @@ function RelicOwnershipGrid({ ownership, onOwnershipChange, readOnly = false, cl
 											<div className="flex items-start gap-1.5">
 												{/* 미보유는 초상·이름만 흐리게 — 스위치는 항상 또렷하게 */}
 												<div className={cn('flex min-w-0 flex-1 items-center gap-1.5', !owned && 'opacity-45')}>
-													<RelicPortrait
+													<GradePortrait
 														src={relic.imageSrc}
 														alt={relic.name}
 														grade={relic.grade}

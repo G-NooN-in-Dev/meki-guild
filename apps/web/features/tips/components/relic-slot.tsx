@@ -4,8 +4,8 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 import { PlusIcon } from 'lucide-react'
 
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
-import RelicPortrait from '@/features/tips/components/relic-portrait'
 import { RELIC_GRADE_BADGE_CLASS, RELIC_GRADE_META } from '@/features/tips/lib/relic.constants'
 import {
 	getRelicPotentialOptionById,
@@ -45,7 +45,7 @@ function RelicSlot({
 
 			{relic ? (
 				<div className="flex items-start gap-2.5">
-					<RelicPortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="md" />
+					<GradePortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="md" />
 					<div className="min-w-0 flex-1 space-y-1">
 						<div className="flex flex-wrap items-center gap-1.5">
 							<Badge className={RELIC_GRADE_BADGE_CLASS[relic.grade]}>{RELIC_GRADE_META[relic.grade].label}</Badge>

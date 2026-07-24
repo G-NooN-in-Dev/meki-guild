@@ -19,12 +19,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FormEvent, useMemo, useState, useTransition } from 'react'
 
-import {
-	buildConsultingPaginationItems,
-	CONSULTING_SHORT_ID_LENGTH,
-	getConsultingListPath,
-	getConsultingPostPath
-} from '@/features/tips/lib/companion-consulting.constants'
+import { getConsultingListPath, getConsultingPostPath } from '@/features/tips/lib/companion-consulting.constants'
+import { buildConsultingPaginationItems, CONSULTING_SHORT_ID_LENGTH } from '@/features/tips/lib/consulting.constants'
 import type { CompanionConsultingPost } from '@/features/tips/types/companion-consulting.type'
 
 type CompanionConsultingHubSectionProps = {

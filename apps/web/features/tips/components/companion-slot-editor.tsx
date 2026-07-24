@@ -8,7 +8,7 @@ import { cn } from '@shared/ui/utils'
 import { useEffect, useState } from 'react'
 
 import CompanionLevelStepper from '@/features/tips/components/companion-level-stepper'
-import CompanionPortrait from '@/features/tips/components/companion-portrait'
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import {
 	COMPANION_GRADE_BADGE_CLASS,
 	COMPANION_GRADE_MAX_LEVEL,
@@ -131,7 +131,7 @@ function CompanionSlotEditor({
 					{companion ? (
 						<div className="border-grayscale-200 bg-grayscale-50 flex flex-col gap-3 rounded-xl border p-3">
 							<div className="flex items-center gap-3">
-								<CompanionPortrait src={companion.imageSrc} alt={companion.name} grade={companion.grade} size="lg" />
+								<GradePortrait src={companion.imageSrc} alt={companion.name} grade={companion.grade} size="lg" />
 								<div className="min-w-0 space-y-1">
 									<Badge className={COMPANION_GRADE_BADGE_CLASS[companion.grade]}>
 										{COMPANION_GRADE_META[companion.grade].tierLabel} ({COMPANION_GRADE_META[companion.grade].label})
@@ -249,7 +249,7 @@ function CompanionGradeOptions({
 							selected && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
 						)}
 					>
-						<CompanionPortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />
+						<GradePortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />
 						<span className="text-grayscale-800 truncate">{item.name}</span>
 					</button>
 				)

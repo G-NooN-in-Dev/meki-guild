@@ -1,12 +1,6 @@
 import { randomInt } from 'node:crypto'
 
 import {
-	CONSULTING_POST_LIST_LIMIT,
-	CONSULTING_SHORT_ID_ALPHABET,
-	CONSULTING_SHORT_ID_LENGTH,
-	normalizePresetStats
-} from '@/features/tips/lib/companion-consulting.constants'
-import {
 	ConsultingValidationError,
 	parseConsultingCommentInput,
 	parseConsultingCommentUpdateFields,
@@ -15,6 +9,12 @@ import {
 	parseConsultingPostUpdateInput,
 	parseConsultingShortId
 } from '@/features/tips/lib/companion-consulting.validation'
+import {
+	CONSULTING_POST_LIST_LIMIT,
+	CONSULTING_SHORT_ID_ALPHABET,
+	CONSULTING_SHORT_ID_LENGTH,
+	normalizePresetStats
+} from '@/features/tips/lib/consulting.constants'
 import type {
 	CompanionConsultingComment,
 	CompanionConsultingCommentInput,

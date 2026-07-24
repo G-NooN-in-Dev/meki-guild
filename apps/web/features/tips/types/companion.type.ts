@@ -1,5 +1,7 @@
+import type { ItemGrade } from '@/features/tips/types/item-grade.type'
+
 /** 동료 등급. 4차(레전더리) ~ 2차(에픽)만 다룹니다. */
-export type CompanionGrade = 'legendary' | 'unique' | 'epic'
+export type CompanionGrade = ItemGrade
 
 /** 슬롯 역할: 메인 1 + 서브 6 */
 export type CompanionSlotRole = 'main' | 'sub'

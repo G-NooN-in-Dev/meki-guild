@@ -12,11 +12,17 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
-import CompanionConsultingPasswordDialog from '@/features/tips/components/companion-consulting-password-dialog'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
-import RelicConsultingShareBar from '@/features/tips/components/relic-consulting-share-bar'
+import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
+import ConsultingShareBar from '@/features/tips/components/consulting-share-bar'
 import RelicOwnershipGrid from '@/features/tips/components/relic-ownership-grid'
 import RelicSetupBoard from '@/features/tips/components/relic-setup-board'
+import {
+	CONSULTING_NOTE_MAX_LENGTH,
+	CONSULTING_PASSWORD_MAX_LENGTH,
+	CONSULTING_PASSWORD_MIN_LENGTH
+} from '@/features/tips/lib/consulting.constants'
+import { storeConsultingEditPassword } from '@/features/tips/lib/consulting-edit-password'
 import { projectRelicPresetStats } from '@/features/tips/lib/consulting-preset-projection'
 import {
 	createRelicConsultingCommentAction,
@@ -27,16 +33,12 @@ import {
 	verifyRelicConsultingPostPasswordAction
 } from '@/features/tips/lib/relic-consulting.actions'
 import {
-	CONSULTING_NOTE_MAX_LENGTH,
-	CONSULTING_PASSWORD_MAX_LENGTH,
-	CONSULTING_PASSWORD_MIN_LENGTH,
 	createEmptyRelicConsultingLoadout,
 	getRelicConsultingPostPath,
 	relicOwnershipEntriesToAllowedIds,
 	relicOwnershipEntriesToStageMap,
 	relicOwnershipEntriesToStateMap
 } from '@/features/tips/lib/relic-consulting.constants'
-import { storeRelicConsultingPostEditPassword } from '@/features/tips/lib/relic-consulting-edit-password'
 import type {
 	RelicConsultingComment,
 	RelicConsultingLoadout,
@@ -137,7 +139,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 				return
 			}
 
-			storeRelicConsultingPostEditPassword(post.shortId, password)
+			storeConsultingEditPassword('relic', post.shortId, password)
 			setEditPostOpen(false)
 			router.push(`${getRelicConsultingPostPath(post.shortId)}/edit`)
 		} finally {
@@ -296,7 +298,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 				) : null}
 			</div>
 
-			<RelicConsultingShareBar shortId={post.shortId} />
+			<ConsultingShareBar shortId={post.shortId} path={getRelicConsultingPostPath(post.shortId)} />
 
 			{/* ── 현황: 프리셋·보유·현재 세팅을 한 구역으로 묶습니다 ── */}
 			<div className="flex flex-col gap-4 md:gap-5">
@@ -499,7 +501,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 				</div>
 			</div>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={editPostOpen}
 				onOpenChange={setEditPostOpen}
 				title="게시글 수정"
@@ -509,7 +511,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 				onConfirm={handleUnlockPostEdit}
 			/>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={deletePostOpen}
 				onOpenChange={setDeletePostOpen}
 				title="게시글 삭제"
@@ -520,7 +522,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 				onConfirm={handleDeletePost}
 			/>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={editCommentId !== null}
 				onOpenChange={(open) => {
 					if (!open) {
@@ -534,7 +536,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 				onConfirm={handleUnlockCommentEdit}
 			/>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={deleteCommentId !== null}
 				onOpenChange={(open) => {
 					if (!open) {

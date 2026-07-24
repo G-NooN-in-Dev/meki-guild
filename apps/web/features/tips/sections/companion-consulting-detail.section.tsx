@@ -12,11 +12,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
-import CompanionConsultingPasswordDialog from '@/features/tips/components/companion-consulting-password-dialog'
-import CompanionConsultingShareBar from '@/features/tips/components/companion-consulting-share-bar'
 import CompanionOwnershipGrid from '@/features/tips/components/companion-ownership-grid'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
 import CompanionSetupBoard from '@/features/tips/components/companion-setup-board'
+import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
+import ConsultingShareBar from '@/features/tips/components/consulting-share-bar'
 import {
 	createConsultingCommentAction,
 	deleteConsultingCommentAction,
@@ -26,16 +26,18 @@ import {
 	verifyConsultingPostPasswordAction
 } from '@/features/tips/lib/companion-consulting.actions'
 import {
-	CONSULTING_NOTE_MAX_LENGTH,
-	CONSULTING_PASSWORD_MAX_LENGTH,
-	CONSULTING_PASSWORD_MIN_LENGTH,
 	createEmptyConsultingLoadout,
 	getConsultingPostPath,
 	ownershipEntriesToAllowedIds,
 	ownershipEntriesToLevelMap,
 	ownershipEntriesToStateMap
 } from '@/features/tips/lib/companion-consulting.constants'
-import { storeConsultingPostEditPassword } from '@/features/tips/lib/companion-consulting-edit-password'
+import {
+	CONSULTING_NOTE_MAX_LENGTH,
+	CONSULTING_PASSWORD_MAX_LENGTH,
+	CONSULTING_PASSWORD_MIN_LENGTH
+} from '@/features/tips/lib/consulting.constants'
+import { storeConsultingEditPassword } from '@/features/tips/lib/consulting-edit-password'
 import { projectCompanionPresetStats } from '@/features/tips/lib/consulting-preset-projection'
 import type {
 	CompanionConsultingComment,
@@ -141,7 +143,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 			}
 
 			// 수정 페이지에서 저장할 때 쓰도록 잠깐 보관 (URL에는 넣지 않음)
-			storeConsultingPostEditPassword(post.shortId, password)
+			storeConsultingEditPassword('companion', post.shortId, password)
 			setEditPostOpen(false)
 			router.push(`${getConsultingPostPath(post.shortId)}/edit`)
 		} finally {
@@ -300,7 +302,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				) : null}
 			</div>
 
-			<CompanionConsultingShareBar shortId={post.shortId} />
+			<ConsultingShareBar shortId={post.shortId} path={getConsultingPostPath(post.shortId)} />
 
 			{/* ── 현황: 프리셋·보유·현재 세팅을 한 구역으로 묶습니다 ── */}
 			<div className="flex flex-col gap-4 md:gap-5">
@@ -500,7 +502,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				</div>
 			</div>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={editPostOpen}
 				onOpenChange={setEditPostOpen}
 				title="게시글 수정"
@@ -510,7 +512,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				onConfirm={handleUnlockPostEdit}
 			/>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={deletePostOpen}
 				onOpenChange={setDeletePostOpen}
 				title="게시글 삭제"
@@ -521,7 +523,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				onConfirm={handleDeletePost}
 			/>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={editCommentId !== null}
 				onOpenChange={(open) => {
 					if (!open) {
@@ -535,7 +537,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				onConfirm={handleUnlockCommentEdit}
 			/>
 
-			<CompanionConsultingPasswordDialog
+			<ConsultingPasswordDialog
 				open={deleteCommentId !== null}
 				onOpenChange={(open) => {
 					if (!open) {

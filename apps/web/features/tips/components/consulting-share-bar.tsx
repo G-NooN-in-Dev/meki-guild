@@ -5,16 +5,18 @@ import { Input } from '@shared/ui/input'
 import { CheckIcon, CopyIcon, LinkIcon } from 'lucide-react'
 import { useState } from 'react'
 
-import { getRelicConsultingPostPath } from '@/features/tips/lib/relic-consulting.constants'
-
-type RelicConsultingShareBarProps = {
+type ConsultingShareBarProps = {
 	shortId: string
+	/** 게시글 path (예: /tips/companion-consulting/abc) — origin은 클라이언트에서 붙입니다. */
+	path: string
 }
 
-/** 게시글 ID·URL 복사 — 카톡 채널 공유용 */
-function RelicConsultingShareBar({ shortId }: RelicConsultingShareBarProps) {
+/**
+ * 게시글 ID·URL 복사 바.
+ * 동료/유물 컨설팅 상세에서 공통으로 씁니다.
+ */
+function ConsultingShareBar({ shortId, path }: ConsultingShareBarProps) {
 	const [copied, setCopied] = useState<'id' | 'url' | null>(null)
-	const path = getRelicConsultingPostPath(shortId)
 
 	async function copyText(kind: 'id' | 'url', value: string) {
 		try {
@@ -60,4 +62,4 @@ function RelicConsultingShareBar({ shortId }: RelicConsultingShareBarProps) {
 	)
 }
 
-export default RelicConsultingShareBar
+export default ConsultingShareBar

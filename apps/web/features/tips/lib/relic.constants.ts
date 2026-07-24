@@ -1,3 +1,8 @@
+import {
+	ITEM_GRADE_BADGE_CLASS,
+	ITEM_GRADE_ORDER,
+	ITEM_GRADE_TAB_CLASS
+} from '@/features/tips/lib/item-grade.constants'
 import type {
 	Relic,
 	RelicAwakeningStage,
@@ -7,8 +12,8 @@ import type {
 	RelicStatUnit
 } from '@/features/tips/types/relic.type'
 
-/** UI·정렬용 등급 순서 (높은 등급 먼저) */
-export const RELIC_GRADE_ORDER = ['legendary', 'unique', 'epic'] as const satisfies readonly RelicGrade[]
+/** UI·정렬용 등급 순서 — 공통 ITEM_GRADE_ORDER 재사용 */
+export const RELIC_GRADE_ORDER = ITEM_GRADE_ORDER
 
 /** 등급 표시 라벨 — MGF.GG 유물 페이지 표기(레전드리)를 따릅니다. */
 export const RELIC_GRADE_META = {
@@ -23,22 +28,9 @@ export const RELIC_GRADE_META = {
 	}
 } as const satisfies Record<RelicGrade, { label: string }>
 
-/**
- * 등급 Badge 색상.
- * 동료 세팅과 같은 파스텔 톤을 씁니다.
- */
-export const RELIC_GRADE_BADGE_CLASS = {
-	legendary: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
-	unique: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
-	epic: 'border-transparent bg-pastel-purple-100 text-pastel-purple-800'
-} as const satisfies Record<RelicGrade, string>
-
-/** 등급 탭 색상 (동료 세팅과 동일 톤) */
-export const RELIC_GRADE_TAB_CLASS = {
-	legendary: 'text-pastel-green-700 data-active:bg-pastel-green-100 data-active:text-pastel-green-800',
-	unique: 'text-pastel-yellow-700 data-active:bg-pastel-yellow-100 data-active:text-pastel-yellow-800',
-	epic: 'text-pastel-purple-700 data-active:bg-pastel-purple-100 data-active:text-pastel-purple-800'
-} as const satisfies Record<RelicGrade, string>
+/** 등급 Badge·탭 색상 — 공통 상수 재사용 */
+export const RELIC_GRADE_BADGE_CLASS = ITEM_GRADE_BADGE_CLASS
+export const RELIC_GRADE_TAB_CLASS = ITEM_GRADE_TAB_CLASS
 
 /** 유물 슬롯은 총 4칸 */
 export const RELIC_SETUP_SLOTS = [

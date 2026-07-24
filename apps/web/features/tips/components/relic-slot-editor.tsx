@@ -7,8 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
 import { useEffect, useState } from 'react'
 
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import RelicAwakeningStepper from '@/features/tips/components/relic-awakening-stepper'
-import RelicPortrait from '@/features/tips/components/relic-portrait'
 import RelicPotentialEditor from '@/features/tips/components/relic-potential-editor'
 import {
 	getRelicActivationCondition,
@@ -125,7 +125,7 @@ function RelicSlotEditor({
 					{relic ? (
 						<div className="border-grayscale-200 bg-grayscale-50 flex flex-col gap-3 rounded-xl border p-3">
 							<div className="flex items-center gap-3">
-								<RelicPortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="lg" />
+								<GradePortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="lg" />
 								<div className="min-w-0 space-y-1">
 									<Badge className={RELIC_GRADE_BADGE_CLASS[relic.grade]}>{RELIC_GRADE_META[relic.grade].label}</Badge>
 									<p className="text-grayscale-900 font-semibold">{relic.name}</p>
@@ -199,7 +199,7 @@ function RelicSlotEditor({
 													selected && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
 												)}
 											>
-												<RelicPortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />
+												<GradePortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />
 												<span className="text-grayscale-800 truncate">{item.name}</span>
 											</button>
 										)

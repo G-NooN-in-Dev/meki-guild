@@ -1,3 +1,8 @@
+import {
+	ITEM_GRADE_BADGE_CLASS,
+	ITEM_GRADE_ORDER,
+	ITEM_GRADE_TAB_CLASS
+} from '@/features/tips/lib/item-grade.constants'
 import type {
 	Companion,
 	CompanionEquipEffect,
@@ -7,10 +12,10 @@ import type {
 	CompanionSetupSlot
 } from '@/features/tips/types/companion.type'
 
-/** UI·정렬용 등급 순서 (높은 등급 먼저) */
-export const COMPANION_GRADE_ORDER = ['legendary', 'unique', 'epic'] as const satisfies readonly CompanionGrade[]
+/** UI·정렬용 등급 순서 — 공통 ITEM_GRADE_ORDER 재사용 */
+export const COMPANION_GRADE_ORDER = ITEM_GRADE_ORDER
 
-/** 등급 표시 라벨·차수 */
+/** 등급 표시 라벨·차수 (동료만 차수 표기) */
 export const COMPANION_GRADE_META = {
 	legendary: {
 		label: '레전더리',
@@ -26,25 +31,9 @@ export const COMPANION_GRADE_META = {
 	}
 } as const satisfies Record<CompanionGrade, { label: string; tierLabel: string }>
 
-/**
- * 등급 Badge 색상.
- * 레전더리=초록, 유니크=노랑, 에픽=보라.
- */
-export const COMPANION_GRADE_BADGE_CLASS = {
-	legendary: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
-	unique: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
-	epic: 'border-transparent bg-pastel-purple-100 text-pastel-purple-800'
-} as const satisfies Record<CompanionGrade, string>
-
-/**
- * 등급 탭 색상.
- * 비활성은 글자색만, 활성(data-active)은 Badge와 같은 배경·글자색을 씁니다.
- */
-export const COMPANION_GRADE_TAB_CLASS = {
-	legendary: 'text-pastel-green-700 data-active:bg-pastel-green-100 data-active:text-pastel-green-800',
-	unique: 'text-pastel-yellow-700 data-active:bg-pastel-yellow-100 data-active:text-pastel-yellow-800',
-	epic: 'text-pastel-purple-700 data-active:bg-pastel-purple-100 data-active:text-pastel-purple-800'
-} as const satisfies Record<CompanionGrade, string>
+/** 등급 Badge·탭 색상 — 공통 상수 재사용 */
+export const COMPANION_GRADE_BADGE_CLASS = ITEM_GRADE_BADGE_CLASS
+export const COMPANION_GRADE_TAB_CLASS = ITEM_GRADE_TAB_CLASS
 
 /**
  * 레전더리 1레벨 대비 등급별 1레벨 수치 배율.

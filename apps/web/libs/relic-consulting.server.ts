@@ -5,7 +5,7 @@ import {
 	CONSULTING_SHORT_ID_ALPHABET,
 	CONSULTING_SHORT_ID_LENGTH,
 	normalizePresetStats
-} from '@/features/tips/lib/relic-consulting.constants'
+} from '@/features/tips/lib/consulting.constants'
 import {
 	parseRelicConsultingCommentInput,
 	parseRelicConsultingCommentUpdateFields,

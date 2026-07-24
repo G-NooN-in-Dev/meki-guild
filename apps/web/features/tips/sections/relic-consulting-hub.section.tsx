@@ -19,12 +19,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FormEvent, useMemo, useState, useTransition } from 'react'
 
-import {
-	buildConsultingPaginationItems,
-	CONSULTING_SHORT_ID_LENGTH,
-	getRelicConsultingListPath,
-	getRelicConsultingPostPath
-} from '@/features/tips/lib/relic-consulting.constants'
+import { buildConsultingPaginationItems, CONSULTING_SHORT_ID_LENGTH } from '@/features/tips/lib/consulting.constants'
+import { getRelicConsultingListPath, getRelicConsultingPostPath } from '@/features/tips/lib/relic-consulting.constants'
 import type { RelicConsultingPost } from '@/features/tips/types/relic-consulting.type'
 
 type RelicConsultingHubSectionProps = {

@@ -1,51 +1,17 @@
-import {
-	buildConsultingPaginationItems,
-	CONSULTING_CONTENT_MAX_LENGTH,
-	CONSULTING_NOTE_MAX_LENGTH,
-	CONSULTING_PASSWORD_MAX_LENGTH,
-	CONSULTING_PASSWORD_MIN_LENGTH,
-	CONSULTING_POST_LIST_LIMIT,
-	CONSULTING_PRESET_STAT_FIELDS,
-	CONSULTING_SHORT_ID_ALPHABET,
-	CONSULTING_SHORT_ID_LENGTH,
-	CONSULTING_TITLE_MAX_LENGTH,
-	createEmptyPresetStats,
-	normalizePresetStats
-} from '@/features/tips/lib/companion-consulting.constants'
+import { CONSULTING_DEFAULT_OWNED_BY_GRADE } from '@/features/tips/lib/consulting.constants'
 import { clampRelicAwakeningStage, getRelicById, RELIC_SETUP_SLOTS, RELICS } from '@/features/tips/lib/relic.constants'
 import { clampPotentialIds } from '@/features/tips/lib/relic-potential.constants'
-import type { RelicGrade, RelicSlotLoadout } from '@/features/tips/types/relic.type'
+import type { RelicSlotLoadout } from '@/features/tips/types/relic.type'
 import type {
 	RelicConsultingLoadout,
 	RelicOwnershipEntry,
 	RelicOwnershipStateMap
 } from '@/features/tips/types/relic-consulting.type'
 
-/** 동료 컨설팅과 동일한 공유 한도·프리셋·페이지네이션을 재사용합니다. */
-export {
-	buildConsultingPaginationItems,
-	CONSULTING_CONTENT_MAX_LENGTH,
-	CONSULTING_NOTE_MAX_LENGTH,
-	CONSULTING_PASSWORD_MAX_LENGTH,
-	CONSULTING_PASSWORD_MIN_LENGTH,
-	CONSULTING_POST_LIST_LIMIT,
-	CONSULTING_PRESET_STAT_FIELDS,
-	CONSULTING_SHORT_ID_ALPHABET,
-	CONSULTING_SHORT_ID_LENGTH,
-	CONSULTING_TITLE_MAX_LENGTH,
-	createEmptyPresetStats,
-	normalizePresetStats
-}
-
 /**
- * 등급별 기본 보유 여부.
- * 유니크·에픽은 대부분 보유, 레전드리는 미보유가 많다는 전제.
+ * 유물 컨설팅 전용 상수·헬퍼.
+ * shortId·한도·프리셋 등 공통 규칙은 consulting.constants를 씁니다.
  */
-export const RELIC_CONSULTING_DEFAULT_OWNED_BY_GRADE = {
-	legendary: false,
-	unique: true,
-	epic: true
-} as const satisfies Record<RelicGrade, boolean>
 
 const EMPTY_SLOT_LOADOUT: RelicSlotLoadout = { relicId: null, stage: 0, potentialIds: [] }
 
@@ -63,7 +29,7 @@ export function createDefaultRelicOwnershipStateMap(): RelicOwnershipStateMap {
 		RELICS.map((relic) => [
 			relic.id,
 			{
-				owned: RELIC_CONSULTING_DEFAULT_OWNED_BY_GRADE[relic.grade],
+				owned: CONSULTING_DEFAULT_OWNED_BY_GRADE[relic.grade],
 				stage: 0
 			}
 		])

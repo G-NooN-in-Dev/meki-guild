@@ -1,4 +1,9 @@
 import {
+	clampCompanionLevel,
+	COMPANION_SETUP_SLOTS,
+	getCompanionById
+} from '@/features/tips/lib/companion-setup.constants'
+import {
 	CONSULTING_CONTENT_MAX_LENGTH,
 	CONSULTING_NOTE_MAX_LENGTH,
 	CONSULTING_PASSWORD_MAX_LENGTH,
@@ -7,12 +12,7 @@ import {
 	CONSULTING_SHORT_ID_ALPHABET,
 	CONSULTING_SHORT_ID_LENGTH,
 	CONSULTING_TITLE_MAX_LENGTH
-} from '@/features/tips/lib/companion-consulting.constants'
-import {
-	clampCompanionLevel,
-	COMPANION_SETUP_SLOTS,
-	getCompanionById
-} from '@/features/tips/lib/companion-setup.constants'
+} from '@/features/tips/lib/consulting.constants'
 import type {
 	CompanionConsultingCommentInput,
 	CompanionConsultingLoadout,
