@@ -225,7 +225,9 @@ export const COMPANION_JOB_ICON_KEY = {
 	나이트로드: 'nightlord',
 	섀도어: 'shadower',
 	바이퍼: 'viper',
-	캡틴: 'captain'
+	캡틴: 'captain',
+	나이트워커: 'nightwalker',
+	윈드브레이커: 'windbreaker'
 } as const satisfies Record<string, string>
 
 /** 직업 초상화 public 경로. 매핑이 없으면 빈 문자열. */
