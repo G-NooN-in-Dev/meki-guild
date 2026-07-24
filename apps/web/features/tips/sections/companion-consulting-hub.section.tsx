@@ -143,7 +143,7 @@ function CompanionConsultingHubSection({ posts, loadError = null }: CompanionCon
 									</div>
 									<p className="text-grayscale-900 truncate text-sm font-medium">{post.title}</p>
 									<p className="text-grayscale-500 text-xs">
-										{formatCreatedAt(post.createdAt)} · 추천 {post.commentCount}개
+										{formatCreatedAt(post.createdAt)} · 댓글 {post.commentCount}개
 									</p>
 								</div>
 								<ArrowRightIcon className="text-grayscale-400 size-4 shrink-0" />
