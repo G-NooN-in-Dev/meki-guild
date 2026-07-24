@@ -174,3 +174,17 @@ export function formatPresetStatValue(value: number, unit: ConsultingPresetStatU
 	const rounded = Math.round(value * 10) / 10
 	return unit === 'percent' ? `${rounded}%` : String(rounded)
 }
+
+/**
+ * 현재 프리셋 대비 증감 라벨.
+ * 0이면 null — UI에서 변화 없음을 숨깁니다.
+ */
+export function formatPresetStatDelta(delta: number, unit: ConsultingPresetStatUnit): string | null {
+	const rounded = Math.round(delta * 10) / 10
+	if (rounded === 0) {
+		return null
+	}
+
+	const sign = rounded > 0 ? '+' : ''
+	return unit === 'percent' ? `${sign}${rounded}%` : `${sign}${rounded}`
+}

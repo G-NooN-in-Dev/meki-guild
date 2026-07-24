@@ -404,6 +404,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 												title="예상 프리셋 스탯"
 												description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
 												stats={editProjectedPresetStats}
+												baseStats={post.presetStats}
 												readOnly
 											/>
 
@@ -430,6 +431,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 												title="예상 프리셋 스탯"
 												description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
 												stats={projectRelicPresetStats(post.presetStats, post.loadout, comment.loadout)}
+												baseStats={post.presetStats}
 												readOnly
 											/>
 										</>
@@ -488,6 +490,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 						title="예상 프리셋 스탯"
 						description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
 						stats={recommendProjectedPresetStats}
+						baseStats={post.presetStats}
 						readOnly
 					/>
 

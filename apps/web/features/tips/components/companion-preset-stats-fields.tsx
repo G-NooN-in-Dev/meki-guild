@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 import {
 	CONSULTING_PRESET_STAT_GROUPS,
+	formatPresetStatDelta,
 	formatPresetStatValue,
 	getPresetStatFieldsByGroup
 } from '@/features/tips/lib/consulting.constants'
@@ -21,6 +22,8 @@ type CompanionPresetStatsFieldsProps = {
 	title?: string
 	/** 기본: 게임 프리셋 입력 안내. 예상 프리셋 등에서 덮어씁니다. */
 	description?: string
+	/** 있으면 읽기 전용 행에 현재 대비 증감 표시 (예상 프리셋용) */
+	baseStats?: ConsultingPresetStats
 }
 
 /** 숫자·소수점 최대 1자리. 입력 중 `12.` 같은 중간 상태도 통과시킵니다. */
@@ -38,7 +41,8 @@ function CompanionPresetStatsFields({
 	readOnly = false,
 	className,
 	title = '현재 프리셋 스탯',
-	description = '게임에 표시된 프리셋 기준 수치를 입력해 주세요.'
+	description = '게임에 표시된 프리셋 기준 수치를 입력해 주세요.',
+	baseStats
 }: CompanionPresetStatsFieldsProps) {
 	// Number("12.") → 12가 되어 소수점이 사라지므로, 타이핑 중인 문자열을 따로 둡니다.
 	const [drafts, setDrafts] = useState<Partial<Record<ConsultingPresetStatId, string>>>({})
@@ -100,11 +104,28 @@ function CompanionPresetStatsFields({
 								const displayValue = draft !== undefined ? draft : value === 0 ? '' : String(value)
 
 								if (readOnly) {
+									// 예상 프리셋만 baseStats를 넘겨 현재 대비 증감을 옆에 붙입니다.
+									const delta = baseStats !== undefined ? value - baseStats[field.id] : 0
+									const deltaLabel = baseStats !== undefined ? formatPresetStatDelta(delta, field.unit) : null
+
 									return (
 										<div key={field.id} className="flex items-baseline justify-between gap-2">
 											<span className="text-grayscale-600 text-sm">{field.label}</span>
-											<span className="text-grayscale-900 text-sm font-semibold tabular-nums">
-												{formatPresetStatValue(value, field.unit)}
+											<span className="flex items-baseline gap-1.5 tabular-nums">
+												<span className="text-grayscale-900 text-sm font-semibold">
+													{formatPresetStatValue(value, field.unit)}
+												</span>
+												{deltaLabel ? (
+													<span
+														className={cn(
+															'text-xs font-medium',
+															delta > 0 && 'text-success-700',
+															delta < 0 && 'text-danger-700'
+														)}
+													>
+														({deltaLabel})
+													</span>
+												) : null}
 											</span>
 										</div>
 									)

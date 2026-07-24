@@ -407,6 +407,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 												title="예상 프리셋 스탯"
 												description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
 												stats={editProjectedPresetStats}
+												baseStats={post.presetStats}
 												readOnly
 											/>
 
@@ -433,6 +434,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 												title="예상 프리셋 스탯"
 												description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
 												stats={projectCompanionPresetStats(post.presetStats, post.loadout, comment.loadout)}
+												baseStats={post.presetStats}
 												readOnly
 											/>
 										</>
@@ -489,6 +491,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 						title="예상 프리셋 스탯"
 						description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
 						stats={recommendProjectedPresetStats}
+						baseStats={post.presetStats}
 						readOnly
 					/>
 
