@@ -15,30 +15,40 @@ type CompanionSlotProps = {
 	equipEffects: readonly CompanionEquipEffect[]
 	/** Sheet에서 이 슬롯을 편집 중일 때 강조 */
 	isEditing?: boolean
-	onOpen: () => void
+	/** true면 클릭 불가 (조회 전용) */
+	readOnly?: boolean
+	onOpen?: () => void
 }
 
 /** 세팅 보드용 슬롯 카드. 클릭하면 Sheet에서 동료·레벨을 편집합니다. */
-function CompanionSlot({ slot, companion, level, equipEffects, isEditing = false, onOpen }: CompanionSlotProps) {
+function CompanionSlot({
+	slot,
+	companion,
+	level,
+	equipEffects,
+	isEditing = false,
+	readOnly = false,
+	onOpen
+}: CompanionSlotProps) {
 	const isMain = slot.role === 'main'
 	const gradeMeta = companion ? COMPANION_GRADE_META[companion.grade] : null
 	const primaryEffect = equipEffects[0]
-
-	return (
-		<button
-			type="button"
-			onClick={onOpen}
-			aria-pressed={isEditing}
-			className={cn(
-				'group border-grayscale-200 bg-card shadow-soft flex w-full cursor-pointer flex-col gap-1.5 rounded-xl border p-3 text-left transition-colors',
+	const shellClassName = cn(
+		'group border-grayscale-200 bg-card shadow-soft flex w-full flex-col gap-1.5 rounded-xl border p-3 text-left',
+		!companion && 'border-dashed',
+		isEditing && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1',
+		isMain && 'md:p-4',
+		!readOnly &&
+			cn(
+				'cursor-pointer transition-colors',
 				'hover:border-grayscale-300 hover:bg-grayscale-50/70',
 				'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
-				'[&_img]:cursor-pointer',
-				!companion && 'border-dashed',
-				isEditing && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1',
-				isMain && 'md:p-4'
-			)}
-		>
+				'[&_img]:cursor-pointer'
+			)
+	)
+
+	const body = (
+		<>
 			<div className="flex items-center justify-between gap-2">
 				<p className="text-grayscale-500 text-xs font-medium">{slot.label}</p>
 				{companion ? <span className="text-grayscale-400 text-xs tabular-nums">Lv.{level}</span> : null}
@@ -62,10 +72,20 @@ function CompanionSlot({ slot, companion, level, equipEffects, isEditing = false
 				</div>
 			) : (
 				<div className="text-grayscale-400 flex items-center gap-1.5 py-2 text-sm">
-					<PlusIcon className="size-4 shrink-0" />
-					<span>동료 선택</span>
+					{!readOnly ? <PlusIcon className="size-4 shrink-0" /> : null}
+					<span>{readOnly ? '비어 있음' : '동료 선택'}</span>
 				</div>
 			)}
+		</>
+	)
+
+	if (readOnly) {
+		return <div className={shellClassName}>{body}</div>
+	}
+
+	return (
+		<button type="button" onClick={onOpen} aria-pressed={isEditing} className={shellClassName}>
+			{body}
 		</button>
 	)
 }

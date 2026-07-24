@@ -1,5 +1,6 @@
 import '@/global.css'
 
+import { Toaster } from '@shared/ui/sonner'
 import type { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
@@ -48,6 +49,7 @@ function RootLayout({ children }: PropsWithChildren) {
 					<Header />
 					{children}
 					<Footer />
+					<Toaster />
 				</NameRevealProvider>
 			</body>
 		</html>

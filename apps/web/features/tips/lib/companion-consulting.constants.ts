@@ -1,0 +1,237 @@
+import {
+	clampCompanionLevel,
+	COMPANION_SETUP_SLOTS,
+	COMPANIONS,
+	getCompanionById
+} from '@/features/tips/lib/companion-setup.constants'
+import type { CompanionGrade, CompanionSlotLoadout } from '@/features/tips/types/companion.type'
+import type {
+	CompanionConsultingLoadout,
+	CompanionOwnershipEntry,
+	CompanionOwnershipStateMap,
+	ConsultingPresetStatId,
+	ConsultingPresetStats,
+	ConsultingPresetStatUnit
+} from '@/features/tips/types/companion-consulting.type'
+
+/** 사람이 치기 쉬운 공유 ID 문자 (0/O, 1/I 제외) */
+export const CONSULTING_SHORT_ID_ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
+
+export const CONSULTING_SHORT_ID_LENGTH = 8
+
+/** 제목 한 줄 최대 길이 */
+export const CONSULTING_TITLE_MAX_LENGTH = 60
+
+/** 추천 댓글 한 줄 최대 길이 */
+export const CONSULTING_NOTE_MAX_LENGTH = 200
+
+/**
+ * CUD(작성·수정·삭제)용 단순 비밀번호 길이.
+ * 계정 ID/비번이 아니라, 글·댓글을 나중에 고치거나 지울 때 쓰는 키입니다.
+ */
+export const CONSULTING_PASSWORD_MIN_LENGTH = 4
+export const CONSULTING_PASSWORD_MAX_LENGTH = 32
+
+/** 목록 한 페이지 개수 */
+export const CONSULTING_POST_LIST_LIMIT = 30
+
+/**
+ * 현재 프리셋 기준 입력 스탯.
+ * 명중·회피만 flat, 나머지는 %.
+ */
+export const CONSULTING_PRESET_STAT_FIELDS = [
+	{ id: 'critRate', label: '크리티컬 확률', unit: 'percent' },
+	{ id: 'critDamage', label: '크리티컬 데미지', unit: 'percent' },
+	{ id: 'attackSpeed', label: '공격 속도', unit: 'percent' },
+	{ id: 'bossDamage', label: '보스 몬스터 데미지', unit: 'percent' },
+	{ id: 'normalDamage', label: '일반 몬스터 데미지', unit: 'percent' },
+	{ id: 'accuracy', label: '명중', unit: 'flat' },
+	{ id: 'evasion', label: '회피', unit: 'flat' },
+	{ id: 'minDamageMultiplier', label: '최소 데미지 배율', unit: 'percent' },
+	{ id: 'maxDamageMultiplier', label: '최대 데미지 배율', unit: 'percent' }
+] as const satisfies readonly {
+	id: ConsultingPresetStatId
+	label: string
+	unit: ConsultingPresetStatUnit
+}[]
+
+type ConsultingPresetStatField = (typeof CONSULTING_PRESET_STAT_FIELDS)[number]
+
+/**
+ * UI 행 배치용 세트.
+ * 카드/제목으로 묶지 않고, 한 블록 안에서 행만 나눌 때 씁니다.
+ */
+export const CONSULTING_PRESET_STAT_GROUPS = [
+	{
+		id: 'crit-speed',
+		label: '크리티컬 · 공격 속도',
+		fieldIds: ['critRate', 'critDamage', 'attackSpeed']
+	},
+	{
+		id: 'monster-damage',
+		label: '몬스터 데미지',
+		fieldIds: ['bossDamage', 'normalDamage']
+	},
+	{
+		id: 'hit-evade',
+		label: '명중 · 회피',
+		fieldIds: ['accuracy', 'evasion']
+	},
+	{
+		id: 'damage-multiplier',
+		label: '데미지 배율',
+		fieldIds: ['minDamageMultiplier', 'maxDamageMultiplier']
+	}
+] as const satisfies readonly {
+	id: string
+	label: string
+	fieldIds: readonly ConsultingPresetStatId[]
+}[]
+
+const PRESET_STAT_FIELD_BY_ID = Object.fromEntries(
+	CONSULTING_PRESET_STAT_FIELDS.map((field) => [field.id, field])
+) as Record<ConsultingPresetStatId, ConsultingPresetStatField>
+
+/** 그룹에 속한 필드 정의 목록 */
+export function getPresetStatFieldsByGroup(groupId: (typeof CONSULTING_PRESET_STAT_GROUPS)[number]['id']) {
+	const group = CONSULTING_PRESET_STAT_GROUPS.find((item) => item.id === groupId)
+	if (!group) {
+		return [] as ConsultingPresetStatField[]
+	}
+
+	return group.fieldIds.map((fieldId) => PRESET_STAT_FIELD_BY_ID[fieldId])
+}
+
+/** 빈 프리셋 스탯 (작성 폼 초기값) */
+export function createEmptyPresetStats(): ConsultingPresetStats {
+	return Object.fromEntries(CONSULTING_PRESET_STAT_FIELDS.map((field) => [field.id, 0])) as ConsultingPresetStats
+}
+
+export function formatPresetStatValue(value: number, unit: ConsultingPresetStatUnit) {
+	const rounded = unit === 'percent' ? Math.round(value * 10) / 10 : Math.round(value)
+	return unit === 'percent' ? `${rounded}%` : String(rounded)
+}
+
+/**
+ * 등급별 기본 보유 여부.
+ * 유니크·에픽은 대부분 보유, 레전더리는 미보유가 많다는 전제.
+ */
+export const CONSULTING_DEFAULT_OWNED_BY_GRADE = {
+	legendary: false,
+	unique: true,
+	epic: true
+} as const satisfies Record<CompanionGrade, boolean>
+
+/** 빈 세팅 보드 (슬롯별 null) */
+export function createEmptyConsultingLoadout(): CompanionConsultingLoadout {
+	return Object.fromEntries(
+		COMPANION_SETUP_SLOTS.map((slot) => [slot.id, { companionId: null, level: 1 } satisfies CompanionSlotLoadout])
+	)
+}
+
+/**
+ * 보유 현황 초기값.
+ * 레전더리=미보유, 유니크·에픽=보유 Lv.1
+ */
+export function createDefaultOwnershipStateMap(): CompanionOwnershipStateMap {
+	return Object.fromEntries(
+		COMPANIONS.map((companion) => [
+			companion.id,
+			{
+				owned: CONSULTING_DEFAULT_OWNED_BY_GRADE[companion.grade],
+				level: 1
+			}
+		])
+	)
+}
+
+/** 보유 맵 → DB에 넣을 보유 목록 (owned만) */
+export function ownershipStateToEntries(stateMap: CompanionOwnershipStateMap): CompanionOwnershipEntry[] {
+	const entries: CompanionOwnershipEntry[] = []
+
+	for (const companion of COMPANIONS) {
+		const state = stateMap[companion.id]
+		if (!state?.owned) {
+			continue
+		}
+
+		entries.push({
+			companionId: companion.id,
+			level: clampCompanionLevel(companion.grade, state.level)
+		})
+	}
+
+	return entries
+}
+
+/** DB 보유 목록 → UI 상태 맵 (없는 id는 미보유) */
+export function ownershipEntriesToStateMap(entries: readonly CompanionOwnershipEntry[]): CompanionOwnershipStateMap {
+	const ownedById = new Map(entries.map((entry) => [entry.companionId, entry.level]))
+	const base = createDefaultOwnershipStateMap()
+
+	for (const companion of COMPANIONS) {
+		const level = ownedById.get(companion.id)
+		if (level === undefined) {
+			base[companion.id] = { owned: false, level: 1 }
+			continue
+		}
+
+		base[companion.id] = {
+			owned: true,
+			level: clampCompanionLevel(companion.grade, level)
+		}
+	}
+
+	return base
+}
+
+/** 보유 목록 → companionId Set (슬롯 선택 제한용) */
+export function ownershipEntriesToAllowedIds(entries: readonly CompanionOwnershipEntry[]): Set<string> {
+	return new Set(entries.map((entry) => entry.companionId))
+}
+
+/** 보유 목록 → companionId → level */
+export function ownershipEntriesToLevelMap(entries: readonly CompanionOwnershipEntry[]): Map<string, number> {
+	return new Map(entries.map((entry) => [entry.companionId, entry.level]))
+}
+
+/**
+ * 슬롯에 동료를 넣을 때 보유 레벨을 반영합니다.
+ * 미보유면 companionId를 비웁니다.
+ */
+export function syncLoadoutWithOwnership(
+	loadout: CompanionConsultingLoadout,
+	entries: readonly CompanionOwnershipEntry[]
+): CompanionConsultingLoadout {
+	const levelById = ownershipEntriesToLevelMap(entries)
+	const next = { ...loadout }
+
+	for (const slot of COMPANION_SETUP_SLOTS) {
+		const current = next[slot.id] ?? { companionId: null, level: 1 }
+		const { companionId } = current
+
+		if (!companionId) {
+			next[slot.id] = { companionId: null, level: 1 }
+			continue
+		}
+
+		const ownedLevel = levelById.get(companionId)
+		if (ownedLevel === undefined) {
+			next[slot.id] = { companionId: null, level: 1 }
+			continue
+		}
+
+		const companion = getCompanionById(companionId)
+		next[slot.id] = {
+			companionId,
+			level: companion ? clampCompanionLevel(companion.grade, ownedLevel) : ownedLevel
+		}
+	}
+
+	return next
+}
+
+/** 공유 URL 경로 (앱 origin은 클라이언트에서 붙임) */
+export function getConsultingPostPath(shortId: string) {
+	return `/tips/companion-setup/${shortId}`
+}

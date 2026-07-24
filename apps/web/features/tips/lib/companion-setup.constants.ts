@@ -6,7 +6,6 @@ import type {
 	CompanionGrade,
 	CompanionSetupSlot
 } from '@/features/tips/types/companion.type'
-import { JOB_CLASS_LINE_ORDER, JOBS_BY_CLASS_LINE } from '@/libs/job-class.constants'
 
 /** UI·정렬용 등급 순서 (높은 등급 먼저) */
 export const COMPANION_GRADE_ORDER = ['legendary', 'unique', 'epic'] as const satisfies readonly CompanionGrade[]
@@ -85,8 +84,26 @@ export const COMPANION_SETUP_SLOTS = [
 	{ id: 'sub-6', role: 'sub', subIndex: 6, label: '서브 동료 6' }
 ] as const satisfies readonly CompanionSetupSlot[]
 
-/** 계열 순서대로 펼친 직업 목록 (동료 생성·선택 UI용) */
-const ALL_COMPANION_JOBS = JOB_CLASS_LINE_ORDER.flatMap((line) => JOBS_BY_CLASS_LINE[line])
+/**
+ * 동료 선택·보유 UI 직업 배치 순서.
+ * 길드 직업 분포(JOBS_BY_CLASS_LINE)와 별도로 둡니다.
+ */
+export const COMPANION_JOB_ORDER = [
+	'히어로',
+	'팔라딘',
+	'다크나이트',
+	'썬콜',
+	'불독',
+	'비숍',
+	'보우마스터',
+	'신궁',
+	'나이트로드',
+	'섀도어',
+	'바이퍼',
+	'캡틴',
+	'나이트워커',
+	'윈드브레이커'
+] as const satisfies readonly string[]
 
 /**
  * 아직 출시되지 않아 동료 정보가 없는 직업.
@@ -97,7 +114,7 @@ export const UNRELEASED_COMPANION_JOBS = [] as const
 const UNRELEASED_COMPANION_JOB_SET = new Set<string>(UNRELEASED_COMPANION_JOBS)
 
 /** 출시된 직업만 동료 선택에 노출합니다. */
-export const COMPANION_JOBS = ALL_COMPANION_JOBS.filter((job) => !UNRELEASED_COMPANION_JOB_SET.has(job))
+export const COMPANION_JOBS = COMPANION_JOB_ORDER.filter((job) => !UNRELEASED_COMPANION_JOB_SET.has(job))
 
 /**
  * 직업별 장착 효과 — 레전더리 1레벨 기준.

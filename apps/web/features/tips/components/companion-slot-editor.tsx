@@ -28,6 +28,13 @@ type CompanionSlotEditorProps = {
 	companion: Companion | null
 	level: number
 	excludedIds: ReadonlySet<string>
+	/**
+	 * 있으면 이 집합에 있는 동료만 선택 가능 (보유 현황 제한).
+	 * null/undefined면 전체 카탈로그.
+	 */
+	allowedIds?: ReadonlySet<string> | null
+	/** 보유 레벨이 고정일 때 레벨 조절 UI 숨김 */
+	lockLevel?: boolean
 	onSelect: (companion: Companion) => void
 	onClear: () => void
 	onLevelChange: (level: number) => void
@@ -53,6 +60,8 @@ function CompanionSlotEditor({
 	companion,
 	level,
 	excludedIds,
+	allowedIds = null,
+	lockLevel = false,
 	onSelect,
 	onClear,
 	onLevelChange
@@ -111,7 +120,11 @@ function CompanionSlotEditor({
 			>
 				<SheetHeader className="border-grayscale-200 border-b">
 					<SheetTitle>{slot?.label ?? '동료 슬롯'}</SheetTitle>
-					<SheetDescription>등급을 고른 뒤 동료를 선택하고 레벨을 조절하세요.</SheetDescription>
+					<SheetDescription>
+						{allowedIds
+							? '보유한 동료만 선택할 수 있습니다. 등급을 고른 뒤 동료를 선택하세요.'
+							: '등급을 고른 뒤 동료를 선택하고 레벨을 조절하세요.'}
+					</SheetDescription>
 				</SheetHeader>
 
 				<div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
@@ -124,13 +137,16 @@ function CompanionSlotEditor({
 										{COMPANION_GRADE_META[companion.grade].tierLabel} ({COMPANION_GRADE_META[companion.grade].label})
 									</Badge>
 									<p className="text-grayscale-900 font-semibold">{companion.name}</p>
+									{lockLevel ? <p className="text-grayscale-600 text-sm tabular-nums">Lv.{level}</p> : null}
 								</div>
 							</div>
-							<CompanionLevelStepper
-								level={level}
-								maxLevel={COMPANION_GRADE_MAX_LEVEL[companion.grade]}
-								onLevelChange={onLevelChange}
-							/>
+							{!lockLevel ? (
+								<CompanionLevelStepper
+									level={level}
+									maxLevel={COMPANION_GRADE_MAX_LEVEL[companion.grade]}
+									onLevelChange={onLevelChange}
+								/>
+							) : null}
 							<ul className="text-grayscale-700 list-inside list-disc text-sm">
 								{equipEffects.map((effect) => (
 									<li key={effect.label}>{effect.displayText}</li>
@@ -168,6 +184,7 @@ function CompanionSlotEditor({
 								<CompanionGradeOptions
 									grade={grade}
 									excludedIds={excludedIds}
+									allowedIds={allowedIds}
 									selectedCompanionId={companion?.id ?? null}
 									onSelect={onSelect}
 								/>
@@ -194,11 +211,18 @@ function CompanionSlotEditor({
 type CompanionGradeOptionsProps = {
 	grade: CompanionGrade
 	excludedIds: ReadonlySet<string>
+	allowedIds?: ReadonlySet<string> | null
 	selectedCompanionId: string | null
 	onSelect: (companion: Companion) => void
 }
 
-function CompanionGradeOptions({ grade, excludedIds, selectedCompanionId, onSelect }: CompanionGradeOptionsProps) {
+function CompanionGradeOptions({
+	grade,
+	excludedIds,
+	allowedIds = null,
+	selectedCompanionId,
+	onSelect
+}: CompanionGradeOptionsProps) {
 	const companions = COMPANIONS.filter((item) => item.grade === grade)
 
 	return (
@@ -206,19 +230,22 @@ function CompanionGradeOptions({ grade, excludedIds, selectedCompanionId, onSele
 		<div className="grid grid-cols-2 gap-1.5">
 			{companions.map((item) => {
 				const excluded = excludedIds.has(item.id)
+				const notAllowed = allowedIds ? !allowedIds.has(item.id) : false
 				const selected = selectedCompanionId === item.id
+				const disabled = (excluded || notAllowed) && !selected
 
 				return (
 					<button
 						key={item.id}
 						type="button"
-						disabled={excluded && !selected}
+						disabled={disabled}
 						onClick={() => onSelect(item)}
 						className={cn(
 							'border-grayscale-200 flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm font-medium transition-colors',
 							'hover:border-grayscale-300 hover:bg-grayscale-50',
 							'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:outline-none',
 							'disabled:cursor-not-allowed disabled:opacity-35',
+							notAllowed && !selected && 'opacity-40 grayscale',
 							selected && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
 						)}
 					>

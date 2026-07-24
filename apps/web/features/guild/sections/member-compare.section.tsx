@@ -8,9 +8,9 @@ import { useEffect, useMemo, useState } from 'react'
 import MemberComparePanel from '@/features/guild/components/member-compare-panel'
 import MemberSelect, { type MemberSelectOption } from '@/features/guild/components/member-select'
 import type { GuildMemberInput, MemberVsMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import type { MemberRankings } from '@/utils/compute-member-rankings'
 import { compareMembers } from '@/utils/compare-members'
 import { parseGuildMember } from '@/utils/compare-snapshots'
+import type { MemberRankings } from '@/utils/compute-member-rankings'
 
 type MemberCompareSectionProps = {
 	members: GuildMemberInput[]
