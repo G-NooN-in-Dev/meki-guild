@@ -4,7 +4,7 @@ import {
 	CONSULTING_POST_LIST_LIMIT,
 	CONSULTING_SHORT_ID_ALPHABET,
 	CONSULTING_SHORT_ID_LENGTH,
-	createEmptyPresetStats
+	normalizePresetStats
 } from '@/features/tips/lib/companion-consulting.constants'
 import {
 	ConsultingValidationError,
@@ -35,6 +35,8 @@ const COMMENTS_COLLECTION = 'companion_consulting_comments'
 type PostDocument = {
 	shortId: string
 	title: string
+	/** 보충 설명. 예전 글에는 없을 수 있어 조회 시 빈 문자열로 보정합니다. */
+	content?: string
 	/** 예전 글에는 없을 수 있어 조회 시 빈 값으로 보정합니다. */
 	presetStats?: ConsultingPresetStats
 	ownership: CompanionOwnershipEntry[]
@@ -103,7 +105,8 @@ function toPostView(doc: PostDocument, commentCount: number): CompanionConsultin
 	return {
 		shortId: doc.shortId,
 		title: doc.title,
-		presetStats: doc.presetStats ?? createEmptyPresetStats(),
+		content: doc.content ?? '',
+		presetStats: normalizePresetStats(doc.presetStats),
 		ownership: doc.ownership,
 		loadout: doc.loadout,
 		createdAt: doc.createdAt.toISOString(),
@@ -226,6 +229,7 @@ export async function createConsultingPost(rawInput: unknown): Promise<{ shortId
 	const document = {
 		shortId,
 		title: input.title,
+		content: input.content,
 		presetStats: input.presetStats,
 		ownership: [...input.ownership],
 		loadout: input.loadout,
@@ -240,7 +244,8 @@ export async function createConsultingPost(rawInput: unknown): Promise<{ shortId
 /** 게시글 수정 — 비밀번호 검증 후 본문만 갱신 (비밀번호 자체는 바꾸지 않음) */
 export async function updateConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
-	const { shortId, password, title, presetStats, ownership, loadout } = parseConsultingPostUpdateInput(rawInput)
+	const { shortId, password, title, content, presetStats, ownership, loadout } =
+		parseConsultingPostUpdateInput(rawInput)
 	const db = await getDb()
 	const post = await db
 		.collection<PostDocument>(POSTS_COLLECTION)
@@ -257,6 +262,7 @@ export async function updateConsultingPost(rawInput: unknown): Promise<{ shortId
 		{
 			$set: {
 				title,
+				content,
 				presetStats,
 				ownership: [...ownership],
 				loadout

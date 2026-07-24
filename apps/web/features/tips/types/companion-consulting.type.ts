@@ -23,12 +23,13 @@ export type ConsultingPresetStatId =
 	| 'critRate'
 	| 'critDamage'
 	| 'attackSpeed'
+	| 'mainStatBonus'
+	| 'minDamageMultiplier'
+	| 'maxDamageMultiplier'
 	| 'bossDamage'
 	| 'normalDamage'
 	| 'accuracy'
 	| 'evasion'
-	| 'minDamageMultiplier'
-	| 'maxDamageMultiplier'
 
 /** 프리셋 스탯 수치 맵 */
 export type ConsultingPresetStats = Record<ConsultingPresetStatId, number>
@@ -40,6 +41,8 @@ export type ConsultingPresetStats = Record<ConsultingPresetStatId, number>
 export type CompanionConsultingPostInput = {
 	/** 목적/제목 한 줄 */
 	title: string
+	/** 보충 설명. 비워 두면 빈 문자열로 저장합니다. */
+	content: string
 	/** 현재 프리셋 기준 전투 수치 */
 	presetStats: ConsultingPresetStats
 	ownership: readonly CompanionOwnershipEntry[]
@@ -52,6 +55,8 @@ export type CompanionConsultingPostInput = {
 export type CompanionConsultingPost = {
 	shortId: string
 	title: string
+	/** 보충 설명. 예전 글은 빈 문자열일 수 있습니다. */
+	content: string
 	presetStats: ConsultingPresetStats
 	ownership: readonly CompanionOwnershipEntry[]
 	loadout: CompanionConsultingLoadout

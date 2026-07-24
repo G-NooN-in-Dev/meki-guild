@@ -102,7 +102,7 @@ function CompanionConsultingHubSection({
 						<div className="space-y-2">
 							<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">동료 세팅 컨설팅</h1>
 							<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
-								보유 현황과 현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유하세요.
+								보유 현황과 현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유해보세요.
 							</p>
 						</div>
 						<Link href="/tips/companion-setup/new" className={cn(buttonVariants(), 'shrink-0')}>

@@ -258,6 +258,9 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 						<span className="text-grayscale-500 font-mono text-xs tracking-wider">{post.shortId}</span>
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{post.title}</h1>
+					{post.content ? (
+						<p className="text-grayscale-700 max-w-2xl text-sm whitespace-pre-wrap md:text-base">{post.content}</p>
+					) : null}
 					<p className="text-grayscale-500 text-sm">{formatCreatedAt(post.createdAt)}</p>
 				</header>
 

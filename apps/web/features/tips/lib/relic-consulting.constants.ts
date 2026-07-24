@@ -1,5 +1,6 @@
 import {
 	buildConsultingPaginationItems,
+	CONSULTING_CONTENT_MAX_LENGTH,
 	CONSULTING_NOTE_MAX_LENGTH,
 	CONSULTING_PASSWORD_MAX_LENGTH,
 	CONSULTING_PASSWORD_MIN_LENGTH,
@@ -8,7 +9,8 @@ import {
 	CONSULTING_SHORT_ID_ALPHABET,
 	CONSULTING_SHORT_ID_LENGTH,
 	CONSULTING_TITLE_MAX_LENGTH,
-	createEmptyPresetStats
+	createEmptyPresetStats,
+	normalizePresetStats
 } from '@/features/tips/lib/companion-consulting.constants'
 import { clampRelicAwakeningStage, getRelicById, RELIC_SETUP_SLOTS, RELICS } from '@/features/tips/lib/relic.constants'
 import { clampPotentialIds } from '@/features/tips/lib/relic-potential.constants'
@@ -22,6 +24,7 @@ import type {
 /** 동료 컨설팅과 동일한 공유 한도·프리셋·페이지네이션을 재사용합니다. */
 export {
 	buildConsultingPaginationItems,
+	CONSULTING_CONTENT_MAX_LENGTH,
 	CONSULTING_NOTE_MAX_LENGTH,
 	CONSULTING_PASSWORD_MAX_LENGTH,
 	CONSULTING_PASSWORD_MIN_LENGTH,
@@ -30,7 +33,8 @@ export {
 	CONSULTING_SHORT_ID_ALPHABET,
 	CONSULTING_SHORT_ID_LENGTH,
 	CONSULTING_TITLE_MAX_LENGTH,
-	createEmptyPresetStats
+	createEmptyPresetStats,
+	normalizePresetStats
 }
 
 /**

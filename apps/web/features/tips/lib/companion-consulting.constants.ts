@@ -22,6 +22,9 @@ export const CONSULTING_SHORT_ID_LENGTH = 8
 /** 제목 한 줄 최대 길이 */
 export const CONSULTING_TITLE_MAX_LENGTH = 60
 
+/** 게시글 내용(선택) 최대 길이 */
+export const CONSULTING_CONTENT_MAX_LENGTH = 500
+
 /** 추천 댓글 한 줄 최대 길이 */
 export const CONSULTING_NOTE_MAX_LENGTH = 200
 
@@ -76,17 +79,19 @@ export function getConsultingListPath(page = 1) {
 /**
  * 현재 프리셋 기준 입력 스탯.
  * 명중·회피만 flat, 나머지는 %.
+ * UI 행 순서는 CONSULTING_PRESET_STAT_GROUPS를 따릅니다.
  */
 export const CONSULTING_PRESET_STAT_FIELDS = [
 	{ id: 'critRate', label: '크리티컬 확률', unit: 'percent' },
 	{ id: 'critDamage', label: '크리티컬 데미지', unit: 'percent' },
 	{ id: 'attackSpeed', label: '공격 속도', unit: 'percent' },
+	{ id: 'mainStatBonus', label: '주스탯 추가 퍼센트', unit: 'percent' },
+	{ id: 'minDamageMultiplier', label: '최소 데미지 배율', unit: 'percent' },
+	{ id: 'maxDamageMultiplier', label: '최대 데미지 배율', unit: 'percent' },
 	{ id: 'bossDamage', label: '보스 몬스터 데미지', unit: 'percent' },
 	{ id: 'normalDamage', label: '일반 몬스터 데미지', unit: 'percent' },
 	{ id: 'accuracy', label: '명중', unit: 'flat' },
-	{ id: 'evasion', label: '회피', unit: 'flat' },
-	{ id: 'minDamageMultiplier', label: '최소 데미지 배율', unit: 'percent' },
-	{ id: 'maxDamageMultiplier', label: '최대 데미지 배율', unit: 'percent' }
+	{ id: 'evasion', label: '회피', unit: 'flat' }
 ] as const satisfies readonly {
 	id: ConsultingPresetStatId
 	label: string
@@ -96,14 +101,24 @@ export const CONSULTING_PRESET_STAT_FIELDS = [
 type ConsultingPresetStatField = (typeof CONSULTING_PRESET_STAT_FIELDS)[number]
 
 /**
- * UI 행 배치용 세트.
+ * UI 행 배치용 세트 (한 행에 2개).
  * 카드/제목으로 묶지 않고, 한 블록 안에서 행만 나눌 때 씁니다.
  */
 export const CONSULTING_PRESET_STAT_GROUPS = [
 	{
-		id: 'crit-speed',
-		label: '크리티컬 · 공격 속도',
-		fieldIds: ['critRate', 'critDamage', 'attackSpeed']
+		id: 'crit',
+		label: '크리티컬',
+		fieldIds: ['critRate', 'critDamage']
+	},
+	{
+		id: 'speed-main-stat',
+		label: '공격 속도 · 주스탯',
+		fieldIds: ['attackSpeed', 'mainStatBonus']
+	},
+	{
+		id: 'damage-multiplier',
+		label: '데미지 배율',
+		fieldIds: ['minDamageMultiplier', 'maxDamageMultiplier']
 	},
 	{
 		id: 'monster-damage',
@@ -114,11 +129,6 @@ export const CONSULTING_PRESET_STAT_GROUPS = [
 		id: 'hit-evade',
 		label: '명중 · 회피',
 		fieldIds: ['accuracy', 'evasion']
-	},
-	{
-		id: 'damage-multiplier',
-		label: '데미지 배율',
-		fieldIds: ['minDamageMultiplier', 'maxDamageMultiplier']
 	}
 ] as const satisfies readonly {
 	id: string
@@ -143,6 +153,24 @@ export function getPresetStatFieldsByGroup(groupId: (typeof CONSULTING_PRESET_ST
 /** 빈 프리셋 스탯 (작성 폼 초기값) */
 export function createEmptyPresetStats(): ConsultingPresetStats {
 	return Object.fromEntries(CONSULTING_PRESET_STAT_FIELDS.map((field) => [field.id, 0])) as ConsultingPresetStats
+}
+
+/**
+ * DB·예전 글에 빠진 키가 있어도 전체 필드를 채웁니다.
+ * 조회 시 UI/타입이 깨지지 않게 보정용입니다.
+ */
+export function normalizePresetStats(value: Partial<ConsultingPresetStats> | null | undefined): ConsultingPresetStats {
+	const empty = createEmptyPresetStats()
+	if (!value) {
+		return empty
+	}
+
+	return Object.fromEntries(
+		CONSULTING_PRESET_STAT_FIELDS.map((field) => {
+			const raw = value[field.id]
+			return [field.id, typeof raw === 'number' && Number.isFinite(raw) ? raw : 0]
+		})
+	) as ConsultingPresetStats
 }
 
 export function formatPresetStatValue(value: number, unit: ConsultingPresetStatUnit) {
