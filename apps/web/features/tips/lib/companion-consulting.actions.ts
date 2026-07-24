@@ -3,7 +3,8 @@
 import { ConsultingValidationError } from '@/features/tips/lib/companion-consulting.validation'
 import type {
 	CompanionConsultingComment,
-	CompanionConsultingPost
+	CompanionConsultingPost,
+	CompanionConsultingPostListResult
 } from '@/features/tips/types/companion-consulting.type'
 import {
 	createConsultingComment,
@@ -32,10 +33,12 @@ function toActionError(error: unknown): ActionFail {
 	return { ok: false, error: '저장에 실패했습니다. 잠시 후 다시 시도해 주세요.' }
 }
 
-/** 최근 컨설팅 게시글 목록 */
-export async function fetchConsultingPostsAction(): Promise<ConsultingActionResult<CompanionConsultingPost[]>> {
+/** 최근 컨설팅 게시글 목록 (페이지네이션) */
+export async function fetchConsultingPostsAction(
+	page = 1
+): Promise<ConsultingActionResult<CompanionConsultingPostListResult>> {
 	try {
-		const data = await listConsultingPosts()
+		const data = await listConsultingPosts({ page })
 		return { ok: true, data }
 	} catch (error) {
 		return toActionError(error)

@@ -21,6 +21,7 @@ import type {
 	CompanionConsultingLoadout,
 	CompanionConsultingPost,
 	CompanionConsultingPostInput,
+	CompanionConsultingPostListResult,
 	CompanionOwnershipEntry,
 	ConsultingPresetStats
 } from '@/features/tips/types/companion-consulting.type'
@@ -134,19 +135,37 @@ function assertPasswordMatches(password: string, passwordHash: string | undefine
 	}
 }
 
-/** 최근 게시글 목록 (댓글 수 포함) */
-export async function listConsultingPosts(limit = CONSULTING_POST_LIST_LIMIT): Promise<CompanionConsultingPost[]> {
+type ListConsultingPostsOptions = {
+	/** 1부터 시작. 범위를 벗어나면 totalPages 안으로 보정합니다. */
+	page?: number
+	pageSize?: number
+}
+
+/** 최근 게시글 목록 (댓글 수·페이지네이션 포함) */
+export async function listConsultingPosts(
+	options: ListConsultingPostsOptions = {}
+): Promise<CompanionConsultingPostListResult> {
+	const pageSize = Math.max(1, options.pageSize ?? CONSULTING_POST_LIST_LIMIT)
+	const requestedPage = Math.max(1, Math.floor(options.page ?? 1))
+
 	await ensureIndexes()
 	const db = await getDb()
-	const posts = await db
-		.collection<PostDocument>(POSTS_COLLECTION)
+	const postsCollection = db.collection<PostDocument>(POSTS_COLLECTION)
+
+	const totalCount = await postsCollection.countDocuments()
+	const totalPages = totalCount === 0 ? 0 : Math.ceil(totalCount / pageSize)
+	const page = totalPages === 0 ? 1 : Math.min(requestedPage, totalPages)
+	const skip = (page - 1) * pageSize
+
+	const posts = await postsCollection
 		.find({}, { projection: { _id: 0 } })
 		.sort({ createdAt: -1 })
-		.limit(limit)
+		.skip(skip)
+		.limit(pageSize)
 		.toArray()
 
 	if (posts.length === 0) {
-		return []
+		return { posts: [], page, pageSize, totalCount, totalPages }
 	}
 
 	const shortIds = posts.map((post) => post.shortId)
@@ -160,7 +179,13 @@ export async function listConsultingPosts(limit = CONSULTING_POST_LIST_LIMIT): P
 
 	const countByPostId = new Map(commentCounts.map((row) => [row._id, row.count]))
 
-	return posts.map((post) => toPostView(post, countByPostId.get(post.shortId) ?? 0))
+	return {
+		posts: posts.map((post) => toPostView(post, countByPostId.get(post.shortId) ?? 0)),
+		page,
+		pageSize,
+		totalCount,
+		totalPages
+	}
 }
 
 /** shortId로 게시글 조회 */

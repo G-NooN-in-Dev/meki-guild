@@ -4,17 +4,34 @@ import { Badge } from '@shared/ui/badge'
 import { Button, buttonVariants } from '@shared/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@shared/ui/empty'
 import { Input } from '@shared/ui/input'
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious
+} from '@shared/ui/pagination'
 import { cn } from '@shared/ui/utils'
 import { ArrowLeftIcon, ArrowRightIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FormEvent, useMemo, useState, useTransition } from 'react'
 
-import { CONSULTING_SHORT_ID_LENGTH, getConsultingPostPath } from '@/features/tips/lib/companion-consulting.constants'
+import {
+	buildConsultingPaginationItems,
+	CONSULTING_SHORT_ID_LENGTH,
+	getConsultingListPath,
+	getConsultingPostPath
+} from '@/features/tips/lib/companion-consulting.constants'
 import type { CompanionConsultingPost } from '@/features/tips/types/companion-consulting.type'
 
 type CompanionConsultingHubSectionProps = {
 	posts: readonly CompanionConsultingPost[]
+	page: number
+	totalPages: number
+	totalCount: number
 	/** 서버에서 목록을 못 불러왔을 때 */
 	loadError?: string | null
 }
@@ -35,13 +52,20 @@ function formatCreatedAt(iso: string) {
 }
 
 /** 동료 세팅 컨설팅 허브 — 목록 + ID로 열기 + 작성 */
-function CompanionConsultingHubSection({ posts, loadError = null }: CompanionConsultingHubSectionProps) {
+function CompanionConsultingHubSection({
+	posts,
+	page,
+	totalPages,
+	totalCount,
+	loadError = null
+}: CompanionConsultingHubSectionProps) {
 	const router = useRouter()
 	const [lookupId, setLookupId] = useState('')
 	const [lookupError, setLookupError] = useState<string | null>(null)
 	const [isPending, startTransition] = useTransition()
 
 	const normalizedLookup = useMemo(() => lookupId.trim().toUpperCase(), [lookupId])
+	const paginationItems = useMemo(() => buildConsultingPaginationItems(page, totalPages), [page, totalPages])
 
 	function handleLookup(event: FormEvent) {
 		event.preventDefault()
@@ -127,30 +151,72 @@ function CompanionConsultingHubSection({ posts, loadError = null }: CompanionCon
 					</Link>
 				</Empty>
 			) : (
-				<ul className="flex flex-col gap-2">
-					{posts.map((post) => (
-						<li key={post.shortId}>
-							<Link
-								href={getConsultingPostPath(post.shortId)}
-								className={cn(
-									'border-grayscale-200 bg-card shadow-soft flex items-center gap-3 rounded-xl border p-4 transition-colors',
-									'hover:border-grayscale-300 hover:bg-grayscale-50/70'
-								)}
-							>
-								<div className="min-w-0 flex-1 space-y-1">
-									<div className="flex flex-wrap items-center gap-2">
-										<span className="text-grayscale-500 font-mono text-xs tracking-wider">{post.shortId}</span>
+				<div className="flex flex-col gap-4">
+					<p className="text-grayscale-500 text-xs">
+						전체 {totalCount}개 · {page}/{Math.max(totalPages, 1)}페이지
+					</p>
+					<ul className="flex flex-col gap-2">
+						{posts.map((post) => (
+							<li key={post.shortId}>
+								<Link
+									href={getConsultingPostPath(post.shortId)}
+									className={cn(
+										'border-grayscale-200 bg-card shadow-soft flex items-center gap-3 rounded-xl border p-4 transition-colors',
+										'hover:border-grayscale-300 hover:bg-grayscale-50/70'
+									)}
+								>
+									<div className="min-w-0 flex-1 space-y-1">
+										<div className="flex flex-wrap items-center gap-2">
+											<span className="text-grayscale-500 font-mono text-xs tracking-wider">{post.shortId}</span>
+										</div>
+										<p className="text-grayscale-900 truncate text-sm font-medium">{post.title}</p>
+										<p className="text-grayscale-500 text-xs">
+											{formatCreatedAt(post.createdAt)} · 댓글 {post.commentCount}개
+										</p>
 									</div>
-									<p className="text-grayscale-900 truncate text-sm font-medium">{post.title}</p>
-									<p className="text-grayscale-500 text-xs">
-										{formatCreatedAt(post.createdAt)} · 댓글 {post.commentCount}개
-									</p>
-								</div>
-								<ArrowRightIcon className="text-grayscale-400 size-4 shrink-0" />
-							</Link>
-						</li>
-					))}
-				</ul>
+									<ArrowRightIcon className="text-grayscale-400 size-4 shrink-0" />
+								</Link>
+							</li>
+						))}
+					</ul>
+
+					{/* 2페이지 이상일 때만 @shared/ui Pagination을 노출합니다. */}
+					{totalPages > 1 ? (
+						<Pagination>
+							<PaginationContent>
+								<PaginationItem>
+									<PaginationPrevious
+										href={getConsultingListPath(page - 1)}
+										text="이전"
+										aria-disabled={page <= 1}
+										className={page <= 1 ? 'pointer-events-none opacity-50' : undefined}
+									/>
+								</PaginationItem>
+								{paginationItems.map((item, index) =>
+									item === 'ellipsis' ? (
+										<PaginationItem key={`ellipsis-${index}`}>
+											<PaginationEllipsis />
+										</PaginationItem>
+									) : (
+										<PaginationItem key={item}>
+											<PaginationLink href={getConsultingListPath(item)} isActive={item === page}>
+												{item}
+											</PaginationLink>
+										</PaginationItem>
+									)
+								)}
+								<PaginationItem>
+									<PaginationNext
+										href={getConsultingListPath(page + 1)}
+										text="다음"
+										aria-disabled={page >= totalPages}
+										className={page >= totalPages ? 'pointer-events-none opacity-50' : undefined}
+									/>
+								</PaginationItem>
+							</PaginationContent>
+						</Pagination>
+					) : null}
+				</div>
 			)}
 		</section>
 	)

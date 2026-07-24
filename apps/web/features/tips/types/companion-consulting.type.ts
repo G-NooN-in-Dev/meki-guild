@@ -62,6 +62,16 @@ export type CompanionConsultingPost = {
 	hasPassword: boolean
 }
 
+/** 목록 API 페이지네이션 결과 */
+export type CompanionConsultingPostListResult = {
+	posts: CompanionConsultingPost[]
+	/** 실제 조회에 사용한 페이지 (범위 밖이면 보정됨) */
+	page: number
+	pageSize: number
+	totalCount: number
+	totalPages: number
+}
+
 /** 추천 세팅 댓글 입력 */
 export type CompanionConsultingCommentInput = {
 	postShortId: string

@@ -32,8 +32,46 @@ export const CONSULTING_NOTE_MAX_LENGTH = 200
 export const CONSULTING_PASSWORD_MIN_LENGTH = 4
 export const CONSULTING_PASSWORD_MAX_LENGTH = 32
 
-/** 목록 한 페이지 개수 */
-export const CONSULTING_POST_LIST_LIMIT = 30
+/** 목록 한 페이지에 보여줄 게시글 수 */
+export const CONSULTING_POST_LIST_LIMIT = 10
+
+/**
+ * 페이지네이션에 표시할 페이지 번호·말줄임 목록을 만듭니다.
+ * 예: 1 … 4 5 6 … 12
+ */
+export function buildConsultingPaginationItems(currentPage: number, totalPages: number): Array<number | 'ellipsis'> {
+	if (totalPages <= 7) {
+		return Array.from({ length: totalPages }, (_, index) => index + 1)
+	}
+
+	const items: Array<number | 'ellipsis'> = [1]
+	const start = Math.max(2, currentPage - 1)
+	const end = Math.min(totalPages - 1, currentPage + 1)
+
+	if (start > 2) {
+		items.push('ellipsis')
+	}
+
+	for (let page = start; page <= end; page += 1) {
+		items.push(page)
+	}
+
+	if (end < totalPages - 1) {
+		items.push('ellipsis')
+	}
+
+	items.push(totalPages)
+	return items
+}
+
+/** 목록 URL. 1페이지는 쿼리 없이 깔끔하게 둡니다. */
+export function getConsultingListPath(page = 1) {
+	if (page <= 1) {
+		return '/tips/companion-setup'
+	}
+
+	return `/tips/companion-setup?page=${page}`
+}
 
 /**
  * 현재 프리셋 기준 입력 스탯.
