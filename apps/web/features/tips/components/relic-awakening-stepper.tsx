@@ -9,6 +9,10 @@ import { type ChangeEvent, type KeyboardEvent, useState } from 'react'
 type RelicAwakeningStepperProps = {
 	stage: number
 	onStageChange: (stage: number) => void
+	/** 보유 각성에 맞춰 슬롯 각성을 고정할 때 */
+	disabled?: boolean
+	/** 보유 그리드용 좁은 레이아웃 */
+	compact?: boolean
 	className?: string
 }
 
@@ -29,11 +33,17 @@ function parseStageDraft(raw: string) {
 }
 
 /** 유물 각성 단계(0~5) 조절 UI */
-function RelicAwakeningStepper({ stage, onStageChange, className }: RelicAwakeningStepperProps) {
+function RelicAwakeningStepper({
+	stage,
+	onStageChange,
+	disabled = false,
+	compact = false,
+	className
+}: RelicAwakeningStepperProps) {
 	const [isEditing, setIsEditing] = useState(false)
 	const [draft, setDraft] = useState(String(stage))
-	const canDecrease = stage > 0
-	const canIncrease = stage < MAX_STAGE
+	const canDecrease = !disabled && stage > 0
+	const canIncrease = !disabled && stage < MAX_STAGE
 	const displayValue = isEditing ? draft : String(stage)
 
 	function commitDraft(raw: string) {
@@ -58,6 +68,9 @@ function RelicAwakeningStepper({ stage, onStageChange, className }: RelicAwakeni
 	}
 
 	function handleInputFocus() {
+		if (disabled) {
+			return
+		}
 		setIsEditing(true)
 		setDraft(String(stage))
 	}
@@ -71,7 +84,7 @@ function RelicAwakeningStepper({ stage, onStageChange, className }: RelicAwakeni
 	}
 
 	return (
-		<div className={cn('flex items-center gap-1', className)}>
+		<div className={cn('flex items-center gap-1', compact && 'flex-wrap', className)}>
 			<Button
 				type="button"
 				variant="outline"
@@ -90,6 +103,8 @@ function RelicAwakeningStepper({ stage, onStageChange, className }: RelicAwakeni
 					inputMode="numeric"
 					pattern="[0-9]*"
 					value={displayValue}
+					disabled={disabled}
+					readOnly={disabled}
 					aria-label="각성 단계 입력 (0-5)"
 					onChange={handleInputChange}
 					onFocus={handleInputFocus}
@@ -115,9 +130,9 @@ function RelicAwakeningStepper({ stage, onStageChange, className }: RelicAwakeni
 				type="button"
 				variant="secondary"
 				size="xs"
-				disabled={stage >= MAX_STAGE}
+				disabled={disabled || stage >= MAX_STAGE}
 				aria-label="최대 각성 단계로 설정"
-				className="px-1.5"
+				className={cn('px-1.5', compact && 'h-6 min-w-0')}
 				onClick={() => onStageChange(MAX_STAGE)}
 			>
 				MAX

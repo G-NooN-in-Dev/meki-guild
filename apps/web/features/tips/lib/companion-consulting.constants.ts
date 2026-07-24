@@ -4,161 +4,18 @@ import {
 	COMPANIONS,
 	getCompanionById
 } from '@/features/tips/lib/companion-setup.constants'
-import type { CompanionGrade, CompanionSlotLoadout } from '@/features/tips/types/companion.type'
+import { CONSULTING_DEFAULT_OWNED_BY_GRADE } from '@/features/tips/lib/consulting.constants'
+import type { CompanionSlotLoadout } from '@/features/tips/types/companion.type'
 import type {
 	CompanionConsultingLoadout,
 	CompanionOwnershipEntry,
-	CompanionOwnershipStateMap,
-	ConsultingPresetStatId,
-	ConsultingPresetStats,
-	ConsultingPresetStatUnit
+	CompanionOwnershipStateMap
 } from '@/features/tips/types/companion-consulting.type'
 
-/** 사람이 치기 쉬운 공유 ID 문자 (0/O, 1/I 제외) */
-export const CONSULTING_SHORT_ID_ALPHABET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
-
-export const CONSULTING_SHORT_ID_LENGTH = 8
-
-/** 제목 한 줄 최대 길이 */
-export const CONSULTING_TITLE_MAX_LENGTH = 60
-
-/** 추천 댓글 한 줄 최대 길이 */
-export const CONSULTING_NOTE_MAX_LENGTH = 200
-
 /**
- * CUD(작성·수정·삭제)용 단순 비밀번호 길이.
- * 계정 ID/비번이 아니라, 글·댓글을 나중에 고치거나 지울 때 쓰는 키입니다.
+ * 동료 컨설팅 전용 상수·헬퍼.
+ * shortId·한도·프리셋 등 공통 규칙은 consulting.constants를 씁니다.
  */
-export const CONSULTING_PASSWORD_MIN_LENGTH = 4
-export const CONSULTING_PASSWORD_MAX_LENGTH = 32
-
-/** 목록 한 페이지에 보여줄 게시글 수 */
-export const CONSULTING_POST_LIST_LIMIT = 10
-
-/**
- * 페이지네이션에 표시할 페이지 번호·말줄임 목록을 만듭니다.
- * 예: 1 … 4 5 6 … 12
- */
-export function buildConsultingPaginationItems(currentPage: number, totalPages: number): Array<number | 'ellipsis'> {
-	if (totalPages <= 7) {
-		return Array.from({ length: totalPages }, (_, index) => index + 1)
-	}
-
-	const items: Array<number | 'ellipsis'> = [1]
-	const start = Math.max(2, currentPage - 1)
-	const end = Math.min(totalPages - 1, currentPage + 1)
-
-	if (start > 2) {
-		items.push('ellipsis')
-	}
-
-	for (let page = start; page <= end; page += 1) {
-		items.push(page)
-	}
-
-	if (end < totalPages - 1) {
-		items.push('ellipsis')
-	}
-
-	items.push(totalPages)
-	return items
-}
-
-/** 목록 URL. 1페이지는 쿼리 없이 깔끔하게 둡니다. */
-export function getConsultingListPath(page = 1) {
-	if (page <= 1) {
-		return '/tips/companion-setup'
-	}
-
-	return `/tips/companion-setup?page=${page}`
-}
-
-/**
- * 현재 프리셋 기준 입력 스탯.
- * 명중·회피만 flat, 나머지는 %.
- */
-export const CONSULTING_PRESET_STAT_FIELDS = [
-	{ id: 'critRate', label: '크리티컬 확률', unit: 'percent' },
-	{ id: 'critDamage', label: '크리티컬 데미지', unit: 'percent' },
-	{ id: 'attackSpeed', label: '공격 속도', unit: 'percent' },
-	{ id: 'bossDamage', label: '보스 몬스터 데미지', unit: 'percent' },
-	{ id: 'normalDamage', label: '일반 몬스터 데미지', unit: 'percent' },
-	{ id: 'accuracy', label: '명중', unit: 'flat' },
-	{ id: 'evasion', label: '회피', unit: 'flat' },
-	{ id: 'minDamageMultiplier', label: '최소 데미지 배율', unit: 'percent' },
-	{ id: 'maxDamageMultiplier', label: '최대 데미지 배율', unit: 'percent' }
-] as const satisfies readonly {
-	id: ConsultingPresetStatId
-	label: string
-	unit: ConsultingPresetStatUnit
-}[]
-
-type ConsultingPresetStatField = (typeof CONSULTING_PRESET_STAT_FIELDS)[number]
-
-/**
- * UI 행 배치용 세트.
- * 카드/제목으로 묶지 않고, 한 블록 안에서 행만 나눌 때 씁니다.
- */
-export const CONSULTING_PRESET_STAT_GROUPS = [
-	{
-		id: 'crit-speed',
-		label: '크리티컬 · 공격 속도',
-		fieldIds: ['critRate', 'critDamage', 'attackSpeed']
-	},
-	{
-		id: 'monster-damage',
-		label: '몬스터 데미지',
-		fieldIds: ['bossDamage', 'normalDamage']
-	},
-	{
-		id: 'hit-evade',
-		label: '명중 · 회피',
-		fieldIds: ['accuracy', 'evasion']
-	},
-	{
-		id: 'damage-multiplier',
-		label: '데미지 배율',
-		fieldIds: ['minDamageMultiplier', 'maxDamageMultiplier']
-	}
-] as const satisfies readonly {
-	id: string
-	label: string
-	fieldIds: readonly ConsultingPresetStatId[]
-}[]
-
-const PRESET_STAT_FIELD_BY_ID = Object.fromEntries(
-	CONSULTING_PRESET_STAT_FIELDS.map((field) => [field.id, field])
-) as Record<ConsultingPresetStatId, ConsultingPresetStatField>
-
-/** 그룹에 속한 필드 정의 목록 */
-export function getPresetStatFieldsByGroup(groupId: (typeof CONSULTING_PRESET_STAT_GROUPS)[number]['id']) {
-	const group = CONSULTING_PRESET_STAT_GROUPS.find((item) => item.id === groupId)
-	if (!group) {
-		return [] as ConsultingPresetStatField[]
-	}
-
-	return group.fieldIds.map((fieldId) => PRESET_STAT_FIELD_BY_ID[fieldId])
-}
-
-/** 빈 프리셋 스탯 (작성 폼 초기값) */
-export function createEmptyPresetStats(): ConsultingPresetStats {
-	return Object.fromEntries(CONSULTING_PRESET_STAT_FIELDS.map((field) => [field.id, 0])) as ConsultingPresetStats
-}
-
-export function formatPresetStatValue(value: number, unit: ConsultingPresetStatUnit) {
-	const rounded = unit === 'percent' ? Math.round(value * 10) / 10 : Math.round(value)
-	return unit === 'percent' ? `${rounded}%` : String(rounded)
-}
-
-/**
- * 등급별 기본 보유 여부.
- * 유니크·에픽은 대부분 보유, 레전더리는 미보유가 많다는 전제.
- */
-export const CONSULTING_DEFAULT_OWNED_BY_GRADE = {
-	legendary: false,
-	unique: true,
-	epic: true
-} as const satisfies Record<CompanionGrade, boolean>
 
 /** 빈 세팅 보드 (슬롯별 null) */
 export function createEmptyConsultingLoadout(): CompanionConsultingLoadout {
@@ -267,6 +124,15 @@ export function syncLoadoutWithOwnership(
 	}
 
 	return next
+}
+
+/** 목록 URL. 1페이지는 쿼리 없이 깔끔하게 둡니다. */
+export function getConsultingListPath(page = 1) {
+	if (page <= 1) {
+		return '/tips/companion-setup'
+	}
+
+	return `/tips/companion-setup?page=${page}`
 }
 
 /** 공유 URL 경로 (앱 origin은 클라이언트에서 붙임) */

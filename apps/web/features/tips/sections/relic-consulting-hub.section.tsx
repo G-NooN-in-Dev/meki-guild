@@ -19,12 +19,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FormEvent, useMemo, useState, useTransition } from 'react'
 
-import { getConsultingListPath, getConsultingPostPath } from '@/features/tips/lib/companion-consulting.constants'
 import { buildConsultingPaginationItems, CONSULTING_SHORT_ID_LENGTH } from '@/features/tips/lib/consulting.constants'
-import type { CompanionConsultingPost } from '@/features/tips/types/companion-consulting.type'
+import { getRelicConsultingListPath, getRelicConsultingPostPath } from '@/features/tips/lib/relic-consulting.constants'
+import type { RelicConsultingPost } from '@/features/tips/types/relic-consulting.type'
 
-type CompanionConsultingHubSectionProps = {
-	posts: readonly CompanionConsultingPost[]
+type RelicConsultingHubSectionProps = {
+	posts: readonly RelicConsultingPost[]
 	page: number
 	totalPages: number
 	totalCount: number
@@ -47,14 +47,14 @@ function formatCreatedAt(iso: string) {
 	}).format(date)
 }
 
-/** 동료 세팅 컨설팅 허브 — 목록 + ID로 열기 + 작성 */
-function CompanionConsultingHubSection({
+/** 유물 세팅 컨설팅 허브 — 목록 + ID로 열기 + 작성 */
+function RelicConsultingHubSection({
 	posts,
 	page,
 	totalPages,
 	totalCount,
 	loadError = null
-}: CompanionConsultingHubSectionProps) {
+}: RelicConsultingHubSectionProps) {
 	const router = useRouter()
 	const [lookupId, setLookupId] = useState('')
 	const [lookupError, setLookupError] = useState<string | null>(null)
@@ -73,7 +73,7 @@ function CompanionConsultingHubSection({
 		}
 
 		startTransition(() => {
-			router.push(getConsultingPostPath(normalizedLookup))
+			router.push(getRelicConsultingPostPath(normalizedLookup))
 		})
 	}
 
@@ -92,16 +92,16 @@ function CompanionConsultingHubSection({
 
 				<header className="flex flex-col gap-2">
 					<Badge variant="secondary" className="w-fit">
-						동료
+						유물
 					</Badge>
 					<div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
 						<div className="space-y-2">
-							<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">동료 세팅 컨설팅</h1>
+							<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">유물 세팅 컨설팅</h1>
 							<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
-								보유 현황과 현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유해보세요.
+								보유·각성·현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유해보세요.
 							</p>
 						</div>
-						<Link href="/tips/companion-setup/new" className={cn(buttonVariants(), 'shrink-0')}>
+						<Link href="/tips/relic-setup/new" className={cn(buttonVariants(), 'shrink-0')}>
 							<PlusIcon className="size-4" />
 							컨설팅 요청하기
 						</Link>
@@ -114,11 +114,11 @@ function CompanionConsultingHubSection({
 				className="border-grayscale-200 bg-card shadow-soft flex flex-col gap-2 rounded-xl border p-4 sm:flex-row sm:items-end"
 			>
 				<div className="min-w-0 flex-1 space-y-1.5">
-					<label htmlFor="consulting-lookup-id" className="text-grayscale-900 text-sm font-medium">
+					<label htmlFor="relic-consulting-lookup-id" className="text-grayscale-900 text-sm font-medium">
 						ID로 열기
 					</label>
 					<Input
-						id="consulting-lookup-id"
+						id="relic-consulting-lookup-id"
 						value={lookupId}
 						onChange={(event) => setLookupId(event.target.value)}
 						placeholder="예: A3K7M2PQ"
@@ -142,7 +142,7 @@ function CompanionConsultingHubSection({
 						<EmptyTitle>아직 올라온 요청이 없습니다</EmptyTitle>
 						<EmptyDescription>보유·세팅을 올리면 여기에서 목록으로 확인할 수 있습니다.</EmptyDescription>
 					</EmptyHeader>
-					<Link href="/tips/companion-setup/new" className={buttonVariants()}>
+					<Link href="/tips/relic-setup/new" className={buttonVariants()}>
 						첫 컨설팅 요청하기
 					</Link>
 				</Empty>
@@ -155,7 +155,7 @@ function CompanionConsultingHubSection({
 						{posts.map((post) => (
 							<li key={post.shortId}>
 								<Link
-									href={getConsultingPostPath(post.shortId)}
+									href={getRelicConsultingPostPath(post.shortId)}
 									className={cn(
 										'border-grayscale-200 bg-card shadow-soft flex items-center gap-3 rounded-xl border p-4 transition-colors',
 										'hover:border-grayscale-300 hover:bg-grayscale-50/70'
@@ -176,13 +176,12 @@ function CompanionConsultingHubSection({
 						))}
 					</ul>
 
-					{/* 2페이지 이상일 때만 @shared/ui Pagination을 노출합니다. */}
 					{totalPages > 1 ? (
 						<Pagination>
 							<PaginationContent>
 								<PaginationItem>
 									<PaginationPrevious
-										href={getConsultingListPath(page - 1)}
+										href={getRelicConsultingListPath(page - 1)}
 										text="이전"
 										aria-disabled={page <= 1}
 										className={page <= 1 ? 'pointer-events-none opacity-50' : undefined}
@@ -195,7 +194,7 @@ function CompanionConsultingHubSection({
 										</PaginationItem>
 									) : (
 										<PaginationItem key={item}>
-											<PaginationLink href={getConsultingListPath(item)} isActive={item === page}>
+											<PaginationLink href={getRelicConsultingListPath(item)} isActive={item === page}>
 												{item}
 											</PaginationLink>
 										</PaginationItem>
@@ -203,7 +202,7 @@ function CompanionConsultingHubSection({
 								)}
 								<PaginationItem>
 									<PaginationNext
-										href={getConsultingListPath(page + 1)}
+										href={getRelicConsultingListPath(page + 1)}
 										text="다음"
 										aria-disabled={page >= totalPages}
 										className={page >= totalPages ? 'pointer-events-none opacity-50' : undefined}
@@ -218,4 +217,4 @@ function CompanionConsultingHubSection({
 	)
 }
 
-export default CompanionConsultingHubSection
+export default RelicConsultingHubSection

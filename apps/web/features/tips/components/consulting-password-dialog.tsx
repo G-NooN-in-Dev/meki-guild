@@ -9,9 +9,9 @@ import { useState } from 'react'
 import {
 	CONSULTING_PASSWORD_MAX_LENGTH,
 	CONSULTING_PASSWORD_MIN_LENGTH
-} from '@/features/tips/lib/companion-consulting.constants'
+} from '@/features/tips/lib/consulting.constants'
 
-type CompanionConsultingPasswordDialogProps = {
+type ConsultingPasswordDialogProps = {
 	open: boolean
 	onOpenChange: (open: boolean) => void
 	title: string
@@ -23,7 +23,7 @@ type CompanionConsultingPasswordDialogProps = {
 	onConfirm: (password: string) => void | Promise<void>
 }
 
-type PasswordDialogFormProps = Omit<CompanionConsultingPasswordDialogProps, 'open'>
+type PasswordDialogFormProps = Omit<ConsultingPasswordDialogProps, 'open'>
 
 /**
  * 다이얼로그가 열릴 때마다 마운트되어 비밀번호 입력을 처음부터 시작합니다.
@@ -88,8 +88,9 @@ function PasswordDialogForm({
 /**
  * CUD용 비밀번호 확인 다이얼로그.
  * 계정 로그인이 아니라, 글/댓글을 수정·삭제할 때 쓰는 단순 키 입력입니다.
+ * 동료·유물 컨설팅에서 공통으로 씁니다.
  */
-function CompanionConsultingPasswordDialog({
+function ConsultingPasswordDialog({
 	open,
 	onOpenChange,
 	title,
@@ -98,7 +99,7 @@ function CompanionConsultingPasswordDialog({
 	destructive = false,
 	isPending = false,
 	onConfirm
-}: CompanionConsultingPasswordDialogProps) {
+}: ConsultingPasswordDialogProps) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent>
@@ -119,4 +120,4 @@ function CompanionConsultingPasswordDialog({
 	)
 }
 
-export default CompanionConsultingPasswordDialog
+export default ConsultingPasswordDialog

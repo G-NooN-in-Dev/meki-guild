@@ -1,5 +1,7 @@
+import type { ItemGrade } from '@/features/tips/types/item-grade.type'
+
 /** 유물 등급. MGF.GG 유물 시뮬레이터 기준 3단계입니다. */
-export type RelicGrade = 'legendary' | 'unique' | 'epic'
+export type RelicGrade = ItemGrade
 
 /** 유물 각성 단계. 0~5 단계(총 6단계) */
 export type RelicAwakeningStage = 0 | 1 | 2 | 3 | 4 | 5

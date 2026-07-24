@@ -1,4 +1,10 @@
 import {
+	clampCompanionLevel,
+	COMPANION_SETUP_SLOTS,
+	getCompanionById
+} from '@/features/tips/lib/companion-setup.constants'
+import {
+	CONSULTING_CONTENT_MAX_LENGTH,
 	CONSULTING_NOTE_MAX_LENGTH,
 	CONSULTING_PASSWORD_MAX_LENGTH,
 	CONSULTING_PASSWORD_MIN_LENGTH,
@@ -6,12 +12,7 @@ import {
 	CONSULTING_SHORT_ID_ALPHABET,
 	CONSULTING_SHORT_ID_LENGTH,
 	CONSULTING_TITLE_MAX_LENGTH
-} from '@/features/tips/lib/companion-consulting.constants'
-import {
-	clampCompanionLevel,
-	COMPANION_SETUP_SLOTS,
-	getCompanionById
-} from '@/features/tips/lib/companion-setup.constants'
+} from '@/features/tips/lib/consulting.constants'
 import type {
 	CompanionConsultingCommentInput,
 	CompanionConsultingLoadout,
@@ -64,6 +65,24 @@ function assertTitle(value: unknown): string {
 	return trimmed
 }
 
+/** 게시글 내용 — 비워 두면 빈 문자열. 필수 아님. */
+function assertContent(value: unknown): string {
+	if (value === undefined || value === null) {
+		return ''
+	}
+
+	if (typeof value !== 'string') {
+		throw new ConsultingValidationError('내용 형식이 올바르지 않습니다.')
+	}
+
+	const trimmed = value.trim()
+	if (trimmed.length > CONSULTING_CONTENT_MAX_LENGTH) {
+		throw new ConsultingValidationError(`내용은 ${CONSULTING_CONTENT_MAX_LENGTH}자까지 입력할 수 있습니다.`)
+	}
+
+	return trimmed
+}
+
 function assertNote(value: unknown): string {
 	if (value === undefined || value === null) {
 		return ''
@@ -107,7 +126,7 @@ function assertPassword(value: unknown): string {
 	return trimmed
 }
 
-/** 프리셋 스탯 — 9개 필드 모두 0 이상 숫자여야 합니다. */
+/** 프리셋 스탯 — 정의된 필드 모두 0 이상 숫자여야 합니다. */
 function assertPresetStats(value: unknown): ConsultingPresetStats {
 	if (!value || typeof value !== 'object') {
 		throw new ConsultingValidationError('프리셋 스탯을 입력해 주세요.')
@@ -126,8 +145,8 @@ function assertPresetStats(value: unknown): ConsultingPresetStats {
 			throw new ConsultingValidationError(`${field.label}은(는) 0 이상이어야 합니다.`)
 		}
 
-		// %는 소수 1자리, flat은 정수로 맞춤
-		stats[field.id] = field.unit === 'percent' ? Math.round(fieldValue * 10) / 10 : Math.round(fieldValue)
+		// %·flat 모두 소수 1자리까지 허용합니다.
+		stats[field.id] = Math.round(fieldValue * 10) / 10
 	}
 
 	return stats
@@ -249,7 +268,7 @@ export function parseConsultingPostInput(value: unknown): CompanionConsultingPos
 		throw new ConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
 
-	const { title, presetStats, ownership, loadout, password } = value as Record<string, unknown>
+	const { title, content, presetStats, ownership, loadout, password } = value as Record<string, unknown>
 	const ownershipEntries = assertOwnership(ownership)
 	if (ownershipEntries.length === 0) {
 		throw new ConsultingValidationError('보유 동료를 한 명 이상 선택해 주세요.')
@@ -257,6 +276,7 @@ export function parseConsultingPostInput(value: unknown): CompanionConsultingPos
 
 	return {
 		title: assertTitle(title),
+		content: assertContent(content),
 		presetStats: assertPresetStats(presetStats),
 		ownership: ownershipEntries,
 		loadout: assertLoadout(loadout, ownershipEntries, { requireEquipped: true }),

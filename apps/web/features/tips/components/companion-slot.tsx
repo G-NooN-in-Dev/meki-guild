@@ -4,7 +4,7 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 import { PlusIcon } from 'lucide-react'
 
-import CompanionPortrait from '@/features/tips/components/companion-portrait'
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import { COMPANION_GRADE_BADGE_CLASS, COMPANION_GRADE_META } from '@/features/tips/lib/companion-setup.constants'
 import type { Companion, CompanionEquipEffect, CompanionSetupSlot } from '@/features/tips/types/companion.type'
 
@@ -56,7 +56,7 @@ function CompanionSlot({
 
 			{companion && gradeMeta && primaryEffect ? (
 				<div className="flex items-start gap-2.5">
-					<CompanionPortrait
+					<GradePortrait
 						src={companion.imageSrc}
 						alt={companion.name}
 						grade={companion.grade}

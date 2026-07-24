@@ -7,8 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
 import { useEffect, useState } from 'react'
 
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import RelicAwakeningStepper from '@/features/tips/components/relic-awakening-stepper'
-import RelicPortrait from '@/features/tips/components/relic-portrait'
 import RelicPotentialEditor from '@/features/tips/components/relic-potential-editor'
 import {
 	getRelicActivationCondition,
@@ -30,6 +30,10 @@ type RelicSlotEditorProps = {
 	stage: number
 	potentialIds: readonly string[]
 	excludedIds: ReadonlySet<string>
+	/** 보유 유물만 선택 (컨설팅용). 없으면 전체 */
+	allowedIds?: ReadonlySet<string> | null
+	/** 보유 각성에 맞춰 슬롯 각성 고정 */
+	lockStage?: boolean
 	onSelect: (relic: Relic) => void
 	onClear: () => void
 	onStageChange: (stage: number) => void
@@ -56,6 +60,8 @@ function RelicSlotEditor({
 	stage,
 	potentialIds,
 	excludedIds,
+	allowedIds = null,
+	lockStage = false,
 	onSelect,
 	onClear,
 	onStageChange,
@@ -109,14 +115,17 @@ function RelicSlotEditor({
 			>
 				<SheetHeader className="border-grayscale-200 border-b">
 					<SheetTitle>{slotLabel ?? '유물 슬롯'}</SheetTitle>
-					<SheetDescription>등급을 고른 뒤 유물을 선택하고 각성·잠재옵션을 조절하세요.</SheetDescription>
+					<SheetDescription>
+						등급을 고른 뒤 유물을 선택하고 각성·잠재옵션을 조절하세요.
+						{lockStage ? ' 각성은 보유 현황에 맞춰 고정됩니다.' : ''}
+					</SheetDescription>
 				</SheetHeader>
 
 				<div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
 					{relic ? (
 						<div className="border-grayscale-200 bg-grayscale-50 flex flex-col gap-3 rounded-xl border p-3">
 							<div className="flex items-center gap-3">
-								<RelicPortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="lg" />
+								<GradePortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="lg" />
 								<div className="min-w-0 space-y-1">
 									<Badge className={RELIC_GRADE_BADGE_CLASS[relic.grade]}>{RELIC_GRADE_META[relic.grade].label}</Badge>
 									<p className="text-grayscale-900 font-semibold">{relic.name}</p>
@@ -126,7 +135,7 @@ function RelicSlotEditor({
 								</div>
 							</div>
 
-							<RelicAwakeningStepper stage={stage} onStageChange={onStageChange} />
+							<RelicAwakeningStepper stage={stage} onStageChange={onStageChange} disabled={lockStage} />
 
 							<ul className="text-grayscale-700 list-inside list-disc text-sm">
 								{resolved?.lines.map((line) => (
@@ -172,13 +181,15 @@ function RelicSlotEditor({
 								<div className="grid grid-cols-2 gap-1.5">
 									{getRelicsByGrade(grade).map((item) => {
 										const excluded = excludedIds.has(item.id)
+										const notAllowed = allowedIds !== null && !allowedIds.has(item.id)
 										const selected = relic?.id === item.id
+										const disabled = (excluded && !selected) || (notAllowed && !selected)
 
 										return (
 											<button
 												key={item.id}
 												type="button"
-												disabled={excluded && !selected}
+												disabled={disabled}
 												onClick={() => onSelect(item)}
 												className={cn(
 													'border-grayscale-200 flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm font-medium transition-colors',
@@ -188,7 +199,7 @@ function RelicSlotEditor({
 													selected && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
 												)}
 											>
-												<RelicPortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />
+												<GradePortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />
 												<span className="text-grayscale-800 truncate">{item.name}</span>
 											</button>
 										)

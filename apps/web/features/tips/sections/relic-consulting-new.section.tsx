@@ -12,25 +12,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useSyncExternalStore } from 'react'
 
-import CompanionOwnershipGrid from '@/features/tips/components/companion-ownership-grid'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
-import CompanionSetupBoard from '@/features/tips/components/companion-setup-board'
 import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
-import {
-	createConsultingPostAction,
-	updateConsultingPostAction,
-	verifyConsultingPostPasswordAction
-} from '@/features/tips/lib/companion-consulting.actions'
-import {
-	createDefaultOwnershipStateMap,
-	createEmptyConsultingLoadout,
-	getConsultingPostPath,
-	ownershipEntriesToAllowedIds,
-	ownershipEntriesToLevelMap,
-	ownershipEntriesToStateMap,
-	ownershipStateToEntries,
-	syncLoadoutWithOwnership
-} from '@/features/tips/lib/companion-consulting.constants'
+import RelicOwnershipGrid from '@/features/tips/components/relic-ownership-grid'
+import RelicSetupBoard from '@/features/tips/components/relic-setup-board'
 import {
 	CONSULTING_CONTENT_MAX_LENGTH,
 	CONSULTING_PASSWORD_MAX_LENGTH,
@@ -43,25 +28,40 @@ import {
 	readConsultingEditPassword,
 	storeConsultingEditPassword
 } from '@/features/tips/lib/consulting-edit-password'
+import {
+	createRelicConsultingPostAction,
+	updateRelicConsultingPostAction,
+	verifyRelicConsultingPostPasswordAction
+} from '@/features/tips/lib/relic-consulting.actions'
+import {
+	createDefaultRelicOwnershipStateMap,
+	createEmptyRelicConsultingLoadout,
+	getRelicConsultingPostPath,
+	relicOwnershipEntriesToAllowedIds,
+	relicOwnershipEntriesToStageMap,
+	relicOwnershipEntriesToStateMap,
+	relicOwnershipStateToEntries,
+	syncRelicLoadoutWithOwnership
+} from '@/features/tips/lib/relic-consulting.constants'
+import type { ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
 import type {
-	CompanionConsultingLoadout,
-	CompanionConsultingPost,
-	CompanionOwnershipStateMap,
-	ConsultingPresetStats
-} from '@/features/tips/types/companion-consulting.type'
+	RelicConsultingLoadout,
+	RelicConsultingPost,
+	RelicOwnershipStateMap
+} from '@/features/tips/types/relic-consulting.type'
 
-type CompanionConsultingNewSectionProps = {
+type RelicConsultingNewSectionProps = {
 	/** 있으면 수정 모드 — 초기값으로 채우고 update action을 씁니다. */
-	initialPost?: CompanionConsultingPost
+	initialPost?: RelicConsultingPost
 }
 
 /** sessionStorage는 같은 탭 안에서만 쓰므로 구독할 이벤트가 없습니다. */
-function subscribeConsultingEditPassword() {
+function subscribeRelicConsultingEditPassword() {
 	return () => {}
 }
 
 /** 현황 게시글 작성·수정: 제목·내용 + 프리셋 + 보유 + 세팅 + CUD 비밀번호 */
-function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSectionProps) {
+function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionProps) {
 	const router = useRouter()
 	const isEdit = Boolean(initialPost)
 	const shortId = initialPost?.shortId
@@ -71,24 +71,20 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 	const [presetStats, setPresetStats] = useState<ConsultingPresetStats>(
 		() => initialPost?.presetStats ?? createEmptyPresetStats()
 	)
-	const [ownership, setOwnership] = useState<CompanionOwnershipStateMap>(() =>
-		initialPost ? ownershipEntriesToStateMap(initialPost.ownership) : createDefaultOwnershipStateMap()
+	const [ownership, setOwnership] = useState<RelicOwnershipStateMap>(() =>
+		initialPost ? relicOwnershipEntriesToStateMap(initialPost.ownership) : createDefaultRelicOwnershipStateMap()
 	)
-	const [loadouts, setLoadouts] = useState<CompanionConsultingLoadout>(
-		() => initialPost?.loadout ?? createEmptyConsultingLoadout()
+	const [loadouts, setLoadouts] = useState<RelicConsultingLoadout>(
+		() => initialPost?.loadout ?? createEmptyRelicConsultingLoadout()
 	)
-	/** 작성 모드에서만 쓰는 새 비밀번호 입력값 */
 	const [createPassword, setCreatePassword] = useState('')
-	/** Dialog로 직접 검증한 비밀번호 (sessionStorage에 없을 때) */
 	const [verifiedPassword, setVerifiedPassword] = useState<string | null>(null)
 	const [error, setError] = useState<string | null>(null)
-	/** Server Action 대기용. async를 startTransition에 넣으면 push가 씹힐 수 있어 분리합니다. */
 	const [isPending, setIsPending] = useState(false)
 
-	// 상세 → 수정 진입 시 sessionStorage에 남은 비밀번호를 effect 없이 읽습니다.
 	const storedPassword = useSyncExternalStore(
-		subscribeConsultingEditPassword,
-		() => (shortId ? readConsultingEditPassword('companion', shortId) : null),
+		subscribeRelicConsultingEditPassword,
+		() => (shortId ? readConsultingEditPassword('relic', shortId) : null),
 		() => null
 	)
 
@@ -96,16 +92,16 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 	const editUnlocked = !isEdit || verifiedPassword !== null || Boolean(storedPassword)
 	const unlockDialogOpen = isEdit && !editUnlocked
 
-	const ownershipEntries = useMemo(() => ownershipStateToEntries(ownership), [ownership])
-	const allowedIds = useMemo(() => ownershipEntriesToAllowedIds(ownershipEntries), [ownershipEntries])
-	const levelByCompanionId = useMemo(() => ownershipEntriesToLevelMap(ownershipEntries), [ownershipEntries])
+	const ownershipEntries = useMemo(() => relicOwnershipStateToEntries(ownership), [ownership])
+	const allowedIds = useMemo(() => relicOwnershipEntriesToAllowedIds(ownershipEntries), [ownershipEntries])
+	const stageByRelicId = useMemo(() => relicOwnershipEntriesToStageMap(ownershipEntries), [ownershipEntries])
 
-	const backHref = initialPost ? getConsultingPostPath(initialPost.shortId) : '/tips/companion-setup'
+	const backHref = initialPost ? getRelicConsultingPostPath(initialPost.shortId) : '/tips/relic-setup'
 
-	function handleOwnershipChange(next: CompanionOwnershipStateMap) {
+	function handleOwnershipChange(next: RelicOwnershipStateMap) {
 		setOwnership(next)
-		const entries = ownershipStateToEntries(next)
-		setLoadouts((current) => syncLoadoutWithOwnership(current, entries))
+		const entries = relicOwnershipStateToEntries(next)
+		setLoadouts((current) => syncRelicLoadoutWithOwnership(current, entries))
 	}
 
 	async function handleUnlockEdit(nextPassword: string) {
@@ -115,7 +111,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 
 		setIsPending(true)
 		try {
-			const result = await verifyConsultingPostPasswordAction({
+			const result = await verifyRelicConsultingPostPasswordAction({
 				shortId: initialPost.shortId,
 				password: nextPassword
 			})
@@ -124,7 +120,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 				return
 			}
 
-			storeConsultingEditPassword('companion', initialPost.shortId, nextPassword)
+			storeConsultingEditPassword('relic', initialPost.shortId, nextPassword)
 			setVerifiedPassword(nextPassword)
 		} finally {
 			setIsPending(false)
@@ -132,9 +128,8 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 	}
 
 	function handleUnlockDialogChange(open: boolean) {
-		// Dialog를 닫고 아직 잠금이면 상세로 되돌립니다.
 		if (!open && !editUnlocked && initialPost) {
-			router.replace(getConsultingPostPath(initialPost.shortId))
+			router.replace(getRelicConsultingPostPath(initialPost.shortId))
 		}
 	}
 
@@ -153,8 +148,8 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 
 		try {
 			const result = isEdit
-				? await updateConsultingPostAction({ shortId: initialPost!.shortId, ...payload })
-				: await createConsultingPostAction(payload)
+				? await updateRelicConsultingPostAction({ shortId: initialPost!.shortId, ...payload })
+				: await createRelicConsultingPostAction(payload)
 
 			if (!result.ok) {
 				setError(result.error)
@@ -162,18 +157,16 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 				return
 			}
 
-			// 생성과 동일: toast → soft navigate. refresh는 push와 경합해 수정 페이지에 남을 수 있어 쓰지 않습니다.
 			if (isEdit && initialPost) {
-				clearConsultingEditPassword('companion', initialPost.shortId)
+				clearConsultingEditPassword('relic', initialPost.shortId)
 			}
 			toast.success(isEdit ? '현황이 수정되었습니다.' : `현황이 등록되었습니다. ID: ${result.data.shortId}`)
-			router.push(getConsultingPostPath(result.data.shortId))
+			router.push(getRelicConsultingPostPath(result.data.shortId))
 		} finally {
 			setIsPending(false)
 		}
 	}
 
-	// 수정인데 아직 비밀번호 미확인이면 폼을 가리고 Dialog만 둡니다.
 	if (isEdit && !editUnlocked) {
 		return (
 			<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
@@ -189,9 +182,9 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 					</Link>
 					<header className="flex flex-col gap-2">
 						<Badge variant="secondary" className="w-fit">
-							동료
+							유물
 						</Badge>
-						<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">동료 현황 수정</h1>
+						<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">유물 현황 수정</h1>
 						<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
 							비밀번호를 확인한 뒤에 수정할 수 있습니다.
 						</p>
@@ -221,7 +214,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 					)}
 					onClick={() => {
 						if (initialPost) {
-							clearConsultingEditPassword('companion', initialPost.shortId)
+							clearConsultingEditPassword('relic', initialPost.shortId)
 						}
 					}}
 				>
@@ -231,10 +224,10 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 
 				<header className="flex flex-col gap-2">
 					<Badge variant="secondary" className="w-fit">
-						동료
+						유물
 					</Badge>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">
-						{isEdit ? '동료 현황 수정' : '동료 현황 올리기'}
+						{isEdit ? '유물 현황 수정' : '유물 현황 올리기'}
 					</h1>
 					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
 						{isEdit ? '내용을 수정한 뒤 저장하면 반영됩니다.' : '제목·내용(선택)·프리셋 스탯·현재 세팅을 입력하세요.'}
@@ -242,16 +235,15 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 				</header>
 			</div>
 
-			{/* 작성: 제목·내용 + 비밀번호 / 수정: 이미 Dialog로 확인했으므로 제목·내용만 */}
 			<div className="border-grayscale-200 bg-card shadow-soft flex flex-col gap-3 rounded-xl border p-4">
 				<div className={cn('flex flex-col gap-3', !isEdit && 'md:flex-row md:items-start')}>
 					<div className="flex min-w-0 flex-1 flex-col gap-2">
-						<Label htmlFor="consulting-title">제목</Label>
+						<Label htmlFor="relic-consulting-title">제목</Label>
 						<Input
-							id="consulting-title"
+							id="relic-consulting-title"
 							value={title}
 							onChange={(event) => setTitle(event.target.value.slice(0, CONSULTING_TITLE_MAX_LENGTH))}
-							placeholder="예: 사냥용 세팅 봐주세요"
+							placeholder="예: 월드보스용 잠재 봐주세요"
 							autoComplete="off"
 						/>
 						<p className="text-grayscale-400 text-xs tabular-nums">
@@ -261,9 +253,9 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 
 					{!isEdit ? (
 						<div className="flex w-full flex-col gap-2 md:w-44 md:shrink-0">
-							<Label htmlFor="consulting-password">비밀번호</Label>
+							<Label htmlFor="relic-consulting-password">비밀번호</Label>
 							<Input
-								id="consulting-password"
+								id="relic-consulting-password"
 								type="password"
 								autoComplete="new-password"
 								value={createPassword}
@@ -276,9 +268,9 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<Label htmlFor="consulting-content">내용 (선택)</Label>
+					<Label htmlFor="relic-consulting-content">내용 (선택)</Label>
 					<Textarea
-						id="consulting-content"
+						id="relic-consulting-content"
 						className="resize-none"
 						value={content}
 						onChange={(event) => setContent(event.target.value.slice(0, CONSULTING_CONTENT_MAX_LENGTH))}
@@ -293,14 +285,14 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 
 			<CompanionPresetStatsFields stats={presetStats} onStatsChange={setPresetStats} />
 
-			<CompanionOwnershipGrid ownership={ownership} onOwnershipChange={handleOwnershipChange} />
+			<RelicOwnershipGrid ownership={ownership} onOwnershipChange={handleOwnershipChange} />
 
-			<CompanionSetupBoard
+			<RelicSetupBoard
 				title="현재 세팅"
 				loadouts={loadouts}
 				onLoadoutsChange={setLoadouts}
 				allowedIds={allowedIds}
-				levelByCompanionId={levelByCompanionId}
+				stageByRelicId={stageByRelicId}
 			/>
 
 			{error ? <p className="text-destructive text-sm">{error}</p> : null}
@@ -311,7 +303,7 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 					className={cn(buttonVariants({ variant: 'outline' }), 'justify-center')}
 					onClick={() => {
 						if (initialPost) {
-							clearConsultingEditPassword('companion', initialPost.shortId)
+							clearConsultingEditPassword('relic', initialPost.shortId)
 						}
 					}}
 				>
@@ -325,4 +317,4 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 	)
 }
 
-export default CompanionConsultingNewSection
+export default RelicConsultingNewSection

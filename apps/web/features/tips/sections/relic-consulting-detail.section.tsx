@@ -12,42 +12,42 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
-import CompanionOwnershipGrid from '@/features/tips/components/companion-ownership-grid'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
-import CompanionSetupBoard from '@/features/tips/components/companion-setup-board'
 import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
 import ConsultingShareBar from '@/features/tips/components/consulting-share-bar'
-import {
-	createConsultingCommentAction,
-	deleteConsultingCommentAction,
-	deleteConsultingPostAction,
-	updateConsultingCommentAction,
-	verifyConsultingCommentPasswordAction,
-	verifyConsultingPostPasswordAction
-} from '@/features/tips/lib/companion-consulting.actions'
-import {
-	createEmptyConsultingLoadout,
-	getConsultingPostPath,
-	ownershipEntriesToAllowedIds,
-	ownershipEntriesToLevelMap,
-	ownershipEntriesToStateMap
-} from '@/features/tips/lib/companion-consulting.constants'
+import RelicOwnershipGrid from '@/features/tips/components/relic-ownership-grid'
+import RelicSetupBoard from '@/features/tips/components/relic-setup-board'
 import {
 	CONSULTING_NOTE_MAX_LENGTH,
 	CONSULTING_PASSWORD_MAX_LENGTH,
 	CONSULTING_PASSWORD_MIN_LENGTH
 } from '@/features/tips/lib/consulting.constants'
 import { storeConsultingEditPassword } from '@/features/tips/lib/consulting-edit-password'
-import { projectCompanionPresetStats } from '@/features/tips/lib/consulting-preset-projection'
+import { projectRelicPresetStats } from '@/features/tips/lib/consulting-preset-projection'
+import {
+	createRelicConsultingCommentAction,
+	deleteRelicConsultingCommentAction,
+	deleteRelicConsultingPostAction,
+	updateRelicConsultingCommentAction,
+	verifyRelicConsultingCommentPasswordAction,
+	verifyRelicConsultingPostPasswordAction
+} from '@/features/tips/lib/relic-consulting.actions'
+import {
+	createEmptyRelicConsultingLoadout,
+	getRelicConsultingPostPath,
+	relicOwnershipEntriesToAllowedIds,
+	relicOwnershipEntriesToStageMap,
+	relicOwnershipEntriesToStateMap
+} from '@/features/tips/lib/relic-consulting.constants'
 import type {
-	CompanionConsultingComment,
-	CompanionConsultingLoadout,
-	CompanionConsultingPost
-} from '@/features/tips/types/companion-consulting.type'
+	RelicConsultingComment,
+	RelicConsultingLoadout,
+	RelicConsultingPost
+} from '@/features/tips/types/relic-consulting.type'
 
-type CompanionConsultingDetailSectionProps = {
-	post: CompanionConsultingPost
-	comments: readonly CompanionConsultingComment[]
+type RelicConsultingDetailSectionProps = {
+	post: RelicConsultingPost
+	comments: readonly RelicConsultingComment[]
 }
 
 function formatCreatedAt(iso: string) {
@@ -66,42 +66,39 @@ function formatCreatedAt(iso: string) {
 }
 
 /** 게시글 상세: 조회 + 추천 작성 + 비밀번호 기반 수정·삭제 */
-function CompanionConsultingDetailSection({ post, comments }: CompanionConsultingDetailSectionProps) {
+function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailSectionProps) {
 	const router = useRouter()
-	const ownershipState = useMemo(() => ownershipEntriesToStateMap(post.ownership), [post.ownership])
-	const allowedIds = useMemo(() => ownershipEntriesToAllowedIds(post.ownership), [post.ownership])
-	const levelByCompanionId = useMemo(() => ownershipEntriesToLevelMap(post.ownership), [post.ownership])
+	const ownershipState = useMemo(() => relicOwnershipEntriesToStateMap(post.ownership), [post.ownership])
+	const allowedIds = useMemo(() => relicOwnershipEntriesToAllowedIds(post.ownership), [post.ownership])
+	const stageByRelicId = useMemo(() => relicOwnershipEntriesToStageMap(post.ownership), [post.ownership])
 
-	const [recommendLoadouts, setRecommendLoadouts] = useState<CompanionConsultingLoadout>(() =>
-		createEmptyConsultingLoadout()
+	const [recommendLoadouts, setRecommendLoadouts] = useState<RelicConsultingLoadout>(() =>
+		createEmptyRelicConsultingLoadout()
 	)
 	const [recommendNote, setRecommendNote] = useState('')
 	const [recommendPassword, setRecommendPassword] = useState('')
 	const [error, setError] = useState<string | null>(null)
-	/** Server Action 대기용. async + startTransition 조합을 피해 피드백이 안정적으로 보이게 합니다. */
 	const [isPending, setIsPending] = useState(false)
 
 	const [editPostOpen, setEditPostOpen] = useState(false)
 	const [deletePostOpen, setDeletePostOpen] = useState(false)
 	const [deleteCommentId, setDeleteCommentId] = useState<string | null>(null)
-	/** 수정 진입용 — 비밀번호 Dialog로 연 뒤 shortId를 담습니다. */
 	const [editCommentId, setEditCommentId] = useState<string | null>(null)
 
 	const [editingCommentId, setEditingCommentId] = useState<string | null>(null)
 	const [editNote, setEditNote] = useState('')
-	const [editLoadouts, setEditLoadouts] = useState<CompanionConsultingLoadout>(() => createEmptyConsultingLoadout())
-	/** Dialog에서 검증된 비밀번호 — 저장 시 재사용 */
+	const [editLoadouts, setEditLoadouts] = useState<RelicConsultingLoadout>(() => createEmptyRelicConsultingLoadout())
 	const [verifiedCommentPassword, setVerifiedCommentPassword] = useState('')
 	const [editError, setEditError] = useState<string | null>(null)
 
 	// 추천 작성 중에도 적용 후 프리셋을 바로 보여 줍니다.
 	const recommendProjectedPresetStats = useMemo(
-		() => projectCompanionPresetStats(post.presetStats, post.loadout, recommendLoadouts),
+		() => projectRelicPresetStats(post.presetStats, post.loadout, recommendLoadouts),
 		[post.presetStats, post.loadout, recommendLoadouts]
 	)
 
 	const editProjectedPresetStats = useMemo(
-		() => projectCompanionPresetStats(post.presetStats, post.loadout, editLoadouts),
+		() => projectRelicPresetStats(post.presetStats, post.loadout, editLoadouts),
 		[post.presetStats, post.loadout, editLoadouts]
 	)
 
@@ -110,7 +107,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 		setIsPending(true)
 
 		try {
-			const result = await createConsultingCommentAction({
+			const result = await createRelicConsultingCommentAction({
 				postShortId: post.shortId,
 				note: recommendNote,
 				loadout: recommendLoadouts,
@@ -123,7 +120,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				return
 			}
 
-			setRecommendLoadouts(createEmptyConsultingLoadout())
+			setRecommendLoadouts(createEmptyRelicConsultingLoadout())
 			setRecommendNote('')
 			setRecommendPassword('')
 			toast.success('추천 세팅이 등록되었습니다.')
@@ -136,16 +133,15 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 	async function handleUnlockPostEdit(password: string) {
 		setIsPending(true)
 		try {
-			const result = await verifyConsultingPostPasswordAction({ shortId: post.shortId, password })
+			const result = await verifyRelicConsultingPostPasswordAction({ shortId: post.shortId, password })
 			if (!result.ok) {
 				toast.error(result.error)
 				return
 			}
 
-			// 수정 페이지에서 저장할 때 쓰도록 잠깐 보관 (URL에는 넣지 않음)
-			storeConsultingEditPassword('companion', post.shortId, password)
+			storeConsultingEditPassword('relic', post.shortId, password)
 			setEditPostOpen(false)
-			router.push(`${getConsultingPostPath(post.shortId)}/edit`)
+			router.push(`${getRelicConsultingPostPath(post.shortId)}/edit`)
 		} finally {
 			setIsPending(false)
 		}
@@ -154,7 +150,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 	async function handleDeletePost(password: string) {
 		setIsPending(true)
 		try {
-			const result = await deleteConsultingPostAction({ shortId: post.shortId, password })
+			const result = await deleteRelicConsultingPostAction({ shortId: post.shortId, password })
 			if (!result.ok) {
 				toast.error(result.error)
 				return
@@ -162,7 +158,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 
 			setDeletePostOpen(false)
 			toast.success('게시글이 삭제되었습니다.')
-			router.push('/tips/companion-setup')
+			router.push('/tips/relic-setup')
 			router.refresh()
 		} finally {
 			setIsPending(false)
@@ -176,7 +172,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 
 		setIsPending(true)
 		try {
-			const result = await deleteConsultingCommentAction({ shortId: deleteCommentId, password })
+			const result = await deleteRelicConsultingCommentAction({ shortId: deleteCommentId, password })
 			if (!result.ok) {
 				toast.error(result.error)
 				return
@@ -206,7 +202,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 
 		setIsPending(true)
 		try {
-			const result = await verifyConsultingCommentPasswordAction({ shortId: comment.shortId, password })
+			const result = await verifyRelicConsultingCommentPasswordAction({ shortId: comment.shortId, password })
 			if (!result.ok) {
 				toast.error(result.error)
 				return
@@ -226,7 +222,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 	function cancelEditComment() {
 		setEditingCommentId(null)
 		setEditNote('')
-		setEditLoadouts(createEmptyConsultingLoadout())
+		setEditLoadouts(createEmptyRelicConsultingLoadout())
 		setVerifiedCommentPassword('')
 		setEditError(null)
 	}
@@ -236,7 +232,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 		setIsPending(true)
 
 		try {
-			const result = await updateConsultingCommentAction({
+			const result = await updateRelicConsultingCommentAction({
 				shortId,
 				note: editNote,
 				loadout: editLoadouts,
@@ -261,7 +257,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 		<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
 			<div className="flex flex-col gap-3">
 				<Link
-					href="/tips/companion-setup"
+					href="/tips/relic-setup"
 					className={cn(
 						'text-grayscale-600 hover:text-grayscale-900 inline-flex w-fit items-center gap-1.5 text-sm font-medium transition-colors'
 					)}
@@ -272,7 +268,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 
 				<header className="flex flex-col gap-2">
 					<div className="flex flex-wrap items-center gap-2">
-						<Badge variant="secondary">동료</Badge>
+						<Badge variant="secondary">유물</Badge>
 						<span className="text-grayscale-500 font-mono text-xs tracking-wider">{post.shortId}</span>
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{post.title}</h1>
@@ -302,7 +298,7 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				) : null}
 			</div>
 
-			<ConsultingShareBar shortId={post.shortId} path={getConsultingPostPath(post.shortId)} />
+			<ConsultingShareBar shortId={post.shortId} path={getRelicConsultingPostPath(post.shortId)} />
 
 			{/* ── 현황: 프리셋·보유·현재 세팅을 한 구역으로 묶습니다 ── */}
 			<div className="flex flex-col gap-4 md:gap-5">
@@ -311,18 +307,17 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 						<Badge variant="secondary">현황</Badge>
 						<h2 className="text-grayscale-900 text-lg font-semibold md:text-xl">현재 세팅</h2>
 					</div>
-					<p className="text-grayscale-500 text-sm">이 글에 등록된 프리셋·보유·현재 장착 조합입니다.</p>
+					<p className="text-grayscale-500 text-sm">이 글에 등록된 프리셋·보유(각성)·현재 장착 조합입니다.</p>
 				</header>
 
 				<CompanionPresetStatsFields stats={post.presetStats} readOnly />
-				<CompanionOwnershipGrid ownership={ownershipState} readOnly />
-				<CompanionSetupBoard title="현재 장착" loadouts={post.loadout} readOnly />
+				<RelicOwnershipGrid ownership={ownershipState} readOnly />
+				<RelicSetupBoard title="현재 장착" loadouts={post.loadout} readOnly />
 			</div>
 
-			{/* 현황 / 추천 경계 */}
 			<div className="border-grayscale-200 border-t pt-2 md:pt-4" aria-hidden />
 
-			{/* ── 추천 세팅: 톤·헤더로 현황과 구분합니다 ── */}
+			{/* ── 추천 세팅 ── */}
 			<div className="bg-grayscale-50/80 border-grayscale-200 flex flex-col gap-4 rounded-2xl border border-dashed p-4 md:gap-5 md:p-5">
 				<header className="flex flex-col gap-1">
 					<div className="flex flex-wrap items-end justify-between gap-2">
@@ -332,7 +327,9 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 						</div>
 						<p className="text-grayscale-500 text-sm tabular-nums">{comments.length}개</p>
 					</div>
-					<p className="text-grayscale-500 text-sm">다른 사람이 제안한 세팅입니다. 현재 세팅과 비교해 보세요.</p>
+					<p className="text-grayscale-500 text-sm">
+						다른 사람이 제안한 세팅입니다. 조합·잠재옵션을 현재 세팅과 비교해 보세요.
+					</p>
 				</header>
 
 				{comments.length === 0 ? (
@@ -385,9 +382,9 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 									{isEditing ? (
 										<div className="flex flex-col gap-3">
 											<div className="flex flex-col gap-2">
-												<Label htmlFor={`edit-note-${comment.shortId}`}>한 줄 코멘트 (선택)</Label>
+												<Label htmlFor={`relic-edit-note-${comment.shortId}`}>한 줄 코멘트 (선택)</Label>
 												<Textarea
-													id={`edit-note-${comment.shortId}`}
+													id={`relic-edit-note-${comment.shortId}`}
 													className="resize-none"
 													value={editNote}
 													onChange={(event) => setEditNote(event.target.value.slice(0, CONSULTING_NOTE_MAX_LENGTH))}
@@ -395,17 +392,17 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 												/>
 											</div>
 
-											<CompanionSetupBoard
+											<RelicSetupBoard
 												title="추천 조합"
 												loadouts={editLoadouts}
 												onLoadoutsChange={setEditLoadouts}
 												allowedIds={allowedIds}
-												levelByCompanionId={levelByCompanionId}
+												stageByRelicId={stageByRelicId}
 											/>
 
 											<CompanionPresetStatsFields
 												title="예상 프리셋 스탯"
-												description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
+												description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
 												stats={editProjectedPresetStats}
 												readOnly
 											/>
@@ -428,11 +425,11 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 									) : (
 										<>
 											{comment.note ? <p className="text-grayscale-700 text-sm">{comment.note}</p> : null}
-											<CompanionSetupBoard title="추천 조합" loadouts={comment.loadout} readOnly />
+											<RelicSetupBoard title="추천 조합" loadouts={comment.loadout} readOnly />
 											<CompanionPresetStatsFields
 												title="예상 프리셋 스탯"
-												description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
-												stats={projectCompanionPresetStats(post.presetStats, post.loadout, comment.loadout)}
+												description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
+												stats={projectRelicPresetStats(post.presetStats, post.loadout, comment.loadout)}
 												readOnly
 											/>
 										</>
@@ -446,27 +443,29 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 				<div className="border-grayscale-200 bg-card shadow-soft flex flex-col gap-4 rounded-xl border p-4">
 					<div>
 						<h3 className="text-grayscale-900 font-semibold">추천 세팅 남기기</h3>
-						<p className="text-grayscale-500 text-sm">게시글에 적힌 보유 동료만 장착할 수 있습니다.</p>
+						<p className="text-grayscale-500 text-sm">
+							게시글에 적힌 보유 유물만 장착할 수 있습니다. 각성은 보유 단계로 고정되고, 잠재옵션은 자유롭게 제안할 수
+							있습니다.
+						</p>
 					</div>
 
-					{/* 코멘트 + 비밀번호를 한 줄에 두고, 비밀번호는 좁게 */}
 					<div className="flex flex-col gap-3 md:flex-row md:items-start">
 						<div className="flex min-w-0 flex-1 flex-col gap-2">
-							<Label htmlFor="recommend-note">한 줄 코멘트 (선택)</Label>
+							<Label htmlFor="relic-recommend-note">한 줄 코멘트 (선택)</Label>
 							<Textarea
-								id="recommend-note"
+								id="relic-recommend-note"
 								className="resize-none"
 								value={recommendNote}
 								onChange={(event) => setRecommendNote(event.target.value.slice(0, CONSULTING_NOTE_MAX_LENGTH))}
-								placeholder="예: 메인만 교체해 보세요"
+								placeholder="예: 성배 잠재를 보스 데미지로 바꿔보세요"
 								rows={2}
 							/>
 						</div>
 
 						<div className="flex w-full flex-col gap-2 md:w-40 md:shrink-0">
-							<Label htmlFor="recommend-password">비밀번호</Label>
+							<Label htmlFor="relic-recommend-password">비밀번호</Label>
 							<Input
-								id="recommend-password"
+								id="relic-recommend-password"
 								type="password"
 								autoComplete="new-password"
 								value={recommendPassword}
@@ -477,17 +476,17 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 						</div>
 					</div>
 
-					<CompanionSetupBoard
+					<RelicSetupBoard
 						title="추천 조합"
 						loadouts={recommendLoadouts}
 						onLoadoutsChange={setRecommendLoadouts}
 						allowedIds={allowedIds}
-						levelByCompanionId={levelByCompanionId}
+						stageByRelicId={stageByRelicId}
 					/>
 
 					<CompanionPresetStatsFields
 						title="예상 프리셋 스탯"
-						description="현재 프리셋에서 장착 효과를 바꾼 예상치입니다. 기본 공격·스킬 데미지 등 프리셋에 없는 효과는 반영되지 않습니다."
+						description="현재 프리셋에서 잠재·상시 각성만 반영한 예상치입니다. 조건부·연동 효과와 최종 데미지 등은 반영되지 않습니다."
 						stats={recommendProjectedPresetStats}
 						readOnly
 					/>
@@ -555,4 +554,4 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 	)
 }
 
-export default CompanionConsultingDetailSection
+export default RelicConsultingDetailSection

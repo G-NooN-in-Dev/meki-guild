@@ -5,16 +5,18 @@ import { Input } from '@shared/ui/input'
 import { CheckIcon, CopyIcon, LinkIcon } from 'lucide-react'
 import { useState } from 'react'
 
-import { getConsultingPostPath } from '@/features/tips/lib/companion-consulting.constants'
-
-type CompanionConsultingShareBarProps = {
+type ConsultingShareBarProps = {
 	shortId: string
+	/** 게시글 path (예: /tips/companion-consulting/abc) — origin은 클라이언트에서 붙입니다. */
+	path: string
 }
 
-/** 게시글 ID·URL 복사 — 카톡 채널 공유용 */
-function CompanionConsultingShareBar({ shortId }: CompanionConsultingShareBarProps) {
+/**
+ * 게시글 ID·URL 복사 바.
+ * 동료/유물 컨설팅 상세에서 공통으로 씁니다.
+ */
+function ConsultingShareBar({ shortId, path }: ConsultingShareBarProps) {
 	const [copied, setCopied] = useState<'id' | 'url' | null>(null)
-	const path = getConsultingPostPath(shortId)
 
 	async function copyText(kind: 'id' | 'url', value: string) {
 		try {
@@ -60,4 +62,4 @@ function CompanionConsultingShareBar({ shortId }: CompanionConsultingShareBarPro
 	)
 }
 
-export default CompanionConsultingShareBar
+export default ConsultingShareBar

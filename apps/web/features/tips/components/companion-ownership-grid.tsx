@@ -6,7 +6,7 @@ import { cn } from '@shared/ui/utils'
 import { useMemo, useState } from 'react'
 
 import CompanionLevelStepper from '@/features/tips/components/companion-level-stepper'
-import CompanionPortrait from '@/features/tips/components/companion-portrait'
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import {
 	clampCompanionLevel,
 	COMPANION_GRADE_MAX_LEVEL,
@@ -113,7 +113,7 @@ function CompanionOwnershipGrid({
 											<div className="flex items-start gap-1.5">
 												{/* 미보유는 초상·이름만 흐리게 — 스위치는 항상 또렷하게 */}
 												<div className={cn('flex min-w-0 flex-1 items-center gap-1.5', !owned && 'opacity-45')}>
-													<CompanionPortrait
+													<GradePortrait
 														src={companion.imageSrc}
 														alt={companion.name}
 														grade={companion.grade}

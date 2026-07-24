@@ -4,8 +4,8 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 import { PlusIcon } from 'lucide-react'
 
+import GradePortrait from '@/features/tips/components/grade-portrait'
 import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
-import RelicPortrait from '@/features/tips/components/relic-portrait'
 import { RELIC_GRADE_BADGE_CLASS, RELIC_GRADE_META } from '@/features/tips/lib/relic.constants'
 import {
 	getRelicPotentialOptionById,
@@ -20,24 +20,24 @@ type RelicSlotProps = {
 	potentialIds: readonly string[]
 	resolvedEffects: RelicResolvedEffects | null
 	isEditing?: boolean
-	onOpen: () => void
+	/** 조회 전용 — 버튼이 아닌 div로 렌더합니다 */
+	readOnly?: boolean
+	onOpen?: () => void
 }
 
 /** 세팅 보드에서 쓰는 유물 슬롯 카드 */
-function RelicSlot({ label, relic, stage, potentialIds, resolvedEffects, isEditing = false, onOpen }: RelicSlotProps) {
-	return (
-		<button
-			type="button"
-			onClick={onOpen}
-			aria-pressed={isEditing}
-			className={cn(
-				'group border-grayscale-200 bg-card shadow-soft flex w-full cursor-pointer flex-col gap-1.5 rounded-xl border p-3 text-left transition-colors',
-				'hover:border-grayscale-300 hover:bg-grayscale-50/70',
-				'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
-				!relic && 'border-dashed',
-				isEditing && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
-			)}
-		>
+function RelicSlot({
+	label,
+	relic,
+	stage,
+	potentialIds,
+	resolvedEffects,
+	isEditing = false,
+	readOnly = false,
+	onOpen
+}: RelicSlotProps) {
+	const content = (
+		<>
 			<div className="flex items-center justify-between gap-2">
 				<p className="text-grayscale-500 text-xs font-medium">{label}</p>
 				{relic ? <RelicAwakeningStars stage={stage} /> : null}
@@ -45,7 +45,7 @@ function RelicSlot({ label, relic, stage, potentialIds, resolvedEffects, isEditi
 
 			{relic ? (
 				<div className="flex items-start gap-2.5">
-					<RelicPortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="md" />
+					<GradePortrait src={relic.imageSrc} alt={relic.name} grade={relic.grade} size="md" />
 					<div className="min-w-0 flex-1 space-y-1">
 						<div className="flex flex-wrap items-center gap-1.5">
 							<Badge className={RELIC_GRADE_BADGE_CLASS[relic.grade]}>{RELIC_GRADE_META[relic.grade].label}</Badge>
@@ -78,9 +78,35 @@ function RelicSlot({ label, relic, stage, potentialIds, resolvedEffects, isEditi
 			) : (
 				<div className="text-grayscale-400 flex items-center gap-1.5 py-2 text-sm">
 					<PlusIcon className="size-4 shrink-0" />
-					<span>유물 선택</span>
+					<span>{readOnly ? '비어 있음' : '유물 선택'}</span>
 				</div>
 			)}
+		</>
+	)
+
+	const frameClassName = cn(
+		'border-grayscale-200 bg-card shadow-soft flex w-full flex-col gap-1.5 rounded-xl border p-3 text-left',
+		!relic && 'border-dashed',
+		isEditing && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
+	)
+
+	if (readOnly || !onOpen) {
+		return <div className={frameClassName}>{content}</div>
+	}
+
+	return (
+		<button
+			type="button"
+			onClick={onOpen}
+			aria-pressed={isEditing}
+			className={cn(
+				frameClassName,
+				'group cursor-pointer transition-colors',
+				'hover:border-grayscale-300 hover:bg-grayscale-50/70',
+				'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
+			)}
+		>
+			{content}
 		</button>
 	)
 }
