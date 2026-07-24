@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react'
 import GradePortrait from '@/features/tips/components/grade-portrait'
 import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
 import RelicAwakeningStepper from '@/features/tips/components/relic-awakening-stepper'
+import { ITEM_GRADE_SLOT_CLASS } from '@/features/tips/lib/item-grade.constants'
 import {
 	clampRelicAwakeningStage,
 	getRelicActivationCondition,
@@ -99,7 +100,8 @@ function RelicOwnershipGrid({ ownership, onOwnershipChange, readOnly = false, cl
 											key={relic.id}
 											className={cn(
 												'border-grayscale-200 bg-card flex flex-col gap-1.5 rounded-lg border p-2',
-												!owned && 'bg-grayscale-50'
+												// 보유 시에만 등급색 — 미보유는 회색 톤을 유지합니다.
+												owned ? ITEM_GRADE_SLOT_CLASS[relic.grade] : 'bg-grayscale-50'
 											)}
 										>
 											<div className="flex items-start gap-1.5">

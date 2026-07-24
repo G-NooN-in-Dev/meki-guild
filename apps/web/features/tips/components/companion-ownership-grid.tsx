@@ -15,6 +15,7 @@ import {
 	COMPANION_GRADE_TAB_CLASS,
 	COMPANIONS
 } from '@/features/tips/lib/companion-setup.constants'
+import { ITEM_GRADE_SLOT_CLASS } from '@/features/tips/lib/item-grade.constants'
 import type { Companion, CompanionGrade } from '@/features/tips/types/companion.type'
 import type { CompanionOwnershipStateMap } from '@/features/tips/types/companion-consulting.type'
 
@@ -107,7 +108,8 @@ function CompanionOwnershipGrid({
 											key={companion.id}
 											className={cn(
 												'border-grayscale-200 bg-card flex flex-col gap-1.5 rounded-lg border p-2',
-												!owned && 'bg-grayscale-50'
+												// 보유 시에만 등급색 — 미보유는 회색 톤을 유지합니다.
+												owned ? ITEM_GRADE_SLOT_CLASS[companion.grade] : 'bg-grayscale-50'
 											)}
 										>
 											<div className="flex items-start gap-1.5">

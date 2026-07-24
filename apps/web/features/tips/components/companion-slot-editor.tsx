@@ -18,6 +18,7 @@ import {
 	COMPANIONS,
 	resolveEquipEffects
 } from '@/features/tips/lib/companion-setup.constants'
+import { ITEM_GRADE_SLOT_CLASS, ITEM_GRADE_SLOT_HOVER_CLASS } from '@/features/tips/lib/item-grade.constants'
 import type { Companion, CompanionGrade, CompanionSetupSlot } from '@/features/tips/types/companion.type'
 import useMediaQuery from '@/hooks/use-media-query'
 
@@ -129,7 +130,13 @@ function CompanionSlotEditor({
 
 				<div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
 					{companion ? (
-						<div className="border-grayscale-200 bg-grayscale-50 flex flex-col gap-3 rounded-xl border p-3">
+						<div
+							className={cn(
+								'flex flex-col gap-3 rounded-xl border p-3',
+								// 보드 슬롯과 같은 등급 파스텔로 현재 선택 미리보기를 맞춥니다.
+								ITEM_GRADE_SLOT_CLASS[companion.grade]
+							)}
+						>
 							<div className="flex items-center gap-3">
 								<GradePortrait src={companion.imageSrc} alt={companion.name} grade={companion.grade} size="lg" />
 								<div className="min-w-0 space-y-1">
@@ -241,12 +248,13 @@ function CompanionGradeOptions({
 						disabled={disabled}
 						onClick={() => onSelect(item)}
 						className={cn(
-							'border-grayscale-200 flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm font-medium transition-colors',
-							'hover:border-grayscale-300 hover:bg-grayscale-50',
+							'flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm font-medium transition-colors',
+							ITEM_GRADE_SLOT_CLASS[item.grade],
+							ITEM_GRADE_SLOT_HOVER_CLASS[item.grade],
 							'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:outline-none',
 							'disabled:cursor-not-allowed disabled:opacity-35',
 							notAllowed && !selected && 'opacity-40 grayscale',
-							selected && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1'
+							selected && 'ring-grayscale-900/20 ring-2'
 						)}
 					>
 						<GradePortrait src={item.imageSrc} alt={item.name} grade={item.grade} size="sm" />

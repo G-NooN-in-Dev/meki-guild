@@ -32,3 +32,20 @@ export const ITEM_GRADE_RING_CLASS = {
 	unique: 'ring-pastel-yellow-400',
 	epic: 'ring-pastel-purple-400'
 } as const satisfies Record<ItemGrade, string>
+
+/**
+ * 슬롯 카드(동료·유물) 배경·테두리.
+ * 아이콘 ring만으로는 구분이 약해서, 장착 시 카드 전체에 같은 파스텔 톤을 입힙니다.
+ */
+export const ITEM_GRADE_SLOT_CLASS = {
+	legendary: 'border-pastel-green-300 bg-pastel-green-50',
+	unique: 'border-pastel-yellow-300 bg-pastel-yellow-50',
+	epic: 'border-pastel-purple-300 bg-pastel-purple-50'
+} as const satisfies Record<ItemGrade, string>
+
+/** 슬롯 카드 hover — 등급 배경을 덮어쓰지 않도록 톤만 살짝 올립니다. */
+export const ITEM_GRADE_SLOT_HOVER_CLASS = {
+	legendary: 'hover:border-pastel-green-400 hover:bg-pastel-green-100/80',
+	unique: 'hover:border-pastel-yellow-400 hover:bg-pastel-yellow-100/80',
+	epic: 'hover:border-pastel-purple-400 hover:bg-pastel-purple-100/80'
+} as const satisfies Record<ItemGrade, string>

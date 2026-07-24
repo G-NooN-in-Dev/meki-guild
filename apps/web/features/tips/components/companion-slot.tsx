@@ -6,6 +6,7 @@ import { PlusIcon } from 'lucide-react'
 
 import GradePortrait from '@/features/tips/components/grade-portrait'
 import { COMPANION_GRADE_BADGE_CLASS, COMPANION_GRADE_META } from '@/features/tips/lib/companion-setup.constants'
+import { ITEM_GRADE_SLOT_CLASS, ITEM_GRADE_SLOT_HOVER_CLASS } from '@/features/tips/lib/item-grade.constants'
 import type { Companion, CompanionEquipEffect, CompanionSetupSlot } from '@/features/tips/types/companion.type'
 
 type CompanionSlotProps = {
@@ -33,15 +34,18 @@ function CompanionSlot({
 	const isMain = slot.role === 'main'
 	const gradeMeta = companion ? COMPANION_GRADE_META[companion.grade] : null
 	const primaryEffect = equipEffects[0]
+	const grade = companion?.grade
 	const shellClassName = cn(
 		'group border-grayscale-200 bg-card shadow-soft flex w-full flex-col gap-1.5 rounded-xl border p-3 text-left',
 		!companion && 'border-dashed',
-		isEditing && 'border-grayscale-900 bg-grayscale-50 ring-grayscale-900/10 ring-1',
+		// 장착 시 등급 파스텔로 슬롯 전체를 칠해 아이콘 ring만 있을 때보다 구분을 쉽게 합니다.
+		grade && ITEM_GRADE_SLOT_CLASS[grade],
+		isEditing && 'ring-grayscale-900/20 ring-2',
 		isMain && 'md:p-4',
 		!readOnly &&
 			cn(
 				'cursor-pointer transition-colors',
-				'hover:border-grayscale-300 hover:bg-grayscale-50/70',
+				grade ? ITEM_GRADE_SLOT_HOVER_CLASS[grade] : 'hover:border-grayscale-300 hover:bg-grayscale-50/70',
 				'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
 				'[&_img]:cursor-pointer'
 			)
