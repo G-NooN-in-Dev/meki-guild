@@ -90,13 +90,15 @@ function CompanionPresetStatsFields({
 				{description ? <p className="text-grayscale-500 text-sm">{description}</p> : null}
 			</div>
 
-			<div className="border-grayscale-200 bg-card shadow-soft flex flex-col gap-3 rounded-xl border p-4">
+			<div className="border-grayscale-200 bg-card shadow-soft flex min-w-0 flex-col gap-3 rounded-xl border p-4">
 				{CONSULTING_PRESET_STAT_GROUPS.map((group) => {
 					const fields = getPresetStatFieldsByGroup(group.id)
-					const columnClass = fields.length === 3 ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2'
+					// 모바일 1열 → xs부터 2열. 긴 라벨+증감이 한 칸에서 겹치지 않게 합니다.
+					const columnClass =
+						fields.length === 3 ? 'grid-cols-1 xs:grid-cols-2 sm:grid-cols-3' : 'grid-cols-1 xs:grid-cols-2'
 
 					return (
-						<div key={group.id} className={cn('grid gap-3', columnClass)}>
+						<div key={group.id} className={cn('grid min-w-0 gap-3', columnClass)}>
 							{fields.map((field) => {
 								const value = stats[field.id]
 								const inputId = `preset-stat-${field.id}`
@@ -109,9 +111,10 @@ function CompanionPresetStatsFields({
 									const deltaLabel = baseStats !== undefined ? formatPresetStatDelta(delta, field.unit) : null
 
 									return (
-										<div key={field.id} className="flex items-baseline justify-between gap-2">
-											<span className="text-grayscale-600 text-sm">{field.label}</span>
-											<span className="flex items-baseline gap-1.5 tabular-nums">
+										// 2열 그리드 안에서도 라벨·수치가 가로로 싸우지 않도록 세로 배치합니다.
+										<div key={field.id} className="flex min-w-0 flex-col gap-0.5">
+											<span className="text-grayscale-600 min-w-0 text-sm break-keep">{field.label}</span>
+											<span className="flex flex-wrap items-baseline gap-1.5 tabular-nums">
 												<span className="text-grayscale-900 text-sm font-semibold">
 													{formatPresetStatValue(value, field.unit)}
 												</span>
@@ -132,7 +135,7 @@ function CompanionPresetStatsFields({
 								}
 
 								return (
-									<div key={field.id} className="flex flex-col gap-1.5">
+									<div key={field.id} className="flex min-w-0 flex-col gap-1.5">
 										<Label htmlFor={inputId}>{field.label}</Label>
 										<div className="relative">
 											<Input

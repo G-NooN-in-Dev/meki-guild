@@ -176,8 +176,8 @@ function CompanionSetupBoard({
 					onOpen={readOnly ? undefined : () => setEditingSlotId(mainSlot.id)}
 				/>
 
-				{/* 모바일부터 2열, 넓은 화면에서 3열 */}
-				<div className="grid grid-cols-2 gap-2 lg:grid-cols-3">
+				{/* 매우 좁은 화면은 1열(효과 문구 가독성), xxs부터 2열, lg에서 3열 */}
+				<div className="xxs:grid-cols-2 grid grid-cols-1 gap-2 lg:grid-cols-3">
 					{subSlots.map((slot) => {
 						const { loadout, companion, equipEffects } = getSlotView(slot.id)
 						return (

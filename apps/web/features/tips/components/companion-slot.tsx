@@ -69,9 +69,10 @@ function CompanionSlot({
 					<div className="min-w-0 flex-1 space-y-1">
 						<div className="flex flex-wrap items-center gap-1.5">
 							<Badge className={COMPANION_GRADE_BADGE_CLASS[companion.grade]}>{gradeMeta.label}</Badge>
-							<p className="text-grayscale-900 text-sm font-semibold">{companion.name}</p>
+							{/* 좁은 2열 슬롯에서도 이름이 잘리지 않도록 줄바꿈 허용 */}
+							<p className="text-grayscale-900 min-w-0 text-sm font-semibold break-keep">{companion.name}</p>
 						</div>
-						<p className="text-grayscale-600 truncate text-xs md:text-sm">{primaryEffect.displayText}</p>
+						<p className="text-grayscale-600 text-xs break-keep md:text-sm">{primaryEffect.displayText}</p>
 					</div>
 				</div>
 			) : (

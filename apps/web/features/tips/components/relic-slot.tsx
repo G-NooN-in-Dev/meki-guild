@@ -50,9 +50,11 @@ function RelicSlot({
 					<div className="min-w-0 flex-1 space-y-1">
 						<div className="flex flex-wrap items-center gap-1.5">
 							<Badge className={RELIC_GRADE_BADGE_CLASS[relic.grade]}>{RELIC_GRADE_META[relic.grade].label}</Badge>
-							<p className="text-grayscale-900 text-sm font-semibold">{relic.name}</p>
+							{/* 좁은 슬롯에서도 유물 이름이 잘리지 않도록 줄바꿈 허용 */}
+							<p className="text-grayscale-900 min-w-0 text-sm font-semibold break-keep">{relic.name}</p>
 						</div>
-						<p className="text-grayscale-600 line-clamp-2 text-xs md:text-sm">
+						{/* 추천 조합 조회 시 효과 문구가 잘리지 않도록 전체 표시 */}
+						<p className="text-grayscale-600 text-xs break-keep md:text-sm">
 							{resolvedEffects?.lines[0] ?? '효과 정보가 없습니다.'}
 						</p>
 						{potentialIds.length > 0 ? (
@@ -66,7 +68,11 @@ function RelicSlot({
 									return (
 										<Badge
 											key={`${id}-${index}`}
-											className={cn('max-w-full truncate text-[10px]', RELIC_POTENTIAL_GRADE_BADGE_CLASS[option.grade])}
+											className={cn(
+												// truncate 대신 줄바꿈 — 잠재옵션 문구가 배지 밖으로 잘리지 않게 합니다.
+												'max-w-full text-left text-[10px] leading-snug break-keep whitespace-normal',
+												RELIC_POTENTIAL_GRADE_BADGE_CLASS[option.grade]
+											)}
 										>
 											{option.displayText}
 										</Badge>
