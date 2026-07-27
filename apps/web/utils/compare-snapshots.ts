@@ -302,9 +302,13 @@ function buildComparison(
 	previous: ParsedGuildMember | null,
 	status: MemberComparisonStatus
 ): GuildMemberComparison {
+	const previousJob = previous?.job ?? null
+
 	return {
 		name: current.name,
 		job: current.job,
+		previousJob,
+		jobChanged: previousJob !== null && previousJob !== current.job,
 		status,
 		level: createLevelDelta(current, previous),
 		combatPower: createNumericDelta(
@@ -363,6 +367,8 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 	return {
 		name: previous.name,
 		job: previous.job,
+		previousJob: previous.job,
+		jobChanged: false,
 		status: 'left',
 		level: {
 			current: 0,

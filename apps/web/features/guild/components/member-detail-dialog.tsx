@@ -210,10 +210,22 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 					<DialogTitle className="flex flex-wrap items-center gap-1.5">
 						<MemberDisplayName name={comparison.name} />
 						<MemberStatusBadge status={comparison.status} />
-						<JobBadge job={comparison.job} />
+						{comparison.jobChanged && comparison.previousJob ? (
+							<span className="inline-flex flex-wrap items-center gap-1">
+								<JobBadge job={comparison.previousJob} />
+								<span className="text-grayscale-400 text-xs font-normal">→</span>
+								<JobBadge job={comparison.job} />
+							</span>
+						) : (
+							<JobBadge job={comparison.job} />
+						)}
 					</DialogTitle>
 					{/* DialogDescription은 a11y용으로 숨기고, 직업은 색상 Badge로 표시 */}
-					<DialogDescription className="sr-only">{comparison.job}</DialogDescription>
+					<DialogDescription className="sr-only">
+						{comparison.jobChanged && comparison.previousJob
+							? `직업 변경: ${comparison.previousJob}에서 ${comparison.job}로`
+							: comparison.job}
+					</DialogDescription>
 				</DialogHeader>
 				{/* 회색 배경 + sticky 헤더로 숫자 대비·스크롤 가독성 확보. 뷰포트 대비 높이로 데이터가 많아도 편하게 스크롤 */}
 				<div className="border-grayscale-200 bg-grayscale-100 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">

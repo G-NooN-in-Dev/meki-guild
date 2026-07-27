@@ -85,6 +85,10 @@ export type MemberComparisonStatus = 'active' | 'new' | 'left'
 export type GuildMemberComparison = {
 	name: string
 	job: string
+	/** 직전 주 직업. 신규·탈퇴·직전 데이터 없으면 null */
+	previousJob: string | null
+	/** 직전 주 대비 직업이 바뀌었는지 */
+	jobChanged: boolean
 	status: MemberComparisonStatus
 	level: LevelDelta
 	combatPower: NumericDelta
