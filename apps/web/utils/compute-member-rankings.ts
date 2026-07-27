@@ -9,6 +9,8 @@ export type RankingMap = Record<string, number>
 /** 순위 표시 대상 항목들의 등수 모음. 레벨은 순위 기준이 아니므로 제외. */
 export type MemberRankings = {
 	combatPower: RankingMap
+	/** 토벌전 등수. 숫자가 작을수록 상위(1위가 최고) */
+	expeditionPlacement: RankingMap
 	expeditionScore: RankingMap
 	rivalry: RankingMap
 	training: RankingMap
@@ -23,6 +25,7 @@ export type MemberRankings = {
 export function computeMemberRankings(members: ParsedGuildMember[]): MemberRankings {
 	return {
 		combatPower: computeRank(members, (m) => (m.hasCombatPower ? m.combatPower : null)),
+		expeditionPlacement: computeRankAsc(members, (m) => (m.expedition.hasPlacement ? m.expedition.placement : null)),
 		expeditionScore: computeRank(members, (m) => (m.expedition.hasScore ? m.expedition.score : null)),
 		rivalry: computeRank(members, (m) => (m.hasRivalry ? m.rivalry : null)),
 		training: computeRank(members, (m) => (m.hasTraining ? m.training : null)),
@@ -45,6 +48,32 @@ function computeRank(members: ParsedGuildMember[], getValue: (m: ParsedGuildMemb
 	for (const entry of entries) {
 		if (prevValue !== null && entry.value === prevValue) {
 			// 동점 처리: 직전과 같은 등수
+			map[entry.name] = prevRank
+		} else {
+			map[entry.name] = rank
+			prevRank = rank
+		}
+		prevValue = entry.value
+		rank++
+	}
+
+	return map
+}
+
+/** 값이 작은 순서로 등수를 매깁니다. 토벌전 등수처럼 숫자가 작을수록 상위인 항목에 사용합니다. */
+function computeRankAsc(members: ParsedGuildMember[], getValue: (m: ParsedGuildMember) => number | null): RankingMap {
+	const entries = members
+		.map((m) => ({ name: m.name, value: getValue(m) }))
+		.filter((e): e is { name: string; value: number } => e.value !== null)
+		.sort((a, b) => a.value - b.value)
+
+	const map: RankingMap = {}
+	let rank = 1
+	let prevRank = 1
+	let prevValue: number | null = null
+
+	for (const entry of entries) {
+		if (prevValue !== null && entry.value === prevValue) {
 			map[entry.name] = prevRank
 		} else {
 			map[entry.name] = rank

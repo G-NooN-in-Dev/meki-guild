@@ -38,6 +38,11 @@ type CompareRow = {
 	opponentRankLabel?: string | null
 }
 
+type RankLead = {
+	leftLeadLabel: string | null
+	rightLeadLabel: string | null
+}
+
 /** 비교 행 그리드 — 모바일·데스크탑 공통 3열, 항목 열 수직 중앙 정렬 */
 const compareRowGridClassName =
 	'grid min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-2 md:grid-cols-3 md:gap-x-10'
@@ -114,6 +119,38 @@ function getWinnerDiffPercentLabel(
 	return diffPercentLabel
 }
 
+/** `N위` 라벨에서 숫자만 꺼냅니다. */
+function parseRankLabel(rankLabel: string | null | undefined): number | null {
+	if (!rankLabel) {
+		return null
+	}
+
+	const numeric = Number(rankLabel.replace('위', '').trim())
+	return Number.isFinite(numeric) && numeric > 0 ? numeric : null
+}
+
+/**
+ * 양쪽 모두 순위가 있을 때, 더 높은 쪽(숫자가 작은 쪽) 라벨 옆에
+ * `▲차이`를 보여주기 위한 좌/우 표시값을 계산합니다.
+ */
+function getRankLead(rankSelf: string | null | undefined, rankOpponent: string | null | undefined): RankLead {
+	const selfRank = parseRankLabel(rankSelf)
+	const opponentRank = parseRankLabel(rankOpponent)
+
+	if (selfRank === null || opponentRank === null) {
+		return { leftLeadLabel: null, rightLeadLabel: null }
+	}
+
+	const rankGap = Math.abs(selfRank - opponentRank)
+	if (rankGap === 0) {
+		return { leftLeadLabel: null, rightLeadLabel: null }
+	}
+
+	return selfRank < opponentRank
+		? { leftLeadLabel: `▲${rankGap}`, rightLeadLabel: null }
+		: { leftLeadLabel: null, rightLeadLabel: `▲${rankGap}` }
+}
+
 type CompareValueProps = {
 	side: CompareSide
 	value: string
@@ -166,14 +203,22 @@ function CompareValue({
 type CompareLabelProps = {
 	label: string
 	contentUpdatedAt?: string | null
+	leftLeadLabel?: string | null
+	rightLeadLabel?: string | null
 }
 
-function CompareLabel({ label, contentUpdatedAt }: CompareLabelProps) {
+function CompareLabel({ label, contentUpdatedAt, leftLeadLabel, rightLeadLabel }: CompareLabelProps) {
+	const leadPlaceholder = <span aria-hidden className="w-6 shrink-0" />
+
 	// 기준일이 있으면 라벨 아래에 상시 표시 (Tooltip hover 대신)
 	if (contentUpdatedAt !== undefined) {
 		return (
 			<div className="flex flex-col items-center gap-0.5 px-1 text-center">
-				<span className="text-grayscale-500 text-xs">{label}</span>
+				<div className="grid w-full grid-cols-[24px_auto_24px] place-items-center gap-1">
+					{leftLeadLabel ? <GrowthDelta value={leftLeadLabel} className="shrink-0 text-[10px]" /> : leadPlaceholder}
+					<span className="text-grayscale-500 text-xs">{label}</span>
+					{rightLeadLabel ? <GrowthDelta value={rightLeadLabel} className="shrink-0 text-[10px]" /> : leadPlaceholder}
+				</div>
 				<span className="text-grayscale-400 text-[10px] leading-tight">
 					{getGuildContentCriteriaLabel(contentUpdatedAt)}
 				</span>
@@ -181,7 +226,13 @@ function CompareLabel({ label, contentUpdatedAt }: CompareLabelProps) {
 		)
 	}
 
-	return <span className="text-grayscale-500 px-1 text-xs">{label}</span>
+	return (
+		<div className="grid w-full grid-cols-[24px_auto_24px] place-items-center gap-1 px-1">
+			{leftLeadLabel ? <GrowthDelta value={leftLeadLabel} className="shrink-0 text-[10px]" /> : leadPlaceholder}
+			<span className="text-grayscale-500 text-xs">{label}</span>
+			{rightLeadLabel ? <GrowthDelta value={rightLeadLabel} className="shrink-0 text-[10px]" /> : leadPlaceholder}
+		</div>
+	)
 }
 
 type CompareRowItemProps = {
@@ -189,6 +240,8 @@ type CompareRowItemProps = {
 }
 
 function CompareRowItem({ row }: CompareRowItemProps) {
+	const rankLead = getRankLead(row.selfRankLabel, row.opponentRankLabel)
+
 	return (
 		<div className="border-grayscale-100 border-b px-3 py-3 last:border-b-0 md:px-4 md:py-2.5">
 			<div className={compareRowGridClassName}>
@@ -202,7 +255,12 @@ function CompareRowItem({ row }: CompareRowItemProps) {
 					rankLabel={row.selfRankLabel}
 				/>
 				<div className="flex items-center justify-center self-stretch px-0.5 md:px-1">
-					<CompareLabel label={row.label} contentUpdatedAt={row.contentUpdatedAt} />
+					<CompareLabel
+						label={row.label}
+						contentUpdatedAt={row.contentUpdatedAt}
+						leftLeadLabel={rankLead.leftLeadLabel}
+						rightLeadLabel={rankLead.rightLeadLabel}
+					/>
 				</div>
 				<CompareValue
 					side="opponent"
@@ -271,7 +329,13 @@ function buildCompareRows(comparison: MemberVsMemberComparison, rankings: Member
 					? comparison.expeditionPlacement.diffLabel
 					: null,
 			winner: comparison.expeditionPlacement.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current,
+			selfRankLabel: comparison.expeditionPlacement.leftHasValue
+				? formatRankLabel(rankings.expeditionPlacement, leftName)
+				: null,
+			opponentRankLabel: comparison.expeditionPlacement.rightHasValue
+				? formatRankLabel(rankings.expeditionPlacement, rightName)
+				: null
 		},
 		{
 			label: '토벌전 점수',

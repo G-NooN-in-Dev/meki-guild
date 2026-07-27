@@ -46,7 +46,8 @@ function formatLevelDiff(diff: number): string | null {
 		return null
 	}
 
-	return diff > 0 ? `+${diff}` : `${diff}`
+	// 1vs1 전 항목에서 증감을 동일하게 읽도록 레벨도 ▲/▼ 표기를 사용합니다.
+	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
 }
 
 /**
