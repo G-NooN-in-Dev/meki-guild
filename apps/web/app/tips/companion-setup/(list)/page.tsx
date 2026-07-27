@@ -1,5 +1,9 @@
 import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 
+import PageLoading from '@/components/page-loading'
+import PageShell from '@/components/page-shell'
+import ConsultingHubHeader from '@/features/tips/components/consulting-hub-header'
 import { getConsultingListPath } from '@/features/tips/lib/companion-consulting.constants'
 import CompanionConsultingHubSection from '@/features/tips/sections/companion-consulting-hub.section'
 import { listConsultingPosts } from '@/libs/companion-consulting.server'
@@ -22,7 +26,8 @@ function parseListPage(raw: string | string[] | undefined) {
 	return page
 }
 
-async function CompanionSetupTipPage({ searchParams }: CompanionSetupTipPageProps) {
+/** DB 목록만 담당 — Suspense 안에서 await 합니다. */
+async function CompanionSetupTipContent({ searchParams }: CompanionSetupTipPageProps) {
 	const { page: rawPage } = await searchParams
 	const requestedPage = parseListPage(rawPage)
 
@@ -49,19 +54,35 @@ async function CompanionSetupTipPage({ searchParams }: CompanionSetupTipPageProp
 	}
 
 	return (
-		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
-			<main className="flex w-full flex-1">
-				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
-					<CompanionConsultingHubSection
-						posts={posts}
-						page={page}
-						totalPages={totalPages}
-						totalCount={totalCount}
-						loadError={loadError}
-					/>
-				</div>
-			</main>
-		</div>
+		<CompanionConsultingHubSection
+			posts={posts}
+			page={page}
+			totalPages={totalPages}
+			totalCount={totalCount}
+			loadError={loadError}
+		/>
+	)
+}
+
+/**
+ * 헤더는 즉시 렌더하고, 목록만 Suspense로 스트리밍합니다.
+ * 라우트 진입 시에는 loading.tsx가 같은 골격으로 즉시 전환을 담당합니다.
+ */
+function CompanionSetupTipPage({ searchParams }: CompanionSetupTipPageProps) {
+	return (
+		<PageShell>
+			<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
+				<ConsultingHubHeader
+					badge="동료"
+					title="동료 세팅 컨설팅"
+					description="보유 현황과 현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유해보세요."
+					newHref="/tips/companion-setup/new"
+				/>
+				<Suspense fallback={<PageLoading variant="hub-body" />}>
+					<CompanionSetupTipContent searchParams={searchParams} />
+				</Suspense>
+			</section>
+		</PageShell>
 	)
 }
 

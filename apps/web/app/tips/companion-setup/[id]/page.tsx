@@ -1,5 +1,8 @@
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
+import PageLoading from '@/components/page-loading'
+import PageShell from '@/components/page-shell'
 import { ConsultingValidationError } from '@/features/tips/lib/companion-consulting.validation'
 import CompanionConsultingDetailSection from '@/features/tips/sections/companion-consulting-detail.section'
 import { getConsultingPostByShortId, listConsultingComments } from '@/libs/companion-consulting.server'
@@ -10,7 +13,7 @@ type CompanionConsultingDetailPageProps = {
 	params: Promise<{ id: string }>
 }
 
-async function CompanionConsultingDetailPage({ params }: CompanionConsultingDetailPageProps) {
+async function CompanionConsultingDetailContent({ params }: CompanionConsultingDetailPageProps) {
 	const { id } = await params
 
 	let post = null
@@ -33,14 +36,16 @@ async function CompanionConsultingDetailPage({ params }: CompanionConsultingDeta
 		notFound()
 	}
 
+	return <CompanionConsultingDetailSection post={post} comments={comments} />
+}
+
+function CompanionConsultingDetailPage({ params }: CompanionConsultingDetailPageProps) {
 	return (
-		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
-			<main className="flex w-full flex-1">
-				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
-					<CompanionConsultingDetailSection post={post} comments={comments} />
-				</div>
-			</main>
-		</div>
+		<PageShell>
+			<Suspense fallback={<PageLoading variant="detail" />}>
+				<CompanionConsultingDetailContent params={params} />
+			</Suspense>
+		</PageShell>
 	)
 }
 

@@ -1,5 +1,9 @@
 import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 
+import PageLoading from '@/components/page-loading'
+import PageShell from '@/components/page-shell'
+import ConsultingHubHeader from '@/features/tips/components/consulting-hub-header'
 import { getRelicConsultingListPath } from '@/features/tips/lib/relic-consulting.constants'
 import RelicConsultingHubSection from '@/features/tips/sections/relic-consulting-hub.section'
 import { listRelicConsultingPosts } from '@/libs/relic-consulting.server'
@@ -22,7 +26,8 @@ function parseListPage(raw: string | string[] | undefined) {
 	return page
 }
 
-async function RelicSetupTipPage({ searchParams }: RelicSetupTipPageProps) {
+/** DB 목록만 담당 — Suspense 안에서 await 합니다. */
+async function RelicSetupTipContent({ searchParams }: RelicSetupTipPageProps) {
 	const { page: rawPage } = await searchParams
 	const requestedPage = parseListPage(rawPage)
 
@@ -43,25 +48,36 @@ async function RelicSetupTipPage({ searchParams }: RelicSetupTipPageProps) {
 		loadError = '목록을 불러오지 못했습니다. MongoDB 연결(MONGODB_URI)을 확인해 주세요.'
 	}
 
-	// redirect는 throw라서 위 try/catch 밖에서 호출합니다.
 	if (!loadError && totalPages > 0 && requestedPage !== page) {
 		redirect(getRelicConsultingListPath(page))
 	}
 
 	return (
-		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
-			<main className="flex w-full flex-1">
-				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
-					<RelicConsultingHubSection
-						posts={posts}
-						page={page}
-						totalPages={totalPages}
-						totalCount={totalCount}
-						loadError={loadError}
-					/>
-				</div>
-			</main>
-		</div>
+		<RelicConsultingHubSection
+			posts={posts}
+			page={page}
+			totalPages={totalPages}
+			totalCount={totalCount}
+			loadError={loadError}
+		/>
+	)
+}
+
+function RelicSetupTipPage({ searchParams }: RelicSetupTipPageProps) {
+	return (
+		<PageShell>
+			<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
+				<ConsultingHubHeader
+					badge="유물"
+					title="유물 세팅 컨설팅"
+					description="보유·각성·현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유해보세요."
+					newHref="/tips/relic-setup/new"
+				/>
+				<Suspense fallback={<PageLoading variant="hub-body" />}>
+					<RelicSetupTipContent searchParams={searchParams} />
+				</Suspense>
+			</section>
+		</PageShell>
 	)
 }
 

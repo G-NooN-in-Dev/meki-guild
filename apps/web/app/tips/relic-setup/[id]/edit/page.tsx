@@ -1,5 +1,8 @@
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
+import PageLoading from '@/components/page-loading'
+import PageShell from '@/components/page-shell'
 import { RelicConsultingValidationError } from '@/features/tips/lib/relic-consulting.validation'
 import RelicConsultingNewSection from '@/features/tips/sections/relic-consulting-new.section'
 import { getRelicConsultingPostByShortId } from '@/libs/relic-consulting.server'
@@ -11,7 +14,7 @@ type RelicConsultingEditPageProps = {
 }
 
 /** 현황 게시글 수정 — 작성 폼을 초기값으로 재사용합니다. */
-async function RelicConsultingEditPage({ params }: RelicConsultingEditPageProps) {
+async function RelicConsultingEditContent({ params }: RelicConsultingEditPageProps) {
 	const { id } = await params
 
 	let post = null
@@ -30,14 +33,16 @@ async function RelicConsultingEditPage({ params }: RelicConsultingEditPageProps)
 		notFound()
 	}
 
+	return <RelicConsultingNewSection initialPost={post} />
+}
+
+function RelicConsultingEditPage({ params }: RelicConsultingEditPageProps) {
 	return (
-		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
-			<main className="flex w-full flex-1">
-				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
-					<RelicConsultingNewSection initialPost={post} />
-				</div>
-			</main>
-		</div>
+		<PageShell>
+			<Suspense fallback={<PageLoading variant="detail" />}>
+				<RelicConsultingEditContent params={params} />
+			</Suspense>
+		</PageShell>
 	)
 }
 

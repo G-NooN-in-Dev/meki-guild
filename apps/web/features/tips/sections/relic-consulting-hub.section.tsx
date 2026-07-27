@@ -1,6 +1,5 @@
 'use client'
 
-import { Badge } from '@shared/ui/badge'
 import { Button, buttonVariants } from '@shared/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@shared/ui/empty'
 import { Input } from '@shared/ui/input'
@@ -13,12 +12,14 @@ import {
 	PaginationNext,
 	PaginationPrevious
 } from '@shared/ui/pagination'
+import { Spinner } from '@shared/ui/spinner'
 import { cn } from '@shared/ui/utils'
-import { ArrowLeftIcon, ArrowRightIcon, PlusIcon, SearchIcon } from 'lucide-react'
+import { ArrowRightIcon, SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type FormEvent, useMemo, useState, useTransition } from 'react'
 
+import LinkPendingHint, { LinkPendingIcon } from '@/components/link-pending-hint'
 import { buildConsultingPaginationItems, CONSULTING_SHORT_ID_LENGTH } from '@/features/tips/lib/consulting.constants'
 import { getRelicConsultingListPath, getRelicConsultingPostPath } from '@/features/tips/lib/relic-consulting.constants'
 import type { RelicConsultingPost } from '@/features/tips/types/relic-consulting.type'
@@ -47,7 +48,10 @@ function formatCreatedAt(iso: string) {
 	}).format(date)
 }
 
-/** 유물 세팅 컨설팅 허브 — 목록 + ID로 열기 + 작성 */
+/**
+ * 유물 세팅 컨설팅 허브 본문 — 목록 + ID로 열기.
+ * 제목 헤더는 페이지(Suspense 바깥)에서 렌더합니다.
+ */
 function RelicConsultingHubSection({
 	posts,
 	page,
@@ -78,37 +82,7 @@ function RelicConsultingHubSection({
 	}
 
 	return (
-		<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
-			<div className="flex flex-col gap-3">
-				<Link
-					href="/tips"
-					className={cn(
-						'text-grayscale-600 hover:text-grayscale-900 inline-flex w-fit items-center gap-1.5 text-sm font-medium transition-colors'
-					)}
-				>
-					<ArrowLeftIcon className="size-4" />
-					정보 / 팁 목록
-				</Link>
-
-				<header className="flex flex-col gap-2">
-					<Badge variant="secondary" className="w-fit">
-						유물
-					</Badge>
-					<div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-						<div className="space-y-2">
-							<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">유물 세팅 컨설팅</h1>
-							<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
-								보유·각성·현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유해보세요.
-							</p>
-						</div>
-						<Link href="/tips/relic-setup/new" className={cn(buttonVariants(), 'shrink-0')}>
-							<PlusIcon className="size-4" />
-							컨설팅 요청하기
-						</Link>
-					</div>
-				</header>
-			</div>
-
+		<div className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
 			<form
 				onSubmit={handleLookup}
 				className="border-grayscale-200 bg-card shadow-soft flex flex-col gap-2 rounded-xl border p-4 sm:flex-row sm:items-end"
@@ -125,12 +99,13 @@ function RelicConsultingHubSection({
 						className="font-mono tracking-wider uppercase"
 						autoComplete="off"
 						spellCheck={false}
+						disabled={isPending}
 					/>
 					{lookupError ? <p className="text-destructive text-xs">{lookupError}</p> : null}
 				</div>
 				<Button type="submit" variant="secondary" disabled={isPending} className="shrink-0">
-					<SearchIcon className="size-4" />
-					열기
+					{isPending ? <Spinner className="size-4" /> : <SearchIcon className="size-4" />}
+					{isPending ? '이동 중…' : '열기'}
 				</Button>
 			</form>
 
@@ -142,8 +117,9 @@ function RelicConsultingHubSection({
 						<EmptyTitle>아직 올라온 요청이 없습니다</EmptyTitle>
 						<EmptyDescription>보유·세팅을 올리면 여기에서 목록으로 확인할 수 있습니다.</EmptyDescription>
 					</EmptyHeader>
-					<Link href="/tips/relic-setup/new" className={buttonVariants()}>
+					<Link href="/tips/relic-setup/new" className={cn(buttonVariants(), 'inline-flex items-center gap-1.5')}>
 						첫 컨설팅 요청하기
+						<LinkPendingHint className="text-primary-foreground" />
 					</Link>
 				</Empty>
 			) : (
@@ -170,7 +146,9 @@ function RelicConsultingHubSection({
 											{formatCreatedAt(post.createdAt)} · 댓글 {post.commentCount}개
 										</p>
 									</div>
-									<ArrowRightIcon className="text-grayscale-400 size-4 shrink-0" />
+									<LinkPendingIcon>
+										<ArrowRightIcon className="text-grayscale-400 size-4" />
+									</LinkPendingIcon>
 								</Link>
 							</li>
 						))}
@@ -213,7 +191,7 @@ function RelicConsultingHubSection({
 					) : null}
 				</div>
 			)}
-		</section>
+		</div>
 	)
 }
 

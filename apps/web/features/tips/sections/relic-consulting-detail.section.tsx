@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
+import LinkPendingHint from '@/components/link-pending-hint'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
 import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
 import ConsultingShareBar from '@/features/tips/components/consulting-share-bar'
@@ -158,8 +159,9 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 
 			setDeletePostOpen(false)
 			toast.success('게시글이 삭제되었습니다.')
+			// 목록은 force-dynamic이라 push만으로 충분합니다.
+			// refresh를 같이 호출하면 삭제된 상세를 다시 fetch하며 이동이 깨질 수 있습니다.
 			router.push('/tips/relic-setup')
-			router.refresh()
 		} finally {
 			setIsPending(false)
 		}
@@ -264,6 +266,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 				>
 					<ArrowLeftIcon className="size-4" />
 					목록으로 돌아가기
+					<LinkPendingHint />
 				</Link>
 
 				<header className="flex flex-col gap-2">

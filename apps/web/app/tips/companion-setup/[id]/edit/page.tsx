@@ -1,5 +1,8 @@
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
+import PageLoading from '@/components/page-loading'
+import PageShell from '@/components/page-shell'
 import { ConsultingValidationError } from '@/features/tips/lib/companion-consulting.validation'
 import CompanionConsultingNewSection from '@/features/tips/sections/companion-consulting-new.section'
 import { getConsultingPostByShortId } from '@/libs/companion-consulting.server'
@@ -11,7 +14,7 @@ type CompanionConsultingEditPageProps = {
 }
 
 /** 현황 게시글 수정 — 작성 폼을 초기값으로 재사용합니다. */
-async function CompanionConsultingEditPage({ params }: CompanionConsultingEditPageProps) {
+async function CompanionConsultingEditContent({ params }: CompanionConsultingEditPageProps) {
 	const { id } = await params
 
 	let post = null
@@ -31,14 +34,16 @@ async function CompanionConsultingEditPage({ params }: CompanionConsultingEditPa
 		notFound()
 	}
 
+	return <CompanionConsultingNewSection initialPost={post} />
+}
+
+function CompanionConsultingEditPage({ params }: CompanionConsultingEditPageProps) {
 	return (
-		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
-			<main className="flex w-full flex-1">
-				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
-					<CompanionConsultingNewSection initialPost={post} />
-				</div>
-			</main>
-		</div>
+		<PageShell>
+			<Suspense fallback={<PageLoading variant="detail" />}>
+				<CompanionConsultingEditContent params={params} />
+			</Suspense>
+		</PageShell>
 	)
 }
 

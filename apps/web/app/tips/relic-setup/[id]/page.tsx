@@ -1,5 +1,8 @@
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
+import PageLoading from '@/components/page-loading'
+import PageShell from '@/components/page-shell'
 import { RelicConsultingValidationError } from '@/features/tips/lib/relic-consulting.validation'
 import RelicConsultingDetailSection from '@/features/tips/sections/relic-consulting-detail.section'
 import { getRelicConsultingPostByShortId, listRelicConsultingComments } from '@/libs/relic-consulting.server'
@@ -10,7 +13,7 @@ type RelicConsultingDetailPageProps = {
 	params: Promise<{ id: string }>
 }
 
-async function RelicConsultingDetailPage({ params }: RelicConsultingDetailPageProps) {
+async function RelicConsultingDetailContent({ params }: RelicConsultingDetailPageProps) {
 	const { id } = await params
 
 	let post = null
@@ -33,14 +36,16 @@ async function RelicConsultingDetailPage({ params }: RelicConsultingDetailPagePr
 		notFound()
 	}
 
+	return <RelicConsultingDetailSection post={post} comments={comments} />
+}
+
+function RelicConsultingDetailPage({ params }: RelicConsultingDetailPageProps) {
 	return (
-		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
-			<main className="flex w-full flex-1">
-				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
-					<RelicConsultingDetailSection post={post} comments={comments} />
-				</div>
-			</main>
-		</div>
+		<PageShell>
+			<Suspense fallback={<PageLoading variant="detail" />}>
+				<RelicConsultingDetailContent params={params} />
+			</Suspense>
+		</PageShell>
 	)
 }
 

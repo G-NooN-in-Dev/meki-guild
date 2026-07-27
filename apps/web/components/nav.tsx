@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
+import LinkPendingHint from '@/components/link-pending-hint'
 import { TIP_ENTRIES } from '@/features/tips/lib/tips-registry.constants'
 
 type NavChildLink = {
@@ -101,11 +102,12 @@ function MobileNavGroup({
 					href={item.href}
 					onClick={() => closeSheetAfterNavigate(onNavigate)}
 					className={cn(
-						'hover:bg-grayscale-50 min-w-0 flex-1 rounded-md px-3 py-2.5 transition-colors',
+						'hover:bg-grayscale-50 inline-flex min-w-0 flex-1 items-center gap-1.5 rounded-md px-3 py-2.5 transition-colors',
 						parentActive ? 'text-grayscale-900 bg-grayscale-50 font-semibold' : 'hover:text-grayscale-900'
 					)}
 				>
 					{item.label}
+					<LinkPendingHint />
 				</Link>
 				<CollapsibleTrigger
 					aria-label={`${item.label} 하위 메뉴 ${open ? '접기' : '펼치기'}`}
@@ -128,13 +130,14 @@ function MobileNavGroup({
 							href={child.href}
 							onClick={() => closeSheetAfterNavigate(onNavigate)}
 							className={cn(
-								'hover:bg-grayscale-50 rounded-md px-3 py-2 text-sm transition-colors',
+								'hover:bg-grayscale-50 inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors',
 								childActive
 									? 'text-grayscale-900 bg-grayscale-50 font-semibold'
 									: 'text-grayscale-600 hover:text-grayscale-900'
 							)}
 						>
 							{child.label}
+							<LinkPendingHint />
 						</Link>
 					)
 				})}
@@ -189,21 +192,19 @@ function NavItems({ orientation, onNavigate }: NavItemsProps) {
 							onNavigate?.()
 						}}
 						className={cn(
-							'relative transition-colors',
+							'relative inline-flex items-center gap-1.5 transition-colors',
 							isVertical
 								? cn(
 										'hover:bg-grayscale-50 w-full rounded-md px-3 py-2.5',
 										active ? 'text-grayscale-900 bg-grayscale-50 font-semibold' : 'hover:text-grayscale-900'
 									)
-								: cn(
-										'inline-block',
-										active
-											? 'text-grayscale-900 after:bg-grayscale-900 font-semibold after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:mt-1 after:block after:h-0.5 after:content-[""]'
-											: 'hover:text-grayscale-900'
-									)
+								: active
+									? 'text-grayscale-900 after:bg-grayscale-900 font-semibold after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:mt-1 after:block after:h-0.5 after:content-[""]'
+									: 'hover:text-grayscale-900'
 						)}
 					>
 						{item.label}
+						<LinkPendingHint />
 					</Link>
 				)
 			})}
