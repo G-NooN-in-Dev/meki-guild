@@ -127,8 +127,8 @@
 				"placement": 373,
 				"score": "1085억 2597만"
 			},
-			"rivalry": "",
-			"training": ""
+			"rivalry": "0",
+			"training": "0"
 		},
 		{
 			"name": "부귀창귀",
@@ -362,7 +362,7 @@
 				"score": "324억 2918만"
 			},
 			"rivalry": "177억 1648만",
-			"training": ""
+			"training": "0"
 		},
 		{
 			"name": "휘언",
