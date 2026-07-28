@@ -8,9 +8,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { UsersIcon } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
+import { GrowthDelta } from '@/features/guild/components/growth-delta'
+import JobBadge from '@/features/guild/components/job-badge'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { getJobClassLineBadgeClass, getJobTextClass } from '@/libs/job-class.constants'
+import { getJobClassLineBadgeClass } from '@/libs/job-class.constants'
 import { calculateJobDistribution, type JobCountSortDirection, sortJobDistributionRows } from '@/utils/job-distribution'
+
+/** 직업 인원 증감 라벨. 증가=▲, 감소=▼ (레벨·순위와 동일 표기) */
+function formatJobCountDelta(diff: number): string {
+	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
+}
 
 type JobDistributionGuideProps = {
 	comparisons: GuildMemberComparison[]
@@ -42,25 +49,24 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 					</Button>
 				}
 			/>
-			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-lg sm:gap-6 sm:p-6">
+			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-lg sm:p-6">
 				<DialogHeader>
 					<DialogTitle>길드 직업 분포 (총 {distribution.totalMembers}명)</DialogTitle>
 					<DialogDescription hidden />
 				</DialogHeader>
-				{/* 순백 배경은 pastel text와 대비가 약해, 살짝 톤 내린 회색 배경으로 가독성을 맞춤 */}
-				<div className="border-grayscale-200 bg-grayscale-100 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">
+				<div className="border-grayscale-200 bg-grayscale-50 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">
 					<Table>
-						<TableHeader>
-							<TableRow className="bg-grayscale-200/70 hover:bg-grayscale-200/70 border-grayscale-200">
-								<TableHead className="text-grayscale-600 w-24">계열</TableHead>
-								<TableHead className="text-grayscale-600">직업</TableHead>
-								<TableHead className="text-grayscale-600 text-right">
+						<TableHeader className="bg-grayscale-50 sticky top-0 z-10">
+							<TableRow className="bg-grayscale-50 hover:bg-grayscale-50 border-grayscale-200">
+								<TableHead className="text-grayscale-500 w-24">직업군</TableHead>
+								<TableHead className="text-grayscale-500">직업</TableHead>
+								<TableHead className="text-grayscale-500 text-right">
 									<button
 										type="button"
 										onClick={handleCountSort}
 										className={cn(
 											'hover:text-grayscale-900 ml-auto inline-flex items-center gap-1 transition-colors hover:cursor-pointer',
-											'text-grayscale-800'
+											'text-grayscale-700'
 										)}
 									>
 										인원수
@@ -70,20 +76,48 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{sortedRows.map((row) => {
-								const { classLine, job, count } = row
-								const jobTextClass = getJobTextClass(job)
+							{sortedRows.map((row, index) => {
+								const { classLine, job, count, previousCount } = row
+								const diff = count - previousCount
+								// 직전 주와 인원이 다를 때만 "2명 → 1명" + ▲/▼ 증감 표시
+								const countChanged = diff !== 0
+								const isEmpty = count === 0 && previousCount === 0
 
 								return (
-									<TableRow key={job} className="border-grayscale-200/80 bg-grayscale-100 hover:bg-grayscale-200/50">
-										{/* 계열: Badge / 직업·인원: 직업별 text 색 */}
+									<TableRow
+										key={job}
+										className={cn(
+											'border-grayscale-200',
+											index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50',
+											'hover:bg-grayscale-100/80',
+											// 인원 0인 행은 한 단계 눌러 실제 인원 행이 돋보이게
+											isEmpty && 'opacity-55'
+										)}
+									>
 										<TableCell>
 											<Badge variant="outline" className={getJobClassLineBadgeClass(classLine)}>
 												{classLine}
 											</Badge>
 										</TableCell>
-										<TableCell className={cn('font-medium', jobTextClass)}>{job}</TableCell>
-										<TableCell className={cn('text-right tabular-nums', jobTextClass)}>{count}명</TableCell>
+										{/* 직업 식별은 pastel text 대신 Badge(배경+글자)로 — 밝은 줄에서도 대비가 안정적 */}
+										<TableCell>
+											<JobBadge job={job} />
+										</TableCell>
+										<TableCell className="text-right tabular-nums">
+											{countChanged ? (
+												<span className="inline-flex items-center justify-end gap-1.5">
+													<span className="text-grayscale-400 text-sm">{previousCount}명</span>
+													<span className="text-grayscale-300 text-xs">→</span>
+													<span className="text-grayscale-900 font-semibold">{count}명</span>
+													{/* 멤버 테이블과 동일: GrowthDelta로 ▲/▼ 색상 처리 */}
+													<GrowthDelta value={formatJobCountDelta(diff)} />
+												</span>
+											) : (
+												<span className={cn('font-medium', count === 0 ? 'text-grayscale-400' : 'text-grayscale-900')}>
+													{count}명
+												</span>
+											)}
+										</TableCell>
 									</TableRow>
 								)
 							})}

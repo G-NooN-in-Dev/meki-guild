@@ -9,7 +9,10 @@ import {
 export type JobDistributionRow = {
 	classLine: JobClassLine | '미분류'
 	job: string
+	/** 이번 주 인원 (이탈 제외) */
 	count: number
+	/** 직전 주 인원 (신규 제외). 직업 변경·가입·이탈을 반영합니다 */
+	previousCount: number
 }
 
 export type JobDistribution = {
@@ -18,39 +21,55 @@ export type JobDistribution = {
 }
 
 /**
- * 이번 주 길드원 직업 분포를 집계합니다.
- * 정의된 직업은 인원 0이어도 포함하고, 이탈(left) 멤버는 제외합니다.
+ * 이번 주·직전 주 길드원 직업 분포를 집계합니다.
+ * 정의된 직업은 인원 0이어도 포함하고, 이탈(left)은 이번 주에서만 제외합니다.
  */
 export function calculateJobDistribution(comparisons: GuildMemberComparison[]): JobDistribution {
 	const counts = new Map<string, number>()
+	const previousCounts = new Map<string, number>()
 
 	for (const comparison of comparisons) {
-		if (comparison.status === 'left') {
-			continue
+		// 이번 주: 남아 있는 멤버만 (이탈 제외)
+		if (comparison.status !== 'left') {
+			counts.set(comparison.job, (counts.get(comparison.job) ?? 0) + 1)
 		}
 
-		counts.set(comparison.job, (counts.get(comparison.job) ?? 0) + 1)
+		// 직전 주: 그때 길드에 있던 멤버만 (신규 제외)
+		if (comparison.status !== 'new') {
+			const previousJob = comparison.previousJob ?? comparison.job
+			previousCounts.set(previousJob, (previousCounts.get(previousJob) ?? 0) + 1)
+		}
 	}
 
 	const rows: JobDistributionRow[] = []
+	const knownJobs = new Set<string>()
 
 	for (const classLine of JOB_CLASS_LINE_ORDER) {
 		for (const job of JOBS_BY_CLASS_LINE[classLine]) {
+			knownJobs.add(job)
 			rows.push({
 				classLine,
 				job,
-				count: counts.get(job) ?? 0
+				count: counts.get(job) ?? 0,
+				previousCount: previousCounts.get(job) ?? 0
 			})
 		}
 	}
 
-	// 매핑에 없는 직업(미분류)은 별도 행으로 추가
-	for (const [job, count] of counts.entries()) {
-		if (getJobClassLine(job)) {
+	// 매핑에 없는 직업(미분류) — 이번 주·직전 주 모두 포함
+	const unclassifiedJobs = new Set([...counts.keys(), ...previousCounts.keys()])
+
+	for (const job of unclassifiedJobs) {
+		if (knownJobs.has(job) || getJobClassLine(job)) {
 			continue
 		}
 
-		rows.push({ classLine: '미분류', job, count })
+		rows.push({
+			classLine: '미분류',
+			job,
+			count: counts.get(job) ?? 0,
+			previousCount: previousCounts.get(job) ?? 0
+		})
 	}
 
 	return {
