@@ -8,7 +8,8 @@ import {
 	type MemberVsWinner,
 	type ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
-import { formatExpeditionGradeDelta, getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
+import { getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
+import { formatArrowDelta, formatRankArrowDelta } from '@/utils/format-delta-label'
 import {
 	formatDeltaPercent,
 	formatKoreanDelta,
@@ -39,30 +40,6 @@ function getPlacementWinner(left: number, right: number): MemberVsWinner {
 	}
 
 	return left < right ? 'left' : 'right'
-}
-
-function formatLevelDiff(diff: number): string | null {
-	if (diff === 0) {
-		return null
-	}
-
-	// 1vs1 전 항목에서 증감을 동일하게 읽도록 레벨도 ▲/▼ 표기를 사용합니다.
-	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
-}
-
-/**
- * 1vs1 등수 차이 라벨.
- * 양수 = left가 더 상위(등수 숫자가 작음). GrowthDelta·우세 쪽 뒤집기와 맞춤.
- */
-function formatPlacementDiff(left: number, right: number): string | null {
-	const improvement = right - left
-
-	if (improvement === 0) {
-		return null
-	}
-
-	// 전투력 등과 같이 +/- 대신 ▲/▼로 표시 (상승=▲, 하락=▼)
-	return improvement > 0 ? `▲${improvement}` : `▼${Math.abs(improvement)}`
 }
 
 function createNumericField(left: bigint, right: bigint, leftLabel: string, rightLabel: string): MemberVsNumericField {
@@ -107,7 +84,7 @@ function createExpeditionGradeField(left: string, right: string): MemberVsExpedi
 		left,
 		right,
 		diff,
-		diffLabel: diff === null || diff === 0 ? null : formatExpeditionGradeDelta(diff),
+		diffLabel: formatArrowDelta(diff),
 		winner
 	}
 }
@@ -119,7 +96,7 @@ function createLevelField(left: number, right: number): MemberVsLevelField {
 		left,
 		right,
 		diff,
-		diffLabel: formatLevelDiff(diff),
+		diffLabel: formatArrowDelta(diff),
 		winner: getLevelWinner(left, right)
 	}
 }
@@ -164,7 +141,7 @@ function createExpeditionPlacementField(left: ParsedGuildMember, right: ParsedGu
 		leftLabel: left.expedition.placementLabel,
 		rightLabel: right.expedition.placementLabel,
 		diff: left.expedition.placement - right.expedition.placement,
-		diffLabel: formatPlacementDiff(left.expedition.placement, right.expedition.placement),
+		diffLabel: formatRankArrowDelta(left.expedition.placement - right.expedition.placement),
 		winner: getPlacementWinner(left.expedition.placement, right.expedition.placement),
 		leftHasValue: true,
 		rightHasValue: true

@@ -8,7 +8,8 @@ import type {
 	ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { formatExpeditionGradeDelta, getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
+import { getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
+import { formatArrowDelta, formatRankArrowDelta } from '@/utils/format-delta-label'
 import {
 	formatDeltaPercent,
 	formatKoreanDelta,
@@ -198,30 +199,10 @@ function createExpeditionGradeDelta(
 		previous: previousGrade,
 		currentLabel: current.expedition.grade,
 		diff,
-		diffLabel: formatExpeditionGradeDelta(diff),
+		diffLabel: formatArrowDelta(diff),
 		changed: previousGrade !== current.expedition.grade,
 		hasValue: true
 	}
-}
-
-function formatLevelDelta(diff: number | null): string | null {
-	if (diff === null || diff === 0) {
-		return null
-	}
-
-	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
-}
-
-/**
- * 토벌전 등수 증감 라벨.
- * 등수는 숫자가 작아질수록 상승이므로 raw diff 부호를 뒤집어 ▲/▼를 붙입니다.
- */
-function formatPlacementDelta(diff: number | null): string | null {
-	if (diff === null || diff === 0) {
-		return null
-	}
-
-	return diff < 0 ? `▲${Math.abs(diff)}` : `▼${diff}`
 }
 
 function createLevelDelta(current: ParsedGuildMember, previous: ParsedGuildMember | null): LevelDelta {
@@ -253,7 +234,7 @@ function createLevelDelta(current: ParsedGuildMember, previous: ParsedGuildMembe
 		current: current.level,
 		previous: previous.level,
 		diff,
-		diffLabel: formatLevelDelta(diff),
+		diffLabel: formatArrowDelta(diff),
 		currentLabel: String(current.level),
 		hasValue: true
 	}
@@ -291,7 +272,7 @@ function createExpeditionPlacementDelta(current: ParsedGuildMember, previous: Pa
 		current: current.expedition.placement,
 		previous: previousPlacement,
 		diff,
-		diffLabel: formatPlacementDelta(diff),
+		diffLabel: formatRankArrowDelta(diff),
 		currentLabel: current.expedition.placementLabel,
 		hasValue: true
 	}
@@ -375,7 +356,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			previous: previous.hasLevel ? previous.level : null,
 			diff: previous.hasLevel ? -previous.level : null,
 			currentLabel: GUILD_EMPTY_VALUE_LABEL,
-			diffLabel: previous.hasLevel ? formatLevelDelta(-previous.level) : null,
+			diffLabel: previous.hasLevel ? formatArrowDelta(-previous.level) : null,
 			hasValue: false
 		},
 		combatPower: {

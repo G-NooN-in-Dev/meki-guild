@@ -57,19 +57,6 @@ export function getExpeditionGradeDiff(previous: string, current: string): numbe
 	return previousRank - currentRank
 }
 
-export function formatExpeditionGradeDelta(diff: number | null): string | null {
-	if (diff === null) {
-		return null
-	}
-
-	if (diff === 0) {
-		return null
-	}
-
-	// 등급 상승=▲, 하락=▼ (챌린저1 방향이 상승)
-	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
-}
-
 export function getExpeditionGradePoints(grade: string): number {
 	return EXPEDITION_GUILD_TIERS.find((tier) => tier.rank === grade)?.points ?? 0
 }

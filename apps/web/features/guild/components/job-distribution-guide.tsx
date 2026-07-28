@@ -12,12 +12,8 @@ import { GrowthDelta } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getJobClassLineBadgeClass } from '@/libs/job-class.constants'
+import { formatArrowDelta } from '@/utils/format-delta-label'
 import { calculateJobDistribution, type JobCountSortDirection, sortJobDistributionRows } from '@/utils/job-distribution'
-
-/** 직업 인원 증감 라벨. 증가=▲, 감소=▼ (레벨·순위와 동일 표기) */
-function formatJobCountDelta(diff: number): string {
-	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
-}
 
 type JobDistributionGuideProps = {
 	comparisons: GuildMemberComparison[]
@@ -109,8 +105,7 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 													<span className="text-grayscale-400 text-sm">{previousCount}명</span>
 													<span className="text-grayscale-300 text-xs">→</span>
 													<span className="text-grayscale-900 font-semibold">{count}명</span>
-													{/* 멤버 테이블과 동일: GrowthDelta로 ▲/▼ 색상 처리 */}
-													<GrowthDelta value={formatJobCountDelta(diff)} />
+													<GrowthDelta value={formatArrowDelta(diff)} />
 												</span>
 											) : (
 												<span className={cn('font-medium', count === 0 ? 'text-grayscale-400' : 'text-grayscale-900')}>

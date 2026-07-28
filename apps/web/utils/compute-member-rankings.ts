@@ -1,4 +1,5 @@
 import type { ParsedGuildMember } from '@/features/guild/types/guild-snapshot.type'
+import { formatRankArrowDelta } from '@/utils/format-delta-label'
 
 /**
  * 멤버별 순위를 담는 객체 (이름 → 등수).
@@ -107,10 +108,7 @@ export function formatRankDiffLabel(
 
 	if (current === undefined || previous === undefined) return null
 
-	const diff = previous - current
-	if (diff === 0) return null
-
-	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
+	return formatRankArrowDelta(current - previous)
 }
 
 /** 순위에 참여한 전체 인원 수 */
