@@ -29,7 +29,7 @@ export const RELIC_POTENTIAL_GRADE_META = {
  * 미스틱=진한 빨강(pure-red), 레어=파랑. 나머지는 유물 등급과 같은 톤을 씁니다.
  */
 export const RELIC_POTENTIAL_GRADE_BADGE_CLASS = {
-	mystic: 'border-transparent bg-pure-red/15 text-[#b91c1c]',
+	mystic: 'border-transparent bg-pure-red/15 text-danger-700',
 	legendary: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
 	unique: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
 	epic: 'border-transparent bg-pastel-purple-100 text-pastel-purple-800',
@@ -38,7 +38,7 @@ export const RELIC_POTENTIAL_GRADE_BADGE_CLASS = {
 
 /** 잠재 등급 탭 색상 */
 export const RELIC_POTENTIAL_GRADE_TAB_CLASS = {
-	mystic: 'text-[#b91c1c] data-active:bg-pure-red/15 data-active:text-[#991b1b]',
+	mystic: 'text-danger-700 data-active:bg-pure-red/15 data-active:text-danger-700',
 	legendary: 'text-pastel-green-700 data-active:bg-pastel-green-100 data-active:text-pastel-green-800',
 	unique: 'text-pastel-yellow-700 data-active:bg-pastel-yellow-100 data-active:text-pastel-yellow-800',
 	epic: 'text-pastel-purple-700 data-active:bg-pastel-purple-100 data-active:text-pastel-purple-800',
