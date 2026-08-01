@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -11,6 +12,31 @@ export const dynamic = 'force-dynamic'
 
 type RelicConsultingDetailPageProps = {
 	params: Promise<{ id: string }>
+}
+
+/** 게시글 제목·내용으로 OG/탭 제목을 맞춥니다. */
+export async function generateMetadata({ params }: RelicConsultingDetailPageProps): Promise<Metadata> {
+	const { id } = await params
+
+	try {
+		const post = await getRelicConsultingPostByShortId(id)
+		if (!post) {
+			return {
+				title: '유물 세팅 컨설팅',
+				description: '유물 세팅 현황과 추천을 확인합니다.'
+			}
+		}
+
+		return {
+			title: post.title,
+			description: post.content || '유물 세팅 현황과 추천을 확인합니다.'
+		}
+	} catch {
+		return {
+			title: '유물 세팅 컨설팅',
+			description: '유물 세팅 현황과 추천을 확인합니다.'
+		}
+	}
 }
 
 async function RelicConsultingDetailContent({ params }: RelicConsultingDetailPageProps) {

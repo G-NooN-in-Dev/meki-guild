@@ -1,4 +1,11 @@
+import type { Metadata } from 'next'
+
 import CompanionConsultingNewSection from '@/features/tips/sections/companion-consulting-new.section'
+
+export const metadata: Metadata = {
+	title: '동료 현황 올리기',
+	description: '제목·내용(선택)·프리셋 스탯·현재 세팅을 입력해 동료 세팅 컨설팅 현황을 올립니다.'
+}
 
 function CompanionConsultingNewPage() {
 	return (

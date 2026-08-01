@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -9,6 +10,11 @@ import RelicConsultingHubSection from '@/features/tips/sections/relic-consulting
 import { listRelicConsultingPosts } from '@/libs/relic-consulting.server'
 
 export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+	title: '유물 세팅 컨설팅',
+	description: '보유·각성·현재 세팅을 올리면, 추천 세팅을 댓글로 받을 수 있습니다. ID·URL을 카톡 채널에 공유해보세요.'
+}
 
 type RelicSetupTipPageProps = {
 	searchParams: Promise<{ page?: string | string[] }>
