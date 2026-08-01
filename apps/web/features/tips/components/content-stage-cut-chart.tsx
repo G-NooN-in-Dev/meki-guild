@@ -73,7 +73,7 @@ function StageCutCell({ cut, isOddRow }: { cut: ParsedStageCut | undefined; isOd
 		return (
 			<div
 				className={cn(
-					'border-grayscale-200 flex min-h-9 items-center justify-center border-r last:border-r-0 md:min-h-12 lg:min-h-14',
+					'border-grayscale-200 flex min-h-6 items-center justify-center border-r last:border-r-0 md:min-h-10 lg:min-h-12',
 					isOddRow ? 'bg-grayscale-50/70' : 'bg-background'
 				)}
 			>
@@ -90,7 +90,7 @@ function StageCutCell({ cut, isOddRow }: { cut: ParsedStageCut | undefined; isOd
 	return (
 		<div
 			className={cn(
-				'border-grayscale-200/40 flex min-h-9 items-center justify-center border-r px-0.5 last:border-r-0 md:min-h-12 lg:min-h-14',
+				'border-grayscale-200/40 flex min-h-6 items-center justify-center border-r px-0.5 last:border-r-0 md:min-h-10 lg:min-h-12',
 				getDifficultyChipClassName(difficulty)
 			)}
 		>
