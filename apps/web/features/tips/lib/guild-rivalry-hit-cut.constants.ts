@@ -1,7 +1,7 @@
 import type { GuildRivalryHitCutEntry } from '@/features/tips/types/guild-rivalry-hit-cut.type'
 
-/** 표에 표시할 최대 단계 (우선 40단까지) */
-export const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 40
+/** 표에 표시할 최대 단계 */
+export const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 50
 
 /** 1단계 기준 명중. 이후 단계마다 +8 */
 export const GUILD_RIVALRY_BASE_HIT = 200
