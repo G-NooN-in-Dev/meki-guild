@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -11,6 +12,30 @@ export const dynamic = 'force-dynamic'
 
 type CompanionConsultingEditPageProps = {
 	params: Promise<{ id: string }>
+}
+
+export async function generateMetadata({ params }: CompanionConsultingEditPageProps): Promise<Metadata> {
+	const { id } = await params
+
+	try {
+		const post = await getConsultingPostByShortId(id)
+		if (!post) {
+			return {
+				title: '동료 현황 수정',
+				description: '동료 세팅 현황을 수정합니다.'
+			}
+		}
+
+		return {
+			title: `${post.title} 수정`,
+			description: '내용을 수정한 뒤 저장하면 반영됩니다.'
+		}
+	} catch {
+		return {
+			title: '동료 현황 수정',
+			description: '동료 세팅 현황을 수정합니다.'
+		}
+	}
 }
 
 /** 현황 게시글 수정 — 작성 폼을 초기값으로 재사용합니다. */

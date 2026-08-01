@@ -15,9 +15,11 @@ type TipCardProps = {
 
 /** 정보/팁 허브에서 상세 페이지로 이동하는 링크 카드 */
 function TipCard({ tip }: TipCardProps) {
+	const { href, tags, title, description } = tip
+
 	return (
 		<Link
-			href={tip.href}
+			href={href}
 			className={cn(
 				'group focus-visible:ring-grayscale-900 block cursor-pointer rounded-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
 			)}
@@ -28,13 +30,19 @@ function TipCard({ tip }: TipCardProps) {
 			>
 				<CardHeader className="gap-2">
 					<div className="flex items-start justify-between gap-3">
-						<Badge variant="secondary">{tip.category}</Badge>
+						<div className="flex min-w-0 flex-wrap gap-1.5">
+							{tags.map((tag) => (
+								<Badge key={tag} variant="secondary">
+									{tag}
+								</Badge>
+							))}
+						</div>
 						<LinkPendingIcon>
-							<ChevronRightIcon className="text-grayscale-400 group-hover:text-grayscale-600 size-4 transition-colors" />
+							<ChevronRightIcon className="text-grayscale-400 group-hover:text-grayscale-600 size-4 shrink-0 transition-colors" />
 						</LinkPendingIcon>
 					</div>
-					<CardTitle className="text-grayscale-900 text-lg font-semibold">{tip.title}</CardTitle>
-					<CardDescription className="text-grayscale-600">{tip.description}</CardDescription>
+					<CardTitle className="text-grayscale-900 text-lg font-semibold">{title}</CardTitle>
+					<CardDescription className="text-grayscale-600">{description}</CardDescription>
 				</CardHeader>
 			</Card>
 		</Link>

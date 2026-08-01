@@ -1,5 +1,15 @@
+import type { Metadata } from 'next'
+
 import GuildDashboardSection from '@/features/guild/sections/guild-dashboard.section'
 import { loadGuildDashboardData } from '@/libs/guild-snapshot.loader'
+
+// 루트 title.template이 붙지 않도록 absolute로 기본 사이트 제목을 유지합니다.
+export const metadata: Metadata = {
+	title: {
+		absolute: '메이플키우기 게임즈 길드'
+	},
+	description: '메이플키우기 1서버 게임즈 길드 대시보드입니다. 주간 스냅샷·멤버 현황을 확인하세요.'
+}
 
 function Homepage() {
 	const data = loadGuildDashboardData()

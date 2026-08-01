@@ -5,8 +5,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { CircleHelpIcon } from 'lucide-react'
 
-import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
 import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
+import { formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
 function ExpeditionTierGuide() {
 	return (
@@ -48,14 +48,12 @@ function ExpeditionTierGuide() {
 							{EXPEDITION_GUILD_TIERS.map((tier) => (
 								<TableRow key={tier.rank}>
 									<TableCell className="text-center font-medium">{tier.rank}</TableCell>
-									{/* null = 마스터5처럼 등수 제한 없음 */}
+									{/* null = 마스터5처럼 등수 제한 없음 → formatPlacementRank가 빈 값 표기 */}
 									<TableCell className="text-grayscale-700 text-center">
-										{tier.maxPlacement === null
-											? GUILD_EMPTY_VALUE_LABEL
-											: `${tier.maxPlacement.toLocaleString('ko-KR')} 위`}
+										{formatPlacementRank(tier.maxPlacement)}
 									</TableCell>
 									<TableCell className="text-grayscale-900 text-center font-semibold">
-										{tier.points.toLocaleString('ko-KR')}
+										{formatLocaleNumber(tier.points)}
 									</TableCell>
 								</TableRow>
 							))}

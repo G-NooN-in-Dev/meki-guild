@@ -6,18 +6,16 @@ import { Input } from '@shared/ui/input'
 import { Label } from '@shared/ui/label'
 import { toast } from '@shared/ui/sonner'
 import { Textarea } from '@shared/ui/textarea'
-import { cn } from '@shared/ui/utils'
-import { ArrowLeftIcon, PencilIcon, Trash2Icon } from 'lucide-react'
-import Link from 'next/link'
+import { PencilIcon, Trash2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
-import LinkPendingHint from '@/components/link-pending-hint'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
 import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
 import ConsultingShareBar from '@/features/tips/components/consulting-share-bar'
 import RelicOwnershipGrid from '@/features/tips/components/relic-ownership-grid'
 import RelicSetupBoard from '@/features/tips/components/relic-setup-board'
+import TipsBackLink from '@/features/tips/components/tips-back-link'
 import {
 	CONSULTING_NOTE_MAX_LENGTH,
 	CONSULTING_PASSWORD_MAX_LENGTH,
@@ -258,16 +256,7 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
 			<div className="flex flex-col gap-3">
-				<Link
-					href="/tips/relic-setup"
-					className={cn(
-						'text-grayscale-600 hover:text-grayscale-900 inline-flex w-fit items-center gap-1.5 text-sm font-medium transition-colors'
-					)}
-				>
-					<ArrowLeftIcon className="size-4" />
-					목록으로 돌아가기
-					<LinkPendingHint />
-				</Link>
+				<TipsBackLink href="/tips/relic-setup">목록으로 돌아가기</TipsBackLink>
 
 				<header className="flex flex-col gap-2">
 					<div className="flex flex-wrap items-center gap-2">

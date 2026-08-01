@@ -11,6 +11,7 @@ import type { GuildMemberInput, MemberVsMemberComparison } from '@/features/guil
 import { compareMembers } from '@/utils/compare-members'
 import { parseGuildMember } from '@/utils/compare-snapshots'
 import type { MemberRankings } from '@/utils/compute-member-rankings'
+import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 type MemberCompareSectionProps = {
 	members: GuildMemberInput[]
@@ -52,7 +53,7 @@ function MemberCompareSection({ members, rankings }: MemberCompareSectionProps) 
 				name: member.name,
 				job: member.job,
 				combatPowerLabel:
-					typeof member.combatPower === 'number' ? member.combatPower.toLocaleString('ko-KR') : member.combatPower
+					typeof member.combatPower === 'number' ? formatLocaleNumber(member.combatPower) : member.combatPower
 			})),
 		[members]
 	)

@@ -1,3 +1,6 @@
+/** 허브에서 카드를 묶는 상위 분류 (태그 필터와 별개) */
+export type TipCategory = '정보/팁' | '컨설팅'
+
 /** 정보/팁 허브에 노출되는 개별 팁 메타데이터 */
 export type TipEntry = {
 	/** URL 경로 세그먼트 (예: guild-rivalry-hit-cut) */
@@ -6,8 +9,10 @@ export type TipEntry = {
 	title: string
 	/** 허브 카드 부제 */
 	description: string
-	/** 분류 태그 (예: 대항전, 토벌전) */
-	category: string
+	/** 카드·필터용 태그 (예: 대항전, 파티퀘스트) */
+	tags: readonly string[]
+	/** 카테고리 섹션 분류 */
+	category: TipCategory
 	/** 상세 페이지 경로 */
 	href: `/tips/${string}`
 }

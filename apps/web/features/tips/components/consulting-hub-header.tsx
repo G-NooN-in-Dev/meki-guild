@@ -1,10 +1,11 @@
 import { Badge } from '@shared/ui/badge'
 import { buttonVariants } from '@shared/ui/button'
 import { cn } from '@shared/ui/utils'
-import { ArrowLeftIcon, PlusIcon } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
 import Link from 'next/link'
 
 import LinkPendingHint from '@/components/link-pending-hint'
+import TipsBackLink from '@/features/tips/components/tips-back-link'
 
 type ConsultingHubHeaderProps = {
 	badge: string
@@ -20,16 +21,7 @@ type ConsultingHubHeaderProps = {
 function ConsultingHubHeader({ badge, title, description, newHref }: ConsultingHubHeaderProps) {
 	return (
 		<div className="flex flex-col gap-3">
-			<Link
-				href="/tips"
-				className={cn(
-					'text-grayscale-600 hover:text-grayscale-900 inline-flex w-fit items-center gap-1.5 text-sm font-medium transition-colors'
-				)}
-			>
-				<ArrowLeftIcon className="size-4" />
-				정보 / 팁 목록
-				<LinkPendingHint />
-			</Link>
+			<TipsBackLink href="/tips">정보 / 팁 목록</TipsBackLink>
 
 			<header className="flex flex-col gap-2">
 				<Badge variant="secondary" className="w-fit">

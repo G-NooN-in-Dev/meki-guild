@@ -13,6 +13,7 @@ import { formatArrowDelta, formatRankArrowDelta } from '@/utils/format-delta-lab
 import {
 	formatDeltaPercent,
 	formatKoreanDelta,
+	formatLocaleNumber,
 	formatPlacementRank,
 	formatTrainingDelta,
 	formatTrainingScore
@@ -33,7 +34,7 @@ function isEmptyInput(value: string | number | undefined): boolean {
 
 function toKoreanLabel(value: string | number): string {
 	if (typeof value === 'number') {
-		return value.toLocaleString('ko-KR')
+		return formatLocaleNumber(value)
 	}
 
 	return value
