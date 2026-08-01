@@ -10,9 +10,10 @@ function ContentStageCutSection() {
 				<TipsBackLink href="/tips">정보 / 팁 목록</TipsBackLink>
 
 				<header className="flex flex-col gap-2">
-					<Badge variant="secondary" className="w-fit">
-						컨텐츠
-					</Badge>
+					<div className="flex flex-wrap gap-1.5">
+						<Badge variant="secondary">파티퀘스트</Badge>
+						<Badge variant="secondary">보스레이드</Badge>
+					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">컨텐츠 별 스테이지컷</h1>
 					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
 						컨텐츠 및 난이도 별 스테이지 컷을 확인해보세요.
