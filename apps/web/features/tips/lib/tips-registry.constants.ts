@@ -8,9 +8,16 @@ export const TIP_ENTRIES = [
 	{
 		slug: 'content-stage-cut',
 		title: '컨텐츠 별 스테이지컷',
-		description: '스테이지 순 타임라인으로 난이도별 컷과 클리어 보상을 정리했습니다.',
+		description: '컨텐츠 및 난이도 별 스테이지컷을 확인해보세요.',
 		category: '컨텐츠',
 		href: '/tips/content-stage-cut'
+	},
+	{
+		slug: 'guild-rivalry-hit-cut',
+		title: '대항전 명중컷 · 버프 스택',
+		description: '길드 대항전 단계별 필요 명중과, 보스 데미지 증가 스택을 확인해보세요.',
+		category: '대항전',
+		href: '/tips/guild-rivalry-hit-cut'
 	},
 	{
 		slug: 'companion-setup',
