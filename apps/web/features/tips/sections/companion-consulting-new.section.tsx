@@ -7,7 +7,6 @@ import { Label } from '@shared/ui/label'
 import { toast } from '@shared/ui/sonner'
 import { Textarea } from '@shared/ui/textarea'
 import { cn } from '@shared/ui/utils'
-import { ArrowLeftIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useSyncExternalStore } from 'react'
@@ -16,6 +15,7 @@ import CompanionOwnershipGrid from '@/features/tips/components/companion-ownersh
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
 import CompanionSetupBoard from '@/features/tips/components/companion-setup-board'
 import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
+import TipsBackLink from '@/features/tips/components/tips-back-link'
 import {
 	createConsultingPostAction,
 	updateConsultingPostAction,
@@ -178,15 +178,9 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 		return (
 			<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
 				<div className="flex flex-col gap-3">
-					<Link
-						href={backHref}
-						className={cn(
-							'text-grayscale-600 hover:text-grayscale-900 inline-flex w-fit items-center gap-1.5 text-sm font-medium transition-colors'
-						)}
-					>
-						<ArrowLeftIcon className="size-4" />
+					<TipsBackLink href={backHref} showPendingHint={false}>
 						게시글로 돌아가기
-					</Link>
+					</TipsBackLink>
 					<header className="flex flex-col gap-2">
 						<Badge variant="secondary" className="w-fit">
 							동료
@@ -214,20 +208,17 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
 			<div className="flex flex-col gap-3">
-				<Link
+				<TipsBackLink
 					href={backHref}
-					className={cn(
-						'text-grayscale-600 hover:text-grayscale-900 inline-flex w-fit items-center gap-1.5 text-sm font-medium transition-colors'
-					)}
+					showPendingHint={false}
 					onClick={() => {
 						if (initialPost) {
 							clearConsultingEditPassword('companion', initialPost.shortId)
 						}
 					}}
 				>
-					<ArrowLeftIcon className="size-4" />
 					{isEdit ? '게시글로 돌아가기' : '목록으로 돌아가기'}
-				</Link>
+				</TipsBackLink>
 
 				<header className="flex flex-col gap-2">
 					<Badge variant="secondary" className="w-fit">
