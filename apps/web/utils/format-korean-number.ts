@@ -10,6 +10,17 @@ const KOREAN_UNITS = [
 const TRAINING_KOREAN_FORMAT_THRESHOLD = 10_000_000n
 
 /**
+ * 숫자를 한국어 locale 천 단위 구분 문자열로 변환합니다.
+ *
+ * @example
+ * formatLocaleNumber(1234) // '1,234'
+ * formatLocaleNumber(1234n) // '1,234'
+ */
+export function formatLocaleNumber(value: number | bigint): string {
+	return value.toLocaleString('ko-KR')
+}
+
+/**
  * bigint 값을 경/조/억/만 단위 문자열로 변환합니다.
  *
  * @example
@@ -34,7 +45,7 @@ export function formatKoreanNumber(value: bigint): string {
 	}
 
 	if (remaining > 0n) {
-		parts.push(remaining.toLocaleString('ko-KR'))
+		parts.push(formatLocaleNumber(remaining))
 	}
 
 	const formatted = parts.join(' ')
@@ -72,7 +83,7 @@ export function formatTrainingScore(value: bigint): string {
 	const absoluteValue = isNegative ? -value : value
 
 	if (absoluteValue < TRAINING_KOREAN_FORMAT_THRESHOLD) {
-		return value.toLocaleString('ko-KR')
+		return formatLocaleNumber(value)
 	}
 
 	const parts: string[] = []
@@ -117,7 +128,7 @@ export function formatPlacementRank(value: number | null): string {
 		return GUILD_EMPTY_VALUE_LABEL
 	}
 
-	return `${value.toLocaleString('ko-KR')} 위`
+	return `${formatLocaleNumber(value)} 위`
 }
 
 /**

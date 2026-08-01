@@ -1,6 +1,11 @@
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { sumExpeditionGradePoints } from '@/libs/expedition-guild-tier.constants'
-import { formatDeltaPercent, formatKoreanDelta, formatTrainingDelta } from '@/utils/format-korean-number'
+import {
+	formatDeltaPercent,
+	formatKoreanDelta,
+	formatLocaleNumber,
+	formatTrainingDelta
+} from '@/utils/format-korean-number'
 
 type NumericFieldSelector = (_comparison: GuildMemberComparison) => NumericDeltaLike
 
@@ -103,7 +108,7 @@ function formatPointsDelta(diff: number): string | null {
 
 	const sign = diff > 0 ? '+' : '-'
 
-	return `${sign}${Math.abs(diff).toLocaleString('ko-KR')}`
+	return `${sign}${formatLocaleNumber(Math.abs(diff))}`
 }
 
 function getCurrentExpeditionGrades(comparisons: GuildMemberComparison[]): string[] {
@@ -131,7 +136,7 @@ export function calculateExpeditionGradePointsTotal(comparisons: GuildMemberComp
 		return GUILD_EMPTY_VALUE_LABEL
 	}
 
-	return sumExpeditionGradePoints(grades).toLocaleString('ko-KR')
+	return formatLocaleNumber(sumExpeditionGradePoints(grades))
 }
 
 /** 길드원 개인 토벌전 등급 포인트 합계의 주간 변화량 */
