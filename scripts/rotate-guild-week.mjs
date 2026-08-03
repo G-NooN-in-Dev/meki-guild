@@ -11,7 +11,7 @@ const contentDatesPath = join(dataDirectory, 'guild-content-dates.json')
 /** CLI 인자로 받는 이월 대상 */
 const ROTATION_MODES = {
 	all: ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss'],
-	'combat-power': ['combatPower'],
+	character: ['combatPower'],
 	expedition: ['expedition'],
 	rivalry: ['rivalry'],
 	training: ['training'],
@@ -28,11 +28,33 @@ const CONTENT_DATE_KEYS = {
 
 const MODE_LABELS = {
 	all: '전체',
-	'combat-power': '전투력·레벨',
+	character: '전투력·레벨·직업',
 	expedition: '토벌전(등급·등수·점수)',
 	rivalry: '대항전',
 	training: '수련장',
 	'guild-boss': '길드보스'
+}
+
+/** previous 로 이월되는 항목 표시명 */
+const CARRY_LABELS = {
+	combatPower: '전투력·레벨·직업',
+	expedition: '토벌전(등급·등수·점수)',
+	rivalry: '대항전',
+	training: '수련장',
+	guildBoss: '길드보스'
+}
+
+/** current 에서 초기화되는 항목 표시명 */
+const CLEAR_LABELS = {
+	combatPower: '전투력',
+	expedition: '토벌전(등급·등수·점수)',
+	rivalry: '대항전',
+	training: '수련장',
+	guildBoss: '길드보스'
+}
+
+function formatFieldLabels(fields, labels) {
+	return fields.map((field) => labels[field]).join(', ')
 }
 
 function readJson(path) {
@@ -63,6 +85,7 @@ function copyFieldsToPrevious(currentMember, previousMember, fields) {
 		switch (field) {
 			case 'combatPower':
 				previousMember.level = currentMember.level
+				previousMember.job = currentMember.job
 				previousMember.combatPower = currentMember.combatPower
 				break
 			case 'expedition':
@@ -101,7 +124,7 @@ function clearFieldsInCurrent(member, fields) {
 	for (const field of fields) {
 		switch (field) {
 			case 'combatPower':
-				nextMember.level = 0
+				// 레벨·직업은 current 에 유지하고, 전투력만 재입력 대기 상태로 비웁니다.
 				nextMember.combatPower = ''
 				break
 			case 'expedition':
@@ -169,9 +192,15 @@ function rotateGuildWeek(mode) {
 	writeJson(currentWeekPath, currentWeek)
 	writeJson(contentDatesPath, contentDates)
 
+	const carried = formatFieldLabels(fields, CARRY_LABELS)
+	const cleared = formatFieldLabels(fields, CLEAR_LABELS)
+
 	console.log(`✅ ${MODE_LABELS[mode]} 이월 완료`)
-	console.log(`   previous-week.json ← current 값 반영`)
-	console.log(`   current-week.json 해당 항목 초기화`)
+	console.log(`   previous-week.json ← ${carried} 반영`)
+	console.log(`   current-week.json ${cleared} 초기화`)
+	if (fields.includes('combatPower')) {
+		console.log(`   (레벨·직업은 current 에 유지)`)
+	}
 	console.log(`   guild-content-dates.json 최근→직전 이월, 최근=${today}`)
 }
 

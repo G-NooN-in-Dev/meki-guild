@@ -3,7 +3,7 @@
 		{
 			"name": "교토",
 			"level": 109,
-			"job": "히어로",
+			"job": "바이퍼",
 			"combatPower": "359조 4616억",
 			"expedition": {
 				"grade": "그랜드마스터5",
@@ -16,7 +16,7 @@
 		{
 			"name": "김촌삭",
 			"level": 105,
-			"job": "다크나이트",
+			"job": "바이퍼",
 			"combatPower": "51조 1441억",
 			"expedition": {
 				"grade": "마스터2",
@@ -81,7 +81,7 @@
 		{
 			"name": "무병창귀",
 			"level": 108,
-			"job": "썬콜",
+			"job": "바이퍼",
 			"combatPower": "148조 3160억",
 			"expedition": {
 				"grade": "마스터1",
@@ -289,7 +289,7 @@
 		{
 			"name": "쫀쿤",
 			"level": 110,
-			"job": "다크나이트",
+			"job": "팔라딘",
 			"combatPower": "275조 9976억",
 			"expedition": {
 				"grade": "그랜드마스터5",
