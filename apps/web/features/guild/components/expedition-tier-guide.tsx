@@ -2,13 +2,46 @@
 
 import { Button } from '@shared/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog'
+import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { CircleHelpIcon } from 'lucide-react'
 
-import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
+import {
+	EXPEDITION_GUILD_TIERS,
+	EXPEDITION_TIER_BAND_META,
+	type ExpeditionGuildTier,
+	type ExpeditionTierBand,
+	getExpeditionGradeTextClass,
+	getExpeditionTierBand
+} from '@/libs/expedition-guild-tier.constants'
 import { formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
+/** 등급 구간 헤더를 끼워 넣어 한 덩어리로 보이지 않게 합니다. */
+function buildTierRows(tiers: readonly ExpeditionGuildTier[]) {
+	const rows: Array<{ type: 'band'; band: ExpeditionTierBand } | { type: 'tier'; tier: ExpeditionGuildTier }> = []
+	let previousBand: ExpeditionTierBand | null = null
+
+	for (const tier of tiers) {
+		const band = getExpeditionTierBand(tier.rank)
+
+		if (band === null) {
+			continue
+		}
+
+		if (band !== previousBand) {
+			rows.push({ type: 'band', band })
+			previousBand = band
+		}
+
+		rows.push({ type: 'tier', tier })
+	}
+
+	return rows
+}
+
 function ExpeditionTierGuide() {
+	const rows = buildTierRows(EXPEDITION_GUILD_TIERS)
+
 	return (
 		<Dialog>
 			<DialogTrigger
@@ -35,28 +68,55 @@ function ExpeditionTierGuide() {
 						<p>자격 등수 이내에 들어야 해당 포인트를 받을 수 있습니다.</p>
 					</DialogDescription>
 				</DialogHeader>
-				<div className="border-grayscale-200 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">
+				<div className="border-grayscale-200 bg-card shadow-soft max-h-[60dvh] overflow-y-auto rounded-xl border sm:max-h-[65dvh]">
 					<Table>
-						<TableHeader>
-							<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">
-								<TableHead className="text-grayscale-500 text-center">등급</TableHead>
-								<TableHead className="text-grayscale-500 text-center">자격 등수</TableHead>
-								<TableHead className="text-grayscale-500 text-center">포인트</TableHead>
+						<TableHeader className="bg-grayscale-100 sticky top-0 z-10">
+							<TableRow className="border-grayscale-200 bg-grayscale-100 hover:bg-grayscale-100">
+								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">등급</TableHead>
+								<TableHead className="text-grayscale-600 h-11 px-3 text-center text-xs font-semibold tracking-wide">
+									자격 등수
+								</TableHead>
+								<TableHead className="text-grayscale-600 h-11 px-3 text-right text-xs font-semibold tracking-wide">
+									포인트
+								</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{EXPEDITION_GUILD_TIERS.map((tier) => (
-								<TableRow key={tier.rank}>
-									<TableCell className="text-center font-medium">{tier.rank}</TableCell>
-									{/* null = 마스터5처럼 등수 제한 없음 → formatPlacementRank가 빈 값 표기 */}
-									<TableCell className="text-grayscale-700 text-center">
-										{formatPlacementRank(tier.maxPlacement)}
-									</TableCell>
-									<TableCell className="text-grayscale-900 text-center font-semibold">
-										{formatLocaleNumber(tier.points)}
-									</TableCell>
-								</TableRow>
-							))}
+							{rows.map((row) => {
+								if (row.type === 'band') {
+									const { label, headerClassName } = EXPEDITION_TIER_BAND_META[row.band]
+
+									return (
+										<TableRow key={`band-${row.band}`} className="hover:bg-transparent">
+											<TableCell
+												colSpan={3}
+												className={cn(
+													'border-grayscale-200 px-3 py-1.5 text-[11px] font-semibold tracking-wide',
+													headerClassName
+												)}
+											>
+												{label}
+											</TableCell>
+										</TableRow>
+									)
+								}
+
+								const { tier } = row
+
+								return (
+									<TableRow key={tier.rank} className="border-grayscale-100 hover:bg-grayscale-50/80">
+										<TableCell className={cn('px-3 py-2.5', getExpeditionGradeTextClass(tier.rank))}>
+											{tier.rank}
+										</TableCell>
+										<TableCell className="text-grayscale-600 px-3 py-2.5 text-center tabular-nums">
+											{formatPlacementRank(tier.maxPlacement)}
+										</TableCell>
+										<TableCell className="text-grayscale-900 px-3 py-2.5 text-right font-semibold tabular-nums">
+											{formatLocaleNumber(tier.points)}
+										</TableCell>
+									</TableRow>
+								)
+							})}
 						</TableBody>
 					</Table>
 				</div>

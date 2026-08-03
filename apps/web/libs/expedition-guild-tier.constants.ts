@@ -5,6 +5,31 @@ export type ExpeditionGuildTier = {
 	maxPlacement: number | null
 }
 
+/** 토벌전 등급 UI 구간 (챌린저 / 그랜드마스터 / 마스터) */
+export type ExpeditionTierBand = 'challenger' | 'grandmaster' | 'master'
+
+/**
+ * 구간별 UI 톤.
+ * 헤더는 배경+라벨색, 등급명은 텍스트색 + 한 단계 올린 두께를 씁니다.
+ */
+export const EXPEDITION_TIER_BAND_META = {
+	challenger: {
+		label: '챌린저',
+		headerClassName: 'bg-pastel-orange-50 text-pastel-orange-800',
+		textClassName: 'font-semibold text-pastel-orange-800'
+	},
+	grandmaster: {
+		label: '그랜드마스터',
+		headerClassName: 'bg-pastel-blue-50 text-pastel-blue-800',
+		textClassName: 'font-semibold text-pastel-blue-800'
+	},
+	master: {
+		label: '마스터',
+		headerClassName: 'bg-pastel-purple-100 text-pastel-purple-600',
+		textClassName: 'font-semibold text-pastel-purple-700'
+	}
+} as const satisfies Record<ExpeditionTierBand, { label: string; headerClassName: string; textClassName: string }>
+
 /**
  * 토벌전 점수 순위에 따른 길드 등급·포인트 기준표.
  * 1위부터 순서대로 적용됩니다.
@@ -30,6 +55,44 @@ export const EXPEDITION_GUILD_TIERS = [
 
 export function getExpeditionGuildTier(position: number): ExpeditionGuildTier | null {
 	return EXPEDITION_GUILD_TIERS[position - 1] ?? null
+}
+
+/**
+ * 등급명 → UI 구간.
+ * 빈 값(`-`)·미매칭은 null.
+ */
+export function getExpeditionTierBand(grade: string): ExpeditionTierBand | null {
+	if (!grade || grade === '-') {
+		return null
+	}
+
+	if (grade.startsWith('챌린저')) {
+		return 'challenger'
+	}
+
+	if (grade.startsWith('그랜드마스터')) {
+		return 'grandmaster'
+	}
+
+	if (grade.startsWith('마스터')) {
+		return 'master'
+	}
+
+	return null
+}
+
+/**
+ * 토벌전 등급 텍스트 색·두께.
+ * 빈 값은 grayscale-400, 미매칭은 빈 문자열(호출측 기본 스타일 유지).
+ */
+export function getExpeditionGradeTextClass(grade: string): string {
+	if (!grade || grade === '-') {
+		return 'text-grayscale-400'
+	}
+
+	const band = getExpeditionTierBand(grade)
+
+	return band ? EXPEDITION_TIER_BAND_META[band].textClassName : ''
 }
 
 /**

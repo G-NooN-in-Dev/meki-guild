@@ -8,6 +8,7 @@ import { GrowthDelta, MemberStatusBadge } from '@/features/guild/components/grow
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName, { useMemberDisplayName } from '@/features/guild/components/member-display-name'
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
 import {
 	formatGuildContentDateOrNone,
 	GUILD_CONTENT_UPDATED_AT,
@@ -50,6 +51,8 @@ type DetailRow = {
 	previousRankLabel?: string | null
 	/** 순위 변동 (예: "▲2"). 상승=▲, 하락=▼ */
 	rankDiffLabel?: string | null
+	/** 토벌전 등급 행 — 구간 텍스트 색 적용 */
+	valueKind?: 'text' | 'expeditionGrade'
 }
 
 /** 멤버 비교 데이터를 Dialog 표 행으로 펼칩니다. rankings로 각 항목의 길드 내 순위를 포함합니다. */
@@ -84,7 +87,8 @@ function buildDetailRows(
 			currentLabel: comparison.expeditionGrade.currentLabel,
 			previousLabel: formatPreviousValue(comparison.expeditionGrade.previous),
 			diffLabel: comparison.expeditionGrade.diffLabel,
-			contentDates: GUILD_CONTENT_UPDATED_AT.expedition
+			contentDates: GUILD_CONTENT_UPDATED_AT.expedition,
+			valueKind: 'expeditionGrade'
 		},
 		{
 			label: '토벌전 (등수)',
@@ -168,13 +172,21 @@ type PeriodValueCellProps = {
 	emphasize?: boolean
 	/** 길드 내 순위 라벨 (예: "1위"). 값 오른쪽에 (N위) 형태로 표시 */
 	rankLabel?: string | null
+	valueKind?: 'text' | 'expeditionGrade'
 }
 
 /** 값 + 해당 기간의 수집일을 함께 표시합니다 */
-function PeriodValueCell({ value, updatedAt, emphasize = false, rankLabel }: PeriodValueCellProps) {
+function PeriodValueCell({ value, updatedAt, emphasize = false, rankLabel, valueKind = 'text' }: PeriodValueCellProps) {
 	return (
 		<div className="flex flex-col items-end gap-0.5">
-			<span className={cn('tabular-nums', emphasize && 'font-semibold', getValueClassName(value))}>
+			<span
+				className={cn(
+					'tabular-nums',
+					emphasize && 'font-semibold',
+					getValueClassName(value),
+					valueKind === 'expeditionGrade' && getExpeditionGradeTextClass(value)
+				)}
+			>
 				{value}
 				{rankLabel ? <span className="text-grayscale-600 ml-1 text-[11px] font-normal">({rankLabel})</span> : null}
 			</span>
@@ -250,6 +262,7 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 											value={row.previousLabel}
 											updatedAt={row.contentDates.previous}
 											rankLabel={row.previousRankLabel}
+											valueKind={row.valueKind}
 										/>
 									</TableCell>
 									<TableCell className="py-3 text-right">
@@ -258,6 +271,7 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 											updatedAt={row.contentDates.current}
 											emphasize
 											rankLabel={row.rankLabel}
+											valueKind={row.valueKind}
 										/>
 									</TableCell>
 									<TableCell className="py-3 text-right">

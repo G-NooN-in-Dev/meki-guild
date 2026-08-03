@@ -10,6 +10,7 @@ import {
 	type MemberVsMemberComparison,
 	type MemberVsWinner
 } from '@/features/guild/types/guild-snapshot.type'
+import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
 import { getGuildContentCriteriaLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
 import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 import { formatRankLabel, type MemberRankings } from '@/utils/compute-member-rankings'
@@ -31,7 +32,7 @@ type CompareRow = {
 	/** 최근 수집일. 있으면 항목 라벨 아래에 기준일 표시 */
 	contentUpdatedAt?: string | null
 	/** 직업 행은 텍스트 대신 JobBadge로 표시합니다 */
-	valueKind?: 'text' | 'job'
+	valueKind?: 'text' | 'job' | 'expeditionGrade'
 	/** 나(왼쪽)의 길드 내 순위 라벨 */
 	selfRankLabel?: string | null
 	/** 상대방(오른쪽)의 길드 내 순위 라벨 */
@@ -157,7 +158,7 @@ type CompareValueProps = {
 	winner: MemberVsWinner
 	diffLabel: string | null
 	diffPercentLabel?: string | null
-	valueKind?: 'text' | 'job'
+	valueKind?: 'text' | 'job' | 'expeditionGrade'
 	rankLabel?: string | null
 }
 
@@ -173,18 +174,25 @@ function CompareValue({
 	const winnerDiffLabel = getWinnerDiffLabel(winner, side, diffLabel)
 	const winnerDiffPercentLabel = getWinnerDiffPercentLabel(winner, side, diffPercentLabel)
 	const isJob = valueKind === 'job'
+	const isExpeditionGrade = valueKind === 'expeditionGrade'
+	const useOwnValueColor = isJob || isExpeditionGrade
 
 	return (
 		<div
 			className={cn(
 				'flex min-w-0 flex-col items-center gap-0.5 text-center',
-				!isJob && getWinnerClassName(side, winner)
+				!useOwnValueColor && getWinnerClassName(side, winner)
 			)}
 		>
 			{isJob ? (
 				<JobBadge job={value} />
 			) : (
-				<span className="text-xs leading-snug font-medium wrap-break-word md:text-sm">
+				<span
+					className={cn(
+						'text-xs leading-snug font-medium wrap-break-word md:text-sm',
+						isExpeditionGrade && getExpeditionGradeTextClass(value)
+					)}
+				>
 					{value}
 					{rankLabel ? <span className="text-grayscale-600 ml-0.5 text-[10px] font-normal">({rankLabel})</span> : null}
 				</span>
@@ -314,7 +322,8 @@ function buildCompareRows(comparison: MemberVsMemberComparison, rankings: Member
 			opponentValue: comparison.expeditionGrade.right,
 			diffLabel: comparison.expeditionGrade.diffLabel,
 			winner: comparison.expeditionGrade.winner,
-			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current
+			contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.expedition.current,
+			valueKind: 'expeditionGrade'
 		},
 		{
 			label: '토벌전 등수',

@@ -17,6 +17,7 @@ import MemberDisplayName from '@/features/guild/components/member-display-name'
 import WeeklyGrowthLeaders from '@/features/guild/components/weekly-growth-leaders'
 import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
 import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 import type { MemberRankings } from '@/utils/compute-member-rankings'
 import {
@@ -395,7 +396,12 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 										/>
 									</TableCell>
 									<TableCell>
-										<div className={getValueClassName(comparison.expeditionGrade.currentLabel)}>
+										<div
+											className={cn(
+												getValueClassName(comparison.expeditionGrade.currentLabel),
+												getExpeditionGradeTextClass(comparison.expeditionGrade.currentLabel)
+											)}
+										>
 											{comparison.expeditionGrade.currentLabel}
 										</div>
 										<GrowthDelta value={comparison.expeditionGrade.diffLabel} />
