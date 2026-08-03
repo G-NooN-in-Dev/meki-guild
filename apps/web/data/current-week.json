@@ -4,7 +4,7 @@
 			"name": "교토",
 			"level": 110,
 			"job": "바이퍼",
-			"combatPower": "427조 5605억",
+			"combatPower": "437조 6961억",
 			"expedition": {
 				"grade": "그랜드마스터5",
 				"placement": 456,
@@ -82,7 +82,7 @@
 			"name": "무병창귀",
 			"level": 109,
 			"job": "바이퍼",
-			"combatPower": "182조 918억",
+			"combatPower": "195조 7281억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 715,
@@ -173,13 +173,13 @@
 			"name": "아로미0",
 			"level": 108,
 			"job": "불독",
-			"combatPower": "116조 6575억",
+			"combatPower": "118조 2571억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 750,
 				"score": "729억 8390만"
 			},
-			"rivalry": "297억 3027만",
+			"rivalry": "316억 5366만",
 			"training": "7292736"
 		},
 		{
@@ -199,7 +199,7 @@
 			"name": "양촌삭",
 			"level": 106,
 			"job": "비숍",
-			"combatPower": "73조 1562억",
+			"combatPower": "76조 2863억",
 			"expedition": {
 				"grade": "마스터2",
 				"placement": 1610,
@@ -225,7 +225,7 @@
 			"name": "왈왈멍멍",
 			"level": 113,
 			"job": "비숍",
-			"combatPower": "1635조 6755억",
+			"combatPower": "1654조 1332억",
 			"expedition": {
 				"grade": "그랜드마스터1",
 				"placement": 130,
@@ -238,7 +238,7 @@
 			"name": "원더08",
 			"level": 109,
 			"job": "섀도어",
-			"combatPower": "197조 7673억",
+			"combatPower": "202조 7412억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 878,
@@ -296,7 +296,7 @@
 				"placement": 347,
 				"score": "1346억 4261만"
 			},
-			"rivalry": "639억 8601만",
+			"rivalry": "700억 7607만",
 			"training": "1375만 1841"
 		},
 		{
