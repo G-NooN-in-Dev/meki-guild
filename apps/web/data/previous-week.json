@@ -2,9 +2,9 @@
 	"members": [
 		{
 			"name": "교토",
-			"level": 108,
+			"level": 109,
 			"job": "히어로",
-			"combatPower": "242조 5442억",
+			"combatPower": "359조 4616억",
 			"expedition": {
 				"grade": "그랜드마스터5",
 				"placement": 382,
@@ -17,7 +17,7 @@
 			"name": "김촌삭",
 			"level": 105,
 			"job": "다크나이트",
-			"combatPower": "28조 4238억",
+			"combatPower": "51조 1441억",
 			"expedition": {
 				"grade": "마스터2",
 				"placement": 1883,
@@ -28,9 +28,9 @@
 		},
 		{
 			"name": "누텔라토스트",
-			"level": 107,
+			"level": 108,
 			"job": "팔라딘",
-			"combatPower": "76조 3936억",
+			"combatPower": "115조 9209억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 698,
@@ -41,9 +41,9 @@
 		},
 		{
 			"name": "단우링",
-			"level": 105,
+			"level": 106,
 			"job": "신궁",
-			"combatPower": "39조 852억",
+			"combatPower": "72조 5096억",
 			"expedition": {
 				"grade": "마스터2",
 				"placement": 1962,
@@ -54,9 +54,9 @@
 		},
 		{
 			"name": "딸기몽구",
-			"level": 104,
+			"level": 105,
 			"job": "썬콜",
-			"combatPower": "78조 9400억",
+			"combatPower": "110조 9203억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 943,
@@ -69,7 +69,7 @@
 			"name": "랴이토",
 			"level": 108,
 			"job": "섀도어",
-			"combatPower": "181조 361억",
+			"combatPower": "224조 2703억",
 			"expedition": {
 				"grade": "그랜드마스터5",
 				"placement": 464,
@@ -80,9 +80,9 @@
 		},
 		{
 			"name": "무병창귀",
-			"level": 107,
+			"level": 108,
 			"job": "썬콜",
-			"combatPower": "79조 4520억",
+			"combatPower": "148조 3160억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 769,
@@ -93,9 +93,9 @@
 		},
 		{
 			"name": "믐슷믐",
-			"level": 105,
+			"level": 106,
 			"job": "섀도어",
-			"combatPower": "125조 3007억",
+			"combatPower": "143조 7110억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 781,
@@ -106,9 +106,9 @@
 		},
 		{
 			"name": "미꽁치와와",
-			"level": 106,
+			"level": 107,
 			"job": "섀도어",
-			"combatPower": "111조 5813억",
+			"combatPower": "156조 4112억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 568,
@@ -121,7 +121,7 @@
 			"name": "민무늬오징어",
 			"level": 109,
 			"job": "히어로",
-			"combatPower": "230조 7230억",
+			"combatPower": "319조 9307억",
 			"expedition": {
 				"grade": "그랜드마스터5",
 				"placement": 402,
@@ -132,9 +132,9 @@
 		},
 		{
 			"name": "부귀창귀",
-			"level": 108,
+			"level": 109,
 			"job": "섀도어",
-			"combatPower": "275조 5504억",
+			"combatPower": "400조 1639억",
 			"expedition": {
 				"grade": "그랜드마스터5",
 				"placement": 393,
@@ -147,7 +147,7 @@
 			"name": "살점",
 			"level": 108,
 			"job": "섀도어",
-			"combatPower": "111조 5126억",
+			"combatPower": "163조 8805억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 728,
@@ -158,9 +158,9 @@
 		},
 		{
 			"name": "살짝",
-			"level": 111,
+			"level": 112,
 			"job": "비숍",
-			"combatPower": "535조 6001억",
+			"combatPower": "584조 7228억",
 			"expedition": {
 				"grade": "그랜드마스터3",
 				"placement": 220,
@@ -171,9 +171,9 @@
 		},
 		{
 			"name": "아로미0",
-			"level": 106,
+			"level": 107,
 			"job": "불독",
-			"combatPower": "86조 2163억",
+			"combatPower": "99조 4739억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 723,
@@ -184,9 +184,9 @@
 		},
 		{
 			"name": "아이뿌",
-			"level": 105,
+			"level": 106,
 			"job": "비숍",
-			"combatPower": "118조 9943억",
+			"combatPower": "231조 367억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 712,
@@ -199,7 +199,7 @@
 			"name": "양촌삭",
 			"level": 105,
 			"job": "비숍",
-			"combatPower": "28조 4238억",
+			"combatPower": "46조 945억",
 			"expedition": {
 				"grade": "마스터2",
 				"placement": 1765,
@@ -210,9 +210,9 @@
 		},
 		{
 			"name": "오도리야",
-			"level": 106,
+			"level": 107,
 			"job": "섀도어",
-			"combatPower": "100조 3863억",
+			"combatPower": "139조 3578억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 585,
@@ -223,9 +223,9 @@
 		},
 		{
 			"name": "왈왈멍멍",
-			"level": 112,
+			"level": 113,
 			"job": "비숍",
-			"combatPower": "1225조 3678억",
+			"combatPower": "1535조 5340억",
 			"expedition": {
 				"grade": "그랜드마스터1",
 				"placement": 119,
@@ -236,9 +236,9 @@
 		},
 		{
 			"name": "원더08",
-			"level": 108,
+			"level": 109,
 			"job": "섀도어",
-			"combatPower": "145조 5792억",
+			"combatPower": "178조 2781억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 700,
@@ -251,7 +251,7 @@
 			"name": "위험장소경고",
 			"level": 108,
 			"job": "나이트로드",
-			"combatPower": "179조 9081억",
+			"combatPower": "261조 6950억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 526,
@@ -262,9 +262,9 @@
 		},
 		{
 			"name": "장수창귀",
-			"level": 105,
+			"level": 106,
 			"job": "다크나이트",
-			"combatPower": "76조 6076억",
+			"combatPower": "120조 364억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 836,
@@ -275,9 +275,9 @@
 		},
 		{
 			"name": "조막",
-			"level": 105,
+			"level": 106,
 			"job": "썬콜",
-			"combatPower": "64조 3744억",
+			"combatPower": "87조 9409억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 771,
@@ -288,9 +288,9 @@
 		},
 		{
 			"name": "쫀쿤",
-			"level": 109,
+			"level": 110,
 			"job": "다크나이트",
-			"combatPower": "212조 4820억",
+			"combatPower": "275조 9976억",
 			"expedition": {
 				"grade": "그랜드마스터5",
 				"placement": 373,
@@ -301,9 +301,9 @@
 		},
 		{
 			"name": "창귀창귀",
-			"level": 106,
+			"level": 107,
 			"job": "비숍",
-			"combatPower": "88조 3025억",
+			"combatPower": "122조 3063억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 981,
@@ -314,9 +314,9 @@
 		},
 		{
 			"name": "코넛",
-			"level": 107,
+			"level": 108,
 			"job": "썬콜",
-			"combatPower": "77조 8806억",
+			"combatPower": "99조 6247억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 900,
@@ -327,9 +327,9 @@
 		},
 		{
 			"name": "크르릉캉캉",
-			"level": 112,
+			"level": 113,
 			"job": "히어로",
-			"combatPower": "2604조 4059억",
+			"combatPower": "3906조 1685억",
 			"expedition": {
 				"grade": "챌린저5",
 				"placement": 85,
@@ -340,9 +340,9 @@
 		},
 		{
 			"name": "현뚜니",
-			"level": 108,
+			"level": 109,
 			"job": "히어로",
-			"combatPower": "229조 8651억",
+			"combatPower": "312조 571억",
 			"expedition": {
 				"grade": "마스터1",
 				"placement": 544,
@@ -355,7 +355,7 @@
 			"name": "홍진영",
 			"level": 105,
 			"job": "썬콜",
-			"combatPower": "73조 777억",
+			"combatPower": "100조 8670억",
 			"expedition": {
 				"grade": "마스터2",
 				"placement": 1216,
@@ -368,7 +368,7 @@
 			"name": "휘언",
 			"level": 110,
 			"job": "비숍",
-			"combatPower": "393조 6568억",
+			"combatPower": "523조 8703억",
 			"expedition": {
 				"grade": "그랜드마스터4",
 				"placement": 271,
@@ -379,9 +379,9 @@
 		},
 		{
 			"name": "lGNooNl",
-			"level": 104,
+			"level": 105,
 			"job": "썬콜",
-			"combatPower": "41조 8752억",
+			"combatPower": "59조 3239억",
 			"expedition": {
 				"grade": "마스터2",
 				"placement": 1183,
