@@ -32,6 +32,8 @@ pnpm turbo build --filter=@shared/tailwind-config
 
 - [Turborepo 문서](https://turborepo.com/docs)
 - [Next.js 문서](https://nextjs.org/docs)
-- `APP_SETUP.md` (새 앱 공통 초기 세팅 가이드)
-- `COMMIT_MESSAGE_GUIDE.md` (커밋 메시지 규칙 가이드)
-- `.github/JIRA_SETUP.md` (GitHub Actions ↔ Jira 연동·Secrets 설정)
+- [`docs/README.md`](docs/README.md) — 문서 맵
+- [`docs/CODING_GUIDELINES.md`](docs/CODING_GUIDELINES.md) — 코딩 가이드라인
+- [`docs/APP_SETUP.md`](docs/APP_SETUP.md) — 새 앱 공통 초기 세팅
+- [`docs/COMMIT_MESSAGE_GUIDE.md`](docs/COMMIT_MESSAGE_GUIDE.md) — 커밋 메시지 규칙
+- [`AGENTS.md`](AGENTS.md) — AI 에이전트 인덱스

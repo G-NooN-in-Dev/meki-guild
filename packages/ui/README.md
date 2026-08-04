@@ -34,7 +34,7 @@ export function Example() {
 
 ## Tailwind v4 className 정규화
 
-shadcn/Tailwind IntelliSense가 제안하는 v4 canonical 문법을 따른다. (상세 규칙은 `.cursor/rules/tailwind-shared-system.mdc` 참고)
+shadcn/Tailwind IntelliSense가 제안하는 v4 canonical 문법을 따른다. (상세: [`docs/CODING_GUIDELINES.md`](../../docs/CODING_GUIDELINES.md) § UI / Tailwind)
 
 - `w-[var(--x)]` → `w-(--x)`
 - `left-[calc(var(--x)*-1)]` → `-left-(--x)`

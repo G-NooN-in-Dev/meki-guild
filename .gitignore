@@ -38,5 +38,5 @@ yarn-error.log*
 .DS_Store
 *.pem
 
-# Local AI editor rules (personal)
-.cursor/
+# Cursor — 로컬 전용 (에이전트 규칙)
+.cursor/rules/
