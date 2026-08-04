@@ -91,6 +91,7 @@ function BgmToggle({ variant = 'header', className }: BgmToggleProps) {
 
 	return (
 		<div
+			data-bgm-controls=""
 			className={cn(
 				'flex items-center',
 				variant === 'sheet' ? 'w-full flex-col items-stretch gap-2.5' : 'gap-1',

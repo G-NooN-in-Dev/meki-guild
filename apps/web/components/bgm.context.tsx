@@ -12,6 +12,9 @@ import {
 
 import { BGM_DEFAULT_VOLUME, BGM_SRC, BGM_VOLUME_STORAGE_KEY } from '@/libs/bgm.constants'
 
+/** BGM 컨트롤 클릭은 제스처 자동재생과 겹치지 않도록 이 속성을 둡니다. */
+const BGM_CONTROLS_SELECTOR = '[data-bgm-controls]'
+
 type BgmContextValue = {
 	/** 현재 재생 중인지 */
 	isPlaying: boolean
@@ -82,12 +85,19 @@ function getServerVolumeSnapshot() {
 	return BGM_DEFAULT_VOLUME
 }
 
+function isEventFromBgmControls(event: Event) {
+	const target = event.target
+	return target instanceof Element && Boolean(target.closest(BGM_CONTROLS_SELECTOR))
+}
+
 /**
  * 사이트 전역 BGM 상태를 공유합니다.
  * Audio 인스턴스는 Provider에 하나만 두고, 헤더·모바일 Sheet 버튼이 같은 상태를 씁니다.
  */
 function BgmProvider({ children }: PropsWithChildren) {
 	const audioRef = useRef<HTMLAudioElement | null>(null)
+	/** 자동재생 실패 시 붙인 제스처 리스너를 toggle에서도 해제할 수 있게 보관 */
+	const removeUnlockListenersRef = useRef<(() => void) | null>(null)
 	const [isPlaying, setIsPlaying] = useState(false)
 	const volume = useSyncExternalStore(subscribeVolume, getVolumeSnapshot, getServerVolumeSnapshot)
 
@@ -98,6 +108,35 @@ function BgmProvider({ children }: PropsWithChildren) {
 		audio.volume = readStoredVolume()
 		audioRef.current = audio
 
+		const unlockEvents = ['pointerdown', 'keydown', 'touchstart'] as const
+
+		function removeUnlockListeners() {
+			for (const eventName of unlockEvents) {
+				window.removeEventListener(eventName, tryPlayOnGesture)
+			}
+			removeUnlockListenersRef.current = null
+		}
+
+		function tryPlayOnGesture(event: Event) {
+			// 재생 버튼과 동시에 play→pause 되는 레이스를 막습니다
+			if (isEventFromBgmControls(event)) return
+			if (!audio.paused) {
+				removeUnlockListeners()
+				return
+			}
+
+			void audio.play().catch(() => {
+				// 제스처 후에도 실패하면 리스너는 유지해 다음 입력을 기다립니다
+			})
+		}
+
+		function armGestureUnlock() {
+			removeUnlockListenersRef.current = removeUnlockListeners
+			for (const eventName of unlockEvents) {
+				window.addEventListener(eventName, tryPlayOnGesture, { passive: true })
+			}
+		}
+
 		const handlePlay = () => {
 			setIsPlaying(true)
 			removeUnlockListeners()
@@ -107,28 +146,7 @@ function BgmProvider({ children }: PropsWithChildren) {
 		audio.addEventListener('play', handlePlay)
 		audio.addEventListener('pause', handlePause)
 
-		/** 브라우저가 자동재생을 막으면, 첫 사용자 제스처에서 재생을 재시도합니다. */
-		const unlockEvents = ['pointerdown', 'keydown', 'touchstart'] as const
-
-		function removeUnlockListeners() {
-			for (const eventName of unlockEvents) {
-				window.removeEventListener(eventName, tryPlayOnGesture)
-			}
-		}
-
-		function tryPlayOnGesture() {
-			void audio.play().catch(() => {
-				// 제스처 후에도 실패하면 리스너는 유지해 다음 입력을 기다립니다
-			})
-		}
-
-		function armGestureUnlock() {
-			for (const eventName of unlockEvents) {
-				window.addEventListener(eventName, tryPlayOnGesture, { passive: true })
-			}
-		}
-
-		// 기본은 재생 — 자동재생이 막히면 첫 클릭/키 입력에서 이어서 켭니다
+		// 기본은 재생 — Chrome 등은 자동재생을 막을 수 있어, 실패 시 첫 제스처에서 이어서 켭니다
 		void audio.play().catch(() => {
 			armGestureUnlock()
 		})
@@ -154,6 +172,9 @@ function BgmProvider({ children }: PropsWithChildren) {
 	async function toggle() {
 		const audio = audioRef.current
 		if (!audio) return
+
+		// 버튼 조작이 제스처 자동재생과 겹치지 않게 먼저 해제
+		removeUnlockListenersRef.current?.()
 
 		if (!audio.paused) {
 			audio.pause()
