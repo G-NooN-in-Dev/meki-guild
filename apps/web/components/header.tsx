@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import BgmToggle from '@/components/bgm-toggle'
 import Nav, { MobileNav } from '@/components/nav'
 import NameRevealUnlock from '@/features/guild/components/name-reveal-unlock'
 import { formatAppVersionLabel } from '@/libs/app-version.constants'
@@ -25,6 +26,7 @@ function Header() {
 					>
 						{formatAppVersionLabel()}
 					</span>
+					<BgmToggle className="hidden md:flex" />
 				</div>
 			</div>
 		</header>

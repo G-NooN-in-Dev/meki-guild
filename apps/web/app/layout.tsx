@@ -4,6 +4,7 @@ import { Toaster } from '@shared/ui/sonner'
 import type { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
+import { BgmProvider } from '@/components/bgm.context'
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import NameRevealProvider from '@/features/guild/context/name-reveal.context'
@@ -46,10 +47,13 @@ function RootLayout({ children }: PropsWithChildren) {
 				<div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-white/78 backdrop-blur-[2px]" />
 				{/* 메인·비교 페이지에서 이름 공개 상태를 공유 */}
 				<NameRevealProvider>
-					<Header />
-					{children}
-					<Footer />
-					<Toaster />
+					{/* 헤더·모바일 Sheet에서 같은 BGM 재생 상태를 공유 */}
+					<BgmProvider>
+						<Header />
+						{children}
+						<Footer />
+						<Toaster />
+					</BgmProvider>
 				</NameRevealProvider>
 			</body>
 		</html>

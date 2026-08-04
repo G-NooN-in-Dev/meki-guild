@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
+import BgmToggle from '@/components/bgm-toggle'
 import LinkPendingHint from '@/components/link-pending-hint'
 import { TIP_ENTRIES } from '@/features/tips/lib/tips-registry.constants'
 
@@ -246,9 +247,12 @@ function MobileNav() {
 						<SheetTitle>메뉴</SheetTitle>
 						<SheetDescription hidden />
 					</SheetHeader>
-					<nav className="text-grayscale-600 flex flex-col gap-1 p-3 text-base font-medium">
+					<nav className="text-grayscale-600 flex flex-1 flex-col gap-1 overflow-y-auto p-3 text-base font-medium">
 						<NavItems orientation="vertical" onNavigate={() => setOpen(false)} />
 					</nav>
+					<div className="border-border mt-auto border-t p-3">
+						<BgmToggle variant="sheet" />
+					</div>
 				</SheetContent>
 			</Sheet>
 		</>
