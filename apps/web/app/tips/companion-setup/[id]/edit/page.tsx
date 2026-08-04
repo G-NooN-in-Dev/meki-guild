@@ -6,7 +6,7 @@ import PageLoading from '@/components/page-loading'
 import PageShell from '@/components/page-shell'
 import { ConsultingValidationError } from '@/features/tips/lib/companion-consulting.validation'
 import CompanionConsultingNewSection from '@/features/tips/sections/companion-consulting-new.section'
-import { getConsultingPostByShortId } from '@/libs/companion-consulting.server'
+import { loadConsultingPostByShortId } from '@/libs/companion-consulting.loader'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,11 +14,11 @@ type CompanionConsultingEditPageProps = {
 	params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: CompanionConsultingEditPageProps): Promise<Metadata> {
+async function generateMetadata({ params }: CompanionConsultingEditPageProps): Promise<Metadata> {
 	const { id } = await params
 
 	try {
-		const post = await getConsultingPostByShortId(id)
+		const post = await loadConsultingPostByShortId(id)
 		if (!post) {
 			return {
 				title: '동료 현황 수정',
@@ -45,7 +45,7 @@ async function CompanionConsultingEditContent({ params }: CompanionConsultingEdi
 	let post = null
 
 	try {
-		post = await getConsultingPostByShortId(id)
+		post = await loadConsultingPostByShortId(id)
 	} catch (error) {
 		if (error instanceof ConsultingValidationError) {
 			notFound()
@@ -73,3 +73,5 @@ function CompanionConsultingEditPage({ params }: CompanionConsultingEditPageProp
 }
 
 export default CompanionConsultingEditPage
+
+export { generateMetadata }

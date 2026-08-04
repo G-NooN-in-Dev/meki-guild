@@ -3,14 +3,14 @@
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@shared/ui/empty'
 import { Spinner } from '@shared/ui/spinner'
 import { Swords } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import MemberComparePanel from '@/features/guild/components/member-compare-panel'
 import MemberSelect, { type MemberSelectOption } from '@/features/guild/components/member-select'
+import { compareMembers } from '@/features/guild/lib/compare-members'
+import { parseGuildMember } from '@/features/guild/lib/compare-snapshots'
+import type { MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import type { GuildMemberInput, MemberVsMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { compareMembers } from '@/utils/compare-members'
-import { parseGuildMember } from '@/utils/compare-snapshots'
-import type { MemberRankings } from '@/utils/compute-member-rankings'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 type MemberCompareSectionProps = {
@@ -47,16 +47,12 @@ function MemberCompareSection({ members, rankings }: MemberCompareSectionProps) 
 	const [opponentName, setOpponentName] = useState<string | null>(null)
 	const [loadedComparison, setLoadedComparison] = useState<LoadedComparison | null>(null)
 
-	const memberOptions = useMemo<MemberSelectOption[]>(
-		() =>
-			members.map((member) => ({
-				name: member.name,
-				job: member.job,
-				combatPowerLabel:
-					typeof member.combatPower === 'number' ? formatLocaleNumber(member.combatPower) : member.combatPower
-			})),
-		[members]
-	)
+	const memberOptions: MemberSelectOption[] = members.map((member) => ({
+		name: member.name,
+		job: member.job,
+		combatPowerLabel:
+			typeof member.combatPower === 'number' ? formatLocaleNumber(member.combatPower) : member.combatPower
+	}))
 
 	const canCompare = Boolean(selfName && opponentName)
 

@@ -9,7 +9,7 @@ import { cn } from './lib/utils'
 
 export const sheetSideOptions = ['top', 'right', 'bottom', 'left'] as const
 
-export type SheetSide = (typeof sheetSideOptions)[number]
+type SheetSide = (typeof sheetSideOptions)[number]
 
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
 	return <SheetPrimitive.Root data-slot="sheet" {...props} />
@@ -107,3 +107,5 @@ function SheetDescription({ className, ...props }: SheetPrimitive.Description.Pr
 }
 
 export { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger }
+
+export type { SheetSide }

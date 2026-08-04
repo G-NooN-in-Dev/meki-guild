@@ -4,7 +4,7 @@
  * 동료/유물 컨설팅이 같은 API를 쓰고, kind로 키를 구분합니다.
  */
 
-export type ConsultingEditPasswordKind = 'companion' | 'relic'
+type ConsultingEditPasswordKind = 'companion' | 'relic'
 
 /** kind별 prefix — 이미 저장된 세션 키와 호환을 유지합니다. */
 const POST_EDIT_PASSWORD_PREFIX = {
@@ -12,18 +12,26 @@ const POST_EDIT_PASSWORD_PREFIX = {
 	relic: 'relic-consulting-post-edit-password:'
 } as const satisfies Record<ConsultingEditPasswordKind, string>
 
-export function getConsultingEditPasswordKey(kind: ConsultingEditPasswordKind, shortId: string) {
+function getConsultingEditPasswordKey(kind: ConsultingEditPasswordKind, shortId: string) {
 	return `${POST_EDIT_PASSWORD_PREFIX[kind]}${shortId}`
 }
 
-export function storeConsultingEditPassword(kind: ConsultingEditPasswordKind, shortId: string, password: string) {
+function storeConsultingEditPassword(kind: ConsultingEditPasswordKind, shortId: string, password: string) {
 	sessionStorage.setItem(getConsultingEditPasswordKey(kind, shortId), password)
 }
 
-export function readConsultingEditPassword(kind: ConsultingEditPasswordKind, shortId: string): string | null {
+function readConsultingEditPassword(kind: ConsultingEditPasswordKind, shortId: string): string | null {
 	return sessionStorage.getItem(getConsultingEditPasswordKey(kind, shortId))
 }
 
-export function clearConsultingEditPassword(kind: ConsultingEditPasswordKind, shortId: string) {
+function clearConsultingEditPassword(kind: ConsultingEditPasswordKind, shortId: string) {
 	sessionStorage.removeItem(getConsultingEditPasswordKey(kind, shortId))
 }
+
+export {
+	clearConsultingEditPassword,
+	getConsultingEditPasswordKey,
+	readConsultingEditPassword,
+	storeConsultingEditPassword
+}
+export type { ConsultingEditPasswordKind }

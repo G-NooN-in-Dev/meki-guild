@@ -7,7 +7,7 @@
  * 값이 커질수록 좋은 지표(레벨·등급·인원 등).
  * 상승=▲, 하락=▼. 변동 없거나 비교 불가면 null.
  */
-export function formatArrowDelta(diff: number | null): string | null {
+function formatArrowDelta(diff: number | null): string | null {
 	if (diff === null || diff === 0) {
 		return null
 	}
@@ -20,10 +20,12 @@ export function formatArrowDelta(diff: number | null): string | null {
  * `rawDiff`는 current - previous (또는 left - right).
  * 등수 상승(숫자 감소)=▲, 하락=▼.
  */
-export function formatRankArrowDelta(rawDiff: number | null): string | null {
+function formatRankArrowDelta(rawDiff: number | null): string | null {
 	if (rawDiff === null || rawDiff === 0) {
 		return null
 	}
 
 	return rawDiff < 0 ? `▲${Math.abs(rawDiff)}` : `▼${rawDiff}`
 }
+
+export { formatArrowDelta, formatRankArrowDelta }

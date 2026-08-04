@@ -6,19 +6,19 @@ import type { RelicSlotLoadout } from '@/features/tips/types/relic.type'
  * 미보유는 DB에 넣지 않고, 보유한 항목만 배열로 저장합니다.
  * stage는 각성 단계(0~5)입니다.
  */
-export type RelicOwnershipEntry = {
+type RelicOwnershipEntry = {
 	relicId: string
 	stage: number
 }
 
 /** 슬롯 id → 장착 유물(각성·잠재 포함) */
-export type RelicConsultingLoadout = Record<string, RelicSlotLoadout>
+type RelicConsultingLoadout = Record<string, RelicSlotLoadout>
 
 /**
  * 게시글 작성·수정용 클라이언트 페이로드.
  * password는 CUD용 단순 키이며, 서버에서만 해시로 저장합니다.
  */
-export type RelicConsultingPostInput = {
+type RelicConsultingPostInput = {
 	/** 목적/제목 한 줄 */
 	title: string
 	/** 보충 설명. 비워 두면 빈 문자열로 저장합니다. */
@@ -32,7 +32,7 @@ export type RelicConsultingPostInput = {
 }
 
 /** 목록·상세에 쓰는 게시글 요약/본문 */
-export type RelicConsultingPost = {
+type RelicConsultingPost = {
 	shortId: string
 	title: string
 	/** 보충 설명. 예전 글은 빈 문자열일 수 있습니다. */
@@ -48,7 +48,7 @@ export type RelicConsultingPost = {
 }
 
 /** 목록 API 페이지네이션 결과 */
-export type RelicConsultingPostListResult = {
+type RelicConsultingPostListResult = {
 	posts: RelicConsultingPost[]
 	/** 실제 조회에 사용한 페이지 (범위 밖이면 보정됨) */
 	page: number
@@ -58,7 +58,7 @@ export type RelicConsultingPostListResult = {
 }
 
 /** 추천 세팅 댓글 입력 */
-export type RelicConsultingCommentInput = {
+type RelicConsultingCommentInput = {
 	postShortId: string
 	note: string
 	loadout: RelicConsultingLoadout
@@ -67,7 +67,7 @@ export type RelicConsultingCommentInput = {
 }
 
 /** 추천 세팅 댓글 */
-export type RelicConsultingComment = {
+type RelicConsultingComment = {
 	shortId: string
 	postShortId: string
 	note: string
@@ -78,10 +78,22 @@ export type RelicConsultingComment = {
 }
 
 /** 보유 UI용 로컬 상태 (미보유 포함) */
-export type RelicOwnershipState = {
+type RelicOwnershipState = {
 	owned: boolean
 	/** 각성 단계 0~5 */
 	stage: number
 }
 
-export type RelicOwnershipStateMap = Record<string, RelicOwnershipState>
+type RelicOwnershipStateMap = Record<string, RelicOwnershipState>
+
+export type {
+	RelicConsultingComment,
+	RelicConsultingCommentInput,
+	RelicConsultingLoadout,
+	RelicConsultingPost,
+	RelicConsultingPostInput,
+	RelicConsultingPostListResult,
+	RelicOwnershipEntry,
+	RelicOwnershipState,
+	RelicOwnershipStateMap
+}

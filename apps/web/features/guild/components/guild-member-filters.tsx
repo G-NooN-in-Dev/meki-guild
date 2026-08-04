@@ -7,9 +7,16 @@ import { Separator } from '@shared/ui/separator'
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@shared/ui/sheet'
 import { Slider } from '@shared/ui/slider'
 import { FilterIcon, XIcon } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import JobBadge from '@/features/guild/components/job-badge'
+import {
+	countActiveGuildMemberFilters,
+	createEmptyGuildMemberFilter,
+	type GuildMemberFilterState,
+	isJobTaxonomyFilterActive,
+	type NumberRange
+} from '@/features/guild/lib/filter-guild-members'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import useMediaQuery from '@/hooks/use-media-query'
 import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
@@ -20,13 +27,6 @@ import {
 	type JobClassLine,
 	JOBS_BY_CLASS_LINE
 } from '@/libs/job-class.constants'
-import {
-	countActiveGuildMemberFilters,
-	createEmptyGuildMemberFilter,
-	type GuildMemberFilterState,
-	isJobTaxonomyFilterActive,
-	type NumberRange
-} from '@/utils/filter-guild-members'
 import { formatKoreanNumber, formatTrainingScore } from '@/utils/format-korean-number'
 
 type GuildMemberFiltersProps = {
@@ -180,7 +180,7 @@ type FilterPanelBodyProps = {
 
 /** Sheet/Drawer 공통 — 직업 선택 + range 슬라이더 본문 */
 function FilterPanelBody({ comparisons, filter, onFilterChange }: FilterPanelBodyProps) {
-	const sliderBoundsByKey = useMemo(() => {
+	const sliderBoundsByKey = (() => {
 		const next = {} as Record<SliderFieldKey, RangeBounds | null>
 
 		for (const { key } of SLIDER_FIELDS) {
@@ -188,7 +188,7 @@ function FilterPanelBody({ comparisons, filter, onFilterChange }: FilterPanelBod
 		}
 
 		return next
-	}, [comparisons])
+	})()
 
 	function patchSliderRange(key: SliderFieldKey, patch: Partial<NumberRange>) {
 		onFilterChange({

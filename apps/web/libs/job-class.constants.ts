@@ -1,5 +1,5 @@
 /** 메이플스토리 직업 계열 */
-export type JobClassLine = '전사' | '마법사' | '궁수' | '도적' | '해적'
+type JobClassLine = '전사' | '마법사' | '궁수' | '도적' | '해적'
 
 /** UI·집계 시 계열 표시 순서 */
 export const JOB_CLASS_LINE_ORDER = [
@@ -40,7 +40,7 @@ export const JOBS_BY_CLASS_LINE: Record<JobClassLine, readonly string[]> = {
 	해적: ['바이퍼', '캡틴']
 }
 
-export function getJobClassLine(job: string): JobClassLine | null {
+function getJobClassLine(job: string): JobClassLine | null {
 	return JOB_TO_CLASS_LINE[job as keyof typeof JOB_TO_CLASS_LINE] ?? null
 }
 
@@ -57,7 +57,7 @@ export const JOB_CLASS_LINE_BADGE_CLASS = {
 	미분류: 'border-transparent bg-grayscale-100 text-grayscale-600'
 } as const satisfies Record<JobClassLine | '미분류', string>
 
-export function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): string {
+function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): string {
 	return JOB_CLASS_LINE_BADGE_CLASS[classLine]
 }
 
@@ -84,7 +84,7 @@ export const JOB_TEXT_CLASS = {
 
 const FALLBACK_JOB_TEXT_CLASS = 'text-grayscale-700'
 
-export function getJobTextClass(job: string): string {
+function getJobTextClass(job: string): string {
 	return JOB_TEXT_CLASS[job as keyof typeof JOB_TEXT_CLASS] ?? FALLBACK_JOB_TEXT_CLASS
 }
 
@@ -111,6 +111,9 @@ export const JOB_BADGE_CLASS = {
 
 const FALLBACK_JOB_BADGE_CLASS = 'border-transparent bg-grayscale-100 text-grayscale-600'
 
-export function getJobBadgeClass(job: string): string {
+function getJobBadgeClass(job: string): string {
 	return JOB_BADGE_CLASS[job as keyof typeof JOB_BADGE_CLASS] ?? FALLBACK_JOB_BADGE_CLASS
 }
+
+export { getJobBadgeClass, getJobClassLine, getJobClassLineBadgeClass, getJobTextClass }
+export type { JobClassLine }

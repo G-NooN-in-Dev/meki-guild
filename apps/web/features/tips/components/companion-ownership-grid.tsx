@@ -3,7 +3,7 @@
 import { Switch } from '@shared/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import CompanionLevelStepper from '@/features/tips/components/companion-level-stepper'
 import GradePortrait from '@/features/tips/components/grade-portrait'
@@ -42,7 +42,7 @@ function CompanionOwnershipGrid({
 }: CompanionOwnershipGridProps) {
 	const [gradeTab, setGradeTab] = useState<CompanionGrade>('legendary')
 
-	const ownedCount = useMemo(() => COMPANIONS.filter((companion) => ownership[companion.id]?.owned).length, [ownership])
+	const ownedCount = COMPANIONS.filter((companion) => ownership[companion.id]?.owned).length
 
 	function updateCompanion(companion: Companion, patch: Partial<{ owned: boolean; level: number }>) {
 		if (readOnly || !onOwnershipChange) {

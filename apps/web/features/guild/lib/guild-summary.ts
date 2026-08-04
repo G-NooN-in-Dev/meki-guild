@@ -22,7 +22,7 @@ type NumericDeltaLike = {
  * - new: current(전주 데이터 없음, 입력된 값만)
  * - left: diff(음수)
  */
-export function calculateTotalNumericChange(
+function calculateTotalNumericChange(
 	comparisons: GuildMemberComparison[],
 	getField: NumericFieldSelector,
 	shouldInclude?: (_comparison: GuildMemberComparison) => boolean
@@ -50,7 +50,7 @@ export function calculateTotalNumericChange(
  * 증감율 분모용 직전 주 합산값.
  * calculateTotalNumericChange와 같은 멤버 포함 규칙을 따릅니다(신규는 이전값 없음 → 제외).
  */
-export function calculateTotalPrevious(
+function calculateTotalPrevious(
 	comparisons: GuildMemberComparison[],
 	getField: NumericFieldSelector,
 	shouldInclude?: (_comparison: GuildMemberComparison) => boolean
@@ -87,7 +87,7 @@ function calculateTotalChangePercent(
 }
 
 /** 이번 주 기준 길드원 평균 레벨(이탈·미입력 멤버 제외) */
-export function calculateAverageLevel(comparisons: GuildMemberComparison[]): string {
+function calculateAverageLevel(comparisons: GuildMemberComparison[]): string {
 	const levels = comparisons
 		.filter((comparison) => comparison.status !== 'left' && comparison.level.hasValue)
 		.map((comparison) => comparison.level.current)
@@ -129,7 +129,7 @@ function getPreviousExpeditionGrades(comparisons: GuildMemberComparison[]): stri
 }
 
 /** 이번 주 길드원 개인 토벌전 등급 포인트 합계 */
-export function calculateExpeditionGradePointsTotal(comparisons: GuildMemberComparison[]): string {
+function calculateExpeditionGradePointsTotal(comparisons: GuildMemberComparison[]): string {
 	const grades = getCurrentExpeditionGrades(comparisons)
 
 	if (grades.length === 0) {
@@ -140,7 +140,7 @@ export function calculateExpeditionGradePointsTotal(comparisons: GuildMemberComp
 }
 
 /** 길드원 개인 토벌전 등급 포인트 합계의 주간 변화량 */
-export function calculateExpeditionGradePointsChange(comparisons: GuildMemberComparison[]): string | null {
+function calculateExpeditionGradePointsChange(comparisons: GuildMemberComparison[]): string | null {
 	const currentGrades = getCurrentExpeditionGrades(comparisons)
 	const previousGrades = getPreviousExpeditionGrades(comparisons)
 
@@ -163,7 +163,7 @@ function hasGuildBossContribution(comparison: GuildMemberComparison): boolean {
 	return comparison.guildBoss.previous !== null
 }
 
-export function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[]) {
+function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[]) {
 	const combatPowerField = (comparison: GuildMemberComparison) => comparison.combatPower
 	const expeditionScoreField = (comparison: GuildMemberComparison) => comparison.expeditionScore
 	const rivalryField = (comparison: GuildMemberComparison) => comparison.rivalry
@@ -187,4 +187,13 @@ export function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[
 		),
 		guildBossChangePercent: calculateTotalChangePercent(comparisons, guildBossField, hasGuildBossContribution)
 	}
+}
+
+export {
+	calculateAverageLevel,
+	calculateExpeditionGradePointsChange,
+	calculateExpeditionGradePointsTotal,
+	calculateGuildSummaryMetrics,
+	calculateTotalNumericChange,
+	calculateTotalPrevious
 }

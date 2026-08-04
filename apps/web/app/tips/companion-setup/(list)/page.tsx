@@ -7,7 +7,7 @@ import PageShell from '@/components/page-shell'
 import ConsultingHubHeader from '@/features/tips/components/consulting-hub-header'
 import { getConsultingListPath } from '@/features/tips/lib/companion-consulting.constants'
 import CompanionConsultingHubSection from '@/features/tips/sections/companion-consulting-hub.section'
-import { listConsultingPosts } from '@/libs/companion-consulting.server'
+import { loadConsultingPostList } from '@/libs/companion-consulting.loader'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,14 +37,14 @@ async function CompanionSetupTipContent({ searchParams }: CompanionSetupTipPageP
 	const { page: rawPage } = await searchParams
 	const requestedPage = parseListPage(rawPage)
 
-	let posts: Awaited<ReturnType<typeof listConsultingPosts>>['posts'] = []
+	let posts: Awaited<ReturnType<typeof loadConsultingPostList>>['posts'] = []
 	let page = 1
 	let totalPages = 0
 	let totalCount = 0
 	let loadError: string | null = null
 
 	try {
-		const result = await listConsultingPosts({ page: requestedPage })
+		const result = await loadConsultingPostList({ page: requestedPage })
 		posts = result.posts
 		page = result.page
 		totalPages = result.totalPages

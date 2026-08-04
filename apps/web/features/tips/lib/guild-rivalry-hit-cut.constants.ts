@@ -31,7 +31,7 @@ export const GUILD_RIVALRY_HIT_BONUS_MAX_DIFF = 30
  * 단계 → 누적 보스 데미지 증가 스택.
  * 단계마다 잡몹 6마리 × +1 = +6이므로 stage × 6.
  */
-export function getGuildRivalryBuffStack(stage: number) {
+function getGuildRivalryBuffStack(stage: number) {
 	return stage * GUILD_RIVALRY_BUFF_STACK_PER_STAGE
 }
 
@@ -39,12 +39,12 @@ export function getGuildRivalryBuffStack(stage: number) {
  * 단계 → 요구 명중.
  * 1단계 200, 이후 단계마다 +8 → 200 + (stage - 1) × 8.
  */
-export function getGuildRivalryRequiredHit(stage: number) {
+function getGuildRivalryRequiredHit(stage: number) {
 	return GUILD_RIVALRY_BASE_HIT + (stage - 1) * GUILD_RIVALRY_HIT_PER_STAGE
 }
 
 /** 1~maxStage 단계 표 데이터 */
-export function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_MAX_STAGE): GuildRivalryHitCutEntry[] {
+function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_MAX_STAGE): GuildRivalryHitCutEntry[] {
 	return Array.from({ length: maxStage }, (_, index) => {
 		const stage = index + 1
 
@@ -58,3 +58,5 @@ export function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_
 
 /** 페이지 표에 바로 쓰는 1~40단 데이터 */
 export const GUILD_RIVALRY_HIT_CUT_ENTRIES = buildGuildRivalryHitCutEntries()
+
+export { buildGuildRivalryHitCutEntries, getGuildRivalryBuffStack, getGuildRivalryRequiredHit }

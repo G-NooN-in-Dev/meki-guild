@@ -28,9 +28,9 @@ export const sidebarSideOptions = ['left', 'right'] as const
 export const sidebarVariantOptions = ['sidebar', 'floating', 'inset'] as const
 export const sidebarCollapsibleOptions = ['offcanvas', 'icon', 'none'] as const
 
-export type SidebarSide = (typeof sidebarSideOptions)[number]
-export type SidebarVariant = (typeof sidebarVariantOptions)[number]
-export type SidebarCollapsible = (typeof sidebarCollapsibleOptions)[number]
+type SidebarSide = (typeof sidebarSideOptions)[number]
+type SidebarVariant = (typeof sidebarVariantOptions)[number]
+type SidebarCollapsible = (typeof sidebarCollapsibleOptions)[number]
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -686,3 +686,5 @@ export {
 	SidebarTrigger,
 	useSidebar
 }
+
+export type { SidebarCollapsible, SidebarSide, SidebarVariant }

@@ -55,7 +55,7 @@ export const RELIC_POTENTIAL_SLOT_LIMIT = {
 	epic: 2
 } as const satisfies Record<RelicGrade, number>
 
-export function getRelicPotentialSlotLimit(grade: RelicGrade) {
+function getRelicPotentialSlotLimit(grade: RelicGrade) {
 	return RELIC_POTENTIAL_SLOT_LIMIT[grade]
 }
 
@@ -139,11 +139,11 @@ function buildPotentialOptionsForGrade(grade: RelicPotentialGrade): RelicPotenti
 export const RELIC_POTENTIAL_OPTIONS: readonly RelicPotentialOption[] =
 	RELIC_POTENTIAL_GRADE_ORDER.flatMap(buildPotentialOptionsForGrade)
 
-export function getRelicPotentialOptionById(id: string): RelicPotentialOption | undefined {
+function getRelicPotentialOptionById(id: string): RelicPotentialOption | undefined {
 	return RELIC_POTENTIAL_OPTIONS.find((option) => option.id === id)
 }
 
-export function getRelicPotentialOptionsByGrade(grade: RelicPotentialGrade): readonly RelicPotentialOption[] {
+function getRelicPotentialOptionsByGrade(grade: RelicPotentialGrade): readonly RelicPotentialOption[] {
 	return RELIC_POTENTIAL_OPTIONS.filter((option) => option.grade === grade)
 }
 
@@ -151,7 +151,7 @@ export function getRelicPotentialOptionsByGrade(grade: RelicPotentialGrade): rea
  * 잠재옵션 id 목록을 합산용 스탯으로 변환합니다.
  * 상시 효과라 scope는 두지 않고, 같은 label끼리 유물 기본 효과와도 합쳐집니다.
  */
-export function resolvePotentialStats(potentialIds: readonly string[]): readonly RelicStatEffect[] {
+function resolvePotentialStats(potentialIds: readonly string[]): readonly RelicStatEffect[] {
 	return potentialIds.flatMap((id) => {
 		const option = getRelicPotentialOptionById(id)
 		if (!option) {
@@ -164,7 +164,15 @@ export function resolvePotentialStats(potentialIds: readonly string[]): readonly
 }
 
 /** 유물 등급 변경 시 잠재 칸 수를 맞춥니다. */
-export function clampPotentialIds(potentialIds: readonly string[], relicGrade: RelicGrade): readonly string[] {
+function clampPotentialIds(potentialIds: readonly string[], relicGrade: RelicGrade): readonly string[] {
 	const limit = getRelicPotentialSlotLimit(relicGrade)
 	return potentialIds.slice(0, limit).filter((id) => Boolean(getRelicPotentialOptionById(id)))
+}
+
+export {
+	clampPotentialIds,
+	getRelicPotentialOptionById,
+	getRelicPotentialOptionsByGrade,
+	getRelicPotentialSlotLimit,
+	resolvePotentialStats
 }

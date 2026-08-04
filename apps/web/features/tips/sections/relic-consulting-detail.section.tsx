@@ -8,7 +8,7 @@ import { toast } from '@shared/ui/sonner'
 import { Textarea } from '@shared/ui/textarea'
 import { PencilIcon, Trash2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
 import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
@@ -67,9 +67,9 @@ function formatCreatedAt(iso: string) {
 /** 게시글 상세: 조회 + 추천 작성 + 비밀번호 기반 수정·삭제 */
 function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailSectionProps) {
 	const router = useRouter()
-	const ownershipState = useMemo(() => relicOwnershipEntriesToStateMap(post.ownership), [post.ownership])
-	const allowedIds = useMemo(() => relicOwnershipEntriesToAllowedIds(post.ownership), [post.ownership])
-	const stageByRelicId = useMemo(() => relicOwnershipEntriesToStageMap(post.ownership), [post.ownership])
+	const ownershipState = relicOwnershipEntriesToStateMap(post.ownership)
+	const allowedIds = relicOwnershipEntriesToAllowedIds(post.ownership)
+	const stageByRelicId = relicOwnershipEntriesToStageMap(post.ownership)
 
 	const [recommendLoadouts, setRecommendLoadouts] = useState<RelicConsultingLoadout>(() =>
 		createEmptyRelicConsultingLoadout()
@@ -91,15 +91,8 @@ function RelicConsultingDetailSection({ post, comments }: RelicConsultingDetailS
 	const [editError, setEditError] = useState<string | null>(null)
 
 	// 추천 작성 중에도 적용 후 프리셋을 바로 보여 줍니다.
-	const recommendProjectedPresetStats = useMemo(
-		() => projectRelicPresetStats(post.presetStats, post.loadout, recommendLoadouts),
-		[post.presetStats, post.loadout, recommendLoadouts]
-	)
-
-	const editProjectedPresetStats = useMemo(
-		() => projectRelicPresetStats(post.presetStats, post.loadout, editLoadouts),
-		[post.presetStats, post.loadout, editLoadouts]
-	)
+	const recommendProjectedPresetStats = projectRelicPresetStats(post.presetStats, post.loadout, recommendLoadouts)
+	const editProjectedPresetStats = projectRelicPresetStats(post.presetStats, post.loadout, editLoadouts)
 
 	async function handleSubmitRecommend() {
 		setError(null)

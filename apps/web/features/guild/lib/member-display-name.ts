@@ -24,12 +24,14 @@ function toAliasCode(hash: number): string {
  * 잠금 상태에서 화면에 보여줄 이름.
  * DOM에 실명이 노출되지 않도록 별칭만 반환합니다.
  */
-export function getMaskedMemberName(realName: string): string {
+function getMaskedMemberName(realName: string): string {
 	const code = toAliasCode(hashMemberName(realName))
 	return `모험가_${code}`
 }
 
 /** 잠금 여부에 따라 실명 또는 별칭을 반환합니다 */
-export function getMemberDisplayName(realName: string, isUnlocked: boolean): string {
+function getMemberDisplayName(realName: string, isUnlocked: boolean): string {
 	return isUnlocked ? realName : getMaskedMemberName(realName)
 }
+
+export { getMaskedMemberName, getMemberDisplayName }

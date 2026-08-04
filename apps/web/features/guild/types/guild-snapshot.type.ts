@@ -1,4 +1,4 @@
-export type GuildMemberInput = {
+type GuildMemberInput = {
 	name: string
 	level: number
 	job: string
@@ -16,7 +16,7 @@ export type GuildMemberInput = {
 }
 
 /** 한 시점의 길드원 스냅샷. 수집일은 guild-content-dates.json 에서 분야별로 관리합니다. */
-export type GuildWeekSnapshot = {
+type GuildWeekSnapshot = {
 	members: GuildMemberInput[]
 }
 
@@ -26,7 +26,7 @@ export const GUILD_EMPTY_VALUE_LABEL = '-'
 /** 증감이 0일 때의 화면 표기 (+0 대신) */
 export const GUILD_ZERO_DELTA_LABEL = '-'
 
-export type ParsedGuildMember = {
+type ParsedGuildMember = {
 	name: string
 	level: number
 	job: string
@@ -56,7 +56,7 @@ export type ParsedGuildMember = {
 	hasGuildBoss: boolean
 }
 
-export type NumericDelta = {
+type NumericDelta = {
 	current: bigint
 	previous: bigint | null
 	diff: bigint | null
@@ -69,7 +69,7 @@ export type NumericDelta = {
 	hasValue: boolean
 }
 
-export type LevelDelta = {
+type LevelDelta = {
 	current: number
 	previous: number | null
 	diff: number | null
@@ -80,9 +80,9 @@ export type LevelDelta = {
 	hasValue: boolean
 }
 
-export type MemberComparisonStatus = 'active' | 'new' | 'left'
+type MemberComparisonStatus = 'active' | 'new' | 'left'
 
-export type GuildMemberComparison = {
+type GuildMemberComparison = {
 	name: string
 	job: string
 	/** 직전 주 직업. 신규·탈퇴·직전 데이터 없으면 null */
@@ -114,19 +114,19 @@ export type GuildMemberComparison = {
 	guildBoss: NumericDelta
 }
 
-export type GuildDashboardData = {
+type GuildDashboardData = {
 	currentWeek: GuildWeekSnapshot
 	previousWeek: GuildWeekSnapshot
 	comparisons: GuildMemberComparison[]
-	rankings: import('@/utils/compute-member-rankings').MemberRankings
+	rankings: import('@/features/guild/lib/compute-member-rankings').MemberRankings
 	/** 직전 주 기준 순위. 순위 변동 표시에 사용 */
-	previousRankings: import('@/utils/compute-member-rankings').MemberRankings
+	previousRankings: import('@/features/guild/lib/compute-member-rankings').MemberRankings
 }
 
 /** 1 vs 1 비교에서 우세한 쪽 */
-export type MemberVsWinner = 'left' | 'right' | 'tie'
+type MemberVsWinner = 'left' | 'right' | 'tie'
 
-export type MemberVsNumericField = {
+type MemberVsNumericField = {
 	left: bigint
 	right: bigint
 	leftLabel: string
@@ -137,7 +137,7 @@ export type MemberVsNumericField = {
 	diffPercentLabel: string | null
 }
 
-export type MemberVsLevelField = {
+type MemberVsLevelField = {
 	left: number
 	right: number
 	diff: number
@@ -145,7 +145,7 @@ export type MemberVsLevelField = {
 	winner: MemberVsWinner
 }
 
-export type MemberVsExpeditionGradeField = {
+type MemberVsExpeditionGradeField = {
 	left: string
 	right: string
 	diff: number | null
@@ -154,7 +154,7 @@ export type MemberVsExpeditionGradeField = {
 }
 
 /** 토벌전 등수 1vs1. 낮은 등수가 우세. 미입력 시 leftHasValue/rightHasValue로 구분 */
-export type MemberVsPlacementField = {
+type MemberVsPlacementField = {
 	left: number
 	right: number
 	leftLabel: string
@@ -167,7 +167,7 @@ export type MemberVsPlacementField = {
 }
 
 /** 두 길드원 간 스펙 비교 결과 */
-export type MemberVsMemberComparison = {
+type MemberVsMemberComparison = {
 	left: Pick<ParsedGuildMember, 'name' | 'job'>
 	right: Pick<ParsedGuildMember, 'name' | 'job'>
 	level: MemberVsLevelField
@@ -180,7 +180,25 @@ export type MemberVsMemberComparison = {
 	guildBoss: MemberVsNumericField & { leftHasValue: boolean; rightHasValue: boolean }
 }
 
-export type GuildComparePageData = {
+type GuildComparePageData = {
 	members: GuildMemberInput[]
-	rankings: import('@/utils/compute-member-rankings').MemberRankings
+	rankings: import('@/features/guild/lib/compute-member-rankings').MemberRankings
+}
+
+export type {
+	GuildComparePageData,
+	GuildDashboardData,
+	GuildMemberComparison,
+	GuildMemberInput,
+	GuildWeekSnapshot,
+	LevelDelta,
+	MemberComparisonStatus,
+	MemberVsExpeditionGradeField,
+	MemberVsLevelField,
+	MemberVsMemberComparison,
+	MemberVsNumericField,
+	MemberVsPlacementField,
+	MemberVsWinner,
+	NumericDelta,
+	ParsedGuildMember
 }

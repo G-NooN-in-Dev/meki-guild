@@ -6,7 +6,7 @@ import { cn } from './lib/utils'
 /** Storybook Controls용 input type 목록 */
 export const inputTypeOptions = ['text', 'password', 'email', 'number', 'search'] as const
 
-export type InputType = (typeof inputTypeOptions)[number] | (string & {})
+type InputType = (typeof inputTypeOptions)[number] | (string & {})
 
 function Input({ className, type, ...props }: ComponentProps<'input'>) {
 	return (
@@ -23,3 +23,5 @@ function Input({ className, type, ...props }: ComponentProps<'input'>) {
 }
 
 export { Input }
+
+export type { InputType }

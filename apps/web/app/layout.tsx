@@ -6,7 +6,7 @@ import { PropsWithChildren } from 'react'
 
 import Footer from '@/components/footer'
 import Header from '@/components/header'
-import { NameRevealProvider } from '@/features/guild/context/name-reveal.context'
+import NameRevealProvider from '@/features/guild/context/name-reveal.context'
 
 // 카카오톡 등 링크 미리보기용 Open Graph 메타
 const SITE_URL = 'https://meki-games.vercel.app'

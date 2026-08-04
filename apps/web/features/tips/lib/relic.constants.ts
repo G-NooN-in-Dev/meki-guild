@@ -92,12 +92,12 @@ export const RELIC_ICON_KEY = Object.fromEntries(
 ) as Record<(typeof RELIC_CATALOG_SOURCE)[number]['name'], (typeof RELIC_CATALOG_SOURCE)[number]['iconKey']>
 
 /** iconKey → public 경로 */
-export function getRelicImageSrcByIconKey(iconKey: string) {
+function getRelicImageSrcByIconKey(iconKey: string) {
 	return iconKey ? `/tips/relics/${iconKey}.png` : ''
 }
 
 /** 유물 표시명 → public 경로. 매핑이 없으면 빈 문자열. */
-export function getRelicImageSrc(name: string) {
+function getRelicImageSrc(name: string) {
 	const iconKey = RELIC_ICON_KEY[name as keyof typeof RELIC_ICON_KEY]
 	return iconKey ? getRelicImageSrcByIconKey(iconKey) : ''
 }
@@ -122,15 +122,15 @@ export const RELICS: readonly Relic[] = [...RELIC_CATALOG_SOURCE].map(createReli
 	return a.name.localeCompare(b.name, 'ko')
 })
 
-export function getRelicById(id: string): Relic | undefined {
+function getRelicById(id: string): Relic | undefined {
 	return RELICS.find((relic) => relic.id === id)
 }
 
-export function getRelicByName(name: string): Relic | undefined {
+function getRelicByName(name: string): Relic | undefined {
 	return RELICS.find((relic) => relic.name === name)
 }
 
-export function getRelicsByGrade(grade: RelicGrade): readonly Relic[] {
+function getRelicsByGrade(grade: RelicGrade): readonly Relic[] {
 	return RELICS.filter((relic) => relic.grade === grade)
 }
 
@@ -151,7 +151,7 @@ function stageFlat(values: readonly number[], stage: RelicAwakeningStage): strin
 }
 
 /** 입력 단계가 범위를 벗어나면 0~5로 보정 */
-export function clampRelicAwakeningStage(stage: number): RelicAwakeningStage {
+function clampRelicAwakeningStage(stage: number): RelicAwakeningStage {
 	const clamped = Math.min(RELIC_MAX_AWAKENING_STAGE, Math.max(0, Math.floor(stage)))
 	return clamped as RelicAwakeningStage
 }
@@ -487,11 +487,11 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	}
 }
 
-export function getRelicActivationCondition(relicId: string): string | undefined {
+function getRelicActivationCondition(relicId: string): string | undefined {
 	return RELIC_EFFECT_DEFINITION_BY_ID[relicId]?.activationCondition
 }
 
-export function resolveRelicEffects(relicId: string, stage: number): RelicResolvedEffects | null {
+function resolveRelicEffects(relicId: string, stage: number): RelicResolvedEffects | null {
 	const relic = getRelicById(relicId)
 	const definition = RELIC_EFFECT_DEFINITION_BY_ID[relicId]
 	if (!relic || !definition) {
@@ -513,7 +513,7 @@ export function resolveRelicEffects(relicId: string, stage: number): RelicResolv
  * 장착된 유물 스탯을 라벨·스코프별로 합산합니다.
  * 조건부 효과(월드보스 등)는 scope가 달라서 상시 수치와 섞이지 않습니다.
  */
-export function aggregateRelicStats(stats: readonly RelicStatEffect[]): readonly RelicStatEffect[] {
+function aggregateRelicStats(stats: readonly RelicStatEffect[]): readonly RelicStatEffect[] {
 	const totals = new Map<string, { label: string; value: number; unit: RelicStatUnit; scope?: string }>()
 
 	for (const { label, value, unit, scope } of stats) {
@@ -537,4 +537,16 @@ export function aggregateRelicStats(stats: readonly RelicStatEffect[]): readonly
 			displayText: `${label} ${formatRelicStatValue(rounded, unit)}`
 		} satisfies RelicStatEffect
 	})
+}
+
+export {
+	aggregateRelicStats,
+	clampRelicAwakeningStage,
+	getRelicActivationCondition,
+	getRelicById,
+	getRelicByName,
+	getRelicImageSrc,
+	getRelicImageSrcByIconKey,
+	getRelicsByGrade,
+	resolveRelicEffects
 }

@@ -1,8 +1,8 @@
-import { GrowthDelta } from '@/features/guild/components/growth-delta'
+import GrowthDelta from '@/features/guild/components/growth-delta'
 import GuildMemberTable from '@/features/guild/components/guild-member-table'
+import { calculateGuildSummaryMetrics } from '@/features/guild/lib/guild-summary'
 import { GUILD_ZERO_DELTA_LABEL, type GuildDashboardData } from '@/features/guild/types/guild-snapshot.type'
 import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
-import { calculateGuildSummaryMetrics } from '@/utils/guild-summary'
 
 type GuildDashboardSectionProps = {
 	data: GuildDashboardData

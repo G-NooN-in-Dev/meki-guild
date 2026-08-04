@@ -142,7 +142,7 @@ type ListRelicConsultingPostsOptions = {
 }
 
 /** 최근 게시글 목록 (댓글 수·페이지네이션 포함) */
-export async function listRelicConsultingPosts(
+async function listRelicConsultingPosts(
 	options: ListRelicConsultingPostsOptions = {}
 ): Promise<RelicConsultingPostListResult> {
 	const pageSize = Math.max(1, options.pageSize ?? CONSULTING_POST_LIST_LIMIT)
@@ -189,7 +189,7 @@ export async function listRelicConsultingPosts(
 }
 
 /** shortId로 게시글 조회 */
-export async function getRelicConsultingPostByShortId(rawShortId: string): Promise<RelicConsultingPost | null> {
+async function getRelicConsultingPostByShortId(rawShortId: string): Promise<RelicConsultingPost | null> {
 	await ensureIndexes()
 	const shortId = parseRelicConsultingShortId(rawShortId)
 	const db = await getDb()
@@ -204,7 +204,7 @@ export async function getRelicConsultingPostByShortId(rawShortId: string): Promi
 }
 
 /** 게시글의 추천 댓글 목록 (오래된 순 — 읽기 흐름) */
-export async function listRelicConsultingComments(rawPostShortId: string): Promise<RelicConsultingComment[]> {
+async function listRelicConsultingComments(rawPostShortId: string): Promise<RelicConsultingComment[]> {
 	await ensureIndexes()
 	const postShortId = parseRelicConsultingShortId(rawPostShortId)
 	const db = await getDb()
@@ -218,7 +218,7 @@ export async function listRelicConsultingComments(rawPostShortId: string): Promi
 }
 
 /** 게시글 생성 → shortId 반환 */
-export async function createRelicConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
+async function createRelicConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const input = parseRelicConsultingPostInput(rawInput) satisfies RelicConsultingPostInput
 	const db = await getDb()
@@ -239,7 +239,7 @@ export async function createRelicConsultingPost(rawInput: unknown): Promise<{ sh
 }
 
 /** 게시글 수정 — 비밀번호 검증 후 본문만 갱신 */
-export async function updateRelicConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
+async function updateRelicConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password, title, content, presetStats, ownership, loadout } =
 		parseRelicConsultingPostUpdateInput(rawInput)
@@ -271,7 +271,7 @@ export async function updateRelicConsultingPost(rawInput: unknown): Promise<{ sh
 }
 
 /** 수정 화면 진입 전 비밀번호만 확인 */
-export async function verifyRelicConsultingPostPassword(rawInput: unknown): Promise<{ shortId: string }> {
+async function verifyRelicConsultingPostPassword(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseRelicConsultingDeleteInput(rawInput, '게시글 ID')
 	const db = await getDb()
@@ -288,7 +288,7 @@ export async function verifyRelicConsultingPostPassword(rawInput: unknown): Prom
 }
 
 /** 게시글 삭제 — 비밀번호 검증 후 추천 댓글까지 cascade 삭제 */
-export async function deleteRelicConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
+async function deleteRelicConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseRelicConsultingDeleteInput(rawInput, '게시글 ID')
 	const db = await getDb()
@@ -313,7 +313,7 @@ export async function deleteRelicConsultingPost(rawInput: unknown): Promise<{ sh
  * 장착 가능 여부는 게시글 보유 현황으로만 검증합니다.
  * 잠재옵션은 추천자가 자유롭게 제안할 수 있습니다.
  */
-export async function createRelicConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
+async function createRelicConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 
 	if (!rawInput || typeof rawInput !== 'object') {
@@ -354,7 +354,7 @@ export async function createRelicConsultingComment(rawInput: unknown): Promise<{
 }
 
 /** 추천 댓글 수정 — 비밀번호 검증 후 note/loadout만 갱신 */
-export async function updateRelicConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
+async function updateRelicConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password, note, loadout } = parseRelicConsultingCommentUpdateFields(rawInput)
 	const db = await getDb()
@@ -392,7 +392,7 @@ export async function updateRelicConsultingComment(rawInput: unknown): Promise<{
 }
 
 /** 추천 수정 진입 전 비밀번호만 확인 */
-export async function verifyRelicConsultingCommentPassword(rawInput: unknown): Promise<{ shortId: string }> {
+async function verifyRelicConsultingCommentPassword(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseRelicConsultingDeleteInput(rawInput, '추천 ID')
 	const db = await getDb()
@@ -409,7 +409,7 @@ export async function verifyRelicConsultingCommentPassword(rawInput: unknown): P
 }
 
 /** 추천 댓글 삭제 — 비밀번호 검증 */
-export async function deleteRelicConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
+async function deleteRelicConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseRelicConsultingDeleteInput(rawInput, '추천 ID')
 	const db = await getDb()
@@ -425,4 +425,18 @@ export async function deleteRelicConsultingComment(rawInput: unknown): Promise<{
 
 	await db.collection(COMMENTS_COLLECTION).deleteOne({ shortId })
 	return { shortId }
+}
+
+export {
+	createRelicConsultingComment,
+	createRelicConsultingPost,
+	deleteRelicConsultingComment,
+	deleteRelicConsultingPost,
+	getRelicConsultingPostByShortId,
+	listRelicConsultingComments,
+	listRelicConsultingPosts,
+	updateRelicConsultingComment,
+	updateRelicConsultingPost,
+	verifyRelicConsultingCommentPassword,
+	verifyRelicConsultingPostPassword
 }

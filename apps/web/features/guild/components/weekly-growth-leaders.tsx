@@ -11,17 +11,16 @@ import {
 	PopoverTrigger
 } from '@shared/ui/popover'
 import { TrophyIcon } from 'lucide-react'
-import { useMemo } from 'react'
 
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
-import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { formatGuildContentDate } from '@/libs/guild-content-dates.constants'
 import {
 	getWeeklyGrowthSelectionStatus,
 	selectWeeklyGrowthLeaders,
 	type WeeklyGrowthLeader
-} from '@/utils/select-weekly-growth-leaders'
+} from '@/features/guild/lib/select-weekly-growth-leaders'
+import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import { formatGuildContentDate } from '@/libs/guild-content-dates.constants'
 
 type WeeklyGrowthLeadersProps = {
 	comparisons: GuildMemberComparison[]
@@ -126,8 +125,8 @@ function PendingState({ pendingLabels }: PendingStateProps) {
  * 주간 필수 컨텐츠가 모두 갱신된 뒤, 성장률 평균 상위 3명을 포디움으로 보여 줍니다.
  */
 function WeeklyGrowthLeaders({ comparisons }: WeeklyGrowthLeadersProps) {
-	const status = useMemo(() => getWeeklyGrowthSelectionStatus(), [])
-	const leaders = useMemo(() => selectWeeklyGrowthLeaders(comparisons), [comparisons])
+	const status = getWeeklyGrowthSelectionStatus()
+	const leaders = selectWeeklyGrowthLeaders(comparisons)
 
 	return (
 		<Popover>

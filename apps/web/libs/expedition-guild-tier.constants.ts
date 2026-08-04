@@ -1,4 +1,4 @@
-export type ExpeditionGuildTier = {
+type ExpeditionGuildTier = {
 	rank: string
 	points: number
 	/** 해당 등급을 얻기 위해 들어야 하는 최대 등수. null이면 등수 제한 없음. */
@@ -6,7 +6,7 @@ export type ExpeditionGuildTier = {
 }
 
 /** 토벌전 등급 UI 구간 (챌린저 / 그랜드마스터 / 마스터) */
-export type ExpeditionTierBand = 'challenger' | 'grandmaster' | 'master'
+type ExpeditionTierBand = 'challenger' | 'grandmaster' | 'master'
 
 /**
  * 구간별 UI 톤.
@@ -53,7 +53,7 @@ export const EXPEDITION_GUILD_TIERS = [
 	{ rank: '마스터5', points: 65_000, maxPlacement: null }
 ] as const satisfies readonly ExpeditionGuildTier[]
 
-export function getExpeditionGuildTier(position: number): ExpeditionGuildTier | null {
+function getExpeditionGuildTier(position: number): ExpeditionGuildTier | null {
 	return EXPEDITION_GUILD_TIERS[position - 1] ?? null
 }
 
@@ -61,7 +61,7 @@ export function getExpeditionGuildTier(position: number): ExpeditionGuildTier | 
  * 등급명 → UI 구간.
  * 빈 값(`-`)·미매칭은 null.
  */
-export function getExpeditionTierBand(grade: string): ExpeditionTierBand | null {
+function getExpeditionTierBand(grade: string): ExpeditionTierBand | null {
 	if (!grade || grade === '-') {
 		return null
 	}
@@ -85,7 +85,7 @@ export function getExpeditionTierBand(grade: string): ExpeditionTierBand | null 
  * 토벌전 등급 텍스트 색·두께.
  * 빈 값은 grayscale-400, 미매칭은 빈 문자열(호출측 기본 스타일 유지).
  */
-export function getExpeditionGradeTextClass(grade: string): string {
+function getExpeditionGradeTextClass(grade: string): string {
 	if (!grade || grade === '-') {
 		return 'text-grayscale-400'
 	}
@@ -99,7 +99,7 @@ export function getExpeditionGradeTextClass(grade: string): string {
  * 토벌전 등급명 → 순위(1=챌린저1 최상위, 15=마스터5 최하위).
  * 길드원 개인 등급·길드 순위 등급 모두 동일한 명칭 체계를 사용합니다.
  */
-export function getExpeditionGradeRank(grade: string): number | null {
+function getExpeditionGradeRank(grade: string): number | null {
 	const index = EXPEDITION_GUILD_TIERS.findIndex((tier) => tier.rank === grade)
 
 	return index === -1 ? null : index + 1
@@ -109,7 +109,7 @@ export function getExpeditionGradeRank(grade: string): number | null {
  * 직전 대비 등급 변화 단계.
  * 양수=상승(챌린저1 방향), 음수=하락(마스터5 방향), 0=동일.
  */
-export function getExpeditionGradeDiff(previous: string, current: string): number | null {
+function getExpeditionGradeDiff(previous: string, current: string): number | null {
 	const previousRank = getExpeditionGradeRank(previous)
 	const currentRank = getExpeditionGradeRank(current)
 
@@ -120,7 +120,7 @@ export function getExpeditionGradeDiff(previous: string, current: string): numbe
 	return previousRank - currentRank
 }
 
-export function getExpeditionGradePoints(grade: string): number {
+function getExpeditionGradePoints(grade: string): number {
 	return EXPEDITION_GUILD_TIERS.find((tier) => tier.rank === grade)?.points ?? 0
 }
 
@@ -128,7 +128,7 @@ export function getExpeditionGradePoints(grade: string): number {
  * 길드원 개인 토벌전 등급에 부여된 포인트를 모두 합산합니다.
  * (길드 내 점수 순위별 포인트와는 별개)
  */
-export function sumExpeditionGradePoints(grades: readonly string[]): number {
+function sumExpeditionGradePoints(grades: readonly string[]): number {
 	return grades.reduce((sum, grade) => sum + getExpeditionGradePoints(grade), 0)
 }
 
@@ -141,7 +141,7 @@ type ExpeditionScoreEntry = {
  * 토벌전 점수 순위에 따라 길드원별 등급 포인트를 합산합니다.
  * 동점일 때는 이름(가나다) 순으로 순위를 정합니다.
  */
-export function calculateExpeditionGuildPoints(entries: ExpeditionScoreEntry[]): number {
+function calculateExpeditionGuildPoints(entries: ExpeditionScoreEntry[]): number {
 	const sorted = [...entries].sort((left, right) => {
 		if (left.score === right.score) {
 			return left.name.localeCompare(right.name, 'ko')
@@ -156,3 +156,15 @@ export function calculateExpeditionGuildPoints(entries: ExpeditionScoreEntry[]):
 		return sum + (tier?.points ?? 0)
 	}, 0)
 }
+
+export {
+	calculateExpeditionGuildPoints,
+	getExpeditionGradeDiff,
+	getExpeditionGradePoints,
+	getExpeditionGradeRank,
+	getExpeditionGradeTextClass,
+	getExpeditionGuildTier,
+	getExpeditionTierBand,
+	sumExpeditionGradePoints
+}
+export type { ExpeditionGuildTier, ExpeditionTierBand }

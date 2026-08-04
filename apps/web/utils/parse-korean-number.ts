@@ -24,7 +24,7 @@ function parsePlainNumber(value: string): bigint | null {
  * parseKoreanNumber('1739조 115억') // 1739115000000000n
  * parseKoreanNumber('15,246,720')   // 15246720n
  */
-export function parseKoreanNumber(input: string | number): bigint {
+function parseKoreanNumber(input: string | number): bigint {
 	if (typeof input === 'number') {
 		return BigInt(Math.trunc(input))
 	}
@@ -63,3 +63,5 @@ export function parseKoreanNumber(input: string | number): bigint {
 
 	return total
 }
+
+export { parseKoreanNumber }

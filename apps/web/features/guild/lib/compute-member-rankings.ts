@@ -5,10 +5,10 @@ import { formatRankArrowDelta } from '@/utils/format-delta-label'
  * 멤버별 순위를 담는 객체 (이름 → 등수).
  * Server→Client 직렬화를 위해 Map 대신 plain object를 사용합니다.
  */
-export type RankingMap = Record<string, number>
+type RankingMap = Record<string, number>
 
 /** 순위 표시 대상 항목들의 등수 모음. 레벨은 순위 기준이 아니므로 제외. */
-export type MemberRankings = {
+type MemberRankings = {
 	combatPower: RankingMap
 	/** 토벌전 등수. 숫자가 작을수록 상위(1위가 최고) */
 	expeditionPlacement: RankingMap
@@ -23,7 +23,7 @@ export type MemberRankings = {
  * 값이 없는(hasXxx = false) 멤버는 순위에서 제외됩니다.
  * 동점은 같은 등수를 부여합니다 (1, 2, 2, 4 방식).
  */
-export function computeMemberRankings(members: ParsedGuildMember[]): MemberRankings {
+function computeMemberRankings(members: ParsedGuildMember[]): MemberRankings {
 	return {
 		combatPower: computeRank(members, (m) => (m.hasCombatPower ? m.combatPower : null)),
 		expeditionPlacement: computeRankAsc(members, (m) => (m.expedition.hasPlacement ? m.expedition.placement : null)),
@@ -88,7 +88,7 @@ function computeRankAsc(members: ParsedGuildMember[], getValue: (m: ParsedGuildM
 }
 
 /** 길드 내 순위 라벨 (예: "1위"). 등수 정보가 없으면 null */
-export function formatRankLabel(rankingMap: RankingMap, memberName: string): string | null {
+function formatRankLabel(rankingMap: RankingMap, memberName: string): string | null {
 	const rank = rankingMap[memberName]
 	if (rank === undefined) return null
 	return `${rank}위`
@@ -98,11 +98,7 @@ export function formatRankLabel(rankingMap: RankingMap, memberName: string): str
  * 순위 변동 라벨. 등수가 낮아지면(숫자 감소) 상승(▲), 높아지면(숫자 증가) 하락(▼).
  * 변동 없거나 비교 불가면 null.
  */
-export function formatRankDiffLabel(
-	currentMap: RankingMap,
-	previousMap: RankingMap,
-	memberName: string
-): string | null {
+function formatRankDiffLabel(currentMap: RankingMap, previousMap: RankingMap, memberName: string): string | null {
 	const current = currentMap[memberName]
 	const previous = previousMap[memberName]
 
@@ -112,6 +108,9 @@ export function formatRankDiffLabel(
 }
 
 /** 순위에 참여한 전체 인원 수 */
-export function getRankingTotal(rankingMap: RankingMap): number {
+function getRankingTotal(rankingMap: RankingMap): number {
 	return Object.keys(rankingMap).length
 }
+
+export { computeMemberRankings, formatRankDiffLabel, formatRankLabel, getRankingTotal }
+export type { MemberRankings, RankingMap }

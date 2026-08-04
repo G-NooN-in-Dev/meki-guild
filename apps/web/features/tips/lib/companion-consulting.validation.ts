@@ -263,7 +263,7 @@ function assertLoadout(
 }
 
 /** 게시글 작성 페이로드 검증 */
-export function parseConsultingPostInput(value: unknown): CompanionConsultingPostInput {
+function parseConsultingPostInput(value: unknown): CompanionConsultingPostInput {
 	if (!value || typeof value !== 'object') {
 		throw new ConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -285,7 +285,7 @@ export function parseConsultingPostInput(value: unknown): CompanionConsultingPos
 }
 
 /** 게시글 수정 페이로드 — shortId + 비밀번호 + 본문 */
-export function parseConsultingPostUpdateInput(value: unknown): CompanionConsultingPostInput & { shortId: string } {
+function parseConsultingPostUpdateInput(value: unknown): CompanionConsultingPostInput & { shortId: string } {
 	if (!value || typeof value !== 'object') {
 		throw new ConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -300,7 +300,7 @@ export function parseConsultingPostUpdateInput(value: unknown): CompanionConsult
 }
 
 /** 추천 댓글 페이로드 검증 */
-export function parseConsultingCommentInput(value: unknown): CompanionConsultingCommentInput {
+function parseConsultingCommentInput(value: unknown): CompanionConsultingCommentInput {
 	if (!value || typeof value !== 'object') {
 		throw new ConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -320,7 +320,7 @@ export function parseConsultingCommentInput(value: unknown): CompanionConsulting
 }
 
 /** 추천 댓글 수정 — shortId + 비밀번호 + note/loadout (ownership은 서버가 붙임) */
-export function parseConsultingCommentUpdateFields(value: unknown): {
+function parseConsultingCommentUpdateFields(value: unknown): {
 	shortId: string
 	password: string
 	note: string
@@ -341,7 +341,7 @@ export function parseConsultingCommentUpdateFields(value: unknown): {
 }
 
 /** 삭제 요청 — shortId + 비밀번호 */
-export function parseConsultingDeleteInput(value: unknown, idLabel: string): { shortId: string; password: string } {
+function parseConsultingDeleteInput(value: unknown, idLabel: string): { shortId: string; password: string } {
 	if (!value || typeof value !== 'object') {
 		throw new ConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -354,6 +354,15 @@ export function parseConsultingDeleteInput(value: unknown, idLabel: string): { s
 	}
 }
 
-export function parseConsultingShortId(value: unknown): string {
+function parseConsultingShortId(value: unknown): string {
 	return assertShortId(value, '게시글 ID')
+}
+
+export {
+	parseConsultingCommentInput,
+	parseConsultingCommentUpdateFields,
+	parseConsultingDeleteInput,
+	parseConsultingPostInput,
+	parseConsultingPostUpdateInput,
+	parseConsultingShortId
 }

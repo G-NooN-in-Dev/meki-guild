@@ -3,7 +3,7 @@ import { getExpeditionGradeRank } from '@/libs/expedition-guild-tier.constants'
 import { getJobClassLine, type JobClassLine } from '@/libs/job-class.constants'
 
 /** 숫자 range. null이면 해당 쪽 제한 없음 */
-export type NumberRange = {
+type NumberRange = {
 	min: number | null
 	max: number | null
 }
@@ -12,7 +12,7 @@ export type NumberRange = {
  * 길드원 테이블 필터 상태.
  * 직업군(전사·마법사 등)/직업은 배열(다중 선택). 숫자·등급은 min~max range.
  */
-export type GuildMemberFilterState = {
+type GuildMemberFilterState = {
 	/** 빈 배열 = 직업군 필터 없음(전체) */
 	classLines: JobClassLine[]
 	/** 빈 배열 = 직업 필터 없음(전체) */
@@ -28,7 +28,7 @@ export type GuildMemberFilterState = {
 }
 
 /** 필터 초기값(매 호출마다 새 객체 — 상태 공유 방지) */
-export function createEmptyGuildMemberFilter(): GuildMemberFilterState {
+function createEmptyGuildMemberFilter(): GuildMemberFilterState {
 	return {
 		classLines: [],
 		jobs: [],
@@ -43,17 +43,17 @@ export function createEmptyGuildMemberFilter(): GuildMemberFilterState {
 }
 
 /** range에 min 또는 max가 하나라도 걸려 있는지 */
-export function isNumberRangeActive({ min, max }: NumberRange): boolean {
+function isNumberRangeActive({ min, max }: NumberRange): boolean {
 	return min !== null || max !== null
 }
 
 /** 직업군·직업 중 하나라도 선택됐는지 */
-export function isJobTaxonomyFilterActive(filter: GuildMemberFilterState): boolean {
+function isJobTaxonomyFilterActive(filter: GuildMemberFilterState): boolean {
 	return filter.classLines.length > 0 || filter.jobs.length > 0
 }
 
 /** 필터가 하나라도 적용 중인지 */
-export function isGuildMemberFilterActive(filter: GuildMemberFilterState): boolean {
+function isGuildMemberFilterActive(filter: GuildMemberFilterState): boolean {
 	if (isJobTaxonomyFilterActive(filter)) {
 		return true
 	}
@@ -73,7 +73,7 @@ export function isGuildMemberFilterActive(filter: GuildMemberFilterState): boole
  * 활성 필터 조건 개수.
  * 직업군·직업은 1조건으로 세고, range 필드는 값이 있는 항목마다 1개로 셉니다.
  */
-export function countActiveGuildMemberFilters(filter: GuildMemberFilterState): number {
+function countActiveGuildMemberFilters(filter: GuildMemberFilterState): number {
 	let count = 0
 
 	if (isJobTaxonomyFilterActive(filter)) {
@@ -170,7 +170,7 @@ function matchesJobTaxonomyFilter(job: string, filter: GuildMemberFilterState): 
 }
 
 /** 필터 상태를 적용해 길드원 목록을 좁힙니다. */
-export function filterGuildMembers(
+function filterGuildMembers(
 	comparisons: GuildMemberComparison[],
 	filter: GuildMemberFilterState
 ): GuildMemberComparison[] {
@@ -215,3 +215,13 @@ export function filterGuildMembers(
 		return true
 	})
 }
+
+export {
+	countActiveGuildMemberFilters,
+	createEmptyGuildMemberFilter,
+	filterGuildMembers,
+	isGuildMemberFilterActive,
+	isJobTaxonomyFilterActive,
+	isNumberRangeActive
+}
+export type { GuildMemberFilterState, NumberRange }

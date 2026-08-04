@@ -1,13 +1,13 @@
 import currentWeekJson from '@/data/current-week.json'
 import previousWeekJson from '@/data/previous-week.json'
+import { compareSnapshots, parseGuildMember } from '@/features/guild/lib/compare-snapshots'
+import { computeMemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import type {
 	GuildComparePageData,
 	GuildDashboardData,
 	GuildMemberInput,
 	GuildWeekSnapshot
 } from '@/features/guild/types/guild-snapshot.type'
-import { compareSnapshots, parseGuildMember } from '@/utils/compare-snapshots'
-import { computeMemberRankings } from '@/utils/compute-member-rankings'
 
 const currentWeek = currentWeekJson as GuildWeekSnapshot
 const previousWeek = previousWeekJson as GuildWeekSnapshot
@@ -45,7 +45,7 @@ function withPreviousExpeditionPlacement(
 	}
 }
 
-export function loadGuildDashboardData(): GuildDashboardData {
+function loadGuildDashboardData(): GuildDashboardData {
 	const parsedMembers = currentWeek.members.map(parseGuildMember)
 	const parsedPreviousMembers = previousWeek.members.map(parseGuildMember)
 	const rankings = computeMemberRankings(parsedMembers)
@@ -61,7 +61,7 @@ export function loadGuildDashboardData(): GuildDashboardData {
 }
 
 /** 1 vs 1 비교 페이지용: 이번 주 활성 길드원 목록 */
-export function loadGuildComparePageData(): GuildComparePageData {
+function loadGuildComparePageData(): GuildComparePageData {
 	const comparisons = compareSnapshots(currentWeek, previousWeek)
 	const activeNames = new Set(
 		comparisons.filter((comparison) => comparison.status !== 'left').map((comparison) => comparison.name)
@@ -78,3 +78,5 @@ export function loadGuildComparePageData(): GuildComparePageData {
 
 	return { members, rankings }
 }
+
+export { loadGuildComparePageData, loadGuildDashboardData }

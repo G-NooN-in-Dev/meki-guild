@@ -296,7 +296,7 @@ function assertLoadout(
 }
 
 /** 게시글 작성 페이로드 검증 */
-export function parseRelicConsultingPostInput(value: unknown): RelicConsultingPostInput {
+function parseRelicConsultingPostInput(value: unknown): RelicConsultingPostInput {
 	if (!value || typeof value !== 'object') {
 		throw new RelicConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -318,7 +318,7 @@ export function parseRelicConsultingPostInput(value: unknown): RelicConsultingPo
 }
 
 /** 게시글 수정 페이로드 — shortId + 비밀번호 + 본문 */
-export function parseRelicConsultingPostUpdateInput(value: unknown): RelicConsultingPostInput & { shortId: string } {
+function parseRelicConsultingPostUpdateInput(value: unknown): RelicConsultingPostInput & { shortId: string } {
 	if (!value || typeof value !== 'object') {
 		throw new RelicConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -333,7 +333,7 @@ export function parseRelicConsultingPostUpdateInput(value: unknown): RelicConsul
 }
 
 /** 추천 댓글 페이로드 검증 */
-export function parseRelicConsultingCommentInput(value: unknown): RelicConsultingCommentInput {
+function parseRelicConsultingCommentInput(value: unknown): RelicConsultingCommentInput {
 	if (!value || typeof value !== 'object') {
 		throw new RelicConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -353,7 +353,7 @@ export function parseRelicConsultingCommentInput(value: unknown): RelicConsultin
 }
 
 /** 추천 댓글 수정 — shortId + 비밀번호 + note/loadout */
-export function parseRelicConsultingCommentUpdateFields(value: unknown): {
+function parseRelicConsultingCommentUpdateFields(value: unknown): {
 	shortId: string
 	password: string
 	note: string
@@ -374,10 +374,7 @@ export function parseRelicConsultingCommentUpdateFields(value: unknown): {
 }
 
 /** 삭제 요청 — shortId + 비밀번호 */
-export function parseRelicConsultingDeleteInput(
-	value: unknown,
-	idLabel: string
-): { shortId: string; password: string } {
+function parseRelicConsultingDeleteInput(value: unknown, idLabel: string): { shortId: string; password: string } {
 	if (!value || typeof value !== 'object') {
 		throw new RelicConsultingValidationError('요청 본문이 올바르지 않습니다.')
 	}
@@ -390,6 +387,15 @@ export function parseRelicConsultingDeleteInput(
 	}
 }
 
-export function parseRelicConsultingShortId(value: unknown): string {
+function parseRelicConsultingShortId(value: unknown): string {
 	return assertShortId(value, '게시글 ID')
+}
+
+export {
+	parseRelicConsultingCommentInput,
+	parseRelicConsultingCommentUpdateFields,
+	parseRelicConsultingDeleteInput,
+	parseRelicConsultingPostInput,
+	parseRelicConsultingPostUpdateInput,
+	parseRelicConsultingShortId
 }

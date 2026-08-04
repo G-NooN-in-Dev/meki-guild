@@ -6,7 +6,7 @@ import PageLoading from '@/components/page-loading'
 import PageShell from '@/components/page-shell'
 import { RelicConsultingValidationError } from '@/features/tips/lib/relic-consulting.validation'
 import RelicConsultingDetailSection from '@/features/tips/sections/relic-consulting-detail.section'
-import { getRelicConsultingPostByShortId, listRelicConsultingComments } from '@/libs/relic-consulting.server'
+import { loadRelicConsultingPostByShortId, loadRelicConsultingPostDetail } from '@/libs/relic-consulting.loader'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,11 +15,11 @@ type RelicConsultingDetailPageProps = {
 }
 
 /** 게시글 제목·내용으로 OG/탭 제목을 맞춥니다. */
-export async function generateMetadata({ params }: RelicConsultingDetailPageProps): Promise<Metadata> {
+async function generateMetadata({ params }: RelicConsultingDetailPageProps): Promise<Metadata> {
 	const { id } = await params
 
 	try {
-		const post = await getRelicConsultingPostByShortId(id)
+		const post = await loadRelicConsultingPostByShortId(id)
 		if (!post) {
 			return {
 				title: '유물 세팅 컨설팅',
@@ -43,13 +43,12 @@ async function RelicConsultingDetailContent({ params }: RelicConsultingDetailPag
 	const { id } = await params
 
 	let post = null
-	let comments: Awaited<ReturnType<typeof listRelicConsultingComments>> = []
+	let comments: Awaited<ReturnType<typeof loadRelicConsultingPostDetail>>['comments'] = []
 
 	try {
-		post = await getRelicConsultingPostByShortId(id)
-		if (post) {
-			comments = await listRelicConsultingComments(id)
-		}
+		const detail = await loadRelicConsultingPostDetail(id)
+		post = detail.post
+		comments = detail.comments
 	} catch (error) {
 		if (error instanceof RelicConsultingValidationError) {
 			notFound()
@@ -76,3 +75,5 @@ function RelicConsultingDetailPage({ params }: RelicConsultingDetailPageProps) {
 }
 
 export default RelicConsultingDetailPage
+
+export { generateMetadata }

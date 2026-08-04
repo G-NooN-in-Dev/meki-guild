@@ -4,28 +4,28 @@ import { Label } from '@shared/ui/label'
 import { cn } from '@shared/ui/lib/utils'
 import { Switch } from '@shared/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import ContentUpdatedAtGuide from '@/features/guild/components/content-updated-at-guide'
 import ExpeditionTierGuide from '@/features/guild/components/expedition-tier-guide'
-import { GrowthDelta, MemberStatusBadge } from '@/features/guild/components/growth-delta'
+import GrowthDelta, { MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import GuildMemberFilters from '@/features/guild/components/guild-member-filters'
 import JobBadge from '@/features/guild/components/job-badge'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import MemberDetailDialog from '@/features/guild/components/member-detail-dialog'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
 import WeeklyGrowthLeaders from '@/features/guild/components/weekly-growth-leaders'
-import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
-import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
-import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
-import type { MemberRankings } from '@/utils/compute-member-rankings'
+import type { MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import {
 	createEmptyGuildMemberFilter,
 	filterGuildMembers,
 	type GuildMemberFilterState,
 	isGuildMemberFilterActive
-} from '@/utils/filter-guild-members'
+} from '@/features/guild/lib/filter-guild-members'
+import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
+import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
+import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 
 type SortKey =
 	'combatPower' | 'expeditionScore' | 'expeditionPlacement' | 'rivalry' | 'training' | 'guildBoss' | 'level'
@@ -201,9 +201,9 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 	const [filter, setFilter] = useState<GuildMemberFilterState>(createEmptyGuildMemberFilter)
 
 	// 필터 → 정렬 순으로 적용해, 좁혀진 목록만 테이블에 표시
-	const filteredComparisons = useMemo(() => filterGuildMembers(comparisons, filter), [comparisons, filter])
+	const filteredComparisons = filterGuildMembers(comparisons, filter)
 
-	const sortedComparisons = useMemo(() => {
+	const sortedComparisons = (() => {
 		const next = [...filteredComparisons]
 
 		next.sort((left, right) => {
@@ -235,7 +235,7 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 		})
 
 		return next
-	}, [filteredComparisons, sortByPercent, sortDirection, sortKey])
+	})()
 
 	const isFilterActive = isGuildMemberFilterActive(filter)
 

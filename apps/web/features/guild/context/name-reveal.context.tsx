@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, type PropsWithChildren, useCallback, useContext, useMemo, useSyncExternalStore } from 'react'
+import { createContext, type PropsWithChildren, useContext, useSyncExternalStore } from 'react'
 
 import { NAME_REVEAL_PASSWORD, NAME_REVEAL_STORAGE_KEY } from '@/features/guild/lib/name-reveal.constants'
 
@@ -81,7 +81,7 @@ function NameRevealProvider({ children }: PropsWithChildren) {
 	// effect + setState 대신 external store로 localStorage와 동기화
 	const isUnlocked = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot)
 
-	const unlock = useCallback((password: string) => {
+	function unlock(password: string) {
 		if (password !== NAME_REVEAL_PASSWORD) {
 			return false
 		}
@@ -89,22 +89,18 @@ function NameRevealProvider({ children }: PropsWithChildren) {
 		writeUnlockedToStorage(true)
 		emitChange()
 		return true
-	}, [])
+	}
 
-	const lock = useCallback(() => {
+	function lock() {
 		writeUnlockedToStorage(false)
 		emitChange()
-	}, [])
+	}
 
-	const value = useMemo(
-		() =>
-			({
-				isUnlocked,
-				unlock,
-				lock
-			}) satisfies NameRevealContextValue,
-		[isUnlocked, lock, unlock]
-	)
+	const value = {
+		isUnlocked,
+		unlock,
+		lock
+	} satisfies NameRevealContextValue
 
 	return <NameRevealContext.Provider value={value}>{children}</NameRevealContext.Provider>
 }
@@ -119,4 +115,5 @@ function useNameReveal() {
 	return context
 }
 
-export { NameRevealProvider, useNameReveal }
+export default NameRevealProvider
+export { useNameReveal }

@@ -82,7 +82,7 @@ export const CONTENT_STAGE_CUTS = [
 ] as const satisfies readonly ContentStageCutEntry[]
 
 /** 파싱된 스테이지컷 한 칸 */
-export type ParsedStageCut = {
+type ParsedStageCut = {
 	/** "7-5" 원문 (= 행 키) */
 	raw: string
 	stage: number
@@ -91,14 +91,14 @@ export type ParsedStageCut = {
 }
 
 /** 타임라인 세로 행 — 스테이지 다음 컷 순 */
-export type StageCutRow = {
+type StageCutRow = {
 	raw: string
 	stage: number
 	cut: number
 }
 
 /** "7-5" → 스테이지·컷 숫자. 형식이 아니면 null */
-export function parseStageCut(raw: string): { stage: number; cut: number } | null {
+function parseStageCut(raw: string): { stage: number; cut: number } | null {
 	const match = /^(\d+)-(\d+)$/.exec(raw)
 
 	if (!match) {
@@ -114,7 +114,7 @@ export function parseStageCut(raw: string): { stage: number; cut: number } | nul
 }
 
 /** 스테이지 우선, 같으면 컷 오름차순 (25-5가 25-10보다 위) */
-export function compareStageCut(left: { stage: number; cut: number }, right: { stage: number; cut: number }) {
+function compareStageCut(left: { stage: number; cut: number }, right: { stage: number; cut: number }) {
 	if (left.stage !== right.stage) {
 		return left.stage - right.stage
 	}
@@ -174,7 +174,7 @@ export const CONTENT_STAGE_ROWS: StageCutRow[] = [
 ].sort(compareStageCut)
 
 /** 표시용 라벨 — "7-5" → "7 - 5" */
-export function formatStageCutLabel(raw: string) {
+function formatStageCutLabel(raw: string) {
 	const parsed = parseStageCut(raw)
 
 	if (!parsed) {
@@ -186,8 +186,11 @@ export function formatStageCutLabel(raw: string) {
 	return `${stage} - ${cut}`
 }
 
-export function getDifficultyChipClassName(difficulty: ContentDifficulty) {
+function getDifficultyChipClassName(difficulty: ContentDifficulty) {
 	return (
 		CONTENT_DIFFICULTIES.find((item) => item.key === difficulty)?.chipClassName ?? 'bg-grayscale-200 text-grayscale-800'
 	)
 }
+
+export { compareStageCut, formatStageCutLabel, getDifficultyChipClassName, parseStageCut }
+export type { ParsedStageCut, StageCutRow }

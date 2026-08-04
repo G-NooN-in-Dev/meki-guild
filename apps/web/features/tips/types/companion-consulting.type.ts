@@ -4,22 +4,22 @@ import type { CompanionSlotLoadout } from '@/features/tips/types/companion.type'
  * 보유 중인 동료 한 건.
  * 미보유는 DB에 넣지 않고, 보유한 항목만 배열로 저장합니다.
  */
-export type CompanionOwnershipEntry = {
+type CompanionOwnershipEntry = {
 	companionId: string
 	level: number
 }
 
 /** 슬롯 id → 장착 동료 (메인·서브) */
-export type CompanionConsultingLoadout = Record<string, CompanionSlotLoadout>
+type CompanionConsultingLoadout = Record<string, CompanionSlotLoadout>
 
 /** 프리셋 스탯 단위. percent=% / flat=절대값(명중·회피) */
-export type ConsultingPresetStatUnit = 'percent' | 'flat'
+type ConsultingPresetStatUnit = 'percent' | 'flat'
 
 /**
  * 현재 프리셋 기준 전투 수치 키.
  * UI·검증·저장 순서는 CONSULTING_PRESET_STAT_FIELDS를 따릅니다.
  */
-export type ConsultingPresetStatId =
+type ConsultingPresetStatId =
 	| 'critRate'
 	| 'critDamage'
 	| 'attackSpeed'
@@ -32,13 +32,13 @@ export type ConsultingPresetStatId =
 	| 'evasion'
 
 /** 프리셋 스탯 수치 맵 */
-export type ConsultingPresetStats = Record<ConsultingPresetStatId, number>
+type ConsultingPresetStats = Record<ConsultingPresetStatId, number>
 
 /**
  * 게시글 작성·수정용 클라이언트 페이로드.
  * password는 CUD용 단순 키이며, 서버에서만 해시로 저장합니다.
  */
-export type CompanionConsultingPostInput = {
+type CompanionConsultingPostInput = {
 	/** 목적/제목 한 줄 */
 	title: string
 	/** 보충 설명. 비워 두면 빈 문자열로 저장합니다. */
@@ -52,7 +52,7 @@ export type CompanionConsultingPostInput = {
 }
 
 /** 목록·상세에 쓰는 게시글 요약/본문 */
-export type CompanionConsultingPost = {
+type CompanionConsultingPost = {
 	shortId: string
 	title: string
 	/** 보충 설명. 예전 글은 빈 문자열일 수 있습니다. */
@@ -68,7 +68,7 @@ export type CompanionConsultingPost = {
 }
 
 /** 목록 API 페이지네이션 결과 */
-export type CompanionConsultingPostListResult = {
+type CompanionConsultingPostListResult = {
 	posts: CompanionConsultingPost[]
 	/** 실제 조회에 사용한 페이지 (범위 밖이면 보정됨) */
 	page: number
@@ -78,7 +78,7 @@ export type CompanionConsultingPostListResult = {
 }
 
 /** 추천 세팅 댓글 입력 */
-export type CompanionConsultingCommentInput = {
+type CompanionConsultingCommentInput = {
 	postShortId: string
 	note: string
 	loadout: CompanionConsultingLoadout
@@ -87,7 +87,7 @@ export type CompanionConsultingCommentInput = {
 }
 
 /** 추천 세팅 댓글 */
-export type CompanionConsultingComment = {
+type CompanionConsultingComment = {
 	shortId: string
 	postShortId: string
 	note: string
@@ -98,9 +98,24 @@ export type CompanionConsultingComment = {
 }
 
 /** 보유 UI용 로컬 상태 (미보유 포함) */
-export type CompanionOwnershipState = {
+type CompanionOwnershipState = {
 	owned: boolean
 	level: number
 }
 
-export type CompanionOwnershipStateMap = Record<string, CompanionOwnershipState>
+type CompanionOwnershipStateMap = Record<string, CompanionOwnershipState>
+
+export type {
+	CompanionConsultingComment,
+	CompanionConsultingCommentInput,
+	CompanionConsultingLoadout,
+	CompanionConsultingPost,
+	CompanionConsultingPostInput,
+	CompanionConsultingPostListResult,
+	CompanionOwnershipEntry,
+	CompanionOwnershipState,
+	CompanionOwnershipStateMap,
+	ConsultingPresetStatId,
+	ConsultingPresetStats,
+	ConsultingPresetStatUnit
+}

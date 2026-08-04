@@ -3,7 +3,7 @@
 import { Switch } from '@shared/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import GradePortrait from '@/features/tips/components/grade-portrait'
 import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
@@ -38,7 +38,7 @@ function isRelicGrade(value: string | number | null): value is RelicGrade {
 function RelicOwnershipGrid({ ownership, onOwnershipChange, readOnly = false, className }: RelicOwnershipGridProps) {
 	const [gradeTab, setGradeTab] = useState<RelicGrade>('legendary')
 
-	const ownedCount = useMemo(() => RELICS.filter((relic) => ownership[relic.id]?.owned).length, [ownership])
+	const ownedCount = RELICS.filter((relic) => ownership[relic.id]?.owned).length
 
 	function updateRelic(relic: Relic, patch: Partial<{ owned: boolean; stage: number }>) {
 		if (readOnly || !onOwnershipChange) {

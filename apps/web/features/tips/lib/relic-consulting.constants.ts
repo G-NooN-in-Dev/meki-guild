@@ -16,7 +16,7 @@ import type {
 const EMPTY_SLOT_LOADOUT: RelicSlotLoadout = { relicId: null, stage: 0, potentialIds: [] }
 
 /** 빈 세팅 보드 (슬롯별 null) */
-export function createEmptyRelicConsultingLoadout(): RelicConsultingLoadout {
+function createEmptyRelicConsultingLoadout(): RelicConsultingLoadout {
 	return Object.fromEntries(RELIC_SETUP_SLOTS.map((slot) => [slot.id, { ...EMPTY_SLOT_LOADOUT }]))
 }
 
@@ -24,7 +24,7 @@ export function createEmptyRelicConsultingLoadout(): RelicConsultingLoadout {
  * 보유 현황 초기값.
  * 레전드리=미보유, 유니크·에픽=보유 각성 0
  */
-export function createDefaultRelicOwnershipStateMap(): RelicOwnershipStateMap {
+function createDefaultRelicOwnershipStateMap(): RelicOwnershipStateMap {
 	return Object.fromEntries(
 		RELICS.map((relic) => [
 			relic.id,
@@ -37,7 +37,7 @@ export function createDefaultRelicOwnershipStateMap(): RelicOwnershipStateMap {
 }
 
 /** 보유 맵 → DB에 넣을 보유 목록 (owned만) */
-export function relicOwnershipStateToEntries(stateMap: RelicOwnershipStateMap): RelicOwnershipEntry[] {
+function relicOwnershipStateToEntries(stateMap: RelicOwnershipStateMap): RelicOwnershipEntry[] {
 	const entries: RelicOwnershipEntry[] = []
 
 	for (const relic of RELICS) {
@@ -56,7 +56,7 @@ export function relicOwnershipStateToEntries(stateMap: RelicOwnershipStateMap): 
 }
 
 /** DB 보유 목록 → UI 상태 맵 (없는 id는 미보유) */
-export function relicOwnershipEntriesToStateMap(entries: readonly RelicOwnershipEntry[]): RelicOwnershipStateMap {
+function relicOwnershipEntriesToStateMap(entries: readonly RelicOwnershipEntry[]): RelicOwnershipStateMap {
 	const ownedById = new Map(entries.map((entry) => [entry.relicId, entry.stage]))
 	const base = createDefaultRelicOwnershipStateMap()
 
@@ -77,12 +77,12 @@ export function relicOwnershipEntriesToStateMap(entries: readonly RelicOwnership
 }
 
 /** 보유 목록 → relicId Set (슬롯 선택 제한용) */
-export function relicOwnershipEntriesToAllowedIds(entries: readonly RelicOwnershipEntry[]): Set<string> {
+function relicOwnershipEntriesToAllowedIds(entries: readonly RelicOwnershipEntry[]): Set<string> {
 	return new Set(entries.map((entry) => entry.relicId))
 }
 
 /** 보유 목록 → relicId → 각성 단계 */
-export function relicOwnershipEntriesToStageMap(entries: readonly RelicOwnershipEntry[]): Map<string, number> {
+function relicOwnershipEntriesToStageMap(entries: readonly RelicOwnershipEntry[]): Map<string, number> {
 	return new Map(entries.map((entry) => [entry.relicId, clampRelicAwakeningStage(entry.stage)]))
 }
 
@@ -90,7 +90,7 @@ export function relicOwnershipEntriesToStageMap(entries: readonly RelicOwnership
  * 슬롯에 유물을 넣을 때 보유 각성을 반영합니다.
  * 미보유면 relicId를 비웁니다. 잠재옵션은 등급 칸 수에 맞게 잘라 둡니다.
  */
-export function syncRelicLoadoutWithOwnership(
+function syncRelicLoadoutWithOwnership(
 	loadout: RelicConsultingLoadout,
 	entries: readonly RelicOwnershipEntry[]
 ): RelicConsultingLoadout {
@@ -124,7 +124,7 @@ export function syncRelicLoadoutWithOwnership(
 }
 
 /** 목록 URL. 1페이지는 쿼리 없이 깔끔하게 둡니다. */
-export function getRelicConsultingListPath(page = 1) {
+function getRelicConsultingListPath(page = 1) {
 	if (page <= 1) {
 		return '/tips/relic-setup'
 	}
@@ -133,6 +133,18 @@ export function getRelicConsultingListPath(page = 1) {
 }
 
 /** 공유 URL 경로 (앱 origin은 클라이언트에서 붙임) */
-export function getRelicConsultingPostPath(shortId: string) {
+function getRelicConsultingPostPath(shortId: string) {
 	return `/tips/relic-setup/${shortId}`
+}
+
+export {
+	createDefaultRelicOwnershipStateMap,
+	createEmptyRelicConsultingLoadout,
+	getRelicConsultingListPath,
+	getRelicConsultingPostPath,
+	relicOwnershipEntriesToAllowedIds,
+	relicOwnershipEntriesToStageMap,
+	relicOwnershipEntriesToStateMap,
+	relicOwnershipStateToEntries,
+	syncRelicLoadoutWithOwnership
 }

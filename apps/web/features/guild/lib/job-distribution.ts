@@ -6,7 +6,7 @@ import {
 	JOBS_BY_CLASS_LINE
 } from '@/libs/job-class.constants'
 
-export type JobDistributionRow = {
+type JobDistributionRow = {
 	classLine: JobClassLine | '미분류'
 	job: string
 	/** 이번 주 인원 (이탈 제외) */
@@ -15,7 +15,7 @@ export type JobDistributionRow = {
 	previousCount: number
 }
 
-export type JobDistribution = {
+type JobDistribution = {
 	totalMembers: number
 	rows: JobDistributionRow[]
 }
@@ -24,7 +24,7 @@ export type JobDistribution = {
  * 이번 주·직전 주 길드원 직업 분포를 집계합니다.
  * 정의된 직업은 인원 0이어도 포함하고, 이탈(left)은 이번 주에서만 제외합니다.
  */
-export function calculateJobDistribution(comparisons: GuildMemberComparison[]): JobDistribution {
+function calculateJobDistribution(comparisons: GuildMemberComparison[]): JobDistribution {
 	const counts = new Map<string, number>()
 	const previousCounts = new Map<string, number>()
 
@@ -78,12 +78,9 @@ export function calculateJobDistribution(comparisons: GuildMemberComparison[]): 
 	}
 }
 
-export type JobCountSortDirection = 'asc' | 'desc'
+type JobCountSortDirection = 'asc' | 'desc'
 
-export function sortJobDistributionRows(
-	rows: JobDistributionRow[],
-	direction: JobCountSortDirection
-): JobDistributionRow[] {
+function sortJobDistributionRows(rows: JobDistributionRow[], direction: JobCountSortDirection): JobDistributionRow[] {
 	return [...rows].sort((left, right) => {
 		if (left.count === right.count) {
 			return left.job.localeCompare(right.job, 'ko')
@@ -92,3 +89,6 @@ export function sortJobDistributionRows(
 		return direction === 'desc' ? right.count - left.count : left.count - right.count
 	})
 }
+
+export { calculateJobDistribution, sortJobDistributionRows }
+export type { JobCountSortDirection, JobDistribution, JobDistributionRow }

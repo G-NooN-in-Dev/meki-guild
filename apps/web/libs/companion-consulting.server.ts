@@ -145,7 +145,7 @@ type ListConsultingPostsOptions = {
 }
 
 /** 최근 게시글 목록 (댓글 수·페이지네이션 포함) */
-export async function listConsultingPosts(
+async function listConsultingPosts(
 	options: ListConsultingPostsOptions = {}
 ): Promise<CompanionConsultingPostListResult> {
 	const pageSize = Math.max(1, options.pageSize ?? CONSULTING_POST_LIST_LIMIT)
@@ -192,7 +192,7 @@ export async function listConsultingPosts(
 }
 
 /** shortId로 게시글 조회 */
-export async function getConsultingPostByShortId(rawShortId: string): Promise<CompanionConsultingPost | null> {
+async function getConsultingPostByShortId(rawShortId: string): Promise<CompanionConsultingPost | null> {
 	await ensureIndexes()
 	const shortId = parseConsultingShortId(rawShortId)
 	const db = await getDb()
@@ -207,7 +207,7 @@ export async function getConsultingPostByShortId(rawShortId: string): Promise<Co
 }
 
 /** 게시글의 추천 댓글 목록 (오래된 순 — 읽기 흐름) */
-export async function listConsultingComments(rawPostShortId: string): Promise<CompanionConsultingComment[]> {
+async function listConsultingComments(rawPostShortId: string): Promise<CompanionConsultingComment[]> {
 	await ensureIndexes()
 	const postShortId = parseConsultingShortId(rawPostShortId)
 	const db = await getDb()
@@ -221,7 +221,7 @@ export async function listConsultingComments(rawPostShortId: string): Promise<Co
 }
 
 /** 게시글 생성 → shortId 반환 */
-export async function createConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
+async function createConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const input = parseConsultingPostInput(rawInput) satisfies CompanionConsultingPostInput
 	const db = await getDb()
@@ -242,7 +242,7 @@ export async function createConsultingPost(rawInput: unknown): Promise<{ shortId
 }
 
 /** 게시글 수정 — 비밀번호 검증 후 본문만 갱신 (비밀번호 자체는 바꾸지 않음) */
-export async function updateConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
+async function updateConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password, title, content, presetStats, ownership, loadout } =
 		parseConsultingPostUpdateInput(rawInput)
@@ -277,7 +277,7 @@ export async function updateConsultingPost(rawInput: unknown): Promise<{ shortId
  * 수정 화면 진입 전 비밀번호만 확인합니다.
  * 통과해도 저장은 update 시 다시 검증합니다.
  */
-export async function verifyConsultingPostPassword(rawInput: unknown): Promise<{ shortId: string }> {
+async function verifyConsultingPostPassword(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseConsultingDeleteInput(rawInput, '게시글 ID')
 	const db = await getDb()
@@ -294,7 +294,7 @@ export async function verifyConsultingPostPassword(rawInput: unknown): Promise<{
 }
 
 /** 게시글 삭제 — 비밀번호 검증 후 추천 댓글까지 cascade 삭제 */
-export async function deleteConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
+async function deleteConsultingPost(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseConsultingDeleteInput(rawInput, '게시글 ID')
 	const db = await getDb()
@@ -318,7 +318,7 @@ export async function deleteConsultingPost(rawInput: unknown): Promise<{ shortId
  * 추천 세팅 댓글 작성.
  * 장착 가능 여부는 게시글 보유 현황으로만 검증합니다.
  */
-export async function createConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
+async function createConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 
 	if (!rawInput || typeof rawInput !== 'object') {
@@ -360,7 +360,7 @@ export async function createConsultingComment(rawInput: unknown): Promise<{ shor
 }
 
 /** 추천 댓글 수정 — 비밀번호 검증 후 note/loadout만 갱신 */
-export async function updateConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
+async function updateConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password, note, loadout } = parseConsultingCommentUpdateFields(rawInput)
 	const db = await getDb()
@@ -399,7 +399,7 @@ export async function updateConsultingComment(rawInput: unknown): Promise<{ shor
 }
 
 /** 추천 수정 진입 전 비밀번호만 확인 */
-export async function verifyConsultingCommentPassword(rawInput: unknown): Promise<{ shortId: string }> {
+async function verifyConsultingCommentPassword(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseConsultingDeleteInput(rawInput, '추천 ID')
 	const db = await getDb()
@@ -416,7 +416,7 @@ export async function verifyConsultingCommentPassword(rawInput: unknown): Promis
 }
 
 /** 추천 댓글 삭제 — 비밀번호 검증 */
-export async function deleteConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
+async function deleteConsultingComment(rawInput: unknown): Promise<{ shortId: string }> {
 	await ensureIndexes()
 	const { shortId, password } = parseConsultingDeleteInput(rawInput, '추천 ID')
 	const db = await getDb()
@@ -432,4 +432,18 @@ export async function deleteConsultingComment(rawInput: unknown): Promise<{ shor
 
 	await db.collection(COMMENTS_COLLECTION).deleteOne({ shortId })
 	return { shortId }
+}
+
+export {
+	createConsultingComment,
+	createConsultingPost,
+	deleteConsultingComment,
+	deleteConsultingPost,
+	getConsultingPostByShortId,
+	listConsultingComments,
+	listConsultingPosts,
+	updateConsultingComment,
+	updateConsultingPost,
+	verifyConsultingCommentPassword,
+	verifyConsultingPostPassword
 }

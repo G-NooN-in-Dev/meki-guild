@@ -195,7 +195,7 @@ function createGuildBossField(
 }
 
 /** 두 길드원의 현재 주 스펙을 1 vs 1 형태로 비교합니다. */
-export function compareMembers(left: ParsedGuildMember, right: ParsedGuildMember): MemberVsMemberComparison {
+function compareMembers(left: ParsedGuildMember, right: ParsedGuildMember): MemberVsMemberComparison {
 	return {
 		left: { name: left.name, job: left.job },
 		right: { name: right.name, job: right.job },
@@ -214,3 +214,5 @@ export function compareMembers(left: ParsedGuildMember, right: ParsedGuildMember
 		guildBoss: createGuildBossField(left, right)
 	}
 }
+
+export { compareMembers }

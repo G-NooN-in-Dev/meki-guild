@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@shared/ui/utils'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import CompanionSlot from '@/features/tips/components/companion-slot'
 import CompanionSlotEditor from '@/features/tips/components/companion-slot-editor'
@@ -50,7 +50,7 @@ function CompanionSetupBoard({
 		: { companionId: null, level: 1 }
 	const editingCompanion = editingLoadout.companionId ? (getCompanionById(editingLoadout.companionId) ?? null) : null
 
-	const excludedIds = useMemo(() => {
+	const excludedIds = (() => {
 		const ids = new Set<string>()
 		for (const [slotId, loadout] of Object.entries(loadouts)) {
 			if (loadout.companionId && slotId !== editingSlotId) {
@@ -58,9 +58,9 @@ function CompanionSetupBoard({
 			}
 		}
 		return ids
-	}, [loadouts, editingSlotId])
+	})()
 
-	const aggregatedEquipEffects = useMemo(() => {
+	const aggregatedEquipEffects = (() => {
 		const effects = COMPANION_SETUP_SLOTS.flatMap((slot) => {
 			const loadout = loadouts[slot.id]
 			if (!loadout?.companionId) {
@@ -76,12 +76,9 @@ function CompanionSetupBoard({
 		})
 
 		return aggregateEquipEffects(effects)
-	}, [loadouts])
+	})()
 
-	const equippedCount = useMemo(
-		() => COMPANION_SETUP_SLOTS.filter((slot) => Boolean(loadouts[slot.id]?.companionId)).length,
-		[loadouts]
-	)
+	const equippedCount = COMPANION_SETUP_SLOTS.filter((slot) => Boolean(loadouts[slot.id]?.companionId)).length
 
 	function updateLoadouts(next: CompanionConsultingLoadout) {
 		onLoadoutsChange?.(next)

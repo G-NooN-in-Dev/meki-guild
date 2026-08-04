@@ -22,7 +22,7 @@ import {
 
 type ActionOk<T> = { ok: true; data: T }
 type ActionFail = { ok: false; error: string }
-export type RelicConsultingActionResult<T> = ActionOk<T> | ActionFail
+type RelicConsultingActionResult<T> = ActionOk<T> | ActionFail
 
 function toActionError(error: unknown): ActionFail {
 	if (error instanceof RelicConsultingValidationError) {
@@ -34,7 +34,7 @@ function toActionError(error: unknown): ActionFail {
 }
 
 /** 최근 컨설팅 게시글 목록 (페이지네이션) */
-export async function fetchRelicConsultingPostsAction(
+async function fetchRelicConsultingPostsAction(
 	page = 1
 ): Promise<RelicConsultingActionResult<RelicConsultingPostListResult>> {
 	try {
@@ -46,7 +46,7 @@ export async function fetchRelicConsultingPostsAction(
 }
 
 /** 게시글 + 추천 댓글 */
-export async function fetchRelicConsultingPostDetailAction(
+async function fetchRelicConsultingPostDetailAction(
 	shortId: string
 ): Promise<RelicConsultingActionResult<{ post: RelicConsultingPost; comments: RelicConsultingComment[] }>> {
 	try {
@@ -63,7 +63,7 @@ export async function fetchRelicConsultingPostDetailAction(
 }
 
 /** 현황 게시글 작성 */
-export async function createRelicConsultingPostAction(
+async function createRelicConsultingPostAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -75,7 +75,7 @@ export async function createRelicConsultingPostAction(
 }
 
 /** 현황 게시글 수정 */
-export async function updateRelicConsultingPostAction(
+async function updateRelicConsultingPostAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -87,7 +87,7 @@ export async function updateRelicConsultingPostAction(
 }
 
 /** 현황 게시글 삭제 (추천 세팅 포함) */
-export async function deleteRelicConsultingPostAction(
+async function deleteRelicConsultingPostAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -99,7 +99,7 @@ export async function deleteRelicConsultingPostAction(
 }
 
 /** 게시글 수정 화면 진입 전 비밀번호 확인 */
-export async function verifyRelicConsultingPostPasswordAction(
+async function verifyRelicConsultingPostPasswordAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -111,7 +111,7 @@ export async function verifyRelicConsultingPostPasswordAction(
 }
 
 /** 추천 세팅 댓글 작성 */
-export async function createRelicConsultingCommentAction(
+async function createRelicConsultingCommentAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -123,7 +123,7 @@ export async function createRelicConsultingCommentAction(
 }
 
 /** 추천 세팅 댓글 수정 */
-export async function updateRelicConsultingCommentAction(
+async function updateRelicConsultingCommentAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -135,7 +135,7 @@ export async function updateRelicConsultingCommentAction(
 }
 
 /** 추천 세팅 댓글 삭제 */
-export async function deleteRelicConsultingCommentAction(
+async function deleteRelicConsultingCommentAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -147,7 +147,7 @@ export async function deleteRelicConsultingCommentAction(
 }
 
 /** 추천 수정 진입 전 비밀번호 확인 */
-export async function verifyRelicConsultingCommentPasswordAction(
+async function verifyRelicConsultingCommentPasswordAction(
 	input: unknown
 ): Promise<RelicConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -157,3 +157,17 @@ export async function verifyRelicConsultingCommentPasswordAction(
 		return toActionError(error)
 	}
 }
+
+export {
+	createRelicConsultingCommentAction,
+	createRelicConsultingPostAction,
+	deleteRelicConsultingCommentAction,
+	deleteRelicConsultingPostAction,
+	fetchRelicConsultingPostDetailAction,
+	fetchRelicConsultingPostsAction,
+	updateRelicConsultingCommentAction,
+	updateRelicConsultingPostAction,
+	verifyRelicConsultingCommentPasswordAction,
+	verifyRelicConsultingPostPasswordAction
+}
+export type { RelicConsultingActionResult }

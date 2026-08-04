@@ -59,7 +59,7 @@ function mapLabeledEffectsToPresetStats(effects: readonly { label: string; value
  * 현재 프리셋에서 장착 A 기여를 빼고 B를 더합니다.
  * 작성 프리셋이 이미 현재 장착을 포함한 게임 수치라는 전제입니다.
  */
-export function projectPresetStatsAfterLoadoutSwap(
+function projectPresetStatsAfterLoadoutSwap(
 	basePresetStats: ConsultingPresetStats,
 	fromContribution: ConsultingPresetStats,
 	toContribution: ConsultingPresetStats
@@ -76,7 +76,7 @@ export function projectPresetStatsAfterLoadoutSwap(
 }
 
 /** 동료 loadout → 프리셋에 매핑되는 장착 기여분 */
-export function getCompanionLoadoutPresetContribution(loadout: CompanionConsultingLoadout): ConsultingPresetStats {
+function getCompanionLoadoutPresetContribution(loadout: CompanionConsultingLoadout): ConsultingPresetStats {
 	const effects = Object.values(loadout).flatMap((slot) => {
 		if (!slot?.companionId) {
 			return []
@@ -98,7 +98,7 @@ export function getCompanionLoadoutPresetContribution(loadout: CompanionConsulti
  * 잠재는 전부 상시, 각성은 scope 없는(상시) 수치만 반영합니다.
  * 조건부·연동 라벨(예: 크확 연동)은 매핑 테이블에 없어 자연히 제외됩니다.
  */
-export function getRelicLoadoutPresetContribution(loadout: RelicConsultingLoadout): ConsultingPresetStats {
+function getRelicLoadoutPresetContribution(loadout: RelicConsultingLoadout): ConsultingPresetStats {
 	const stats: RelicStatEffect[] = []
 
 	for (const slot of Object.values(loadout)) {
@@ -124,7 +124,7 @@ export function getRelicLoadoutPresetContribution(loadout: RelicConsultingLoadou
 }
 
 /** 동료: 현재 프리셋 + 현재/추천 loadout → 추천 적용 시 예상 프리셋 */
-export function projectCompanionPresetStats(
+function projectCompanionPresetStats(
 	basePresetStats: ConsultingPresetStats,
 	currentLoadout: CompanionConsultingLoadout,
 	recommendedLoadout: CompanionConsultingLoadout
@@ -137,7 +137,7 @@ export function projectCompanionPresetStats(
 }
 
 /** 유물: 잠재·상시 각성만 반영한 추천 적용 시 예상 프리셋 */
-export function projectRelicPresetStats(
+function projectRelicPresetStats(
 	basePresetStats: ConsultingPresetStats,
 	currentLoadout: RelicConsultingLoadout,
 	recommendedLoadout: RelicConsultingLoadout
@@ -147,4 +147,12 @@ export function projectRelicPresetStats(
 		getRelicLoadoutPresetContribution(currentLoadout),
 		getRelicLoadoutPresetContribution(recommendedLoadout)
 	)
+}
+
+export {
+	getCompanionLoadoutPresetContribution,
+	getRelicLoadoutPresetContribution,
+	projectCompanionPresetStats,
+	projectPresetStatsAfterLoadoutSwap,
+	projectRelicPresetStats
 }

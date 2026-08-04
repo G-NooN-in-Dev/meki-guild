@@ -6,14 +6,18 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { UsersIcon } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
-import { GrowthDelta } from '@/features/guild/components/growth-delta'
+import GrowthDelta from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
+import {
+	calculateJobDistribution,
+	type JobCountSortDirection,
+	sortJobDistributionRows
+} from '@/features/guild/lib/job-distribution'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getJobClassLineBadgeClass } from '@/libs/job-class.constants'
 import { formatArrowDelta } from '@/utils/format-delta-label'
-import { calculateJobDistribution, type JobCountSortDirection, sortJobDistributionRows } from '@/utils/job-distribution'
 
 type JobDistributionGuideProps = {
 	comparisons: GuildMemberComparison[]
@@ -22,12 +26,8 @@ type JobDistributionGuideProps = {
 function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 	const [countSortDirection, setCountSortDirection] = useState<JobCountSortDirection>('desc')
 
-	const distribution = useMemo(() => calculateJobDistribution(comparisons), [comparisons])
-
-	const sortedRows = useMemo(
-		() => sortJobDistributionRows(distribution.rows, countSortDirection),
-		[distribution.rows, countSortDirection]
-	)
+	const distribution = calculateJobDistribution(comparisons)
+	const sortedRows = sortJobDistributionRows(distribution.rows, countSortDirection)
 
 	function handleCountSort() {
 		setCountSortDirection((current) => (current === 'desc' ? 'asc' : 'desc'))

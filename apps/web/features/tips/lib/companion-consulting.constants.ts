@@ -18,7 +18,7 @@ import type {
  */
 
 /** 빈 세팅 보드 (슬롯별 null) */
-export function createEmptyConsultingLoadout(): CompanionConsultingLoadout {
+function createEmptyConsultingLoadout(): CompanionConsultingLoadout {
 	return Object.fromEntries(
 		COMPANION_SETUP_SLOTS.map((slot) => [slot.id, { companionId: null, level: 1 } satisfies CompanionSlotLoadout])
 	)
@@ -28,7 +28,7 @@ export function createEmptyConsultingLoadout(): CompanionConsultingLoadout {
  * 보유 현황 초기값.
  * 레전더리=미보유, 유니크·에픽=보유 Lv.1
  */
-export function createDefaultOwnershipStateMap(): CompanionOwnershipStateMap {
+function createDefaultOwnershipStateMap(): CompanionOwnershipStateMap {
 	return Object.fromEntries(
 		COMPANIONS.map((companion) => [
 			companion.id,
@@ -41,7 +41,7 @@ export function createDefaultOwnershipStateMap(): CompanionOwnershipStateMap {
 }
 
 /** 보유 맵 → DB에 넣을 보유 목록 (owned만) */
-export function ownershipStateToEntries(stateMap: CompanionOwnershipStateMap): CompanionOwnershipEntry[] {
+function ownershipStateToEntries(stateMap: CompanionOwnershipStateMap): CompanionOwnershipEntry[] {
 	const entries: CompanionOwnershipEntry[] = []
 
 	for (const companion of COMPANIONS) {
@@ -60,7 +60,7 @@ export function ownershipStateToEntries(stateMap: CompanionOwnershipStateMap): C
 }
 
 /** DB 보유 목록 → UI 상태 맵 (없는 id는 미보유) */
-export function ownershipEntriesToStateMap(entries: readonly CompanionOwnershipEntry[]): CompanionOwnershipStateMap {
+function ownershipEntriesToStateMap(entries: readonly CompanionOwnershipEntry[]): CompanionOwnershipStateMap {
 	const ownedById = new Map(entries.map((entry) => [entry.companionId, entry.level]))
 	const base = createDefaultOwnershipStateMap()
 
@@ -81,12 +81,12 @@ export function ownershipEntriesToStateMap(entries: readonly CompanionOwnershipE
 }
 
 /** 보유 목록 → companionId Set (슬롯 선택 제한용) */
-export function ownershipEntriesToAllowedIds(entries: readonly CompanionOwnershipEntry[]): Set<string> {
+function ownershipEntriesToAllowedIds(entries: readonly CompanionOwnershipEntry[]): Set<string> {
 	return new Set(entries.map((entry) => entry.companionId))
 }
 
 /** 보유 목록 → companionId → level */
-export function ownershipEntriesToLevelMap(entries: readonly CompanionOwnershipEntry[]): Map<string, number> {
+function ownershipEntriesToLevelMap(entries: readonly CompanionOwnershipEntry[]): Map<string, number> {
 	return new Map(entries.map((entry) => [entry.companionId, entry.level]))
 }
 
@@ -94,7 +94,7 @@ export function ownershipEntriesToLevelMap(entries: readonly CompanionOwnershipE
  * 슬롯에 동료를 넣을 때 보유 레벨을 반영합니다.
  * 미보유면 companionId를 비웁니다.
  */
-export function syncLoadoutWithOwnership(
+function syncLoadoutWithOwnership(
 	loadout: CompanionConsultingLoadout,
 	entries: readonly CompanionOwnershipEntry[]
 ): CompanionConsultingLoadout {
@@ -127,7 +127,7 @@ export function syncLoadoutWithOwnership(
 }
 
 /** 목록 URL. 1페이지는 쿼리 없이 깔끔하게 둡니다. */
-export function getConsultingListPath(page = 1) {
+function getConsultingListPath(page = 1) {
 	if (page <= 1) {
 		return '/tips/companion-setup'
 	}
@@ -136,6 +136,18 @@ export function getConsultingListPath(page = 1) {
 }
 
 /** 공유 URL 경로 (앱 origin은 클라이언트에서 붙임) */
-export function getConsultingPostPath(shortId: string) {
+function getConsultingPostPath(shortId: string) {
 	return `/tips/companion-setup/${shortId}`
+}
+
+export {
+	createDefaultOwnershipStateMap,
+	createEmptyConsultingLoadout,
+	getConsultingListPath,
+	getConsultingPostPath,
+	ownershipEntriesToAllowedIds,
+	ownershipEntriesToLevelMap,
+	ownershipEntriesToStateMap,
+	ownershipStateToEntries,
+	syncLoadoutWithOwnership
 }

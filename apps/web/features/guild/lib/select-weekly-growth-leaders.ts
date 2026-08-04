@@ -9,7 +9,7 @@ import {
 import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
 
 /** 금주의 길드원 점수에 쓰는 지표 키 */
-export type WeeklyGrowthMetricKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss'
+type WeeklyGrowthMetricKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss'
 
 /** 지표별 표시 라벨 (Popover 상세용) */
 export const WEEKLY_GROWTH_METRIC_LABELS = {
@@ -54,7 +54,7 @@ const BASE_METRIC_KEYS = [
 /** 같은 주간 사이클로 볼 수 있는 수집일 최대 간격(일). 보통 1~3일 */
 export const WEEKLY_GROWTH_CYCLE_MAX_GAP_DAYS = 3
 
-export type WeeklyGrowthMetricBreakdown = {
+type WeeklyGrowthMetricBreakdown = {
 	key: WeeklyGrowthMetricKey
 	label: string
 	/** 표시용 성장률 (예: +12.3%) */
@@ -63,7 +63,7 @@ export type WeeklyGrowthMetricBreakdown = {
 	percent: number
 }
 
-export type WeeklyGrowthLeader = {
+type WeeklyGrowthLeader = {
 	rank: 1 | 2 | 3
 	name: string
 	job: string
@@ -78,7 +78,7 @@ export type WeeklyGrowthLeader = {
 }
 
 /** 선정 가능 여부. ready=false면 아직 주간 업데이트가 끝나지 않음 */
-export type WeeklyGrowthSelectionStatus =
+type WeeklyGrowthSelectionStatus =
 	| {
 			ready: true
 			activeMetricKeys: WeeklyGrowthMetricKey[]
@@ -154,7 +154,7 @@ function isDateInWeeklyCycleWindow(date: string, weeklyCurrentDates: string[], m
  * 주간 필수 3종(전투력·토벌·대항)이 모두 이번 주 갱신됐는지,
  * 그리고 수련장·길드보스를 같은 주 점수에 넣을지 판별합니다.
  */
-export function getWeeklyGrowthSelectionStatus(
+function getWeeklyGrowthSelectionStatus(
 	contentDates: typeof GUILD_CONTENT_UPDATED_AT = GUILD_CONTENT_UPDATED_AT
 ): WeeklyGrowthSelectionStatus {
 	const pendingLabels = REQUIRED_WEEKLY_DATE_KEYS.filter(
@@ -233,7 +233,7 @@ export function getWeeklyGrowthSelectionStatus(
  * 이번 주 점수에 넣을 지표 키 목록.
  * 선정이 아직 준비되지 않았으면 빈 배열.
  */
-export function getActiveWeeklyGrowthMetricKeys(
+function getActiveWeeklyGrowthMetricKeys(
 	contentDates: typeof GUILD_CONTENT_UPDATED_AT = GUILD_CONTENT_UPDATED_AT
 ): WeeklyGrowthMetricKey[] {
 	return getWeeklyGrowthSelectionStatus(contentDates).activeMetricKeys
@@ -305,7 +305,7 @@ function scoreMemberGrowth(
  * - 수련장·길드보스는 같은 주간 사이클(±3일)에 갱신됐을 때만 포함
  * - 동점이면 전투력 성장률 우선
  */
-export function selectWeeklyGrowthLeaders(
+function selectWeeklyGrowthLeaders(
 	comparisons: GuildMemberComparison[],
 	contentDates: typeof GUILD_CONTENT_UPDATED_AT = GUILD_CONTENT_UPDATED_AT
 ): WeeklyGrowthLeader[] {
@@ -345,10 +345,18 @@ export function selectWeeklyGrowthLeaders(
 }
 
 /** 테스트·디버그용: 두 날짜가 같은 주간 창인지 */
-export function isGuildContentInSameWeeklyCycle(
+function isGuildContentInSameWeeklyCycle(
 	left: string,
 	right: string,
 	maxGapDays = WEEKLY_GROWTH_CYCLE_MAX_GAP_DAYS
 ): boolean {
 	return getGuildContentDateDayDiff(left, right) <= maxGapDays
 }
+
+export {
+	getActiveWeeklyGrowthMetricKeys,
+	getWeeklyGrowthSelectionStatus,
+	isGuildContentInSameWeeklyCycle,
+	selectWeeklyGrowthLeaders
+}
+export type { WeeklyGrowthLeader, WeeklyGrowthMetricBreakdown, WeeklyGrowthMetricKey, WeeklyGrowthSelectionStatus }

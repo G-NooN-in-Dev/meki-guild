@@ -2,9 +2,10 @@
 
 import { cn } from '@shared/ui/lib/utils'
 
-import { GrowthDelta } from '@/features/guild/components/growth-delta'
+import GrowthDelta from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
+import { formatRankLabel, type MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import {
 	GUILD_EMPTY_VALUE_LABEL,
 	type MemberVsMemberComparison,
@@ -13,7 +14,6 @@ import {
 import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
 import { getGuildContentCriteriaLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
 import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
-import { formatRankLabel, type MemberRankings } from '@/utils/compute-member-rankings'
 
 type MemberComparePanelProps = {
 	comparison: MemberVsMemberComparison

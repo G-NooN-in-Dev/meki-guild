@@ -9,7 +9,7 @@ import { Textarea } from '@shared/ui/textarea'
 import { cn } from '@shared/ui/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useMemo, useState, useSyncExternalStore } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 
 import CompanionOwnershipGrid from '@/features/tips/components/companion-ownership-grid'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
@@ -96,9 +96,9 @@ function CompanionConsultingNewSection({ initialPost }: CompanionConsultingNewSe
 	const editUnlocked = !isEdit || verifiedPassword !== null || Boolean(storedPassword)
 	const unlockDialogOpen = isEdit && !editUnlocked
 
-	const ownershipEntries = useMemo(() => ownershipStateToEntries(ownership), [ownership])
-	const allowedIds = useMemo(() => ownershipEntriesToAllowedIds(ownershipEntries), [ownershipEntries])
-	const levelByCompanionId = useMemo(() => ownershipEntriesToLevelMap(ownershipEntries), [ownershipEntries])
+	const ownershipEntries = ownershipStateToEntries(ownership)
+	const allowedIds = ownershipEntriesToAllowedIds(ownershipEntries)
+	const levelByCompanionId = ownershipEntriesToLevelMap(ownershipEntries)
 
 	const backHref = initialPost ? getConsultingPostPath(initialPost.shortId) : '/tips/companion-setup'
 

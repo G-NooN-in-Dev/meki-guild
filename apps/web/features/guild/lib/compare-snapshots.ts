@@ -53,7 +53,7 @@ function parsePlacementInput(value: number | null | undefined): { hasPlacement: 
 	return { hasPlacement: true, placement: Math.floor(value) }
 }
 
-export function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
+function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
 	const hasCombatPower = !isEmptyInput(member.combatPower)
 	const hasLevel = member.level > 0
 	const hasExpeditionGrade = !isEmptyInput(member.expedition.grade)
@@ -434,10 +434,7 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 	}
 }
 
-export function compareSnapshots(
-	currentWeek: GuildWeekSnapshot,
-	previousWeek: GuildWeekSnapshot
-): GuildMemberComparison[] {
+function compareSnapshots(currentWeek: GuildWeekSnapshot, previousWeek: GuildWeekSnapshot): GuildMemberComparison[] {
 	const currentMembers = currentWeek.members.map(parseGuildMember)
 	const previousMembers = previousWeek.members.map(parseGuildMember)
 	const previousByName = new Map(previousMembers.map((member) => [member.name, member]))
@@ -474,3 +471,5 @@ export function compareSnapshots(
 		return leftPower > rightPower ? -1 : 1
 	})
 }
+
+export { compareSnapshots, parseGuildMember }

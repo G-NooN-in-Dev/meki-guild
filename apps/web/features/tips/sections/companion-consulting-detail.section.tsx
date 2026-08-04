@@ -8,7 +8,7 @@ import { toast } from '@shared/ui/sonner'
 import { Textarea } from '@shared/ui/textarea'
 import { PencilIcon, Trash2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import CompanionOwnershipGrid from '@/features/tips/components/companion-ownership-grid'
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
@@ -67,9 +67,9 @@ function formatCreatedAt(iso: string) {
 /** 게시글 상세: 조회 + 추천 작성 + 비밀번호 기반 수정·삭제 */
 function CompanionConsultingDetailSection({ post, comments }: CompanionConsultingDetailSectionProps) {
 	const router = useRouter()
-	const ownershipState = useMemo(() => ownershipEntriesToStateMap(post.ownership), [post.ownership])
-	const allowedIds = useMemo(() => ownershipEntriesToAllowedIds(post.ownership), [post.ownership])
-	const levelByCompanionId = useMemo(() => ownershipEntriesToLevelMap(post.ownership), [post.ownership])
+	const ownershipState = ownershipEntriesToStateMap(post.ownership)
+	const allowedIds = ownershipEntriesToAllowedIds(post.ownership)
+	const levelByCompanionId = ownershipEntriesToLevelMap(post.ownership)
 
 	const [recommendLoadouts, setRecommendLoadouts] = useState<CompanionConsultingLoadout>(() =>
 		createEmptyConsultingLoadout()
@@ -94,15 +94,8 @@ function CompanionConsultingDetailSection({ post, comments }: CompanionConsultin
 	const [editError, setEditError] = useState<string | null>(null)
 
 	// 추천 작성 중에도 적용 후 프리셋을 바로 보여 줍니다.
-	const recommendProjectedPresetStats = useMemo(
-		() => projectCompanionPresetStats(post.presetStats, post.loadout, recommendLoadouts),
-		[post.presetStats, post.loadout, recommendLoadouts]
-	)
-
-	const editProjectedPresetStats = useMemo(
-		() => projectCompanionPresetStats(post.presetStats, post.loadout, editLoadouts),
-		[post.presetStats, post.loadout, editLoadouts]
-	)
+	const recommendProjectedPresetStats = projectCompanionPresetStats(post.presetStats, post.loadout, recommendLoadouts)
+	const editProjectedPresetStats = projectCompanionPresetStats(post.presetStats, post.loadout, editLoadouts)
 
 	async function handleSubmitRecommend() {
 		setError(null)

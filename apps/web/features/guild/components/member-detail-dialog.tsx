@@ -4,9 +4,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 
-import { GrowthDelta, MemberStatusBadge } from '@/features/guild/components/growth-delta'
+import GrowthDelta, { MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName, { useMemberDisplayName } from '@/features/guild/components/member-display-name'
+import { formatRankDiffLabel, formatRankLabel, type MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
 import {
@@ -15,7 +16,6 @@ import {
 	type GuildContentDateRange
 } from '@/libs/guild-content-dates.constants'
 import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
-import { formatRankDiffLabel, formatRankLabel, type MemberRankings } from '@/utils/compute-member-rankings'
 import { formatPlacementRank } from '@/utils/format-korean-number'
 
 type MemberDetailDialogProps = {

@@ -6,7 +6,7 @@ import PageLoading from '@/components/page-loading'
 import PageShell from '@/components/page-shell'
 import { RelicConsultingValidationError } from '@/features/tips/lib/relic-consulting.validation'
 import RelicConsultingNewSection from '@/features/tips/sections/relic-consulting-new.section'
-import { getRelicConsultingPostByShortId } from '@/libs/relic-consulting.server'
+import { loadRelicConsultingPostByShortId } from '@/libs/relic-consulting.loader'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,11 +14,11 @@ type RelicConsultingEditPageProps = {
 	params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: RelicConsultingEditPageProps): Promise<Metadata> {
+async function generateMetadata({ params }: RelicConsultingEditPageProps): Promise<Metadata> {
 	const { id } = await params
 
 	try {
-		const post = await getRelicConsultingPostByShortId(id)
+		const post = await loadRelicConsultingPostByShortId(id)
 		if (!post) {
 			return {
 				title: '유물 현황 수정',
@@ -45,7 +45,7 @@ async function RelicConsultingEditContent({ params }: RelicConsultingEditPagePro
 	let post = null
 
 	try {
-		post = await getRelicConsultingPostByShortId(id)
+		post = await loadRelicConsultingPostByShortId(id)
 	} catch (error) {
 		if (error instanceof RelicConsultingValidationError) {
 			notFound()
@@ -72,3 +72,5 @@ function RelicConsultingEditPage({ params }: RelicConsultingEditPageProps) {
 }
 
 export default RelicConsultingEditPage
+
+export { generateMetadata }

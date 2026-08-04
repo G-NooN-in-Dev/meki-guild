@@ -17,7 +17,7 @@ import { cn } from '@shared/ui/utils'
 import { ArrowRightIcon, SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { type FormEvent, useMemo, useState, useTransition } from 'react'
+import { type FormEvent, useState, useTransition } from 'react'
 
 import LinkPendingHint, { LinkPendingIcon } from '@/components/link-pending-hint'
 import { buildConsultingPaginationItems, CONSULTING_SHORT_ID_LENGTH } from '@/features/tips/lib/consulting.constants'
@@ -64,8 +64,8 @@ function RelicConsultingHubSection({
 	const [lookupError, setLookupError] = useState<string | null>(null)
 	const [isPending, startTransition] = useTransition()
 
-	const normalizedLookup = useMemo(() => lookupId.trim().toUpperCase(), [lookupId])
-	const paginationItems = useMemo(() => buildConsultingPaginationItems(page, totalPages), [page, totalPages])
+	const normalizedLookup = lookupId.trim().toUpperCase()
+	const paginationItems = buildConsultingPaginationItems(page, totalPages)
 
 	function handleLookup(event: FormEvent) {
 		event.preventDefault()

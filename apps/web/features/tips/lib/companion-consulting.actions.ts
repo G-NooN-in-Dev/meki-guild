@@ -22,7 +22,7 @@ import {
 
 type ActionOk<T> = { ok: true; data: T }
 type ActionFail = { ok: false; error: string }
-export type ConsultingActionResult<T> = ActionOk<T> | ActionFail
+type ConsultingActionResult<T> = ActionOk<T> | ActionFail
 
 function toActionError(error: unknown): ActionFail {
 	if (error instanceof ConsultingValidationError) {
@@ -34,7 +34,7 @@ function toActionError(error: unknown): ActionFail {
 }
 
 /** 최근 컨설팅 게시글 목록 (페이지네이션) */
-export async function fetchConsultingPostsAction(
+async function fetchConsultingPostsAction(
 	page = 1
 ): Promise<ConsultingActionResult<CompanionConsultingPostListResult>> {
 	try {
@@ -46,7 +46,7 @@ export async function fetchConsultingPostsAction(
 }
 
 /** 게시글 + 추천 댓글 */
-export async function fetchConsultingPostDetailAction(
+async function fetchConsultingPostDetailAction(
 	shortId: string
 ): Promise<ConsultingActionResult<{ post: CompanionConsultingPost; comments: CompanionConsultingComment[] }>> {
 	try {
@@ -63,7 +63,7 @@ export async function fetchConsultingPostDetailAction(
 }
 
 /** 현황 게시글 작성 */
-export async function createConsultingPostAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
+async function createConsultingPostAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
 		const data = await createConsultingPost(input)
 		return { ok: true, data }
@@ -73,7 +73,7 @@ export async function createConsultingPostAction(input: unknown): Promise<Consul
 }
 
 /** 현황 게시글 수정 */
-export async function updateConsultingPostAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
+async function updateConsultingPostAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
 		const data = await updateConsultingPost(input)
 		return { ok: true, data }
@@ -83,7 +83,7 @@ export async function updateConsultingPostAction(input: unknown): Promise<Consul
 }
 
 /** 현황 게시글 삭제 (추천 세팅 포함) */
-export async function deleteConsultingPostAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
+async function deleteConsultingPostAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
 		const data = await deleteConsultingPost(input)
 		return { ok: true, data }
@@ -93,7 +93,7 @@ export async function deleteConsultingPostAction(input: unknown): Promise<Consul
 }
 
 /** 게시글 수정 화면 진입 전 비밀번호 확인 */
-export async function verifyConsultingPostPasswordAction(
+async function verifyConsultingPostPasswordAction(
 	input: unknown
 ): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -105,9 +105,7 @@ export async function verifyConsultingPostPasswordAction(
 }
 
 /** 추천 세팅 댓글 작성 */
-export async function createConsultingCommentAction(
-	input: unknown
-): Promise<ConsultingActionResult<{ shortId: string }>> {
+async function createConsultingCommentAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
 		const data = await createConsultingComment(input)
 		return { ok: true, data }
@@ -117,9 +115,7 @@ export async function createConsultingCommentAction(
 }
 
 /** 추천 세팅 댓글 수정 */
-export async function updateConsultingCommentAction(
-	input: unknown
-): Promise<ConsultingActionResult<{ shortId: string }>> {
+async function updateConsultingCommentAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
 		const data = await updateConsultingComment(input)
 		return { ok: true, data }
@@ -129,9 +125,7 @@ export async function updateConsultingCommentAction(
 }
 
 /** 추천 세팅 댓글 삭제 */
-export async function deleteConsultingCommentAction(
-	input: unknown
-): Promise<ConsultingActionResult<{ shortId: string }>> {
+async function deleteConsultingCommentAction(input: unknown): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
 		const data = await deleteConsultingComment(input)
 		return { ok: true, data }
@@ -141,7 +135,7 @@ export async function deleteConsultingCommentAction(
 }
 
 /** 추천 수정 진입 전 비밀번호 확인 */
-export async function verifyConsultingCommentPasswordAction(
+async function verifyConsultingCommentPasswordAction(
 	input: unknown
 ): Promise<ConsultingActionResult<{ shortId: string }>> {
 	try {
@@ -151,3 +145,17 @@ export async function verifyConsultingCommentPasswordAction(
 		return toActionError(error)
 	}
 }
+
+export {
+	createConsultingCommentAction,
+	createConsultingPostAction,
+	deleteConsultingCommentAction,
+	deleteConsultingPostAction,
+	fetchConsultingPostDetailAction,
+	fetchConsultingPostsAction,
+	updateConsultingCommentAction,
+	updateConsultingPostAction,
+	verifyConsultingCommentPasswordAction,
+	verifyConsultingPostPasswordAction
+}
+export type { ConsultingActionResult }

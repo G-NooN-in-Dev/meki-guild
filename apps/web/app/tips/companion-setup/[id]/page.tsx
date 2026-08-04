@@ -6,7 +6,7 @@ import PageLoading from '@/components/page-loading'
 import PageShell from '@/components/page-shell'
 import { ConsultingValidationError } from '@/features/tips/lib/companion-consulting.validation'
 import CompanionConsultingDetailSection from '@/features/tips/sections/companion-consulting-detail.section'
-import { getConsultingPostByShortId, listConsultingComments } from '@/libs/companion-consulting.server'
+import { loadConsultingPostByShortId, loadConsultingPostDetail } from '@/libs/companion-consulting.loader'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,11 +15,11 @@ type CompanionConsultingDetailPageProps = {
 }
 
 /** 게시글 제목·내용으로 OG/탭 제목을 맞춥니다. */
-export async function generateMetadata({ params }: CompanionConsultingDetailPageProps): Promise<Metadata> {
+async function generateMetadata({ params }: CompanionConsultingDetailPageProps): Promise<Metadata> {
 	const { id } = await params
 
 	try {
-		const post = await getConsultingPostByShortId(id)
+		const post = await loadConsultingPostByShortId(id)
 		if (!post) {
 			return {
 				title: '동료 세팅 컨설팅',
@@ -43,13 +43,12 @@ async function CompanionConsultingDetailContent({ params }: CompanionConsultingD
 	const { id } = await params
 
 	let post = null
-	let comments: Awaited<ReturnType<typeof listConsultingComments>> = []
+	let comments: Awaited<ReturnType<typeof loadConsultingPostDetail>>['comments'] = []
 
 	try {
-		post = await getConsultingPostByShortId(id)
-		if (post) {
-			comments = await listConsultingComments(id)
-		}
+		const detail = await loadConsultingPostDetail(id)
+		post = detail.post
+		comments = detail.comments
 	} catch (error) {
 		if (error instanceof ConsultingValidationError) {
 			notFound()
@@ -76,3 +75,5 @@ function CompanionConsultingDetailPage({ params }: CompanionConsultingDetailPage
 }
 
 export default CompanionConsultingDetailPage
+
+export { generateMetadata }

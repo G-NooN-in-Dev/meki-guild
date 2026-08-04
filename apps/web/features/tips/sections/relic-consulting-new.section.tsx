@@ -9,7 +9,7 @@ import { Textarea } from '@shared/ui/textarea'
 import { cn } from '@shared/ui/utils'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useMemo, useState, useSyncExternalStore } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 
 import CompanionPresetStatsFields from '@/features/tips/components/companion-preset-stats-fields'
 import ConsultingPasswordDialog from '@/features/tips/components/consulting-password-dialog'
@@ -92,9 +92,9 @@ function RelicConsultingNewSection({ initialPost }: RelicConsultingNewSectionPro
 	const editUnlocked = !isEdit || verifiedPassword !== null || Boolean(storedPassword)
 	const unlockDialogOpen = isEdit && !editUnlocked
 
-	const ownershipEntries = useMemo(() => relicOwnershipStateToEntries(ownership), [ownership])
-	const allowedIds = useMemo(() => relicOwnershipEntriesToAllowedIds(ownershipEntries), [ownershipEntries])
-	const stageByRelicId = useMemo(() => relicOwnershipEntriesToStageMap(ownershipEntries), [ownershipEntries])
+	const ownershipEntries = relicOwnershipStateToEntries(ownership)
+	const allowedIds = relicOwnershipEntriesToAllowedIds(ownershipEntries)
+	const stageByRelicId = relicOwnershipEntriesToStageMap(ownershipEntries)
 
 	const backHref = initialPost ? getRelicConsultingPostPath(initialPost.shortId) : '/tips/relic-setup'
 

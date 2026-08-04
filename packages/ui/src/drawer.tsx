@@ -8,7 +8,7 @@ import { cn } from './lib/utils'
 /** vaul Drawer.Root direction prop */
 export const drawerDirectionOptions = ['top', 'bottom', 'left', 'right'] as const
 
-export type DrawerDirection = (typeof drawerDirectionOptions)[number]
+type DrawerDirection = (typeof drawerDirectionOptions)[number]
 
 function Drawer({ ...props }: ComponentProps<typeof DrawerPrimitive.Root>) {
 	return <DrawerPrimitive.Root data-slot="drawer" {...props} />
@@ -107,3 +107,5 @@ export {
 	DrawerTitle,
 	DrawerTrigger
 }
+
+export type { DrawerDirection }

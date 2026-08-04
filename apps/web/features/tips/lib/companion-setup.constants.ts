@@ -141,7 +141,7 @@ function formatEquipEffectValue(value: number, unit: CompanionEquipEffectUnit) {
 }
 
 /** 등급 최대 레벨 안으로 레벨을 보정합니다. */
-export function clampCompanionLevel(grade: CompanionGrade, level: number) {
+function clampCompanionLevel(grade: CompanionGrade, level: number) {
 	const maxLevel = COMPANION_GRADE_MAX_LEVEL[grade]
 	return Math.min(maxLevel, Math.max(1, Math.floor(level)))
 }
@@ -150,11 +150,7 @@ export function clampCompanionLevel(grade: CompanionGrade, level: number) {
  * 장착 효과 계산.
  * 수치 = 등급1레벨값 × (1 + (레벨-1) × 등급상승률)
  */
-export function resolveEquipEffects(
-	job: string,
-	grade: CompanionGrade,
-	level: number
-): readonly CompanionEquipEffect[] {
+function resolveEquipEffects(job: string, grade: CompanionGrade, level: number): readonly CompanionEquipEffect[] {
 	const base = COMPANION_EQUIP_EFFECT_BASE_BY_JOB[job as keyof typeof COMPANION_EQUIP_EFFECT_BASE_BY_JOB]
 
 	if (!base) {
@@ -187,7 +183,7 @@ export function resolveEquipEffects(
  * 같은 효과 라벨끼리 수치를 합산해 최종 목록을 만듭니다.
  * (예: 히어로+히어로 다른 등급이 둘 다 있으면 최대 데미지 배율을 합침)
  */
-export function aggregateEquipEffects(effects: readonly CompanionEquipEffect[]): readonly CompanionEquipEffect[] {
+function aggregateEquipEffects(effects: readonly CompanionEquipEffect[]): readonly CompanionEquipEffect[] {
 	const totals = new Map<string, { label: string; value: number; unit: CompanionEquipEffectUnit }>()
 
 	for (const effect of effects) {
@@ -237,7 +233,7 @@ export const COMPANION_JOB_ICON_KEY = {
 } as const satisfies Record<string, string>
 
 /** 직업 초상화 public 경로. 매핑이 없으면 빈 문자열. */
-export function getCompanionImageSrc(job: string) {
+function getCompanionImageSrc(job: string) {
 	const iconKey = COMPANION_JOB_ICON_KEY[job as keyof typeof COMPANION_JOB_ICON_KEY]
 	return iconKey ? `/tips/companions/${iconKey}.png` : ''
 }
@@ -257,6 +253,8 @@ export const COMPANIONS: readonly Companion[] = COMPANION_JOBS.flatMap((job) =>
 	COMPANION_GRADE_ORDER.map((grade) => createCompanion(job, grade))
 )
 
-export function getCompanionById(id: string): Companion | undefined {
+function getCompanionById(id: string): Companion | undefined {
 	return COMPANIONS.find((companion) => companion.id === id)
 }
+
+export { aggregateEquipEffects, clampCompanionLevel, getCompanionById, getCompanionImageSrc, resolveEquipEffects }

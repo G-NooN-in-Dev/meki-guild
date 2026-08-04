@@ -8,7 +8,7 @@ import { cn } from './lib/utils'
 
 export const alertDialogSizeOptions = ['default', 'sm'] as const
 
-export type AlertDialogSize = (typeof alertDialogSizeOptions)[number]
+type AlertDialogSize = (typeof alertDialogSizeOptions)[number]
 
 function AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {
 	return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />
@@ -157,3 +157,5 @@ export {
 	AlertDialogTitle,
 	AlertDialogTrigger
 }
+
+export type { AlertDialogSize }

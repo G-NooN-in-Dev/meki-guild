@@ -2,7 +2,7 @@
 
 import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
 import RelicSlot from '@/features/tips/components/relic-slot'
@@ -58,7 +58,7 @@ function RelicSetupBoard({
 	const editingLoadout = editingSlotId ? (loadouts[editingSlotId] ?? EMPTY_LOADOUT) : EMPTY_LOADOUT
 	const editingRelic = editingLoadout.relicId ? (getRelicById(editingLoadout.relicId) ?? null) : null
 
-	const excludedIds = useMemo(() => {
+	const excludedIds = (() => {
 		const ids = new Set<string>()
 		for (const [slotId, loadout] of Object.entries(loadouts)) {
 			if (loadout.relicId && slotId !== editingSlotId) {
@@ -66,15 +66,12 @@ function RelicSetupBoard({
 			}
 		}
 		return ids
-	}, [loadouts, editingSlotId])
+	})()
 
-	const equippedCount = useMemo(
-		() => RELIC_SETUP_SLOTS.filter((slot) => Boolean(loadouts[slot.id]?.relicId)).length,
-		[loadouts]
-	)
+	const equippedCount = RELIC_SETUP_SLOTS.filter((slot) => Boolean(loadouts[slot.id]?.relicId)).length
 
 	/** 유물 기본 효과 + 잠재옵션을 라벨·스코프별로 합산 */
-	const aggregatedStats = useMemo(() => {
+	const aggregatedStats = (() => {
 		const stats = RELIC_SETUP_SLOTS.flatMap((slot) => {
 			const loadout = loadouts[slot.id]
 			if (!loadout?.relicId) {
@@ -87,9 +84,9 @@ function RelicSetupBoard({
 		})
 
 		return aggregateRelicStats(stats)
-	}, [loadouts])
+	})()
 
-	const activeConditions = useMemo(() => {
+	const activeConditions = (() => {
 		const set = new Set<string>()
 		for (const slot of RELIC_SETUP_SLOTS) {
 			const relicId = loadouts[slot.id]?.relicId
@@ -102,7 +99,7 @@ function RelicSetupBoard({
 			}
 		}
 		return [...set]
-	}, [loadouts])
+	})()
 
 	function updateLoadouts(next: RelicConsultingLoadout) {
 		onLoadoutsChange?.(next)

@@ -16,7 +16,7 @@ const TRAINING_KOREAN_FORMAT_THRESHOLD = 10_000_000n
  * formatLocaleNumber(1234) // '1,234'
  * formatLocaleNumber(1234n) // '1,234'
  */
-export function formatLocaleNumber(value: number | bigint): string {
+function formatLocaleNumber(value: number | bigint): string {
 	return value.toLocaleString('ko-KR')
 }
 
@@ -26,7 +26,7 @@ export function formatLocaleNumber(value: number | bigint): string {
  * @example
  * formatKoreanNumber(1739115000000000n) // '1739조 115억'
  */
-export function formatKoreanNumber(value: bigint): string {
+function formatKoreanNumber(value: bigint): string {
 	if (value === 0n) {
 		return '0'
 	}
@@ -56,7 +56,7 @@ export function formatKoreanNumber(value: bigint): string {
 /**
  * 증감값을 부호가 포함된 한국어 숫자 문자열로 변환합니다.
  */
-export function formatKoreanDelta(diff: bigint): string {
+function formatKoreanDelta(diff: bigint): string {
 	if (diff === 0n) {
 		return GUILD_ZERO_DELTA_LABEL
 	}
@@ -74,7 +74,7 @@ export function formatKoreanDelta(diff: bigint): string {
  * formatTrainingScore(8158329n)   // '8,158,329'
  * formatTrainingScore(15246720n)  // '1524만 6720'
  */
-export function formatTrainingScore(value: bigint): string {
+function formatTrainingScore(value: bigint): string {
 	if (value === 0n) {
 		return GUILD_EMPTY_VALUE_LABEL
 	}
@@ -109,7 +109,7 @@ export function formatTrainingScore(value: bigint): string {
 /**
  * 수련장 점수 증감 표시용 포맷.
  */
-export function formatTrainingDelta(diff: bigint): string {
+function formatTrainingDelta(diff: bigint): string {
 	if (diff === 0n) {
 		return GUILD_ZERO_DELTA_LABEL
 	}
@@ -123,7 +123,7 @@ export function formatTrainingDelta(diff: bigint): string {
  * 토벌전 등수를 `1,234위` 형태로 표시합니다.
  * 미입력이면 빈 값 표기를 반환합니다.
  */
-export function formatPlacementRank(value: number | null): string {
+function formatPlacementRank(value: number | null): string {
 	if (value === null) {
 		return GUILD_EMPTY_VALUE_LABEL
 	}
@@ -135,7 +135,7 @@ export function formatPlacementRank(value: number | null): string {
  * 이전 값 대비 증감 비율(%)을 포맷합니다.
  * 이전 값이 0이면 비율을 계산할 수 없어 null을 반환합니다.
  */
-export function formatDeltaPercent(diff: bigint, previous: bigint): string | null {
+function formatDeltaPercent(diff: bigint, previous: bigint): string | null {
 	if (previous === 0n) {
 		return null
 	}
@@ -152,4 +152,14 @@ export function formatDeltaPercent(diff: bigint, previous: bigint): string | nul
 	const decPart = absScaled % 10n
 
 	return `${sign}${intPart}.${decPart}%`
+}
+
+export {
+	formatDeltaPercent,
+	formatKoreanDelta,
+	formatKoreanNumber,
+	formatLocaleNumber,
+	formatPlacementRank,
+	formatTrainingDelta,
+	formatTrainingScore
 }

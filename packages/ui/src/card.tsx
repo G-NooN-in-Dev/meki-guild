@@ -4,7 +4,7 @@ import { cn } from './lib/utils'
 
 export const cardSizeOptions = ['default', 'sm'] as const
 
-export type CardSize = (typeof cardSizeOptions)[number]
+type CardSize = (typeof cardSizeOptions)[number]
 
 function Card({ className, size = 'default', ...props }: ComponentProps<'div'> & { size?: CardSize }) {
 	return (
@@ -75,3 +75,5 @@ function CardFooter({ className, ...props }: ComponentProps<'div'>) {
 }
 
 export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
+
+export type { CardSize }

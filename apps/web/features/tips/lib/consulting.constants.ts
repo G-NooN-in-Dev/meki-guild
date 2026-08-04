@@ -48,7 +48,7 @@ export const CONSULTING_DEFAULT_OWNED_BY_GRADE = {
  * 페이지네이션에 표시할 페이지 번호·말줄임 목록을 만듭니다.
  * 예: 1 … 4 5 6 … 12
  */
-export function buildConsultingPaginationItems(currentPage: number, totalPages: number): Array<number | 'ellipsis'> {
+function buildConsultingPaginationItems(currentPage: number, totalPages: number): Array<number | 'ellipsis'> {
 	if (totalPages <= 7) {
 		return Array.from({ length: totalPages }, (_, index) => index + 1)
 	}
@@ -138,7 +138,7 @@ const PRESET_STAT_FIELD_BY_ID = Object.fromEntries(
 ) as Record<ConsultingPresetStatId, ConsultingPresetStatField>
 
 /** 그룹에 속한 필드 정의 목록 */
-export function getPresetStatFieldsByGroup(groupId: (typeof CONSULTING_PRESET_STAT_GROUPS)[number]['id']) {
+function getPresetStatFieldsByGroup(groupId: (typeof CONSULTING_PRESET_STAT_GROUPS)[number]['id']) {
 	const group = CONSULTING_PRESET_STAT_GROUPS.find((item) => item.id === groupId)
 	if (!group) {
 		return [] as ConsultingPresetStatField[]
@@ -148,7 +148,7 @@ export function getPresetStatFieldsByGroup(groupId: (typeof CONSULTING_PRESET_ST
 }
 
 /** 빈 프리셋 스탯 (작성 폼 초기값) */
-export function createEmptyPresetStats(): ConsultingPresetStats {
+function createEmptyPresetStats(): ConsultingPresetStats {
 	return Object.fromEntries(CONSULTING_PRESET_STAT_FIELDS.map((field) => [field.id, 0])) as ConsultingPresetStats
 }
 
@@ -156,7 +156,7 @@ export function createEmptyPresetStats(): ConsultingPresetStats {
  * DB·예전 글에 빠진 키가 있어도 전체 필드를 채웁니다.
  * 조회 시 UI/타입이 깨지지 않게 보정용입니다.
  */
-export function normalizePresetStats(value: Partial<ConsultingPresetStats> | null | undefined): ConsultingPresetStats {
+function normalizePresetStats(value: Partial<ConsultingPresetStats> | null | undefined): ConsultingPresetStats {
 	const empty = createEmptyPresetStats()
 	if (!value) {
 		return empty
@@ -170,7 +170,7 @@ export function normalizePresetStats(value: Partial<ConsultingPresetStats> | nul
 	) as ConsultingPresetStats
 }
 
-export function formatPresetStatValue(value: number, unit: ConsultingPresetStatUnit) {
+function formatPresetStatValue(value: number, unit: ConsultingPresetStatUnit) {
 	const rounded = Math.round(value * 10) / 10
 	return unit === 'percent' ? `${rounded}%` : String(rounded)
 }
@@ -179,7 +179,7 @@ export function formatPresetStatValue(value: number, unit: ConsultingPresetStatU
  * 현재 프리셋 대비 증감 라벨.
  * 0이면 null — UI에서 변화 없음을 숨깁니다.
  */
-export function formatPresetStatDelta(delta: number, unit: ConsultingPresetStatUnit): string | null {
+function formatPresetStatDelta(delta: number, unit: ConsultingPresetStatUnit): string | null {
 	const rounded = Math.round(delta * 10) / 10
 	if (rounded === 0) {
 		return null
@@ -187,4 +187,13 @@ export function formatPresetStatDelta(delta: number, unit: ConsultingPresetStatU
 
 	const sign = rounded > 0 ? '+' : ''
 	return unit === 'percent' ? `${sign}${rounded}%` : `${sign}${rounded}`
+}
+
+export {
+	buildConsultingPaginationItems,
+	createEmptyPresetStats,
+	formatPresetStatDelta,
+	formatPresetStatValue,
+	getPresetStatFieldsByGroup,
+	normalizePresetStats
 }

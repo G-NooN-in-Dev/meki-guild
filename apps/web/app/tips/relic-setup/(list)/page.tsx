@@ -7,7 +7,7 @@ import PageShell from '@/components/page-shell'
 import ConsultingHubHeader from '@/features/tips/components/consulting-hub-header'
 import { getRelicConsultingListPath } from '@/features/tips/lib/relic-consulting.constants'
 import RelicConsultingHubSection from '@/features/tips/sections/relic-consulting-hub.section'
-import { listRelicConsultingPosts } from '@/libs/relic-consulting.server'
+import { loadRelicConsultingPostList } from '@/libs/relic-consulting.loader'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,14 +37,14 @@ async function RelicSetupTipContent({ searchParams }: RelicSetupTipPageProps) {
 	const { page: rawPage } = await searchParams
 	const requestedPage = parseListPage(rawPage)
 
-	let posts: Awaited<ReturnType<typeof listRelicConsultingPosts>>['posts'] = []
+	let posts: Awaited<ReturnType<typeof loadRelicConsultingPostList>>['posts'] = []
 	let page = 1
 	let totalPages = 0
 	let totalCount = 0
 	let loadError: string | null = null
 
 	try {
-		const result = await listRelicConsultingPosts({ page: requestedPage })
+		const result = await loadRelicConsultingPostList({ page: requestedPage })
 		posts = result.posts
 		page = result.page
 		totalPages = result.totalPages

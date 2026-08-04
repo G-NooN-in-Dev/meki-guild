@@ -7,7 +7,7 @@ import { cn } from './lib/utils'
 
 export const avatarSizeOptions = ['default', 'sm', 'lg'] as const
 
-export type AvatarSize = (typeof avatarSizeOptions)[number]
+type AvatarSize = (typeof avatarSizeOptions)[number]
 
 function Avatar({
 	className,
@@ -95,3 +95,5 @@ function AvatarGroupCount({ className, ...props }: ComponentProps<'div'>) {
 }
 
 export { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage }
+
+export type { AvatarSize }

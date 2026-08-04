@@ -5,7 +5,7 @@
 const BREAKPOINT_MD_FALLBACK_PX = 768
 
 /** theme.css `--breakpoint-md` (Tailwind `md:` 시작점) */
-export function getBreakpointMdPx(): number {
+function getBreakpointMdPx(): number {
 	if (typeof window === 'undefined') return BREAKPOINT_MD_FALLBACK_PX
 
 	const raw = getComputedStyle(document.documentElement).getPropertyValue('--breakpoint-md').trim()
@@ -18,8 +18,10 @@ export function getBreakpointMdPx(): number {
  * Tailwind `md:` 미만 뷰포트 여부.
  * 디자인 가이드상 모바일/태블릿 경계는 `md`(768px) 미만으로 본다.
  */
-export function isBelowMdViewport(): boolean {
+function isBelowMdViewport(): boolean {
 	if (typeof window === 'undefined') return false
 
 	return window.matchMedia(`(width < ${getBreakpointMdPx()}px)`).matches
 }
+
+export { getBreakpointMdPx, isBelowMdViewport }

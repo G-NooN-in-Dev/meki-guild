@@ -115,4 +115,5 @@ function ChangedBadge({ changed, children }: ChangedBadgeProps) {
 	)
 }
 
-export { ChangedBadge, GrowthDelta, MemberStatusBadge }
+export default GrowthDelta
+export { ChangedBadge, MemberStatusBadge }

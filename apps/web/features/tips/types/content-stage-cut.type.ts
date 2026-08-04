@@ -1,11 +1,11 @@
 /** 컨텐츠 난이도 — 일부 컨텐츠는 카오스가 없을 수 있음 */
-export type ContentDifficulty = 'easy' | 'normal' | 'hard' | 'chaos'
+type ContentDifficulty = 'easy' | 'normal' | 'hard' | 'chaos'
 
 /** 컨텐츠 종류 (파티퀘스트 / 보스레이드) */
-export type ContentKind = 'party-quest' | 'boss-raid'
+type ContentKind = 'party-quest' | 'boss-raid'
 
 /** 난이도별 스테이지컷. 없는 난이도는 null */
-export type StageCutByDifficulty = {
+type StageCutByDifficulty = {
 	easy: string
 	normal: string
 	hard: string
@@ -14,7 +14,7 @@ export type StageCutByDifficulty = {
 }
 
 /** 허브·표에 쓰는 컨텐츠 한 줄 데이터 */
-export type ContentStageCutEntry = {
+type ContentStageCutEntry = {
 	/** 컨텐츠 표시명 */
 	name: string
 	/** 클리어 보상 장비 라벨 */
@@ -22,3 +22,5 @@ export type ContentStageCutEntry = {
 	kind: ContentKind
 	stageCuts: StageCutByDifficulty
 }
+
+export type { ContentDifficulty, ContentKind, ContentStageCutEntry, StageCutByDifficulty }

@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
 
-export type MemberSelectOption = {
+type MemberSelectOption = {
 	name: string
 	job: string
 	combatPowerLabel: string
@@ -80,7 +80,7 @@ function MemberSelect({
 								<MemberDisplayName name={member.name} className="font-medium break-keep" />
 								<span className="flex min-w-0 flex-wrap items-center gap-1.5">
 									<JobBadge job={member.job} className="text-[11px]" />
-									<span className="text-grayscale-500 text-xs break-words">{member.combatPowerLabel}</span>
+									<span className="text-grayscale-500 text-xs wrap-break-word">{member.combatPowerLabel}</span>
 								</span>
 							</span>
 						</SelectItem>
@@ -92,3 +92,5 @@ function MemberSelect({
 }
 
 export default MemberSelect
+
+export type { MemberSelectOption }

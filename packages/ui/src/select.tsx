@@ -8,7 +8,7 @@ import { cn } from './lib/utils'
 
 export const selectSizeOptions = ['sm', 'default'] as const
 
-export type SelectSize = (typeof selectSizeOptions)[number]
+type SelectSize = (typeof selectSizeOptions)[number]
 
 const Select = SelectPrimitive.Root
 
@@ -169,3 +169,5 @@ export {
 	SelectTrigger,
 	SelectValue
 }
+
+export type { SelectSize }

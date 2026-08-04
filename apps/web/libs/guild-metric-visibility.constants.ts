@@ -11,9 +11,12 @@ export const GUILD_METRIC_VISIBILITY = {
 } as const
 
 /** UI에서 on/off 가능한 지표 키 */
-export type HideableGuildMetricKey = keyof typeof GUILD_METRIC_VISIBILITY
+type HideableGuildMetricKey = keyof typeof GUILD_METRIC_VISIBILITY
 
 /** 해당 지표를 화면에 보여줄지 여부 */
-export function isGuildMetricVisible(key: HideableGuildMetricKey): boolean {
+function isGuildMetricVisible(key: HideableGuildMetricKey): boolean {
 	return GUILD_METRIC_VISIBILITY[key]
 }
+
+export { isGuildMetricVisible }
+export type { HideableGuildMetricKey }
