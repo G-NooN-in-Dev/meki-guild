@@ -199,9 +199,12 @@ function NavItems({ orientation, onNavigate }: NavItemsProps) {
 										'hover:bg-grayscale-50 w-full rounded-md px-3 py-2.5',
 										active ? 'text-grayscale-900 bg-grayscale-50 font-semibold' : 'hover:text-grayscale-900'
 									)
-								: active
-									? 'text-grayscale-900 after:bg-grayscale-900 font-semibold after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:mt-1 after:block after:h-0.5 after:content-[""]'
-									: 'hover:text-grayscale-900'
+								: cn(
+										'whitespace-nowrap',
+										active
+											? 'text-grayscale-900 after:bg-grayscale-900 font-semibold after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:mt-1 after:block after:h-0.5 after:content-[""]'
+											: 'hover:text-grayscale-900'
+									)
 						)}
 					>
 						{item.label}
@@ -213,16 +216,16 @@ function NavItems({ orientation, onNavigate }: NavItemsProps) {
 	)
 }
 
-/** 데스크탑 헤더용 가로 메뉴 (md 이상) */
+/** 데스크탑 헤더용 가로 메뉴 (lg 이상 — 브랜드·유틸과 한 줄 충돌 방지) */
 function Nav() {
 	return (
-		<nav className="text-grayscale-500 hidden items-center gap-6 text-base font-medium md:flex md:text-lg">
+		<nav className="text-grayscale-500 hidden items-center gap-6 text-base font-medium lg:flex lg:text-lg">
 			<NavItems orientation="horizontal" />
 		</nav>
 	)
 }
 
-/** 모바일 햄버거 → 왼쪽 Sheet 메뉴 (md 미만) */
+/** 햄버거 → 왼쪽 Sheet 메뉴 (lg 미만: 모바일·태블릿·좁은 창) */
 function MobileNav() {
 	const [open, setOpen] = useState(false)
 
@@ -233,7 +236,7 @@ function MobileNav() {
 				type="button"
 				variant="ghost"
 				size="icon-sm"
-				className="text-grayscale-700 shrink-0 md:hidden"
+				className="text-grayscale-700 shrink-0 lg:hidden"
 				aria-label={open ? '메뉴 닫기' : '메뉴 열기'}
 				aria-expanded={open}
 				onClick={() => setOpen((current) => !current)}
