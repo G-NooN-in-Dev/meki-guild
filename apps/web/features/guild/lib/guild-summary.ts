@@ -1,9 +1,10 @@
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { sumExpeditionGradePoints } from '@/libs/expedition-guild-tier.constants'
-import { formatRankArrowDelta } from '@/utils/format-delta-label'
+import { formatArrowDelta, formatRankArrowDelta } from '@/utils/format-delta-label'
 import {
 	formatDeltaPercent,
 	formatKoreanDelta,
+	formatKoreanNumber,
 	formatLocaleNumber,
 	formatPlacementRank,
 	formatTrainingDelta
@@ -93,19 +94,59 @@ function calculateTotalChangePercent(
 	return formatDeltaPercent(diff, previous)
 }
 
-/** 이번 주 기준 길드원 평균 레벨(이탈·미입력 멤버 제외) */
-function calculateAverageLevel(comparisons: GuildMemberComparison[]): string {
-	const levels = comparisons
-		.filter((comparison) => comparison.status !== 'left' && comparison.level.hasValue)
-		.map((comparison) => comparison.level.current)
+/** 이번 주 기준 길드 총 전투력(이탈·미입력 멤버 제외) */
+function calculateCombatPowerTotal(comparisons: GuildMemberComparison[]): string {
+	const totals = comparisons.filter((comparison) => comparison.status !== 'left' && comparison.combatPower.hasValue)
 
-	if (levels.length === 0) {
+	if (totals.length === 0) {
 		return GUILD_EMPTY_VALUE_LABEL
 	}
 
-	const average = Math.round(levels.reduce((sum, level) => sum + level, 0) / levels.length)
+	const sum = totals.reduce((acc, comparison) => acc + comparison.combatPower.current, 0n)
 
-	return `${average}`
+	return formatKoreanNumber(sum)
+}
+
+function averageRounded(levels: number[]): number | null {
+	if (levels.length === 0) {
+		return null
+	}
+
+	return Math.round(levels.reduce((sum, level) => sum + level, 0) / levels.length)
+}
+
+/** 이번 주 기준 길드원 평균 레벨(이탈·미입력 멤버 제외) */
+function calculateAverageLevel(comparisons: GuildMemberComparison[]): string {
+	const average = averageRounded(
+		comparisons
+			.filter((comparison) => comparison.status !== 'left' && comparison.level.hasValue)
+			.map((comparison) => comparison.level.current)
+	)
+
+	return average === null ? GUILD_EMPTY_VALUE_LABEL : `${average}`
+}
+
+/**
+ * 직전 주 대비 평균 레벨 증감.
+ * 이번 주: 잔류·신규(입력분), 직전 주: 잔류·이탈(이전 값 있는 분).
+ */
+function calculateAverageLevelChange(comparisons: GuildMemberComparison[]): string | null {
+	const currentAverage = averageRounded(
+		comparisons
+			.filter((comparison) => comparison.status !== 'left' && comparison.level.hasValue)
+			.map((comparison) => comparison.level.current)
+	)
+	const previousAverage = averageRounded(
+		comparisons
+			.filter((comparison) => comparison.status !== 'new' && comparison.level.previous !== null)
+			.map((comparison) => comparison.level.previous as number)
+	)
+
+	if (currentAverage === null || previousAverage === null) {
+		return null
+	}
+
+	return formatArrowDelta(currentAverage - previousAverage)
 }
 
 function formatPointsDelta(diff: number): string | null {
@@ -212,9 +253,11 @@ function calculateGuildSummaryMetrics(
 	const expeditionRank = calculateGuildExpeditionRank(guildExpeditionRank ?? { current: null, previous: null })
 
 	return {
+		combatPowerTotal: calculateCombatPowerTotal(comparisons),
 		combatPowerChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, combatPowerField)),
 		combatPowerChangePercent: calculateTotalChangePercent(comparisons, combatPowerField),
 		averageLevel: calculateAverageLevel(comparisons),
+		averageLevelChange: calculateAverageLevelChange(comparisons),
 		expeditionScoreChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, expeditionScoreField)),
 		expeditionScoreChangePercent: calculateTotalChangePercent(comparisons, expeditionScoreField),
 		expeditionGradePointsTotal: calculateExpeditionGradePointsTotal(comparisons),
@@ -234,6 +277,8 @@ function calculateGuildSummaryMetrics(
 
 export {
 	calculateAverageLevel,
+	calculateAverageLevelChange,
+	calculateCombatPowerTotal,
 	calculateExpeditionGradePointsChange,
 	calculateExpeditionGradePointsTotal,
 	calculateGuildExpeditionRank,
