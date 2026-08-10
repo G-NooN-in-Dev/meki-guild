@@ -145,8 +145,9 @@ function formatDeltaPercent(diff: bigint, previous: bigint): string | null {
 	}
 
 	// 소수점 1자리: (diff / previous) * 100 을 bigint 정수 연산으로 계산
+	// 부호는 scaled가 아닌 diff 기준 — 아주 작은 하락이 0으로 잘려도 -0.0%로 표시
 	const scaled = (diff * 1000n) / previous
-	const sign = scaled >= 0n ? '+' : '-'
+	const sign = diff > 0n ? '+' : '-'
 	const absScaled = scaled < 0n ? -scaled : scaled
 	const intPart = absScaled / 10n
 	const decPart = absScaled % 10n
