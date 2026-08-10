@@ -73,10 +73,10 @@ function ExpeditionTierGuide() {
 						<TableHeader className="bg-grayscale-100 sticky top-0 z-10">
 							<TableRow className="border-grayscale-200 bg-grayscale-100 hover:bg-grayscale-100">
 								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">등급</TableHead>
-								<TableHead className="text-grayscale-600 h-11 px-3 text-center text-xs font-semibold tracking-wide">
+								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">
 									자격 등수
 								</TableHead>
-								<TableHead className="text-grayscale-600 h-11 px-3 text-right text-xs font-semibold tracking-wide">
+								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">
 									포인트
 								</TableHead>
 							</TableRow>
@@ -108,10 +108,10 @@ function ExpeditionTierGuide() {
 										<TableCell className={cn('px-3 py-2.5', getExpeditionGradeTextClass(tier.rank))}>
 											{tier.rank}
 										</TableCell>
-										<TableCell className="text-grayscale-600 px-3 py-2.5 text-center tabular-nums">
+										<TableCell className="text-grayscale-600 px-3 py-2.5 tabular-nums">
 											{formatPlacementRank(tier.maxPlacement)}
 										</TableCell>
-										<TableCell className="text-grayscale-900 px-3 py-2.5 text-right font-semibold tabular-nums">
+										<TableCell className="text-grayscale-900 px-3 py-2.5 font-semibold tabular-nums">
 											{formatLocaleNumber(tier.points)}
 										</TableCell>
 									</TableRow>
