@@ -1,11 +1,18 @@
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { sumExpeditionGradePoints } from '@/libs/expedition-guild-tier.constants'
+import { formatRankArrowDelta } from '@/utils/format-delta-label'
 import {
 	formatDeltaPercent,
 	formatKoreanDelta,
 	formatLocaleNumber,
+	formatPlacementRank,
 	formatTrainingDelta
 } from '@/utils/format-korean-number'
+
+type GuildExpeditionRankInput = {
+	current: number | null | undefined
+	previous: number | null | undefined
+}
 
 type NumericFieldSelector = (_comparison: GuildMemberComparison) => NumericDeltaLike
 
@@ -154,6 +161,36 @@ function calculateExpeditionGradePointsChange(comparisons: GuildMemberComparison
 	return formatPointsDelta(currentPoints - previousPoints)
 }
 
+function parseGuildExpeditionRank(value: number | null | undefined): number | null {
+	if (value === null || value === undefined) {
+		return null
+	}
+
+	if (!Number.isFinite(value) || value <= 0) {
+		return null
+	}
+
+	return Math.floor(value)
+}
+
+/** 길드 토벌전 순위 표시·증감(등수라 숫자가 작을수록 상위) */
+function calculateGuildExpeditionRank(rank: GuildExpeditionRankInput): {
+	label: string
+	changeLabel: string | null
+} {
+	const current = parseGuildExpeditionRank(rank.current)
+	const previous = parseGuildExpeditionRank(rank.previous)
+
+	if (current === null) {
+		return { label: GUILD_EMPTY_VALUE_LABEL, changeLabel: null }
+	}
+
+	return {
+		label: formatPlacementRank(current),
+		changeLabel: previous === null ? null : formatRankArrowDelta(current - previous)
+	}
+}
+
 /** 길드보스 데이터가 있는 멤버만 합산 대상에 포함 */
 function hasGuildBossContribution(comparison: GuildMemberComparison): boolean {
 	if (comparison.status === 'new' || comparison.status === 'active') {
@@ -163,12 +200,16 @@ function hasGuildBossContribution(comparison: GuildMemberComparison): boolean {
 	return comparison.guildBoss.previous !== null
 }
 
-function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[]) {
+function calculateGuildSummaryMetrics(
+	comparisons: GuildMemberComparison[],
+	guildExpeditionRank?: GuildExpeditionRankInput
+) {
 	const combatPowerField = (comparison: GuildMemberComparison) => comparison.combatPower
 	const expeditionScoreField = (comparison: GuildMemberComparison) => comparison.expeditionScore
 	const rivalryField = (comparison: GuildMemberComparison) => comparison.rivalry
 	const trainingField = (comparison: GuildMemberComparison) => comparison.training
 	const guildBossField = (comparison: GuildMemberComparison) => comparison.guildBoss
+	const expeditionRank = calculateGuildExpeditionRank(guildExpeditionRank ?? { current: null, previous: null })
 
 	return {
 		combatPowerChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, combatPowerField)),
@@ -178,6 +219,8 @@ function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[]) {
 		expeditionScoreChangePercent: calculateTotalChangePercent(comparisons, expeditionScoreField),
 		expeditionGradePointsTotal: calculateExpeditionGradePointsTotal(comparisons),
 		expeditionGradePointsChange: calculateExpeditionGradePointsChange(comparisons),
+		guildExpeditionRankLabel: expeditionRank.label,
+		guildExpeditionRankChange: expeditionRank.changeLabel,
 		rivalryChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, rivalryField)),
 		rivalryChangePercent: calculateTotalChangePercent(comparisons, rivalryField),
 		trainingChange: formatTrainingDelta(calculateTotalNumericChange(comparisons, trainingField)),
@@ -193,6 +236,7 @@ export {
 	calculateAverageLevel,
 	calculateExpeditionGradePointsChange,
 	calculateExpeditionGradePointsTotal,
+	calculateGuildExpeditionRank,
 	calculateGuildSummaryMetrics,
 	calculateTotalNumericChange,
 	calculateTotalPrevious

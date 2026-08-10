@@ -1,4 +1,7 @@
 {
+	"guild": {
+		"expeditionRank": 18
+	},
 	"members": [
 		{
 			"name": "교토",

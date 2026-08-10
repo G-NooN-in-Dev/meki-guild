@@ -177,6 +177,19 @@ function rotateGuildWeek(mode) {
 
 	currentWeek.members = currentWeek.members.map((member) => clearFieldsInCurrent(member, fields))
 
+	// 토벌전 이월 시 길드 순위도 함께 밀고, current 는 재입력 대기로 비웁니다.
+	if (fields.includes('expedition')) {
+		const currentRank = currentWeek.guild?.expeditionRank ?? null
+		previousWeek.guild = {
+			...(previousWeek.guild ?? {}),
+			expeditionRank: currentRank
+		}
+		currentWeek.guild = {
+			...(currentWeek.guild ?? {}),
+			expeditionRank: null
+		}
+	}
+
 	// 분야별 수집일: 기존 current → previous 로 밀고, current 는 오늘(새 수집 시작일)
 	for (const field of fields) {
 		const dateKey = CONTENT_DATE_KEYS[field]
@@ -198,6 +211,9 @@ function rotateGuildWeek(mode) {
 	console.log(`✅ ${MODE_LABELS[mode]} 이월 완료`)
 	console.log(`   previous-week.json ← ${carried} 반영`)
 	console.log(`   current-week.json ${cleared} 초기화`)
+	if (fields.includes('expedition')) {
+		console.log(`   (길드 토벌전 순위도 함께 이월)`)
+	}
 	if (fields.includes('combatPower')) {
 		console.log(`   (레벨·직업은 current 에 유지)`)
 	}

@@ -15,9 +15,17 @@ type GuildMemberInput = {
 	guildBoss?: string | number
 }
 
+/** 길드 단위 토벌전 메타(순위 등). 멤버 스냅샷과 별도로 주간 수집합니다. */
+type GuildWeekMeta = {
+	/** 길드 토벌전 순위(1이 최상위). 미입력이면 null/생략 */
+	expeditionRank?: number | null
+}
+
 /** 한 시점의 길드원 스냅샷. 수집일은 guild-content-dates.json 에서 분야별로 관리합니다. */
 type GuildWeekSnapshot = {
 	members: GuildMemberInput[]
+	/** 길드 단위 집계(토벌전 순위 등) */
+	guild?: GuildWeekMeta
 }
 
 /** 표시할 값이 없을 때(미입력·비교 불가·집계 없음 등)의 화면 표기 */
@@ -190,6 +198,7 @@ export type {
 	GuildDashboardData,
 	GuildMemberComparison,
 	GuildMemberInput,
+	GuildWeekMeta,
 	GuildWeekSnapshot,
 	LevelDelta,
 	MemberComparisonStatus,
