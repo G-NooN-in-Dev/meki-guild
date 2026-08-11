@@ -1,11 +1,13 @@
 import { type PropsWithChildren } from 'react'
 
+import TipRenewalView from '@/features/tips/components/tip-renewal-view'
+
 /**
  * 동료 세팅 구간의 레이아웃 경계.
- * 같은 폴더의 not-found.tsx가 notFound() 시 이 구간 UI로 렌더되게 합니다.
+ * 리뉴얼 중에는 하위 라우트(목록·상세·작성·수정) 접근을 막고 안내만 보여 줍니다.
  */
-function CompanionSetupLayout({ children }: PropsWithChildren) {
-	return children
+function CompanionSetupLayout(_props: PropsWithChildren) {
+	return <TipRenewalView title="동료 세팅 컨설팅" />
 }
 
 export default CompanionSetupLayout
