@@ -60,12 +60,16 @@ type CompanionSlotLoadout = {
 	level: number
 }
 
+/** 슬롯 id → 장착 동료 (메인·서브) */
+type CompanionLoadout = Record<string, CompanionSlotLoadout>
+
 export type {
 	Companion,
 	CompanionEquipEffect,
 	CompanionEquipEffectBase,
 	CompanionEquipEffectUnit,
 	CompanionGrade,
+	CompanionLoadout,
 	CompanionSetupSlot,
 	CompanionSlotLoadout,
 	CompanionSlotRole

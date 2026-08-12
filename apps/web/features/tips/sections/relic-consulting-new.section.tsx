@@ -43,7 +43,7 @@ import {
 	relicOwnershipStateToEntries,
 	syncRelicLoadoutWithOwnership
 } from '@/features/tips/lib/relic-consulting.constants'
-import type { ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
+import type { ConsultingPresetStats } from '@/features/tips/types/consulting-preset.type'
 import type {
 	RelicConsultingLoadout,
 	RelicConsultingPost,

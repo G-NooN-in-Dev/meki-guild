@@ -12,13 +12,12 @@ import {
 	getCompanionById,
 	resolveEquipEffects
 } from '@/features/tips/lib/companion-setup.constants'
-import type { Companion } from '@/features/tips/types/companion.type'
-import type { CompanionConsultingLoadout } from '@/features/tips/types/companion-consulting.type'
+import type { Companion, CompanionLoadout } from '@/features/tips/types/companion.type'
 
 type CompanionSetupBoardProps = {
-	loadouts: CompanionConsultingLoadout
-	onLoadoutsChange?: (loadouts: CompanionConsultingLoadout) => void
-	/** 보유 동료만 선택 (컨설팅용). 없으면 전체 */
+	loadouts: CompanionLoadout
+	onLoadoutsChange?: (loadouts: CompanionLoadout) => void
+	/** 보유 동료만 선택. 없으면 전체 */
 	allowedIds?: ReadonlySet<string> | null
 	/** 슬롯 레벨을 보유 레벨에 맞춤 — 선택 시 레벨 고정 */
 	levelByCompanionId?: ReadonlyMap<string, number> | null
@@ -30,7 +29,6 @@ type CompanionSetupBoardProps = {
 
 /**
  * 메인+서브 세팅 보드 + (편집 시) Sheet.
- * 동료 세팅 팁 / 컨설팅 작성·추천에서 공통으로 씁니다.
  */
 function CompanionSetupBoard({
 	loadouts,
@@ -80,7 +78,7 @@ function CompanionSetupBoard({
 
 	const equippedCount = COMPANION_SETUP_SLOTS.filter((slot) => Boolean(loadouts[slot.id]?.companionId)).length
 
-	function updateLoadouts(next: CompanionConsultingLoadout) {
+	function updateLoadouts(next: CompanionLoadout) {
 		onLoadoutsChange?.(next)
 	}
 

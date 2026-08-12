@@ -35,10 +35,10 @@ export const TIP_ENTRIES = [
 	},
 	{
 		slug: 'companion-setup',
-		title: '동료 세팅 컨설팅',
-		description: '동료 세팅 개선이 필요하다면 요청해보세요.',
+		title: '동료 장착 효과',
+		description: '직업·등급·레벨에 따른 동료 장착 효과를 확인해보세요.',
 		tags: ['동료'],
-		category: '컨설팅',
+		category: '정보/팁',
 		href: '/tips/companion-setup'
 	},
 	{

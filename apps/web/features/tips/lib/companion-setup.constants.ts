@@ -9,7 +9,9 @@ import type {
 	CompanionEquipEffectBase,
 	CompanionEquipEffectUnit,
 	CompanionGrade,
-	CompanionSetupSlot
+	CompanionLoadout,
+	CompanionSetupSlot,
+	CompanionSlotLoadout
 } from '@/features/tips/types/companion.type'
 
 /** UI·정렬용 등급 순서 — 공통 ITEM_GRADE_ORDER 재사용 */
@@ -253,8 +255,22 @@ export const COMPANIONS: readonly Companion[] = COMPANION_JOBS.flatMap((job) =>
 	COMPANION_GRADE_ORDER.map((grade) => createCompanion(job, grade))
 )
 
+/** 빈 세팅 보드 (슬롯별 null) */
+function createEmptyCompanionLoadout(): CompanionLoadout {
+	return Object.fromEntries(
+		COMPANION_SETUP_SLOTS.map((slot) => [slot.id, { companionId: null, level: 1 } satisfies CompanionSlotLoadout])
+	)
+}
+
 function getCompanionById(id: string): Companion | undefined {
 	return COMPANIONS.find((companion) => companion.id === id)
 }
 
-export { aggregateEquipEffects, clampCompanionLevel, getCompanionById, getCompanionImageSrc, resolveEquipEffects }
+export {
+	aggregateEquipEffects,
+	clampCompanionLevel,
+	createEmptyCompanionLoadout,
+	getCompanionById,
+	getCompanionImageSrc,
+	resolveEquipEffects
+}

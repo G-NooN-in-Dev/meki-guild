@@ -15,7 +15,7 @@ import {
 	parseRelicConsultingShortId,
 	RelicConsultingValidationError
 } from '@/features/tips/lib/relic-consulting.validation'
-import type { ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
+import type { ConsultingPresetStats } from '@/features/tips/types/consulting-preset.type'
 import type {
 	RelicConsultingComment,
 	RelicConsultingCommentInput,

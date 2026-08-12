@@ -10,7 +10,7 @@ import {
 } from '@/features/tips/lib/consulting.constants'
 import { clampRelicAwakeningStage, getRelicById, RELIC_SETUP_SLOTS } from '@/features/tips/lib/relic.constants'
 import { clampPotentialIds, getRelicPotentialOptionById } from '@/features/tips/lib/relic-potential.constants'
-import type { ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
+import type { ConsultingPresetStats } from '@/features/tips/types/consulting-preset.type'
 import type {
 	RelicConsultingCommentInput,
 	RelicConsultingLoadout,
