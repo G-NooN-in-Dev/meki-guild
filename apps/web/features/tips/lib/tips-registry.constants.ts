@@ -44,3 +44,12 @@ export const TIP_ENTRIES = [
 
 /** 레지스트리 등장 순서를 유지한 태그 목록 (필터 칩용) */
 export const TIP_TAGS = [...new Set(TIP_ENTRIES.flatMap((tip) => tip.tags))] as const
+
+type TipSlug = (typeof TIP_ENTRIES)[number]['slug']
+
+const TIP_ENTRIES_BY_SLUG = new Map(TIP_ENTRIES.map((entry) => [entry.slug, entry] as const))
+
+/** 상세 페이지 slug로 허브 태그를 조회합니다. */
+export function getTipTagsBySlug(slug: TipSlug): readonly string[] {
+	return TIP_ENTRIES_BY_SLUG.get(slug)?.tags ?? []
+}
