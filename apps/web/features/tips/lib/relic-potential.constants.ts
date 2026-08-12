@@ -6,7 +6,7 @@ import type {
 	RelicStatUnit
 } from '@/features/tips/types/relic.type'
 
-/** UI·탭용 잠재 등급 순서 (높은 등급 먼저) */
+/** 표·탭용 잠재 등급 순서 (높은 등급 먼저) */
 export const RELIC_POTENTIAL_GRADE_ORDER = [
 	'mystic',
 	'legendary',
@@ -36,7 +36,7 @@ export const RELIC_POTENTIAL_GRADE_BADGE_CLASS = {
 	rare: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800'
 } as const satisfies Record<RelicPotentialGrade, string>
 
-/** 잠재 등급 탭 색상 */
+/** 잠재 등급 탭(에디터) 색상 */
 export const RELIC_POTENTIAL_GRADE_TAB_CLASS = {
 	mystic: 'text-danger-700 data-active:bg-pure-red/15 data-active:text-danger-700',
 	legendary: 'text-pastel-green-700 data-active:bg-pastel-green-100 data-active:text-pastel-green-800',
@@ -59,8 +59,11 @@ function getRelicPotentialSlotLimit(grade: RelicGrade) {
 	return RELIC_POTENTIAL_SLOT_LIMIT[grade]
 }
 
-/** 잠재옵션에 등장하는 스탯 종류 (등급별 수치만 다름) */
-const POTENTIAL_STAT_LINES = [
+/**
+ * 잠재옵션에 등장하는 스탯 종류 (등급별 수치만 다름).
+ * 잠재 옵션 표 행 순서·카탈로그 생성에 같이 씁니다.
+ */
+export const RELIC_POTENTIAL_STAT_LINES = [
 	{ key: 'main-stat', label: '주 스탯', unit: 'percent' },
 	{ key: 'damage-taken-reduction', label: '받는 피해 감소', unit: 'percent' },
 	{ key: 'defense', label: '방어력', unit: 'percent' },
@@ -77,8 +80,8 @@ const POTENTIAL_STAT_LINES = [
 
 /**
  * 등급별 수치 세트.
- * 미스틱만 2단계(12%/24% · 10%/20%)가 있습니다.
- * 배열 순서는 POTENTIAL_STAT_LINES와 같습니다.
+ * 각 배열은 RELIC_POTENTIAL_STAT_LINES와 같은 순서입니다.
+ * 미스틱만 같은 스탯에 수치가 둘(예: 주 스탯 12·10, 보스 데미지 24·20) 있습니다.
  */
 const POTENTIAL_VALUE_SETS = {
 	mystic: [
@@ -93,6 +96,20 @@ const POTENTIAL_VALUE_SETS = {
 
 function formatPotentialValue(value: number, unit: RelicStatUnit) {
 	return unit === 'percent' ? `+${value}%` : `+${value}`
+}
+
+/**
+ * 잠재 옵션 표 셀용 문자열.
+ * 같은 스탯에 수치가 여러 개면 높은 순으로 `+12% / +10%`처럼 이어 붙입니다.
+ * (표 UI에서는 `/` 기준으로 세로 배치할 수 있습니다.)
+ */
+function formatPotentialValuesForGrade(grade: RelicPotentialGrade, label: string) {
+	const options = getRelicPotentialOptionsByGrade(grade).filter((option) => option.label === label)
+	if (options.length === 0) {
+		return '—'
+	}
+
+	return options.map((option) => formatPotentialValue(option.value, option.unit)).join(' / ')
 }
 
 function createPotentialOption(
@@ -119,7 +136,7 @@ function createPotentialOption(
 function buildPotentialOptionsForGrade(grade: RelicPotentialGrade): RelicPotentialOption[] {
 	const valueSets = POTENTIAL_VALUE_SETS[grade]
 
-	return POTENTIAL_STAT_LINES.flatMap((stat, index) => {
+	return RELIC_POTENTIAL_STAT_LINES.flatMap((stat, index) => {
 		const values: number[] = []
 		for (const set of valueSets) {
 			const value = set[index]
@@ -128,7 +145,7 @@ function buildPotentialOptionsForGrade(grade: RelicPotentialGrade): RelicPotenti
 			}
 		}
 
-		// 같은 스탯이면 높은 수치(12%/24%)가 먼저 보이도록
+		// 같은 스탯이면 높은 수치(예: 12 → 10)가 먼저 보이도록
 		values.sort((a, b) => b - a)
 
 		return values.map((value) => createPotentialOption(grade, stat.key, stat.label, value, stat.unit))
@@ -171,6 +188,7 @@ function clampPotentialIds(potentialIds: readonly string[], relicGrade: RelicGra
 
 export {
 	clampPotentialIds,
+	formatPotentialValuesForGrade,
 	getRelicPotentialOptionById,
 	getRelicPotentialOptionsByGrade,
 	getRelicPotentialSlotLimit,

@@ -7,7 +7,9 @@ import type {
 	Relic,
 	RelicAwakeningStage,
 	RelicGrade,
+	RelicLoadout,
 	RelicResolvedEffects,
+	RelicSlotLoadout,
 	RelicStatEffect,
 	RelicStatUnit
 } from '@/features/tips/types/relic.type'
@@ -42,6 +44,13 @@ export const RELIC_SETUP_SLOTS = [
 
 /** 유물 각성은 0~5 단계 */
 export const RELIC_MAX_AWAKENING_STAGE = 5
+
+const EMPTY_SLOT_LOADOUT: RelicSlotLoadout = { relicId: null, stage: 0, potentialIds: [] }
+
+/** 빈 세팅 보드 (슬롯별 null) */
+function createEmptyRelicLoadout(): RelicLoadout {
+	return Object.fromEntries(RELIC_SETUP_SLOTS.map((slot) => [slot.id, { ...EMPTY_SLOT_LOADOUT }]))
+}
 
 /** 유물 원본 목록 */
 const RELIC_CATALOG_SOURCE = [
@@ -542,6 +551,7 @@ function aggregateRelicStats(stats: readonly RelicStatEffect[]): readonly RelicS
 export {
 	aggregateRelicStats,
 	clampRelicAwakeningStage,
+	createEmptyRelicLoadout,
 	getRelicActivationCondition,
 	getRelicById,
 	getRelicByName,
