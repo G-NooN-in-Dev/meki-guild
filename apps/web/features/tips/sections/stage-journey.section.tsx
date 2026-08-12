@@ -1,12 +1,7 @@
-'use client'
-
 import { Badge } from '@shared/ui/badge'
-import { useState } from 'react'
 
-import StageJourneyChapterTable from '@/features/tips/components/stage-journey-chapter-table'
-import StageJourneyEffectTable from '@/features/tips/components/stage-journey-effect-table'
+import StageJourneyInteractive from '@/features/tips/components/stage-journey-interactive.client'
 import TipsBackLink from '@/features/tips/components/tips-back-link'
-import { STAGE_JOURNEY_DEFAULT_CHAPTER } from '@/features/tips/lib/stage-journey.constants'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 /**
@@ -14,7 +9,6 @@ import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
  * 챕터 요약 표에서 행을 고르면 아래 보유 효과 등급표를 갱신합니다.
  */
 function StageJourneySection() {
-	const [selectedChapter, setSelectedChapter] = useState<number>(STAGE_JOURNEY_DEFAULT_CHAPTER)
 	const tags = getTipTagsBySlug('stage-journey')
 
 	return (
@@ -38,15 +32,7 @@ function StageJourneySection() {
 				</header>
 			</div>
 
-			<div className="flex flex-col gap-2">
-				<h2 className="text-grayscale-900 text-base font-semibold md:text-lg">챕터별 보상 · 특수 옵션</h2>
-				<p className="text-grayscale-500 text-xs md:text-sm">
-					보스를 선택하면 해당 챕터의 보유 효과를 아래에 표시합니다.
-				</p>
-				<StageJourneyChapterTable selectedChapter={selectedChapter} onSelectChapter={setSelectedChapter} />
-			</div>
-
-			<StageJourneyEffectTable chapter={selectedChapter} />
+			<StageJourneyInteractive />
 		</section>
 	)
 }

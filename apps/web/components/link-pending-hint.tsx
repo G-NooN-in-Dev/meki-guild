@@ -3,7 +3,6 @@
 import { Spinner } from '@shared/ui/spinner'
 import { cn } from '@shared/ui/utils'
 import { useLinkStatus } from 'next/link'
-import { type ReactNode } from 'react'
 
 type LinkPendingHintProps = {
 	className?: string
@@ -30,29 +29,4 @@ function LinkPendingHint({ className }: LinkPendingHintProps) {
 	)
 }
 
-type LinkPendingIconProps = {
-	/** pending이 아닐 때 보여줄 아이콘(화살표 등) */
-	children: ReactNode
-	className?: string
-}
-
-/** 목록·카드 trailing 아이콘을 pending 중 Spinner로 교체합니다(레이아웃 고정). */
-function LinkPendingIcon({ children, className }: LinkPendingIconProps) {
-	const { pending } = useLinkStatus()
-
-	return (
-		<span className={cn('relative inline-flex size-4 shrink-0 items-center justify-center', className)}>
-			<span className={cn('inline-flex transition-opacity duration-150', pending && 'opacity-0')}>{children}</span>
-			<Spinner
-				aria-hidden={!pending}
-				className={cn(
-					'text-grayscale-500 absolute inset-0 size-4 opacity-0 transition-opacity duration-150',
-					pending && 'opacity-100 delay-100'
-				)}
-			/>
-		</span>
-	)
-}
-
-export { LinkPendingIcon }
 export default LinkPendingHint
