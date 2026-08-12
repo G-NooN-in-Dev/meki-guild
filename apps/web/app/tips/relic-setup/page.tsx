@@ -5,7 +5,7 @@ import RelicSetupSection from '@/features/tips/sections/relic-setup.section'
 
 export const metadata: Metadata = {
 	title: '유물 장착 효과',
-	description: '유물별 각성 효과·잠재옵션과 세팅 합산을 정리한 가이드입니다.'
+	description: '유물별 각성 효과와 잠재옵션을 확인해보세요.'
 }
 
 function RelicSetupPage() {
