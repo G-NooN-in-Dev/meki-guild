@@ -118,7 +118,7 @@ function StageJourneyChapterTable({ selectedChapter, onSelectChapter }: StageJou
 									className={cn(cellBaseClassName, COLUMN_CLASS.rewards.cell, 'text-left leading-snug break-keep')}
 								>
 									<ul className="flex flex-col gap-0.5">
-										{entry.rewards.map((reward) => {
+										{entry.rewards?.map((reward) => {
 											const item = getGameItemMeta(reward.itemId)
 
 											return (
@@ -133,13 +133,20 @@ function StageJourneyChapterTable({ selectedChapter, onSelectChapter }: StageJou
 												</li>
 											)
 										})}
+										{!entry.rewards?.length && <li className="text-grayscale-500">정보 추가 예정</li>}
 									</ul>
 								</TableCell>
 								<TableCell className={cn(cellBaseClassName, COLUMN_CLASS.special.cell, 'text-left break-keep')}>
-									<span className="text-grayscale-700">{entry.special.label}</span>{' '}
-									<span className="text-grayscale-900 font-bold tabular-nums">
-										{formatStageJourneyStatValue(entry.special.value, entry.special.unit)}
-									</span>
+									{entry.special ? (
+										<>
+											<span className="text-grayscale-700">{entry.special.label}</span>{' '}
+											<span className="text-grayscale-900 font-bold tabular-nums">
+												{formatStageJourneyStatValue(entry.special.value, entry.special.unit)}
+											</span>
+										</>
+									) : (
+										<span className="text-grayscale-500">정보 추가 예정</span>
+									)}
 								</TableCell>
 							</TableRow>
 						)

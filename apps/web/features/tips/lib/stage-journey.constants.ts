@@ -50,16 +50,16 @@ const STAGE_JOURNEY_GRADE_META = {
 	}
 } as const satisfies Record<StageJourneyGrade, { label: string; probabilityText: string; badgeClassName: string }>
 
-/** 보스 초상화 public 경로 */
+/** 보스 초상화 public 경로 (기본값) */
 function getStageJourneyPortraitSrc(chapter: number) {
-	return `/tips/stage-boss/stage-boss-${chapter}.gif` as const
+	return `/tips/stage-boss/stage-boss-${chapter}.gif`
 }
 
 /**
- * 용사의 발자취 챕터 목록 (20~41).
+ * 용사의 발자취 챕터 목록 (20~44).
  * 클리어 보상·보유 효과 3슬롯·특수 옵션을 챕터별로 둡니다.
  */
-const STAGE_JOURNEY_CHAPTERS = [
+const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 	{
 		chapter: 20,
 		name: '구미호',
@@ -72,6 +72,7 @@ const STAGE_JOURNEY_CHAPTERS = [
 			{
 				label: '공격력',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 200,
 					rare: 400,
@@ -85,6 +86,7 @@ const STAGE_JOURNEY_CHAPTERS = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 1000,
 					rare: 2000,
@@ -122,6 +124,7 @@ const STAGE_JOURNEY_CHAPTERS = [
 			{
 				label: '공격력',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 230,
 					rare: 460,
@@ -135,6 +138,7 @@ const STAGE_JOURNEY_CHAPTERS = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 1150,
 					rare: 2300,
@@ -172,6 +176,7 @@ const STAGE_JOURNEY_CHAPTERS = [
 			{
 				label: '공격력',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 260,
 					rare: 520,
@@ -185,6 +190,7 @@ const STAGE_JOURNEY_CHAPTERS = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 1300,
 					rare: 2600,
@@ -1164,11 +1170,107 @@ const STAGE_JOURNEY_CHAPTERS = [
 			}
 		],
 		special: { label: '보스 몬스터 데미지', value: 10, unit: 'percent' }
+	},
+	{
+		chapter: 42,
+		name: '흉터곰',
+		slots: [
+			{
+				label: '공격력',
+				unit: 'flat',
+				values: {
+					normal: 860,
+					rare: 1720,
+					epic: 3440,
+					unique: 5160,
+					legendary: 12900,
+					mystic: 38700,
+					mysticPlus: 77400
+				}
+			},
+			{
+				label: '최대 HP',
+				unit: 'flat',
+				values: {
+					normal: 4300,
+					rare: 8600,
+					epic: 17200,
+					unique: 25800,
+					legendary: 64500,
+					mystic: 193500,
+					mysticPlus: 387000
+				}
+			}
+		]
+	},
+	{
+		chapter: 43,
+		name: '도둑 까마귀',
+		slots: [
+			{
+				label: '공격력',
+				unit: 'flat',
+				values: {
+					normal: 890,
+					rare: 1780,
+					epic: 3560,
+					unique: 5340,
+					legendary: 13350,
+					mystic: 40050,
+					mysticPlus: 80100
+				}
+			},
+			{
+				label: '최대 HP',
+				unit: 'flat',
+				values: {
+					normal: 4450,
+					rare: 8900,
+					epic: 17800,
+					unique: 26700,
+					legendary: 66750,
+					mystic: 200250,
+					mysticPlus: 400500
+				}
+			}
+		]
+	},
+	{
+		chapter: 44,
+		name: '게오르크',
+		slots: [
+			{
+				label: '공격력',
+				unit: 'flat',
+				values: {
+					normal: 920,
+					rare: 1840,
+					epic: 3680,
+					unique: 5520,
+					legendary: 13800,
+					mystic: 41400,
+					mysticPlus: 82800
+				}
+			},
+			{
+				label: '최대 HP',
+				unit: 'flat',
+				values: {
+					normal: 4600,
+					rare: 9200,
+					epic: 18400,
+					unique: 27600,
+					legendary: 69000,
+					mystic: 207000,
+					mysticPlus: 414000
+				}
+			}
+		]
 	}
-] as const satisfies readonly StageJourneyChapter[]
+]
 
 /** 표 기본 선택 챕터 */
-const STAGE_JOURNEY_DEFAULT_CHAPTER = STAGE_JOURNEY_CHAPTERS[0].chapter
+const STAGE_JOURNEY_DEFAULT_CHAPTER = STAGE_JOURNEY_CHAPTERS[0]?.chapter ?? 20
 
 function getStageJourneyChapter(chapter: number) {
 	return STAGE_JOURNEY_CHAPTERS.find((entry) => entry.chapter === chapter)

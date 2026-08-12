@@ -50,6 +50,39 @@ function StageJourneyEffectTable({ chapter }: StageJourneyEffectTableProps) {
 		)
 	}
 
+	if (!entry.slots?.length) {
+		return (
+			<div className="flex flex-col gap-3">
+				<div className="flex flex-wrap items-baseline justify-between gap-2">
+					<h2 className="text-grayscale-900 text-base font-semibold md:text-lg">
+						{entry.chapter}챕터 · {entry.name} 보유 효과
+					</h2>
+				</div>
+				<p className="text-grayscale-600 border-grayscale-200 bg-card shadow-soft rounded-xl border px-4 py-6 text-sm">
+					해당 챕터의 보유 효과 데이터는 추가 예정입니다.
+				</p>
+			</div>
+		)
+	}
+
+	const displayRows = [...entry.slots]
+	const remainingSlotCount = Math.max(0, 3 - displayRows.length)
+	for (let index = 0; index < remainingSlotCount; index += 1) {
+		displayRows.push({
+			label: '추가 예정',
+			unit: 'flat',
+			values: {
+				normal: 0,
+				rare: 0,
+				epic: 0,
+				unique: 0,
+				legendary: 0,
+				mystic: 0,
+				mysticPlus: 0
+			}
+		})
+	}
+
 	return (
 		<div className="flex flex-col gap-3">
 			<div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -57,11 +90,17 @@ function StageJourneyEffectTable({ chapter }: StageJourneyEffectTableProps) {
 					{entry.chapter}챕터 · {entry.name} 보유 효과
 				</h2>
 				<p className="text-grayscale-500 text-xs md:text-sm">
-					<span>특수 옵션: </span>
-					<span className="text-grayscale-600 font-medium">
-						{entry.special.label} {formatStageJourneyStatValue(entry.special.value, entry.special.unit)}
-					</span>
-					<span className="text-grayscale-400"> (3슬롯 유니크 이상)</span>
+					{entry.special ? (
+						<>
+							<span>특수 옵션: </span>
+							<span className="text-grayscale-600 font-medium">
+								{entry.special.label} {formatStageJourneyStatValue(entry.special.value, entry.special.unit)}
+							</span>
+							<span className="text-grayscale-400"> (3슬롯 유니크 이상)</span>
+						</>
+					) : (
+						<span className="text-grayscale-500">특수 옵션 정보 추가 예정</span>
+					)}
 				</p>
 			</div>
 
@@ -86,17 +125,22 @@ function StageJourneyEffectTable({ chapter }: StageJourneyEffectTableProps) {
 						</TableRow>
 					</TableHeader>
 					<TableBody>
-						{entry.slots.map((slot, index) => (
+						{displayRows.map((slot, index) => (
 							<TableRow
 								key={`${entry.chapter}-${slot.label}-${index}`}
 								className="border-grayscale-200 hover:bg-transparent"
 							>
 								<TableCell className={cn(labelCellClassName, 'text-grayscale-800 font-medium break-keep')}>
 									{slot.label}
+									{slot.isEstimated && <span className="text-grayscale-500 ml-1 text-[11px] font-normal">(추정)</span>}
 								</TableCell>
 								{STAGE_JOURNEY_GRADE_ORDER.map((grade) => (
 									<TableCell key={grade} className={cn(gradeCellClassName, STAGE_JOURNEY_GRADE_CELL_CLASS[grade])}>
-										<p className={gradeValueClassName}>{formatStageJourneyStatValue(slot.values[grade], slot.unit)}</p>
+										<p className={gradeValueClassName}>
+											{slot.label === '추가 예정'
+												? '추가 예정'
+												: formatStageJourneyStatValue(slot.values[grade], slot.unit)}
+										</p>
 									</TableCell>
 								))}
 							</TableRow>

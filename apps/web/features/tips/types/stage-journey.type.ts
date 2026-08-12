@@ -16,6 +16,7 @@ type StageJourneyEffectSlot = {
 	label: string
 	unit: StageJourneyStatUnit
 	values: Record<StageJourneyGrade, number>
+	isEstimated?: boolean
 }
 
 /** 3슬롯 모두 유니크 이상일 때 열리는 특수 옵션 */
@@ -29,9 +30,9 @@ type StageJourneySpecialOption = {
 type StageJourneyChapter = {
 	chapter: number
 	name: string
-	rewards: readonly StageJourneyReward[]
-	slots: readonly [StageJourneyEffectSlot, StageJourneyEffectSlot, StageJourneyEffectSlot]
-	special: StageJourneySpecialOption
+	rewards?: readonly StageJourneyReward[]
+	slots?: readonly StageJourneyEffectSlot[]
+	special?: StageJourneySpecialOption
 }
 
 export type {
