@@ -2,7 +2,6 @@ import Link from 'next/link'
 
 import BgmToggle from '@/components/bgm-toggle'
 import Nav, { MobileNav } from '@/components/nav'
-import NameRevealUnlock from '@/features/guild/components/name-reveal-unlock'
 import { formatAppVersionLabel } from '@/libs/app-version.constants'
 
 function Header() {
@@ -19,15 +18,14 @@ function Header() {
 					<Nav />
 				</div>
 				<div className="flex shrink-0 items-center gap-2 md:gap-3">
-					{/* 대외 공개 시 실명 가림 / 길드원 비밀번호로 해제 */}
-					<NameRevealUnlock />
 					<span
 						className="text-grayscale-400 shrink-0 text-xs font-medium tabular-nums md:text-sm"
 						aria-label={`현재 버전 ${formatAppVersionLabel()}`}
 					>
 						{formatAppVersionLabel()}
 					</span>
-					<BgmToggle className="hidden md:flex" />
+					{/* 허브에서는 모바일 메뉴가 없어 헤더에서 항상 BGM을 노출합니다 */}
+					<BgmToggle />
 				</div>
 			</div>
 		</header>

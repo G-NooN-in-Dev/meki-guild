@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 	description: '길드원 스펙을 1대1로 비교합니다. 나와 상대방을 선택하면 상세 스펙 비교가 표시됩니다.'
 }
 
-function ComparePage() {
+function GuildComparePage() {
 	const data = loadGuildComparePageData()
 
 	return (
@@ -22,4 +22,4 @@ function ComparePage() {
 	)
 }
 
-export default ComparePage
+export default GuildComparePage

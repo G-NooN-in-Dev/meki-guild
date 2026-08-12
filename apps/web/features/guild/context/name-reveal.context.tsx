@@ -74,7 +74,7 @@ function getServerSnapshot() {
 }
 
 /**
- * 메인·1vs1 비교 등 전체 페이지에서 이름 공개 상태를 공유합니다.
+ * 길드 정보 구역에서 입장(unlock) 상태를 공유합니다.
  * 브라우저에 unlock 여부를 기억해, 다음 방문에도 유지됩니다.
  */
 function NameRevealProvider({ children }: PropsWithChildren) {

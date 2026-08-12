@@ -9,9 +9,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import BgmToggle from '@/components/bgm-toggle'
 import LinkPendingHint from '@/components/link-pending-hint'
 import { TIP_ENTRIES } from '@/features/tips/lib/tips-registry.constants'
+
+type NavSection = 'guild' | 'tips'
 
 type NavChildLink = {
 	href: string
@@ -22,6 +23,8 @@ type NavLinkItem = {
 	type: 'link'
 	href: string
 	label: string
+	/** 어느 구역 헤더에 노출할지 */
+	section: NavSection
 	/** 있으면 모바일 Sheet에서만 하위 링크로 표시 */
 	children?: readonly NavChildLink[]
 }
@@ -29,18 +32,20 @@ type NavLinkItem = {
 type NavComingSoonItem = {
 	type: 'coming-soon'
 	label: string
+	section: NavSection
 }
 
 type NavItem = NavLinkItem | NavComingSoonItem
 
 /** 메뉴 추가 시 여기만 확장하면 인라인·모바일 Sheet에 함께 반영됩니다 */
 export const NAV_ITEMS: NavItem[] = [
-	{ type: 'link', href: '/', label: '메인' },
-	{ type: 'link', href: '/compare', label: '1 vs 1 비교' },
+	{ type: 'link', href: '/guild', label: '메인', section: 'guild' },
+	{ type: 'link', href: '/guild/compare', label: '1 vs 1 비교', section: 'guild' },
 	{
 		type: 'link',
 		href: '/tips',
 		label: '정보/팁',
+		section: 'tips',
 		// 팁 허브 레지스트리와 동기화 — 새 팁 추가 시 모바일 하위 메뉴도 함께 갱신됩니다
 		children: TIP_ENTRIES.map((tip) => ({
 			href: tip.href,
@@ -49,15 +54,38 @@ export const NAV_ITEMS: NavItem[] = [
 	}
 ]
 
+function getNavSection(pathname: string): NavSection | null {
+	if (pathname === '/guild' || pathname.startsWith('/guild/')) {
+		return 'guild'
+	}
+
+	if (pathname === '/tips' || pathname.startsWith('/tips/')) {
+		return 'tips'
+	}
+
+	return null
+}
+
+function getVisibleNavItems(pathname: string): NavItem[] {
+	const section = getNavSection(pathname)
+
+	if (!section) {
+		return []
+	}
+
+	return NAV_ITEMS.filter((item) => item.section === section)
+}
+
 function isNavActive(pathname: string, href: string) {
-	if (href === '/') {
-		return pathname === '/'
+	if (href === '/guild') {
+		return pathname === '/guild'
 	}
 
 	return pathname === href || pathname.startsWith(`${href}/`)
 }
 
 type NavItemsProps = {
+	items: NavItem[]
 	/** horizontal: 데스크탑 헤더 / vertical: 모바일 Sheet */
 	orientation: 'horizontal' | 'vertical'
 	/** Sheet에서 링크 이동 후 패널을 닫을 때 사용 */
@@ -148,13 +176,13 @@ function MobileNavGroup({
 }
 
 /** 인라인·Sheet 공용 메뉴 항목 렌더 */
-function NavItems({ orientation, onNavigate }: NavItemsProps) {
+function NavItems({ items, orientation, onNavigate }: NavItemsProps) {
 	const pathname = usePathname()
 	const isVertical = orientation === 'vertical'
 
 	return (
 		<>
-			{NAV_ITEMS.map((item) => {
+			{items.map((item) => {
 				if (item.type === 'coming-soon') {
 					return (
 						<button
@@ -218,16 +246,29 @@ function NavItems({ orientation, onNavigate }: NavItemsProps) {
 
 /** 데스크탑 헤더용 가로 메뉴 (lg 이상 — 브랜드·유틸과 한 줄 충돌 방지) */
 function Nav() {
+	const pathname = usePathname()
+	const items = getVisibleNavItems(pathname)
+
+	if (items.length === 0) {
+		return null
+	}
+
 	return (
 		<nav className="text-grayscale-500 hidden items-center gap-6 text-base font-medium lg:flex lg:text-lg">
-			<NavItems orientation="horizontal" />
+			<NavItems items={items} orientation="horizontal" />
 		</nav>
 	)
 }
 
 /** 햄버거 → 왼쪽 Sheet 메뉴 (lg 미만: 모바일·태블릿·좁은 창) */
 function MobileNav() {
+	const pathname = usePathname()
+	const items = getVisibleNavItems(pathname)
 	const [open, setOpen] = useState(false)
+
+	if (items.length === 0) {
+		return null
+	}
 
 	return (
 		<>
@@ -251,11 +292,8 @@ function MobileNav() {
 						<SheetDescription hidden />
 					</SheetHeader>
 					<nav className="text-grayscale-600 flex flex-1 flex-col gap-1 overflow-y-auto p-3 text-base font-medium">
-						<NavItems orientation="vertical" onNavigate={() => setOpen(false)} />
+						<NavItems items={items} orientation="vertical" onNavigate={() => setOpen(false)} />
 					</nav>
-					<div className="border-border mt-auto border-t p-3">
-						<BgmToggle variant="sheet" />
-					</div>
 				</SheetContent>
 			</Sheet>
 		</>
@@ -265,4 +303,4 @@ function MobileNav() {
 export { MobileNav }
 export default Nav
 
-export type { NavItem }
+export type { NavItem, NavSection }
