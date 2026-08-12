@@ -35,21 +35,19 @@ export const TIP_ENTRIES = [
 	},
 	{
 		slug: 'companion-setup',
-		title: '동료 세팅 컨설팅',
-		description: '페이지 리뉴얼 진행중',
+		title: '동료 장착 효과',
+		description: '직업·등급·레벨에 따른 동료 장착 효과를 확인해보세요.',
 		tags: ['동료'],
-		category: '컨설팅',
-		href: '/tips/companion-setup',
-		disabled: true
+		category: '정보/팁',
+		href: '/tips/companion-setup'
 	},
 	{
 		slug: 'relic-setup',
 		title: '유물 세팅 컨설팅',
-		description: '페이지 리뉴얼 진행중',
+		description: '유물 세팅 개선이 필요하다면 요청해보세요.',
 		tags: ['유물'],
 		category: '컨설팅',
-		href: '/tips/relic-setup',
-		disabled: true
+		href: '/tips/relic-setup'
 	}
 ] as const satisfies readonly TipEntry[]
 

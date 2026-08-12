@@ -1,16 +1,7 @@
-import {
-	aggregateEquipEffects,
-	getCompanionById,
-	resolveEquipEffects
-} from '@/features/tips/lib/companion-setup.constants'
 import { CONSULTING_PRESET_STAT_FIELDS, createEmptyPresetStats } from '@/features/tips/lib/consulting.constants'
 import { aggregateRelicStats, resolveRelicEffects } from '@/features/tips/lib/relic.constants'
 import { resolvePotentialStats } from '@/features/tips/lib/relic-potential.constants'
-import type {
-	CompanionConsultingLoadout,
-	ConsultingPresetStatId,
-	ConsultingPresetStats
-} from '@/features/tips/types/companion-consulting.type'
+import type { ConsultingPresetStatId, ConsultingPresetStats } from '@/features/tips/types/consulting-preset.type'
 import type { RelicStatEffect } from '@/features/tips/types/relic.type'
 import type { RelicConsultingLoadout } from '@/features/tips/types/relic-consulting.type'
 
@@ -75,24 +66,6 @@ function projectPresetStatsAfterLoadoutSwap(
 	return projected
 }
 
-/** 동료 loadout → 프리셋에 매핑되는 장착 기여분 */
-function getCompanionLoadoutPresetContribution(loadout: CompanionConsultingLoadout): ConsultingPresetStats {
-	const effects = Object.values(loadout).flatMap((slot) => {
-		if (!slot?.companionId) {
-			return []
-		}
-
-		const companion = getCompanionById(slot.companionId)
-		if (!companion) {
-			return []
-		}
-
-		return [...resolveEquipEffects(companion.job, companion.grade, slot.level)]
-	})
-
-	return mapLabeledEffectsToPresetStats(aggregateEquipEffects(effects))
-}
-
 /**
  * 유물 loadout → 프리셋 기여분.
  * 잠재는 전부 상시, 각성은 scope 없는(상시) 수치만 반영합니다.
@@ -123,19 +96,6 @@ function getRelicLoadoutPresetContribution(loadout: RelicConsultingLoadout): Con
 	return mapLabeledEffectsToPresetStats(aggregateRelicStats(stats))
 }
 
-/** 동료: 현재 프리셋 + 현재/추천 loadout → 추천 적용 시 예상 프리셋 */
-function projectCompanionPresetStats(
-	basePresetStats: ConsultingPresetStats,
-	currentLoadout: CompanionConsultingLoadout,
-	recommendedLoadout: CompanionConsultingLoadout
-): ConsultingPresetStats {
-	return projectPresetStatsAfterLoadoutSwap(
-		basePresetStats,
-		getCompanionLoadoutPresetContribution(currentLoadout),
-		getCompanionLoadoutPresetContribution(recommendedLoadout)
-	)
-}
-
 /** 유물: 잠재·상시 각성만 반영한 추천 적용 시 예상 프리셋 */
 function projectRelicPresetStats(
 	basePresetStats: ConsultingPresetStats,
@@ -149,10 +109,4 @@ function projectRelicPresetStats(
 	)
 }
 
-export {
-	getCompanionLoadoutPresetContribution,
-	getRelicLoadoutPresetContribution,
-	projectCompanionPresetStats,
-	projectPresetStatsAfterLoadoutSwap,
-	projectRelicPresetStats
-}
+export { getRelicLoadoutPresetContribution, projectPresetStatsAfterLoadoutSwap, projectRelicPresetStats }

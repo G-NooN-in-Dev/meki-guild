@@ -11,7 +11,7 @@ import {
 	formatPresetStatValue,
 	getPresetStatFieldsByGroup
 } from '@/features/tips/lib/consulting.constants'
-import type { ConsultingPresetStatId, ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
+import type { ConsultingPresetStatId, ConsultingPresetStats } from '@/features/tips/types/consulting-preset.type'
 
 type CompanionPresetStatsFieldsProps = {
 	stats: ConsultingPresetStats

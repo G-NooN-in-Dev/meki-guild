@@ -2,7 +2,7 @@ import type {
 	ConsultingPresetStatId,
 	ConsultingPresetStats,
 	ConsultingPresetStatUnit
-} from '@/features/tips/types/companion-consulting.type'
+} from '@/features/tips/types/consulting-preset.type'
 import type { ItemGrade } from '@/features/tips/types/item-grade.type'
 
 /**

@@ -1,4 +1,4 @@
-import type { ConsultingPresetStats } from '@/features/tips/types/companion-consulting.type'
+import type { ConsultingPresetStats } from '@/features/tips/types/consulting-preset.type'
 import type { RelicSlotLoadout } from '@/features/tips/types/relic.type'
 
 /**

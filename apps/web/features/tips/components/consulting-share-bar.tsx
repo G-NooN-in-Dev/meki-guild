@@ -7,7 +7,7 @@ import { useState } from 'react'
 
 type ConsultingShareBarProps = {
 	shortId: string
-	/** 게시글 path (예: /tips/companion-consulting/abc) — origin은 클라이언트에서 붙입니다. */
+	/** 게시글 path (예: /tips/relic-setup/abc) — origin은 클라이언트에서 붙입니다. */
 	path: string
 }
 

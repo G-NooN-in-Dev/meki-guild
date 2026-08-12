@@ -10,7 +10,13 @@ type CompanionLevelStepperProps = {
 	level: number
 	maxLevel: number
 	onLevelChange: (level: number) => void
-	/** 슬롯 카드 안에서 쓸 때 부모 클릭(슬롯 선택)과 충돌하지 않도록 */
+	/**
+	 * default: 일반 (입력 포함)
+	 * compact: 슬롯 카드용 (간격만 축소)
+	 * header: 표 헤더용 — 위에 Lv.n/max, 아래 −/+/MAX (입력 없음)
+	 */
+	density?: 'default' | 'compact' | 'header'
+	/** @deprecated density="compact" 사용 */
 	compact?: boolean
 	className?: string
 }
@@ -33,14 +39,18 @@ function parseLevelDraft(raw: string, maxLevel: number) {
 /**
  * 동료 레벨 조절.
  * +/−뿐 아니라 숫자 직접 입력·MAX 바로가기로 높은 레벨도 빠르게 맞출 수 있습니다.
+ * header density는 표 열 너비용으로 입력 없이 표시+버튼만 둡니다.
  */
 function CompanionLevelStepper({
 	level,
 	maxLevel,
 	onLevelChange,
+	density,
 	compact = false,
 	className
 }: CompanionLevelStepperProps) {
+	const resolvedDensity = density ?? (compact ? 'compact' : 'default')
+	const isHeader = resolvedDensity === 'header'
 	const [isEditing, setIsEditing] = useState(false)
 	const [draft, setDraft] = useState(String(level))
 	const canDecrease = level > 1
@@ -82,9 +92,66 @@ function CompanionLevelStepper({
 		}
 	}
 
+	if (isHeader) {
+		return (
+			<div
+				className={cn('flex flex-col items-center gap-2', className)}
+				onClick={(event) => event.stopPropagation()}
+				onKeyDown={(event) => event.stopPropagation()}
+			>
+				<p className="text-grayscale-800 flex items-baseline gap-1 text-[11px] leading-none font-semibold tabular-nums">
+					<span className="text-grayscale-500 font-medium">Lv.</span>
+					<span>
+						{level}
+						<span className="text-grayscale-400 font-medium"> / {maxLevel}</span>
+					</span>
+				</p>
+				<div className="flex items-center justify-center gap-0.5">
+					<Button
+						type="button"
+						variant="outline"
+						size="icon-xs"
+						disabled={!canDecrease}
+						aria-label="레벨 감소"
+						className="size-5 shrink-0 [&_svg]:size-2.5"
+						onClick={() => onLevelChange(level - 1)}
+					>
+						<MinusIcon className="size-3" />
+					</Button>
+					<Button
+						type="button"
+						variant="outline"
+						size="icon-xs"
+						disabled={!canIncrease}
+						aria-label="레벨 증가"
+						className="size-5 shrink-0 [&_svg]:size-2.5"
+						onClick={() => onLevelChange(level + 1)}
+					>
+						<PlusIcon className="size-3" />
+					</Button>
+					<Button
+						type="button"
+						variant="secondary"
+						size="xs"
+						disabled={level >= maxLevel}
+						aria-label={`최대 레벨 ${maxLevel}로 설정`}
+						className="h-5 px-1 text-[10px]"
+						onClick={() => onLevelChange(maxLevel)}
+					>
+						MAX
+					</Button>
+				</div>
+			</div>
+		)
+	}
+
 	return (
 		<div
-			className={cn('flex flex-wrap items-center', compact ? 'gap-0.5' : 'gap-1', className)}
+			className={cn(
+				'flex items-center',
+				resolvedDensity === 'compact' ? 'flex-nowrap gap-0.5' : 'flex-wrap gap-1',
+				className
+			)}
 			onClick={(event) => event.stopPropagation()}
 			onKeyDown={(event) => event.stopPropagation()}
 		>
@@ -112,9 +179,7 @@ function CompanionLevelStepper({
 					onFocus={handleInputFocus}
 					onBlur={() => commitDraft(draft)}
 					onKeyDown={handleInputKeyDown}
-					className={cn(
-						'text-grayscale-900 h-6 w-9 min-w-0 px-1 text-center text-xs leading-none font-semibold tabular-nums shadow-none md:text-xs'
-					)}
+					className="text-grayscale-900 h-6 w-9 min-w-0 px-1 text-center text-xs leading-none font-semibold tabular-nums shadow-none md:text-xs"
 				/>
 				<span className="text-grayscale-400 text-xs tabular-nums">/{maxLevel}</span>
 			</div>

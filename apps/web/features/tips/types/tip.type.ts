@@ -15,8 +15,6 @@ type TipEntry = {
 	category: TipCategory
 	/** 상세 페이지 경로 */
 	href: `/tips/${string}`
-	/** true면 허브에서 클릭 불가·라우트도 리뉴얼 안내로 막음 */
-	disabled?: boolean
 }
 
 export type { TipCategory, TipEntry }
