@@ -20,13 +20,12 @@ import {
 	getRelicPotentialOptionById,
 	resolvePotentialStats
 } from '@/features/tips/lib/relic-potential.constants'
-import type { Relic, RelicSlotLoadout } from '@/features/tips/types/relic.type'
-import type { RelicConsultingLoadout } from '@/features/tips/types/relic-consulting.type'
+import type { Relic, RelicLoadout, RelicSlotLoadout } from '@/features/tips/types/relic.type'
 
 type RelicSetupBoardProps = {
-	loadouts: RelicConsultingLoadout
-	onLoadoutsChange?: (loadouts: RelicConsultingLoadout) => void
-	/** 보유 유물만 선택 (컨설팅용). 없으면 전체 */
+	loadouts: RelicLoadout
+	onLoadoutsChange?: (loadouts: RelicLoadout) => void
+	/** 선택 가능한 유물만 제한. 없으면 전체 */
 	allowedIds?: ReadonlySet<string> | null
 	/** 슬롯 각성을 보유 각성에 맞춤 — 선택 시 각성 고정 */
 	stageByRelicId?: ReadonlyMap<string, number> | null
@@ -40,7 +39,7 @@ const EMPTY_LOADOUT: RelicSlotLoadout = { relicId: null, stage: 0, potentialIds:
 
 /**
  * 유물 4슬롯 세팅 보드 + (편집 시) Sheet.
- * 시뮬레이터·컨설팅 작성·추천에서 공통으로 씁니다.
+ * 세팅 보드에서 슬롯·각성·잠재옵션을 조절합니다.
  */
 function RelicSetupBoard({
 	loadouts,
@@ -101,7 +100,7 @@ function RelicSetupBoard({
 		return [...set]
 	})()
 
-	function updateLoadouts(next: RelicConsultingLoadout) {
+	function updateLoadouts(next: RelicLoadout) {
 		onLoadoutsChange?.(next)
 	}
 

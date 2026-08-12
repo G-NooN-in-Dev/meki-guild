@@ -35,6 +35,9 @@ type RelicSlotLoadout = {
 	potentialIds: readonly string[]
 }
 
+/** 세팅 보드 전체 슬롯 상태 (slot id → loadout) */
+type RelicLoadout = Record<string, RelicSlotLoadout>
+
 /**
  * 유물 카탈로그 항목.
  * 효과·세팅 규칙은 기획 확정 후 이 타입을 확장합니다.
@@ -84,6 +87,7 @@ export type {
 	Relic,
 	RelicAwakeningStage,
 	RelicGrade,
+	RelicLoadout,
 	RelicPotentialGrade,
 	RelicPotentialOption,
 	RelicResolvedEffects,

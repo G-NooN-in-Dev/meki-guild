@@ -31,7 +31,7 @@ type RelicSlotEditorProps = {
 	stage: number
 	potentialIds: readonly string[]
 	excludedIds: ReadonlySet<string>
-	/** 보유 유물만 선택 (컨설팅용). 없으면 전체 */
+	/** 선택 가능한 유물만 제한. 없으면 전체 */
 	allowedIds?: ReadonlySet<string> | null
 	/** 보유 각성에 맞춰 슬롯 각성 고정 */
 	lockStage?: boolean
