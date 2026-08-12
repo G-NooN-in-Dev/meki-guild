@@ -1,12 +1,9 @@
-'use client'
-
 import { Badge } from '@shared/ui/badge'
 import { Card, CardDescription, CardHeader, CardTitle } from '@shared/ui/card'
 import { cn } from '@shared/ui/utils'
 import { ChevronRightIcon } from 'lucide-react'
 import Link from 'next/link'
 
-import { LinkPendingIcon } from '@/components/link-pending-hint'
 import type { TipEntry } from '@/features/tips/types/tip.type'
 
 type TipCardProps = {
@@ -37,9 +34,7 @@ function TipCard({ tip }: TipCardProps) {
 								</Badge>
 							))}
 						</div>
-						<LinkPendingIcon>
-							<ChevronRightIcon className="text-grayscale-400 group-hover:text-grayscale-600 size-4 shrink-0 transition-colors" />
-						</LinkPendingIcon>
+						<ChevronRightIcon className="text-grayscale-400 group-hover:text-grayscale-600 size-4 shrink-0 transition-colors" />
 					</div>
 					<CardTitle className="text-grayscale-900 text-lg font-semibold">{title}</CardTitle>
 					<CardDescription className="text-grayscale-600">{description}</CardDescription>
