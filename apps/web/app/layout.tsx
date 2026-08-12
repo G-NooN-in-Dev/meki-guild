@@ -1,6 +1,7 @@
 import '@/global.css'
 
 import { Toaster } from '@shared/ui/sonner'
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
@@ -51,6 +52,7 @@ function RootLayout({ children }: PropsWithChildren) {
 					<Footer />
 					<Toaster />
 				</BgmProvider>
+				<Analytics />
 			</body>
 		</html>
 	)
