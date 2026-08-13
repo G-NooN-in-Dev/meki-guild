@@ -14,8 +14,8 @@ export const TIP_ENTRIES = [
 	},
 	{
 		slug: 'relic-setup',
-		title: '유물 장착 효과',
-		description: '유물별 각성 효과와 잠재옵션을 확인해보세요.',
+		title: '유물 장착·보유 효과',
+		description: '유물별 장착·보유 효과와 잠재 옵션을 확인해보세요.',
 		tags: ['유물'],
 		href: '/tips/relic-setup'
 	},

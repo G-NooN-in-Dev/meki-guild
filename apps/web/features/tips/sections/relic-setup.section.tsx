@@ -5,8 +5,8 @@ import TipsBackLink from '@/features/tips/components/tips-back-link'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 /**
- * 유물 장착 효과 정보 페이지.
- * 효과 표 / 세팅 보드 탭으로 유물·잠재 정보를 비교할 수 있습니다.
+ * 유물 효과 정보 페이지.
+ * 효과 표 / 세팅 보드 탭으로 장착·보유 효과와 잠재 정보를 비교할 수 있습니다.
  */
 function RelicSetupSection() {
 	const tags = getTipTagsBySlug('relic-setup')
@@ -24,9 +24,9 @@ function RelicSetupSection() {
 							</Badge>
 						))}
 					</div>
-					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">유물 장착 효과</h1>
+					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">유물 장착·보유 효과</h1>
 					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
-						유물별 각성 효과와 잠재옵션을 확인하거나, 세팅 보드로 장착 합산을 시뮬레이션해 보세요.
+						유물별 장착·보유 효과와 잠재 옵션을 확인하거나, 세팅 보드로 장착 합산을 시뮬레이션해 보세요.
 					</p>
 				</header>
 			</div>

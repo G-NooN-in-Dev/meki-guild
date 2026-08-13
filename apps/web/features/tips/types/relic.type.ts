@@ -83,11 +83,35 @@ type RelicResolvedEffects = {
 	stats: readonly RelicStatEffect[]
 }
 
+/** 각성 0~5단계 수치. 인덱스가 단계와 같습니다. */
+type RelicAwakeningValues = readonly [number, number, number, number, number, number]
+
+/**
+ * 유물 보유 효과 한 줄.
+ * 장착하지 않아도, 가지고 있기만 하면 적용되는 상시 스탯입니다.
+ */
+type RelicPossessionStatLine = {
+	label: string
+	unit: RelicStatUnit
+	values: RelicAwakeningValues
+}
+
+/** 효과 표·카드에 넘기는 유물 한 행 (각성 단계가 반영된 문구) */
+type RelicEffectRow = {
+	relic: Relic
+	stage: number
+	equipLines: readonly string[]
+	possessionLines: readonly string[]
+}
+
 export type {
 	Relic,
 	RelicAwakeningStage,
+	RelicAwakeningValues,
+	RelicEffectRow,
 	RelicGrade,
 	RelicLoadout,
+	RelicPossessionStatLine,
 	RelicPotentialGrade,
 	RelicPotentialOption,
 	RelicResolvedEffects,

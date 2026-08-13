@@ -1,4 +1,5 @@
 import type { StageJourneyChapter, StageJourneyGrade } from '@/features/tips/types/stage-journey.type'
+import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 /** 등급 표시 순서 (낮은 등급 → 높은 등급) */
 const STAGE_JOURNEY_GRADE_ORDER = [
@@ -1281,7 +1282,7 @@ function formatStageJourneyStatValue(value: number, unit: 'flat' | 'percent') {
 	if (unit === 'percent') {
 		return `${value}%`
 	}
-	return value.toLocaleString('ko-KR')
+	return formatLocaleNumber(value)
 }
 
 export {

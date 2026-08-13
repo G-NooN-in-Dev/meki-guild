@@ -85,7 +85,10 @@ const RELIC_CATALOG_SOURCE = [
 	{ name: '양초', grade: 'legendary', iconKey: 'candle' },
 	{ name: '동맹의 증표', grade: 'legendary', iconKey: 'alliance-emblem' },
 	{ name: '뿔피리', grade: 'legendary', iconKey: 'horn-flute' },
-	{ name: '저주받은 인형', grade: 'legendary', iconKey: 'cursed-doll' }
+	{ name: '저주받은 인형', grade: 'legendary', iconKey: 'cursed-doll' },
+	{ name: '레인디어의 창', grade: 'legendary', iconKey: 'reindeer-spear' },
+	{ name: '비밀 지도', grade: 'legendary', iconKey: 'secret-map' },
+	{ name: '순환의 고리', grade: 'legendary', iconKey: 'circulation-ring' }
 ] as const satisfies readonly {
 	name: string
 	grade: RelicGrade
@@ -395,6 +398,45 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 			createRelicStat('명중', [15, 18, 21, 24, 27, 30], stage, 'flat'),
 			createRelicStat('최종 데미지', [7, 8.4, 9.8, 11.2, 12.6, 14], stage, 'percent'),
 			createRelicStat('명중', [45, 54, 63, 72, 81, 90], stage, 'flat', '회피 시 5초')
+		]
+	},
+	'legendary-reindeer-spear': {
+		resolveLines: (stage) => [
+			`공격력 ${stagePercent([5, 6, 7, 8, 9, 10], stage)} 증가`,
+			`방어 관통력 ${stagePercent([5, 6, 7, 8, 9, 10], stage)} 증가`,
+			'적이 1명이면 방어 관통력 증가 효과가 2배, 해당 적이 보스면 3배 적용'
+		],
+		resolveStats: (stage) => [
+			createRelicStat('공격력', [5, 6, 7, 8, 9, 10], stage, 'percent'),
+			createRelicStat('방어 관통력', [5, 6, 7, 8, 9, 10], stage, 'percent'),
+			createRelicStat('방어 관통력', [10, 12, 14, 16, 18, 20], stage, 'percent', '적 1명'),
+			createRelicStat('방어 관통력', [15, 18, 21, 24, 27, 30], stage, 'percent', '적 1명 보스')
+		]
+	},
+	'legendary-secret-map': {
+		resolveLines: (stage) => [
+			`공격력 ${stagePercent([5, 6, 7, 8, 9, 10], stage)} 증가`,
+			`적이 10명 이상일 때 최종 데미지 ${stagePercent([5, 6, 7, 8, 9, 10], stage)} 증가`,
+			'성장 던전에서는 최종 데미지 증가 효과가 3배 적용'
+		],
+		resolveStats: (stage) => [
+			createRelicStat('공격력', [5, 6, 7, 8, 9, 10], stage, 'percent'),
+			createRelicStat('최종 데미지', [5, 6, 7, 8, 9, 10], stage, 'percent', '적 10명 이상'),
+			createRelicStat('최종 데미지', [15, 18, 21, 24, 27, 30], stage, 'percent', '성장 던전 · 적 10명 이상')
+		]
+	},
+	'legendary-circulation-ring': {
+		resolveLines: (stage) => [
+			'5초마다 이 유물의 효과를 제거한 후 현재 크리티컬 확률에 따라 다른 효과를 적용',
+			`크리티컬 확률 100% 미만: 크리티컬 확률 ${stagePercent([30, 36, 42, 48, 54, 60], stage)} 증가`,
+			`크리티컬 확률 100% 이상: 스킬 데미지 ${stagePercent([40, 48, 56, 64, 72, 80], stage)} 증가`,
+			`크리티컬 확률 100% 초과 10%마다 기본 공격 데미지 ${stagePercent([6, 7.2, 8.4, 9.6, 10.8, 12], stage)} 증가 (최대 10회)`
+		],
+		resolveStats: (stage) => [
+			createRelicStat('크리티컬 확률', [30, 36, 42, 48, 54, 60], stage, 'percent', '크확 100% 미만'),
+			createRelicStat('스킬 데미지', [40, 48, 56, 64, 72, 80], stage, 'percent', '크확 100% 이상'),
+			createRelicStat('기본 공격 데미지', [6, 7.2, 8.4, 9.6, 10.8, 12], stage, 'percent', '크확 초과 10%당'),
+			createRelicStat('기본 공격 데미지', [60, 72, 84, 96, 108, 120], stage, 'percent', '크확 초과 최대 10회')
 		]
 	},
 	'unique-rainbow-snail-shell': {
