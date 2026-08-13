@@ -9,7 +9,7 @@ import { BgmProvider } from '@/components/bgm.context'
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 
-// 카카오톡 등 링크 미리보기용 Open Graph 메타
+// 파비콘·Apple 터치 아이콘·카카오톡 미리보기 모두 public/games.png 사용
 const SITE_URL = 'https://meki-games.vercel.app'
 
 export const metadata: Metadata = {
@@ -19,6 +19,10 @@ export const metadata: Metadata = {
 		template: '%s | 메이플키우기 게임즈 길드'
 	},
 	description: '메이플키우기 1서버 게임즈 길드입니다',
+	icons: {
+		icon: '/games.png',
+		apple: '/games.png'
+	},
 	openGraph: {
 		title: '메이플키우기 게임즈 길드',
 		description: '메이플키우기 1서버 게임즈 길드입니다',
