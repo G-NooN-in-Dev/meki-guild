@@ -39,6 +39,13 @@ export const TIP_ENTRIES = [
 		description: '길드 대항전 단계별 필요 명중과, 보스 데미지 증가 스택을 확인해보세요.',
 		tags: ['대항전'],
 		href: '/tips/guild-rivalry-hit-cut'
+	},
+	{
+		slug: 'job-release-order',
+		title: '직업 출시 순서표',
+		description: '원작 직업 출시 순서로 메이플키우기 다음 직업을 가늠해보세요.',
+		tags: ['직업'],
+		href: '/tips/job-release-order'
 	}
 ] as const satisfies readonly TipEntry[]
 
