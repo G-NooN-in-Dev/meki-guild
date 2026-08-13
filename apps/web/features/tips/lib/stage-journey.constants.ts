@@ -73,7 +73,6 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '공격력',
 				unit: 'flat',
-				isEstimated: true,
 				values: {
 					normal: 200,
 					rare: 400,
@@ -87,7 +86,6 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
-				isEstimated: true,
 				values: {
 					normal: 1000,
 					rare: 2000,
@@ -125,7 +123,6 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '공격력',
 				unit: 'flat',
-				isEstimated: true,
 				values: {
 					normal: 230,
 					rare: 460,
@@ -139,7 +136,6 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
-				isEstimated: true,
 				values: {
 					normal: 1150,
 					rare: 2300,
@@ -177,7 +173,6 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '공격력',
 				unit: 'flat',
-				isEstimated: true,
 				values: {
 					normal: 260,
 					rare: 520,
@@ -191,7 +186,6 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
-				isEstimated: true,
 				values: {
 					normal: 1300,
 					rare: 2600,
@@ -1179,6 +1173,7 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '공격력',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 860,
 					rare: 1720,
@@ -1192,6 +1187,7 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 4300,
 					rare: 8600,
@@ -1211,6 +1207,7 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '공격력',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 890,
 					rare: 1780,
@@ -1224,6 +1221,7 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 4450,
 					rare: 8900,
@@ -1243,6 +1241,7 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '공격력',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 920,
 					rare: 1840,
@@ -1256,6 +1255,7 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 			{
 				label: '최대 HP',
 				unit: 'flat',
+				isEstimated: true,
 				values: {
 					normal: 4600,
 					rare: 9200,
