@@ -35,13 +35,15 @@ type JobReleaseGroupTableProps = {
 	title: string
 	count: number
 	rows: readonly JobReleaseTableRow[]
+	/** false면 높이 제한 없이 행을 모두 보여 줍니다. 기본은 표 안 스크롤입니다. */
+	scrollable?: boolean
 }
 
 /**
  * 출시/미출시 한쪽 표.
  * 넘긴 행의 순서를 그대로 그리므로, 호출 쪽에서 원작 출시일 순을 유지합니다.
  */
-function JobReleaseGroupTable({ title, count, rows }: JobReleaseGroupTableProps) {
+function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobReleaseGroupTableProps) {
 	return (
 		<section className="flex min-w-0 flex-col gap-3">
 			<h2 className="text-grayscale-900 text-lg font-semibold md:text-xl">
@@ -50,7 +52,13 @@ function JobReleaseGroupTable({ title, count, rows }: JobReleaseGroupTableProps)
 			</h2>
 
 			{/* scroll을 Table 컨테이너에 두고 border-separate를 써야 thead/th sticky가 동작합니다 */}
-			<div className="border-grayscale-300 bg-card shadow-soft overflow-hidden rounded-xl border **:data-[slot=table-container]:max-h-[min(70dvh,44rem)] **:data-[slot=table-container]:overflow-auto">
+			<div
+				className={cn(
+					'border-grayscale-300 bg-card shadow-soft overflow-hidden rounded-xl border',
+					scrollable &&
+						'**:data-[slot=table-container]:max-h-[min(70dvh,44rem)] **:data-[slot=table-container]:overflow-auto'
+				)}
+			>
 				<Table className="w-full border-separate border-spacing-0">
 					<TableHeader className="[&_tr]:border-0">
 						<TableRow className="hover:bg-transparent">
@@ -102,7 +110,7 @@ function JobReleaseOrderTable() {
 	return (
 		<div className="grid gap-8 lg:grid-cols-2 lg:items-start">
 			<JobReleaseGroupTable title="출시" count={releasedCount} rows={JOB_RELEASED_TABLE_ROWS} />
-			<JobReleaseGroupTable title="미출시" count={upcomingCount} rows={JOB_UPCOMING_TABLE_ROWS} />
+			<JobReleaseGroupTable title="미출시" count={upcomingCount} rows={JOB_UPCOMING_TABLE_ROWS} scrollable={false} />
 		</div>
 	)
 }
