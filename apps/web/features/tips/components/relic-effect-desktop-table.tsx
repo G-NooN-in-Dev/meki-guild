@@ -32,8 +32,8 @@ type RelicEffectDesktopTableProps = {
 function RelicEffectDesktopTable({ rows, onStageChange }: RelicEffectDesktopTableProps) {
 	return (
 		<div className="border-grayscale-200 bg-card shadow-soft max-h-[min(70dvh,44rem)] overflow-auto rounded-xl border">
-			<Table className="w-full min-w-3xl">
-				<TableHeader className="sticky top-0 z-20">
+			<Table className="w-full min-w-3xl" containerClassName="overflow-visible">
+				<TableHeader sticky>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
 						<TableHead className={nameHeaderClassName}>유물</TableHead>
 						<TableHead className={stageHeaderClassName}>각성</TableHead>

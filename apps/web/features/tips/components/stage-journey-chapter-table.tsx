@@ -49,8 +49,8 @@ const COLUMN_CLASS = {
 function StageJourneyChapterTable({ selectedChapter, onSelectChapter }: StageJourneyChapterTableProps) {
 	return (
 		<div className="border-grayscale-200 bg-card shadow-soft max-h-[min(50dvh,28rem)] overflow-auto rounded-xl border md:max-h-[min(55dvh,32rem)]">
-			<Table className="w-full min-w-120 table-fixed md:min-w-136">
-				<TableHeader className="sticky top-0 z-20">
+			<Table className="w-full min-w-120 table-fixed md:min-w-136" containerClassName="overflow-visible">
+				<TableHeader sticky>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
 						<TableHead
 							className={cn(

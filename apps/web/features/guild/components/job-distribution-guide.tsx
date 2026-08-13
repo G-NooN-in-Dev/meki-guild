@@ -51,8 +51,8 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 					<DialogDescription hidden />
 				</DialogHeader>
 				<div className="border-grayscale-200 bg-grayscale-50 max-h-[60dvh] overflow-y-auto rounded-lg border sm:max-h-[65dvh]">
-					<Table>
-						<TableHeader className="bg-grayscale-50 sticky top-0 z-10">
+					<Table containerClassName="overflow-visible">
+						<TableHeader sticky className="[&>tr>th]:bg-grayscale-50">
 							<TableRow className="bg-grayscale-50 hover:bg-grayscale-50 border-grayscale-200">
 								<TableHead className="text-grayscale-500 w-24">직업군</TableHead>
 								<TableHead className="text-grayscale-500">직업</TableHead>

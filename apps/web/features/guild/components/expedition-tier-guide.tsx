@@ -69,8 +69,8 @@ function ExpeditionTierGuide() {
 					</DialogDescription>
 				</DialogHeader>
 				<div className="border-grayscale-200 bg-card shadow-soft max-h-[60dvh] overflow-y-auto rounded-xl border sm:max-h-[65dvh]">
-					<Table>
-						<TableHeader className="bg-grayscale-100 sticky top-0 z-10">
+					<Table containerClassName="overflow-visible">
+						<TableHeader sticky className="[&>tr>th]:bg-grayscale-100">
 							<TableRow className="border-grayscale-200 bg-grayscale-100 hover:bg-grayscale-100">
 								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">등급</TableHead>
 								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">

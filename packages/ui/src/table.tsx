@@ -4,16 +4,32 @@ import { type ComponentProps } from 'react'
 
 import { cn } from './lib/utils'
 
-function Table({ className, ...props }: ComponentProps<'table'>) {
+type TableProps = ComponentProps<'table'> & {
+	/** 바깥 래퍼(가로 스크롤 등). 부모에서 이미 overflow를 쓰면 overflow-visible로 덮어씁니다. */
+	containerClassName?: string
+}
+
+function Table({ className, containerClassName, ...props }: TableProps) {
 	return (
-		<div data-slot="table-container" className="relative w-full overflow-x-auto">
+		<div data-slot="table-container" className={cn('relative w-full overflow-x-auto', containerClassName)}>
 			<table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />
 		</div>
 	)
 }
 
-function TableHeader({ className, ...props }: ComponentProps<'thead'>) {
-	return <thead data-slot="table-header" className={cn('[&_tr]:border-b', className)} {...props} />
+type TableHeaderProps = ComponentProps<'thead'> & {
+	/** Chrome은 thead sticky를 무시하므로 th에 sticky를 겁니다. 헤더 셀에 불투명 배경이 필요합니다. */
+	sticky?: boolean
+}
+
+function TableHeader({ className, sticky = false, ...props }: TableHeaderProps) {
+	return (
+		<thead
+			data-slot="table-header"
+			className={cn('[&_tr]:border-b', sticky && '[&>tr>th]:sticky [&>tr>th]:top-0 [&>tr>th]:z-10', className)}
+			{...props}
+		/>
+	)
 }
 
 function TableBody({ className, ...props }: ComponentProps<'tbody'>) {

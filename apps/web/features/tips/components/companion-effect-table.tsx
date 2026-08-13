@@ -46,8 +46,8 @@ function CompanionEffectTable() {
 
 	return (
 		<div className="border-grayscale-200 bg-card shadow-soft max-h-[min(70dvh,44rem)] overflow-auto rounded-xl border">
-			<Table className="w-full table-fixed">
-				<TableHeader className="sticky top-0 z-20">
+			<Table className="w-full table-fixed" containerClassName="overflow-visible">
+				<TableHeader sticky>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
 						<TableHead className={jobHeaderClassName}>동료</TableHead>
 						{COMPANION_GRADE_ORDER.map((grade) => (

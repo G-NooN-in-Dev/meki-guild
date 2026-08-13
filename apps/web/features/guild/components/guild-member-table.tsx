@@ -287,10 +287,10 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 					<ExpeditionTierGuide />
 				</div>
 			</div>
-			{/* 가로 스크롤은 이 카드(테이블) 안에서만 — 페이지로는 전파되지 않음 */}
-			<div className="border-grayscale-200 bg-card shadow-soft w-full min-w-0 overflow-x-auto rounded-xl border">
-				<Table>
-					<TableHeader>
+			{/* 가로·세로 스크롤을 카드 안에서만 — 헤더 고정은 Table 컨테이너가 스크롤 기준이어야 함 */}
+			<div className="border-grayscale-200 bg-card shadow-soft w-full min-w-0 overflow-hidden rounded-xl border">
+				<Table containerClassName="max-h-[min(70dvh,48rem)] overflow-auto">
+					<TableHeader sticky className="[&>tr>th]:bg-grayscale-50">
 						<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">
 							<TableHead className="text-grayscale-500 w-12">#</TableHead>
 							<TableHead className="text-grayscale-500">이름</TableHead>

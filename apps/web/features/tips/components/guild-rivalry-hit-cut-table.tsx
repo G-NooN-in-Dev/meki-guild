@@ -16,8 +16,8 @@ function GuildRivalryHitCutTable() {
 	return (
 		<div className="border-grayscale-200 bg-card shadow-soft max-h-[min(65dvh,36rem)] overflow-auto rounded-xl border md:max-h-[min(70dvh,40rem)]">
 			{/* table-fixed + w-full — 좁은 화면에서도 가로 스크롤 없이 3열이 들어가게 */}
-			<Table className="w-full table-fixed">
-				<TableHeader className="sticky top-0 z-20">
+			<Table className="w-full table-fixed" containerClassName="overflow-visible">
+				<TableHeader sticky>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
 						<TableHead
 							className={cn(
