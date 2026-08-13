@@ -96,10 +96,19 @@ type RelicPossessionStatLine = {
 	values: RelicAwakeningValues
 }
 
+/** 효과 표·카드에 넘기는 유물 한 행 (각성 단계가 반영된 문구) */
+type RelicEffectRow = {
+	relic: Relic
+	stage: number
+	equipLines: readonly string[]
+	possessionLines: readonly string[]
+}
+
 export type {
 	Relic,
 	RelicAwakeningStage,
 	RelicAwakeningValues,
+	RelicEffectRow,
 	RelicGrade,
 	RelicLoadout,
 	RelicPossessionStatLine,
