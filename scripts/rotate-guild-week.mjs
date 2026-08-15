@@ -137,7 +137,7 @@ function clearFieldsInCurrent(member, fields) {
 				nextMember.training = ''
 				break
 			case 'guildBoss':
-				delete nextMember.guildBoss
+				nextMember.guildBoss = ''
 				break
 			default:
 				throw new Error(`알 수 없는 이월 필드: ${field}`)

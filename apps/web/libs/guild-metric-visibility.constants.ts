@@ -7,7 +7,7 @@
  */
 export const GUILD_METRIC_VISIBILITY = {
 	training: true,
-	guildBoss: false
+	guildBoss: true
 } as const
 
 /** UI에서 on/off 가능한 지표 키 */
