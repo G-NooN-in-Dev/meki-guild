@@ -14,6 +14,7 @@ import JobBadge from '@/features/guild/components/job-badge'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import MemberDetailDialog from '@/features/guild/components/member-detail-dialog'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
+import RivalryRankPointsGuide from '@/features/guild/components/rivalry-rank-points-guide'
 import WeeklyGrowthLeaders from '@/features/guild/components/weekly-growth-leaders'
 import type { MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import {
@@ -252,7 +253,7 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 	return (
 		<div className="flex w-full min-w-0 flex-col gap-3">
 			{/*
-				  모바일: 1행=인원·증감율·필터(조작) / 2행=가이드(짧은 라벨)
+				  모바일: 1행=인원·증감율·필터 / 2행=가이드
 				  데스크탑: 한 줄 — 좌=인원 / 우=조작·가이드 (md:contents로 조작 행을 펼침)
 				*/}
 			<div className="flex w-full min-w-0 flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-3">
@@ -285,6 +286,7 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 					<ContentUpdatedAtGuide />
 					<JobDistributionGuide comparisons={comparisons} />
 					<ExpeditionTierGuide />
+					<RivalryRankPointsGuide />
 				</div>
 			</div>
 			{/* 가로·세로 스크롤을 카드 안에서만 — 헤더 고정은 Table 컨테이너가 스크롤 기준이어야 함 */}

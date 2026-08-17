@@ -226,8 +226,22 @@ function buildSummaryCards(metrics: ReturnType<typeof calculateGuildSummaryMetri
 		},
 		{
 			label: '대항전 변화',
+			valueLabel: '대항전 점수 총합',
 			value: metrics.rivalryChange,
-			percentLabel: metrics.rivalryChangePercent
+			percentLabel: metrics.rivalryChangePercent,
+			columnSpan: 2,
+			metaRows: [
+				{
+					label: '길드 포인트 총합',
+					value: metrics.rivalryPointsTotal,
+					delta: metrics.rivalryPointsChange
+				},
+				{
+					label: '길드 순위',
+					value: metrics.guildRivalryRankLabel,
+					delta: metrics.guildRivalryRankChange
+				}
+			]
 		},
 		...(isGuildMetricVisible('training')
 			? [
@@ -254,13 +268,24 @@ function buildSummaryCards(metrics: ReturnType<typeof calculateGuildSummaryMetri
 
 function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 	const metrics = calculateGuildSummaryMetrics(data.comparisons, {
-		current: data.currentWeek.guild?.expeditionRank,
-		previous: data.previousWeek.guild?.expeditionRank
+		expeditionRank: {
+			current: data.currentWeek.guild?.expeditionRank,
+			previous: data.previousWeek.guild?.expeditionRank
+		},
+		rivalryRank: {
+			current: data.currentWeek.guild?.rivalryRank,
+			previous: data.previousWeek.guild?.rivalryRank
+		},
+		rivalryPoints: {
+			current: data.currentWeek.guild?.rivalryPoints,
+			previous: data.previousWeek.guild?.rivalryPoints
+		}
 	})
 	const { top: topSummaryCard, bottom: bottomSummaryCards } = buildSummaryCards(metrics)
-
-	// xl 4열에서 2열 카드와 나머지 카드가 한 줄을 나란히 쓰는 경우
-	const sharesRowAtXl = bottomSummaryCards.filter((card) => card.columnSpan !== 2).length >= 2
+	const splitSummaryCards = bottomSummaryCards.filter((card) => card.columnSpan === 2)
+	const restSummaryCards = bottomSummaryCards.filter((card) => card.columnSpan !== 2)
+	// 토벌전·대항전처럼 2열 카드가 둘이면 xl에서 한 줄을 나눠 씁니다
+	const sharesRowAtXl = splitSummaryCards.length >= 2
 
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-6">
@@ -272,12 +297,21 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 			<div className="flex flex-col gap-4">
 				<SummaryCardView card={topSummaryCard} />
 
-				{/* 2열 카드 + 나머지. 나머지 2개 이상이면 xl에서 4열로 한 줄 배치 */}
-				<div className={sharesRowAtXl ? 'grid gap-4 md:grid-cols-2 xl:grid-cols-4' : 'grid gap-4 md:grid-cols-2'}>
-					{bottomSummaryCards.map((card) => (
-						<SummaryCardView key={card.label} card={card} sharesRowAtXl={sharesRowAtXl} />
-					))}
-				</div>
+				{splitSummaryCards.length > 0 ? (
+					<div className={sharesRowAtXl ? 'grid gap-4 md:grid-cols-2 xl:grid-cols-4' : 'grid gap-4 md:grid-cols-2'}>
+						{splitSummaryCards.map((card) => (
+							<SummaryCardView key={card.label} card={card} sharesRowAtXl={sharesRowAtXl} />
+						))}
+					</div>
+				) : null}
+
+				{restSummaryCards.length > 0 ? (
+					<div className="grid gap-4 md:grid-cols-2">
+						{restSummaryCards.map((card) => (
+							<SummaryCardView key={card.label} card={card} />
+						))}
+					</div>
+				) : null}
 			</div>
 
 			<GuildMemberTable

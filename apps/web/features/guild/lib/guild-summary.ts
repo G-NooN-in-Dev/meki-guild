@@ -9,10 +9,22 @@ import {
 	formatPlacementRank,
 	formatTrainingDelta
 } from '@/utils/format-korean-number'
+import { parseKoreanNumber } from '@/utils/parse-korean-number'
 
-type GuildExpeditionRankInput = {
+type GuildPlacementRankInput = {
 	current: number | null | undefined
 	previous: number | null | undefined
+}
+
+type GuildMetaPointsInput = {
+	current: number | string | null | undefined
+	previous: number | string | null | undefined
+}
+
+type GuildSummaryMetaInput = {
+	expeditionRank?: GuildPlacementRankInput
+	rivalryRank?: GuildPlacementRankInput
+	rivalryPoints?: GuildMetaPointsInput
 }
 
 type NumericFieldSelector = (_comparison: GuildMemberComparison) => NumericDeltaLike
@@ -202,7 +214,7 @@ function calculateExpeditionGradePointsChange(comparisons: GuildMemberComparison
 	return formatPointsDelta(currentPoints - previousPoints)
 }
 
-function parseGuildExpeditionRank(value: number | null | undefined): number | null {
+function parseGuildPlacementRank(value: number | null | undefined): number | null {
 	if (value === null || value === undefined) {
 		return null
 	}
@@ -214,13 +226,13 @@ function parseGuildExpeditionRank(value: number | null | undefined): number | nu
 	return Math.floor(value)
 }
 
-/** 길드 토벌전 순위 표시·증감(등수라 숫자가 작을수록 상위) */
-function calculateGuildExpeditionRank(rank: GuildExpeditionRankInput): {
+/** 길드 순위 표시·증감(등수라 숫자가 작을수록 상위). 토벌전·대항전 공통 */
+function calculateGuildPlacementRank(rank: GuildPlacementRankInput): {
 	label: string
 	changeLabel: string | null
 } {
-	const current = parseGuildExpeditionRank(rank.current)
-	const previous = parseGuildExpeditionRank(rank.previous)
+	const current = parseGuildPlacementRank(rank.current)
+	const previous = parseGuildPlacementRank(rank.previous)
 
 	if (current === null) {
 		return { label: GUILD_EMPTY_VALUE_LABEL, changeLabel: null }
@@ -229,6 +241,86 @@ function calculateGuildExpeditionRank(rank: GuildExpeditionRankInput): {
 	return {
 		label: formatPlacementRank(current),
 		changeLabel: previous === null ? null : formatRankArrowDelta(current - previous)
+	}
+}
+
+const calculateGuildExpeditionRank = calculateGuildPlacementRank
+
+function hasKoreanUnits(value: number | string | null | undefined): boolean {
+	return typeof value === 'string' && /[경조억만]/.test(value)
+}
+
+function parseGuildMetaPoints(value: number | string | null | undefined): bigint | null {
+	if (value === null || value === undefined) {
+		return null
+	}
+
+	if (typeof value === 'string' && value.trim() === '') {
+		return null
+	}
+
+	if (typeof value === 'number' && (!Number.isFinite(value) || value < 0)) {
+		return null
+	}
+
+	try {
+		return parseKoreanNumber(value)
+	} catch {
+		return null
+	}
+}
+
+function formatGuildMetaPointsLabel(original: number | string): string {
+	if (typeof original === 'number') {
+		return formatLocaleNumber(original)
+	}
+
+	if (hasKoreanUnits(original)) {
+		return original.trim()
+	}
+
+	const parsed = parseGuildMetaPoints(original)
+
+	return parsed === null ? GUILD_EMPTY_VALUE_LABEL : formatLocaleNumber(parsed)
+}
+
+function formatGuildMetaPointsDelta(
+	diff: bigint,
+	currentOriginal: number | string | null | undefined,
+	previousOriginal: number | string | null | undefined
+): string | null {
+	if (diff === 0n) {
+		return null
+	}
+
+	if (hasKoreanUnits(currentOriginal) || hasKoreanUnits(previousOriginal)) {
+		return formatKoreanDelta(diff)
+	}
+
+	if (diff <= BigInt(Number.MAX_SAFE_INTEGER) && diff >= BigInt(Number.MIN_SAFE_INTEGER)) {
+		return formatPointsDelta(Number(diff))
+	}
+
+	return formatKoreanDelta(diff)
+}
+
+/** 길드 대항전 포인트 총합 표시·증감. 직전 값이 없으면 증감은 숨깁니다. */
+function calculateGuildRivalryPoints(points: GuildMetaPointsInput): {
+	label: string
+	changeLabel: string | null
+} {
+	const currentOriginal = points.current
+	const current = parseGuildMetaPoints(currentOriginal)
+	const previous = parseGuildMetaPoints(points.previous)
+
+	if (current === null || currentOriginal === null || currentOriginal === undefined) {
+		return { label: GUILD_EMPTY_VALUE_LABEL, changeLabel: null }
+	}
+
+	return {
+		label: formatGuildMetaPointsLabel(currentOriginal),
+		changeLabel:
+			previous === null ? null : formatGuildMetaPointsDelta(current - previous, currentOriginal, points.previous)
 	}
 }
 
@@ -241,16 +333,17 @@ function hasGuildBossContribution(comparison: GuildMemberComparison): boolean {
 	return comparison.guildBoss.previous !== null
 }
 
-function calculateGuildSummaryMetrics(
-	comparisons: GuildMemberComparison[],
-	guildExpeditionRank?: GuildExpeditionRankInput
-) {
+function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guildMeta?: GuildSummaryMetaInput) {
 	const combatPowerField = (comparison: GuildMemberComparison) => comparison.combatPower
 	const expeditionScoreField = (comparison: GuildMemberComparison) => comparison.expeditionScore
 	const rivalryField = (comparison: GuildMemberComparison) => comparison.rivalry
 	const trainingField = (comparison: GuildMemberComparison) => comparison.training
 	const guildBossField = (comparison: GuildMemberComparison) => comparison.guildBoss
-	const expeditionRank = calculateGuildExpeditionRank(guildExpeditionRank ?? { current: null, previous: null })
+	const emptyRank = { current: null, previous: null }
+	const emptyPoints = { current: null, previous: null }
+	const expeditionRank = calculateGuildPlacementRank(guildMeta?.expeditionRank ?? emptyRank)
+	const rivalryRank = calculateGuildPlacementRank(guildMeta?.rivalryRank ?? emptyRank)
+	const rivalryPoints = calculateGuildRivalryPoints(guildMeta?.rivalryPoints ?? emptyPoints)
 
 	return {
 		combatPowerTotal: calculateCombatPowerTotal(comparisons),
@@ -266,6 +359,10 @@ function calculateGuildSummaryMetrics(
 		guildExpeditionRankChange: expeditionRank.changeLabel,
 		rivalryChange: formatKoreanDelta(calculateTotalNumericChange(comparisons, rivalryField)),
 		rivalryChangePercent: calculateTotalChangePercent(comparisons, rivalryField),
+		rivalryPointsTotal: rivalryPoints.label,
+		rivalryPointsChange: rivalryPoints.changeLabel,
+		guildRivalryRankLabel: rivalryRank.label,
+		guildRivalryRankChange: rivalryRank.changeLabel,
 		trainingChange: formatTrainingDelta(calculateTotalNumericChange(comparisons, trainingField)),
 		trainingChangePercent: calculateTotalChangePercent(comparisons, trainingField),
 		guildBossChange: formatKoreanDelta(
@@ -282,6 +379,8 @@ export {
 	calculateExpeditionGradePointsChange,
 	calculateExpeditionGradePointsTotal,
 	calculateGuildExpeditionRank,
+	calculateGuildPlacementRank,
+	calculateGuildRivalryPoints,
 	calculateGuildSummaryMetrics,
 	calculateTotalNumericChange,
 	calculateTotalPrevious

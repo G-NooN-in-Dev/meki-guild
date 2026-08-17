@@ -1,6 +1,8 @@
 {
 	"guild": {
-		"expeditionRank": 18
+		"expeditionRank": 18,
+		"rivalryRank": null,
+		"rivalryPoints": null
 	},
 	"members": [
 		{

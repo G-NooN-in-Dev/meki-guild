@@ -147,6 +147,21 @@ function clearFieldsInCurrent(member, fields) {
 	return nextMember
 }
 
+/** 길드 단위 메타(순위·포인트)를 current → previous 로 밀고, current 는 재입력 대기로 비웁니다. */
+function rotateGuildMetaFields(currentWeek, previousWeek, fieldNames) {
+	for (const fieldName of fieldNames) {
+		const currentValue = currentWeek.guild?.[fieldName] ?? null
+		previousWeek.guild = {
+			...(previousWeek.guild ?? {}),
+			[fieldName]: currentValue
+		}
+		currentWeek.guild = {
+			...(currentWeek.guild ?? {}),
+			[fieldName]: null
+		}
+	}
+}
+
 function rotateGuildWeek(mode) {
 	const fields = ROTATION_MODES[mode]
 
@@ -177,17 +192,12 @@ function rotateGuildWeek(mode) {
 
 	currentWeek.members = currentWeek.members.map((member) => clearFieldsInCurrent(member, fields))
 
-	// 토벌전 이월 시 길드 순위도 함께 밀고, current 는 재입력 대기로 비웁니다.
 	if (fields.includes('expedition')) {
-		const currentRank = currentWeek.guild?.expeditionRank ?? null
-		previousWeek.guild = {
-			...(previousWeek.guild ?? {}),
-			expeditionRank: currentRank
-		}
-		currentWeek.guild = {
-			...(currentWeek.guild ?? {}),
-			expeditionRank: null
-		}
+		rotateGuildMetaFields(currentWeek, previousWeek, ['expeditionRank'])
+	}
+
+	if (fields.includes('rivalry')) {
+		rotateGuildMetaFields(currentWeek, previousWeek, ['rivalryRank', 'rivalryPoints'])
 	}
 
 	// 분야별 수집일: 기존 current → previous 로 밀고, current 는 오늘(새 수집 시작일)
@@ -213,6 +223,9 @@ function rotateGuildWeek(mode) {
 	console.log(`   current-week.json ${cleared} 초기화`)
 	if (fields.includes('expedition')) {
 		console.log(`   (길드 토벌전 순위도 함께 이월)`)
+	}
+	if (fields.includes('rivalry')) {
+		console.log(`   (길드 대항전 순위·포인트도 함께 이월)`)
 	}
 	if (fields.includes('combatPower')) {
 		console.log(`   (레벨·직업은 current 에 유지)`)

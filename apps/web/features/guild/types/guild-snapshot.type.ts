@@ -15,16 +15,23 @@ type GuildMemberInput = {
 	guildBoss?: string | number
 }
 
-/** 길드 단위 토벌전 메타(순위 등). 멤버 스냅샷과 별도로 주간 수집합니다. */
+/** 길드 단위 집계 메타(토벌전·대항전 순위 등). 멤버 스냅샷과 별도로 주간 수집합니다. */
 type GuildWeekMeta = {
 	/** 길드 토벌전 순위(1이 최상위). 미입력이면 null/생략 */
 	expeditionRank?: number | null
+	/** 길드 대항전 순위(1이 최상위). 미입력이면 null/생략 */
+	rivalryRank?: number | null
+	/**
+	 * 길드 대항전 포인트 총합. 멤버 점수 합과 별도로 주간 수집합니다.
+	 * 숫자 또는 한국어 단위 문자열. 미입력이면 null/생략
+	 */
+	rivalryPoints?: number | string | null
 }
 
 /** 한 시점의 길드원 스냅샷. 수집일은 guild-content-dates.json 에서 분야별로 관리합니다. */
 type GuildWeekSnapshot = {
 	members: GuildMemberInput[]
-	/** 길드 단위 집계(토벌전 순위 등) */
+	/** 길드 단위 집계(토벌전·대항전 순위·포인트 등) */
 	guild?: GuildWeekMeta
 }
 
