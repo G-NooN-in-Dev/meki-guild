@@ -145,7 +145,7 @@ function MobileNavGroup({
 						'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:outline-none'
 					)}
 				>
-					<ChevronDownIcon className={cn('size-4 transition-transform', open && 'rotate-180')} />
+					<ChevronDownIcon className={cn('size-4 transition-transform duration-200', open && 'rotate-180')} />
 				</CollapsibleTrigger>
 			</div>
 

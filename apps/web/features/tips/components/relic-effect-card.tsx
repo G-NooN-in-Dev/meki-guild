@@ -45,7 +45,10 @@ function RelicEffectCard({ relic, stage, equipLines, possessionLines, onStageCha
 							'focus-visible:ring-grayscale-900 hover:bg-transparent focus-visible:ring-2 focus-visible:outline-none'
 						)}
 					>
-						<ChevronDownIcon aria-hidden className={cn('size-4 transition-transform', open && 'rotate-180')} />
+						<ChevronDownIcon
+							aria-hidden
+							className={cn('size-4 transition-transform duration-200', open && 'rotate-180')}
+						/>
 					</CollapsibleTrigger>
 				</div>
 
