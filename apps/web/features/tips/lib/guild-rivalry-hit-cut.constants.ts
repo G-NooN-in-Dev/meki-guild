@@ -41,6 +41,12 @@ export const GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT = 4
  */
 export const GUILD_RIVALRY_HIT_BONUS_MAX_DIFF = 30
 
+/** 대항전 단계 기본 제한시간(초). 단계 전환 시에도 이 값을 넘지 않습니다. */
+export const GUILD_RIVALRY_TIME_LIMIT_SEC = 35
+
+/** 단계를 넘길 때 남은 제한시간에 더해지는 시간(초) */
+export const GUILD_RIVALRY_TIME_LIMIT_REFILL_SEC = 20
+
 /**
  * 단계 → 누적 보스 데미지 증가 스택.
  * 단계마다 잡몹 6마리 × +1 = +6이므로 stage × 6.

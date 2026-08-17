@@ -3,7 +3,7 @@
  * 이미지는 `public/items/`에 두고, 페이지마다 경로를 중복 정의하지 않습니다.
  */
 
-type GameItemId = 'journey-coin' | 'starforce-scroll' | 'miracle-cube' | 'additional-cube'
+type GameItemId = 'meso' | 'journey-coin' | 'starforce-scroll' | 'miracle-cube' | 'additional-cube'
 
 type GameItemMeta = {
 	id: GameItemId
@@ -13,6 +13,11 @@ type GameItemMeta = {
 }
 
 const GAME_ITEM_META = {
+	meso: {
+		id: 'meso',
+		label: '메소',
+		imageSrc: '/items/meso.png'
+	},
 	'journey-coin': {
 		id: 'journey-coin',
 		label: '여정의 증표',

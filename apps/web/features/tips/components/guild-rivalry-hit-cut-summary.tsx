@@ -8,7 +8,9 @@ import {
 	GUILD_RIVALRY_MOBS_PER_STAGE,
 	GUILD_RIVALRY_SPAWN_HIT_BONUS,
 	GUILD_RIVALRY_SPAWN_HIT_DECAY,
-	GUILD_RIVALRY_SPAWN_HIT_DECAY_INTERVAL_SEC
+	GUILD_RIVALRY_SPAWN_HIT_DECAY_INTERVAL_SEC,
+	GUILD_RIVALRY_TIME_LIMIT_REFILL_SEC,
+	GUILD_RIVALRY_TIME_LIMIT_SEC
 } from '@/features/tips/lib/guild-rivalry-hit-cut.constants'
 
 function EmphasizedText({ children }: { children: React.ReactNode }) {
@@ -24,6 +26,12 @@ function GuildRivalryHitCutSummary() {
 			</CardHeader>
 			<CardContent>
 				<ul className="text-grayscale-600 list-disc space-y-1.5 pl-5 text-sm md:text-base">
+					<li>
+						제한시간 <EmphasizedText>{GUILD_RIVALRY_TIME_LIMIT_SEC}초</EmphasizedText> 가 주어집니다. 제한시간 내에
+						단계를 클리어하면 제한시간이 <EmphasizedText>{GUILD_RIVALRY_TIME_LIMIT_REFILL_SEC}초</EmphasizedText> 씩
+						충전되며, 충전되어도 기본 제한시간 <EmphasizedText>{GUILD_RIVALRY_TIME_LIMIT_SEC}초</EmphasizedText> 는 넘지
+						않습니다.
+					</li>
 					<li>
 						보스 등장 전 잡몹이 <EmphasizedText>{GUILD_RIVALRY_MOBS_PER_STAGE}마리</EmphasizedText> 나옵니다. 잡몹을
 						처치하면 마리당 <EmphasizedText>+{GUILD_RIVALRY_BUFF_STACK_PER_MOB}</EmphasizedText> 스택을 얻어 단계마다{' '}
