@@ -39,7 +39,7 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 				render={
 					<Button variant="outline" size="sm" className="text-grayscale-600 shrink-0 gap-1.5" aria-label="직업 분포">
 						<UsersIcon className="size-4" />
-						<span className="hidden md:inline">직업 분포</span>
+						<span className="hidden lg:inline">직업 분포</span>
 					</Button>
 				}
 			/>

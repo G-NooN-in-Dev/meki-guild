@@ -53,9 +53,9 @@ function ExpeditionTierGuide() {
 						aria-label="토벌전 등급별 포인트"
 					>
 						<CircleHelpIcon className="size-4" />
-						{/* 모바일은 짧은 라벨, md 이상에서 전체 문구 */}
-						<span className="md:hidden">토벌</span>
-						<span className="hidden md:inline">토벌전 등급별 포인트</span>
+						{/* 태블릿 이하는 짧은 라벨, lg 이상에서 전체 문구 */}
+						<span className="lg:hidden">토벌</span>
+						<span className="hidden lg:inline">토벌전 등급별 포인트</span>
 					</Button>
 				}
 			/>

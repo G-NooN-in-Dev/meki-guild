@@ -139,7 +139,7 @@ function WeeklyGrowthLeaders({ comparisons }: WeeklyGrowthLeadersProps) {
 						aria-label="금주의 길드원"
 					>
 						<TrophyIcon className="size-4" />
-						<span className="hidden md:inline">금주의 길드원</span>
+						<span className="hidden lg:inline">금주의 길드원</span>
 					</Button>
 				}
 			/>
