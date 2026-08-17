@@ -30,7 +30,7 @@
 
 ## colors (`--color-*`)
 
-- 파스텔 팔레트: `pastel-red`, `pastel-orange`, `pastel-yellow`, `pastel-green`, `pastel-blue`, `pastel-purple`
+- 파스텔 팔레트: `pastel-red`, `pastel-orange`, `pastel-yellow`, `pastel-green`, `pastel-blue`, `pastel-navy`, `pastel-purple`
   - Tailwind 기본 색상명(`red`, `blue` 등)과 충돌하지 않도록 `pastel-` 접두사 사용
   - 각 팔레트는 기본값(`--color-pastel-red` 등)과 `50..950` 스케일 제공
 - 기본 텍스트/보더: `grayscale`

@@ -64,6 +64,7 @@ function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): strin
 /**
  * 직업명 text 색.
  * 스프레드시트 배경색 톤을 따르되, 밝은 테이블에서도 읽히도록 700~800 계열로 맞춥니다.
+ * 캡틴은 총기·제복 톤에 맞춰 pastel-navy를 씁니다.
  */
 export const JOB_TEXT_CLASS = {
 	다크나이트: 'text-grayscale-600',
@@ -79,7 +80,7 @@ export const JOB_TEXT_CLASS = {
 	섀도어: 'text-pastel-purple-700',
 	나이트워커: 'text-pastel-purple-700',
 	바이퍼: 'text-pastel-red-800',
-	캡틴: 'text-grayscale-700'
+	캡틴: 'text-pastel-navy-800'
 } as const satisfies Record<keyof typeof JOB_TO_CLASS_LINE, string>
 
 const FALLBACK_JOB_TEXT_CLASS = 'text-grayscale-700'
@@ -106,7 +107,7 @@ export const JOB_BADGE_CLASS = {
 	섀도어: 'border-transparent bg-pastel-purple-100 text-pastel-purple-700',
 	나이트워커: 'border-transparent bg-pastel-purple-100 text-pastel-purple-700',
 	바이퍼: 'border-transparent bg-pastel-red-100 text-pastel-red-800',
-	캡틴: 'border-transparent bg-grayscale-100 text-grayscale-700'
+	캡틴: 'border-transparent bg-pastel-navy-100 text-pastel-navy-800'
 } as const satisfies Record<keyof typeof JOB_TO_CLASS_LINE, string>
 
 const FALLBACK_JOB_BADGE_CLASS = 'border-transparent bg-grayscale-100 text-grayscale-600'
