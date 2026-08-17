@@ -36,6 +36,16 @@ type SortDirection = 'asc' | 'desc'
 const GUILD_MEMBER_TABLE_COLUMN_COUNT =
 	9 + (isGuildMetricVisible('training') ? 1 : 0) + (isGuildMetricVisible('guildBoss') ? 1 : 0)
 
+/**
+ * 가로 스크롤 시 #·이름 열을 왼쪽에 고정합니다.
+ * 이름 열 `left-12`는 # 열 너비(`w-12`)와 같아야 겹치지 않습니다.
+ */
+const stickyIndexHeadClassName = 'sticky left-0 w-12 min-w-12'
+const stickyNameHeadClassName = 'sticky left-12 min-w-28 border-r border-grayscale-200'
+const stickyIndexCellClassName = 'sticky left-0 z-[1] w-12 min-w-12 bg-card group-hover:bg-grayscale-50'
+const stickyNameCellClassName =
+	'sticky left-12 z-[1] min-w-28 border-r border-grayscale-200 bg-card group-hover:bg-grayscale-50'
+
 type GuildMemberTableProps = {
 	comparisons: GuildMemberComparison[]
 	rankings: MemberRankings
@@ -292,10 +302,10 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 			{/* 가로·세로 스크롤을 카드 안에서만 — 헤더 고정은 Table 컨테이너가 스크롤 기준이어야 함 */}
 			<div className="border-grayscale-200 bg-card shadow-soft w-full min-w-0 overflow-hidden rounded-xl border">
 				<Table containerClassName="max-h-[min(70dvh,48rem)] overflow-auto">
-					<TableHeader sticky className="[&>tr>th]:bg-grayscale-50">
+					<TableHeader sticky className="[&>tr>th]:bg-grayscale-50 [&>tr>th:nth-child(-n+2)]:z-20">
 						<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">
-							<TableHead className="text-grayscale-500 w-12">#</TableHead>
-							<TableHead className="text-grayscale-500">이름</TableHead>
+							<TableHead className={cn('text-grayscale-500', stickyIndexHeadClassName)}>#</TableHead>
+							<TableHead className={cn('text-grayscale-500', stickyNameHeadClassName)}>이름</TableHead>
 							<TableHead className="text-grayscale-500">직업</TableHead>
 							<SortableHead
 								label="레벨"
@@ -362,9 +372,9 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 							</TableRow>
 						) : (
 							sortedComparisons.map((comparison, index) => (
-								<TableRow key={comparison.name} className={cn(comparison.status === 'left' && 'opacity-60')}>
-									<TableCell className="text-grayscale-400">{index + 1}</TableCell>
-									<TableCell>
+								<TableRow key={comparison.name} className={cn('group', comparison.status === 'left' && 'opacity-60')}>
+									<TableCell className={cn('text-grayscale-400', stickyIndexCellClassName)}>{index + 1}</TableCell>
+									<TableCell className={stickyNameCellClassName}>
 										{/* 이름은 주 정보, 자세히 보기는 이름 아래 보조 링크로 배치 */}
 										<div className="flex flex-col items-start gap-0.5">
 											<span className="inline-flex items-center font-bold">
