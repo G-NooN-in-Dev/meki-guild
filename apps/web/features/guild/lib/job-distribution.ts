@@ -80,13 +80,27 @@ function calculateJobDistribution(comparisons: GuildMemberComparison[]): JobDist
 
 type JobCountSortDirection = 'asc' | 'desc'
 
+const hasCountChanged = (row: JobDistributionRow) => row.count !== row.previousCount
+
 function sortJobDistributionRows(rows: JobDistributionRow[], direction: JobCountSortDirection): JobDistributionRow[] {
 	return [...rows].sort((left, right) => {
-		if (left.count === right.count) {
-			return left.job.localeCompare(right.job, 'ko')
+		if (left.count !== right.count) {
+			return direction === 'desc' ? right.count - left.count : left.count - right.count
 		}
 
-		return direction === 'desc' ? right.count - left.count : left.count - right.count
+		const leftChanged = hasCountChanged(left)
+		const rightChanged = hasCountChanged(right)
+
+		// 현재 인원이 같으면: 직전 대비 변화가 있는 행 → 직전 인원 많은 순
+		if (leftChanged !== rightChanged) {
+			return leftChanged ? -1 : 1
+		}
+
+		if (left.previousCount !== right.previousCount) {
+			return right.previousCount - left.previousCount
+		}
+
+		return left.job.localeCompare(right.job, 'ko')
 	})
 }
 
