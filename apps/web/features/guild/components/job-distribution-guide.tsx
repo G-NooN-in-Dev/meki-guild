@@ -39,8 +39,6 @@ function JobDistributionGuide({ comparisons }: JobDistributionGuideProps) {
 				render={
 					<Button variant="outline" size="sm" className="text-grayscale-600 shrink-0 gap-1.5" aria-label="직업 분포">
 						<UsersIcon className="size-4" />
-						{/* 모바일은 짧은 라벨, md 이상에서 전체 문구 */}
-						<span className="md:hidden">직업</span>
 						<span className="hidden md:inline">직업 분포</span>
 					</Button>
 				}

@@ -40,8 +40,6 @@ function ContentUpdatedAtGuide() {
 						aria-label="업데이트 기준일"
 					>
 						<CalendarClockIcon className="size-4" />
-						{/* 모바일은 짧은 라벨, md 이상에서 전체 문구 */}
-						<span className="md:hidden">기준일</span>
 						<span className="hidden md:inline">업데이트 기준일</span>
 					</Button>
 				}
