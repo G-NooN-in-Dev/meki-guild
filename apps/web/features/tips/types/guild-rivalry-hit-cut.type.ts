@@ -4,7 +4,7 @@ type GuildRivalryHitCutEntry = {
 	stage: number
 	/** 해당 단계까지 잡몹 처치로 쌓인 보스 데미지 증가 스택 합계 */
 	buffStack: number
-	/** 해당 단계 진입에 필요한 명중 수치 */
+	/** 해당 단계 보스/일반몹 기본 명중컷 (잡몹 소환 보정 제외) */
 	requiredHit: number
 }
 
