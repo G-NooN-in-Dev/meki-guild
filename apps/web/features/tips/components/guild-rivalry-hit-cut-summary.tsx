@@ -27,13 +27,14 @@ function GuildRivalryHitCutSummary() {
 					<li>
 						보스 등장 전 잡몹이 <EmphasizedText>{GUILD_RIVALRY_MOBS_PER_STAGE}마리</EmphasizedText> 나옵니다. 잡몹을
 						처치하면 마리당 <EmphasizedText>+{GUILD_RIVALRY_BUFF_STACK_PER_MOB}</EmphasizedText> 스택을 얻어 단계마다{' '}
-						<EmphasizedText>+{GUILD_RIVALRY_BUFF_STACK_PER_STAGE}</EmphasizedText> 스택이 증가합니다
+						<EmphasizedText>+{GUILD_RIVALRY_BUFF_STACK_PER_STAGE}</EmphasizedText> 스택이 증가합니다.
 					</li>
 					<li>
 						잡몹이 등장하면 필요 명중이 표의 기본 수치에서{' '}
 						<EmphasizedText>+{GUILD_RIVALRY_SPAWN_HIT_BONUS}</EmphasizedText> 증가하고, 이후{' '}
 						<EmphasizedText>{GUILD_RIVALRY_SPAWN_HIT_DECAY_INTERVAL_SEC}초</EmphasizedText> 마다{' '}
-						<EmphasizedText>−{GUILD_RIVALRY_SPAWN_HIT_DECAY}</EmphasizedText> 씩 감소합니다
+						<EmphasizedText>−{GUILD_RIVALRY_SPAWN_HIT_DECAY}</EmphasizedText> 씩 감소합니다. 기본 수치 이하로는 내려가지
+						않습니다.
 					</li>
 					<li>
 						보스 몬스터의 공격을 받으면 스택이{' '}
@@ -41,11 +42,11 @@ function GuildRivalryHitCutSummary() {
 					</li>
 					<li>
 						명중이 필요 수치보다 높으면 최대 <EmphasizedText>{GUILD_RIVALRY_HIT_BONUS_MAX_DIFF}</EmphasizedText>{' '}
-						차이까지 <EmphasizedText>최종 데미지</EmphasizedText> 가 증가합니다
+						차이까지 <EmphasizedText>최종 데미지</EmphasizedText> 가 증가합니다.
 					</li>
 					<li>
 						보스 몬스터를 <EmphasizedText>막타</EmphasizedText>칠 때 남아 있던{' '}
-						<EmphasizedText>보스의 체력</EmphasizedText> 에 따라 <EmphasizedText>점수</EmphasizedText>가 증가합니다
+						<EmphasizedText>보스의 체력</EmphasizedText> 에 따라 <EmphasizedText>점수</EmphasizedText>가 증가합니다.
 					</li>
 				</ul>
 			</CardContent>
