@@ -1,6 +1,9 @@
 /** 사이트 전역 BGM — `apps/web/public/audio` 기준 */
 export const BGM_SRC = '/audio/maple-ereb-bgm.mp3'
 
+/** 접속 시 BGM 자동재생 여부. 사용자가 토글로 켤 때만 재생합니다. */
+export const BGM_DEFAULT_PLAYING = false
+
 /** 기본 볼륨 (0~1). 너무 크지 않게 낮춰 둡니다. */
 export const BGM_DEFAULT_VOLUME = 0.5
 
