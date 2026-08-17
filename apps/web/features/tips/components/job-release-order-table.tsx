@@ -109,7 +109,7 @@ function JobReleaseOrderTable() {
 
 	return (
 		<div className="grid gap-8 lg:grid-cols-2 lg:items-start">
-			<JobReleaseGroupTable title="출시" count={releasedCount} rows={JOB_RELEASED_TABLE_ROWS} />
+			<JobReleaseGroupTable title="출시" count={releasedCount} rows={JOB_RELEASED_TABLE_ROWS} scrollable={false} />
 			<JobReleaseGroupTable title="미출시" count={upcomingCount} rows={JOB_UPCOMING_TABLE_ROWS} scrollable={false} />
 		</div>
 	)
