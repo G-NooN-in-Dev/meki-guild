@@ -15,13 +15,18 @@ import { getJobClassLineBadgeClass, type JobClassLine } from '@/libs/job-class.c
 const gridBorderClassName = 'border-grayscale-300 border-r border-b last:border-r-0'
 const headerClassName = cn(
 	gridBorderClassName,
-	'sticky top-0 z-20 bg-grayscale-100 text-grayscale-700 px-3 text-center text-xs md:text-sm'
+	'sticky top-0 z-20 bg-grayscale-100 text-grayscale-700 px-2 text-center text-xs md:px-3 md:text-sm'
 )
-const cellClassName = cn(gridBorderClassName, 'px-3 py-2 text-xs whitespace-nowrap md:py-2.5 md:text-sm')
+const cellClassName = cn(gridBorderClassName, 'px-2 py-2 text-xs whitespace-nowrap md:px-3 md:py-2.5 md:text-sm')
+
+/** YYYY.MM.DD · ‘출시 일자’ 헤더가 들어가도록 두 표가 같은 너비를 씁니다. */
+const dateColumnClassName = 'w-28 md:w-32 lg:w-36'
+/** 뱃지 1개 기준. lg에서는 제논처럼 계열이 둘이면 한 줄에 들어가도록 더 넓힙니다. */
+const classLineColumnClassName = 'w-24 md:w-28 lg:w-32'
 
 function JobClassLineBadges({ classLines }: { classLines: readonly JobClassLine[] }) {
 	return (
-		<div className="flex items-center justify-center gap-1">
+		<div className="flex flex-col items-center justify-center gap-1 lg:flex-row">
 			{classLines.map((classLine) => (
 				<Badge key={classLine} variant="outline" className={getJobClassLineBadgeClass(classLine)}>
 					{classLine}
@@ -59,11 +64,11 @@ function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobRele
 						'**:data-[slot=table-container]:max-h-[min(70dvh,44rem)] **:data-[slot=table-container]:overflow-auto'
 				)}
 			>
-				<Table className="w-full border-separate border-spacing-0">
+				<Table className="w-full table-fixed border-separate border-spacing-0">
 					<TableHeader className="[&_tr]:border-0">
 						<TableRow className="hover:bg-transparent">
-							<TableHead className={headerClassName}>출시 일자</TableHead>
-							<TableHead className={headerClassName}>직업군</TableHead>
+							<TableHead className={cn(headerClassName, dateColumnClassName)}>출시 일자</TableHead>
+							<TableHead className={cn(headerClassName, classLineColumnClassName)}>직업군</TableHead>
 							<TableHead className={cn(headerClassName, 'text-left')}>직업명</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -78,16 +83,23 @@ function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobRele
 											rowSpan={dateRowSpan}
 											className={cn(
 												cellClassName,
+												dateColumnClassName,
 												'bg-grayscale-100 text-grayscale-800 text-center font-medium tabular-nums'
 											)}
 										>
 											{formatReleaseDateLabel(releasedAt)}
 										</TableCell>
 									) : null}
-									<TableCell className={cn(cellClassName, index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50')}>
+									<TableCell
+										className={cn(
+											cellClassName,
+											classLineColumnClassName,
+											index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50'
+										)}
+									>
 										<JobClassLineBadges classLines={classLines} />
 									</TableCell>
-									<TableCell className={cn(cellClassName, index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50')}>
+									<TableCell className={cn(cellClassName, 'min-w-0', index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50')}>
 										<span className="text-grayscale-900 font-medium">{getJobReleaseDisplayName(row)}</span>
 									</TableCell>
 								</TableRow>
