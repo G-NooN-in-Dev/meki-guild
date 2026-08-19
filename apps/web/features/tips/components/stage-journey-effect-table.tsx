@@ -36,15 +36,16 @@ const PLACEHOLDER_SLOT: StageJourneyEffectSlot = {
 	}
 }
 
+/** 데스크탑 8열: md는 촘촘, lg부터 글자·패딩을 키움 */
 const labelHeaderClassName =
-	'bg-grayscale-100 text-grayscale-600 sticky left-0 z-30 w-[26%] min-w-0 px-2 text-left text-xs sm:w-[22%] sm:px-3 sm:text-sm'
+	'bg-grayscale-100 text-grayscale-600 sticky left-0 z-30 w-[26%] min-w-0 px-2 text-left text-xs lg:w-[20%] lg:px-3 lg:text-sm'
 const labelCellClassName =
-	'bg-grayscale-50 sticky left-0 z-[1] w-[26%] min-w-0 px-2 py-2.5 text-left align-middle sm:w-[22%] sm:px-3 sm:py-3'
+	'bg-grayscale-50 sticky left-0 z-[1] w-[26%] min-w-0 px-2 py-2.5 text-left align-middle lg:w-[20%] lg:px-3 lg:py-3'
 const gradeHeaderClassName =
-	'min-w-0 overflow-hidden px-1 py-2 text-center text-[11px] leading-tight whitespace-normal sm:px-1.5 sm:text-xs md:px-2 md:text-sm'
-const gradeCellClassName = 'min-w-0 overflow-hidden px-1 py-2.5 text-center align-middle sm:px-1.5 sm:py-3 md:px-2'
+	'min-w-0 overflow-hidden px-1 py-2 text-center text-[11px] leading-tight whitespace-normal sm:px-1.5 sm:text-xs lg:px-2 lg:text-sm'
+const gradeCellClassName = 'min-w-0 overflow-hidden px-1 py-2.5 text-center align-middle sm:px-1.5 sm:py-3 lg:px-2'
 const gradeValueClassName =
-	'text-grayscale-900 text-[11px] leading-snug font-semibold tabular-nums sm:text-xs md:text-sm'
+	'text-grayscale-900 text-[11px] leading-snug font-semibold tabular-nums sm:text-xs lg:text-sm'
 
 const mobileGradeHeaderClassName =
 	'bg-grayscale-100 text-grayscale-600 sticky left-0 z-30 w-[28%] min-w-0 px-2 text-center text-xs'
@@ -130,7 +131,7 @@ function StageJourneyEffectMobileTable({ chapter, slots }: StageJourneyEffectGri
 /** 넓은 화면용 효과 3행 × 등급 7열 표. */
 function StageJourneyEffectDesktopTable({ chapter, slots }: StageJourneyEffectGridProps) {
 	return (
-		<Table className="w-full min-w-2xl table-fixed">
+		<Table className="w-full min-w-2xl table-fixed lg:min-w-3xl">
 			<TableHeader className="sticky top-0 z-20">
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
 					<TableHead className={labelHeaderClassName}>보유 효과</TableHead>
@@ -167,7 +168,8 @@ function StageJourneyEffectDesktopTable({ chapter, slots }: StageJourneyEffectGr
 
 /**
  * 선택한 챕터의 보유 효과 표.
- * lg 미만은 등급이 행·효과가 열, lg 이상은 효과가 행·등급이 열입니다.
+ * md 미만은 등급이 행·효과가 열, md 이상은 효과가 행·등급이 열입니다.
+ * 태블릿에서는 8열 최소 너비 때문에 가로 스크롤이 날 수 있습니다.
  */
 function StageJourneyEffectTable({ chapter }: StageJourneyEffectTableProps) {
 	const entry = getStageJourneyChapter(chapter)
@@ -219,10 +221,10 @@ function StageJourneyEffectTable({ chapter }: StageJourneyEffectTableProps) {
 			</div>
 
 			<div className="border-grayscale-200 bg-card shadow-soft overflow-auto rounded-xl border">
-				<div className="lg:hidden">
+				<div className="md:hidden">
 					<StageJourneyEffectMobileTable chapter={entry.chapter} slots={displaySlots} />
 				</div>
-				<div className="hidden lg:block">
+				<div className="hidden md:block">
 					<StageJourneyEffectDesktopTable chapter={entry.chapter} slots={displaySlots} />
 				</div>
 			</div>

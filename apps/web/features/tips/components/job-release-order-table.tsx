@@ -15,18 +15,18 @@ import { getJobClassLineBadgeClass, type JobClassLine } from '@/libs/job-class.c
 const gridBorderClassName = 'border-grayscale-300 border-r border-b last:border-r-0'
 const headerClassName = cn(
 	gridBorderClassName,
-	'sticky top-0 z-20 bg-grayscale-100 text-grayscale-700 px-2 text-center text-xs md:px-3 md:text-sm'
+	'sticky top-0 z-20 bg-grayscale-100 text-grayscale-700 px-2 text-center text-xs lg:px-3 lg:text-sm'
 )
-const cellClassName = cn(gridBorderClassName, 'px-2 py-2 text-xs whitespace-nowrap md:px-3 md:py-2.5 md:text-sm')
+const cellClassName = cn(gridBorderClassName, 'px-2 py-2 text-xs whitespace-nowrap lg:px-3 lg:py-2.5 lg:text-sm')
 
-/** YYYY.MM.DD · ‘출시 일자’ 헤더가 들어가도록 두 표가 같은 너비를 씁니다. */
-const dateColumnClassName = 'w-28 md:w-32 lg:w-36'
-/** 뱃지 1개 기준. lg에서는 제논처럼 계열이 둘이면 한 줄에 들어가도록 더 넓힙니다. */
-const classLineColumnClassName = 'w-24 md:w-28 lg:w-32'
+/** YYYY.MM.DD · sm 2열에서는 좁게, lg부터 헤더 문구가 여유 있게 */
+const dateColumnClassName = 'w-28 lg:w-32 xl:w-36'
+/** 뱃지 1개 기준. xl에서 제논처럼 계열이 둘이면 한 줄에 들어가도록 더 넓힘 */
+const classLineColumnClassName = 'w-24 lg:w-28 xl:w-32'
 
 function JobClassLineBadges({ classLines }: { classLines: readonly JobClassLine[] }) {
 	return (
-		<div className="flex flex-col items-center justify-center gap-1 lg:flex-row">
+		<div className="flex flex-col items-center justify-center gap-1 xl:flex-row">
 			{classLines.map((classLine) => (
 				<Badge key={classLine} variant="outline" className={getJobClassLineBadgeClass(classLine)}>
 					{classLine}
@@ -114,13 +114,14 @@ function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobRele
 
 /**
  * 메키 출시(왼쪽) · 미출시(오른쪽) 두 표.
- * 넓은 화면은 2열, 좁은 화면은 출시 표가 위로 옵니다.
+ * sm 미만은 1열(출시 표가 위), sm(640px)부터 2열.
+ * sm~lg는 열·글자를 촘촘히, lg부터 패딩·글자, xl에서 계열 뱃지를 가로로 둡니다.
  */
 function JobReleaseOrderTable() {
 	const { releasedCount, upcomingCount } = JOB_RELEASE_STATS
 
 	return (
-		<div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+		<div className="grid gap-6 sm:grid-cols-2 sm:items-start lg:gap-8">
 			<JobReleaseGroupTable title="출시" count={releasedCount} rows={JOB_RELEASED_TABLE_ROWS} scrollable={false} />
 			<JobReleaseGroupTable title="미출시" count={upcomingCount} rows={JOB_UPCOMING_TABLE_ROWS} scrollable={false} />
 		</div>

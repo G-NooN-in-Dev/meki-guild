@@ -56,11 +56,13 @@ export { default } from '@shared/tailwind-config/postcss'
   - 컴팩트 모바일: `xxs` (`>=320px`)
   - 모바일 기본: `<sm`
   - 태블릿: `md` (`>=768px`)
+  - 큰 태블릿·작은 랩탑: `tab` (`>=896px`)
   - 데스크탑: `lg` 이상 (`>=1024px`)
-- 모바일 우선으로 작성하고, `md`, `lg`에서 점진적으로 덮어씁니다.
+- 모바일 우선으로 작성하고, `md`, `tab`, `lg`에서 점진적으로 덮어씁니다.
+- `tab`은 다열 표처럼 md와 lg 사이에서만 레이아웃이 갈리는 경우에 씁니다.
 - 매우 좁은 화면은 base/`xxs`부터 시작하고 `xs`에서 확장합니다.
 - 페이지 레이아웃은 `container`와 폭 토큰을 조합합니다.
-  - 페이지 셸: `container max-w-content`
+  - 헤더/푸터·페이지 셸: `container max-w-content`
   - 본문/설명: `max-w-reading` 또는 `max-w-prose`
 - 모바일 브라우저 높이 변화 대응이 필요하면 `min-h-screen` 대신 `min-h-screen-safe`를 사용합니다.
 - 권장 간격 패턴 예시:

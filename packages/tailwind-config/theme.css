@@ -27,6 +27,8 @@
 	--breakpoint-xs: 480px;
 	--breakpoint-sm: 640px;
 	--breakpoint-md: 768px;
+	/* md(768)와 lg(1024) 사이. 다열 표처럼 768은 좁고 1024는 넓은 구간에 사용 */
+	--breakpoint-tab: 896px;
 	--breakpoint-lg: 1024px;
 	--breakpoint-xl: 1280px;
 	--breakpoint-2xl: 1536px;
@@ -37,6 +39,7 @@
 	--container-padding-xs: 1rem;
 	--container-padding-sm: 1.25rem;
 	--container-padding-md: 1.5rem;
+	--container-padding-tab: 1.5rem;
 	--container-padding-lg: 1.5rem;
 	--container-padding-xl: 2rem;
 	--container-padding-2xl: 2.5rem;
@@ -245,7 +248,8 @@
 	--color-sidebar-ring: var(--color-grayscale-900);
 
 	--max-width-prose: 70ch;
-	--max-width-content: 72rem;
+	/* 헤더·푸터·전 페이지 셸 공통 폭 */
+	--max-width-content: 88rem;
 	--max-width-reading: 65ch;
 
 	--min-height-screen-safe: 100dvh;

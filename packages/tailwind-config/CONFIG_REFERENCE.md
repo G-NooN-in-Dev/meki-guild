@@ -18,10 +18,11 @@
 
 ## breakpoints (`--breakpoint-*`)
 
-- `xxs: 320px`, `xs: 480px`, `sm: 640px`, `md: 768px`, `lg: 1024px`, `xl: 1280px`, `2xl: 1536px`
+- `xxs: 320px`, `xs: 480px`, `sm: 640px`, `md: 768px`, `tab: 896px`, `lg: 1024px`, `xl: 1280px`, `2xl: 1536px`
+- `tab`: md와 lg 사이. 4열 표처럼 768px은 좁고 1024px은 넓은 레이아웃에 사용
 - 모바일 우선 설계:
   - base 스타일을 먼저 작성
-  - 이후 `xxs:`, `xs:`, `md:`, `lg:` 순서로 확장
+  - 이후 `xxs:`, `xs:`, `md:`, `tab:`, `lg:` 순서로 확장
 
 ## fontFamily (`--font-*`)
 
@@ -71,7 +72,7 @@
 
 - `max-w-prose`: 긴 본문 텍스트
 - `max-w-reading`: 설명/문단 블록
-- `max-w-content`: 페이지 메인 셸
+- `max-w-content`: 헤더·푸터·페이지 메인 셸 (88rem)
 
 ## minHeight (`--min-height-*`)
 

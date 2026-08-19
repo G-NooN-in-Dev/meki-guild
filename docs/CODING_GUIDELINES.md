@@ -327,7 +327,8 @@ IntelliSense `suggestCanonicalClasses`("can be written as …")를 따릅니다.
 
 - **구현 우선순위:** 데스크탑 UI를 먼저 완성한 뒤 모바일/태블릿을 보완합니다.
 - **최종 코드:** mobile-first Tailwind 문법을 유지합니다. base는 최소 안전 레이아웃, 데스크탑 완성 기준은 `lg:` 이상으로 분리합니다.
-- 브레이크포인트: `xxs` → `xs` → `md` → `lg` 순으로 확장합니다.
+- 브레이크포인트: `xxs` → `xs` → `md` → `tab` → `lg` 순으로 확장합니다.
+- `tab`(896px)은 md와 lg 사이가 필요할 때만 씁니다. (예: 유물 효과 4열 표)
 - 폴더블/초소형은 `xxs`를 기준으로 보완합니다.
 
 ---

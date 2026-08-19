@@ -15,7 +15,7 @@ function createInitialStageByRelicId() {
 
 /**
  * 유물별 장착·보유 효과.
- * 좁은 화면은 카드, lg 이상은 표. 각성 상태는 둘 다 같습니다.
+ * tab(896px) 미만은 카드, 이상은 4열 표. 각성 상태는 둘 다 같습니다.
  */
 function RelicEffectTable() {
 	const [stageByRelicId, setStageByRelicId] = useState(createInitialStageByRelicId)
@@ -49,7 +49,7 @@ function RelicEffectTable() {
 				<RelicPotentialTable />
 			</div>
 
-			<div className="flex flex-col gap-2 lg:hidden">
+			<div className="tab:hidden flex flex-col gap-2">
 				{rows.map((row) => (
 					<RelicEffectCard
 						key={row.relic.id}
@@ -59,7 +59,7 @@ function RelicEffectTable() {
 				))}
 			</div>
 
-			<div className="hidden lg:block">
+			<div className="tab:block hidden">
 				<RelicEffectDesktopTable rows={rows} onStageChange={handleStageChange} />
 			</div>
 		</div>
