@@ -59,7 +59,7 @@ export const CONTENT_STAGE_CUTS = [
 		name: '자쿰',
 		rewards: ['모자', '눈장식'],
 		kind: 'boss-raid',
-		stageCuts: { easy: '13-10', normal: '18-10', hard: '25-10', chaos: '31-15' }
+		stageCuts: { easy: '13-10', normal: '18-10', hard: '25-10', chaos: '30-15' }
 	},
 	{
 		name: '여신의 흔적',
