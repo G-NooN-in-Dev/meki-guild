@@ -16,9 +16,7 @@ function ChangelogSection() {
 		<section className="flex w-full min-w-0 flex-col gap-6 md:gap-8">
 			<header className="flex flex-col gap-2">
 				<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">업데이트 일지</h1>
-				<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
-					사이트에 반영된 변경 사항을 최신 버전부터 모았습니다.
-				</p>
+				<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">사이트에 반영된 변경 사항 이력입니다.</p>
 			</header>
 
 			{hasEntries ? (
