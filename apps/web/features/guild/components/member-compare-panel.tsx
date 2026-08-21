@@ -13,7 +13,7 @@ import {
 } from '@/features/guild/types/guild-snapshot.type'
 import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
 import { getGuildContentCriteriaLabel, GUILD_CONTENT_UPDATED_AT } from '@/libs/guild-content-dates.constants'
-import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
+import { getGuildContentsOrder, type GuildContentsOrderKey } from '@/libs/guild-contents-order.constants'
 
 type MemberComparePanelProps = {
 	comparison: MemberVsMemberComparison
@@ -368,47 +368,52 @@ function buildCompareRows(comparison: MemberVsMemberComparison, rankings: Member
 			selfRankLabel: formatRankLabel(rankings.rivalry, leftName),
 			opponentRankLabel: formatRankLabel(rankings.rivalry, rightName)
 		},
-		...(isGuildMetricVisible('training')
-			? [
-					{
-						label: '수련장',
-						selfValue: comparison.training.leftLabel,
-						opponentValue: comparison.training.rightLabel,
-						diffLabel: comparison.training.diffLabel,
-						diffPercentLabel: comparison.training.diffPercentLabel,
-						winner: comparison.training.winner,
-						contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.training.current,
-						selfRankLabel: formatRankLabel(rankings.training, leftName),
-						opponentRankLabel: formatRankLabel(rankings.training, rightName)
-					} satisfies CompareRow
-				]
-			: []),
-		...(isGuildMetricVisible('guildBoss')
-			? [
-					{
-						label: '길드보스',
-						selfValue: comparison.guildBoss.leftHasValue ? comparison.guildBoss.leftLabel : GUILD_EMPTY_VALUE_LABEL,
-						opponentValue: comparison.guildBoss.rightHasValue
-							? comparison.guildBoss.rightLabel
-							: GUILD_EMPTY_VALUE_LABEL,
-						diffLabel:
-							comparison.guildBoss.leftHasValue && comparison.guildBoss.rightHasValue
-								? comparison.guildBoss.diffLabel
-								: null,
-						diffPercentLabel:
-							comparison.guildBoss.leftHasValue && comparison.guildBoss.rightHasValue
-								? comparison.guildBoss.diffPercentLabel
-								: null,
-						winner: comparison.guildBoss.winner,
-						contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.guildBoss.current,
-						selfRankLabel: comparison.guildBoss.leftHasValue ? formatRankLabel(rankings.guildBoss, leftName) : null,
-						opponentRankLabel: comparison.guildBoss.rightHasValue
-							? formatRankLabel(rankings.guildBoss, rightName)
-							: null
-					} satisfies CompareRow
-				]
-			: [])
+		...getGuildContentsOrder().map(({ key, label }) => createOrderedCompareRow(key, label, comparison, rankings))
 	]
+}
+
+/** 표시 순서 컨텐츠 비교 행 — 키별 필드·순위 매핑 */
+function createOrderedCompareRow(
+	key: GuildContentsOrderKey,
+	label: string,
+	comparison: MemberVsMemberComparison,
+	rankings: MemberRankings
+): CompareRow {
+	const leftName = comparison.left.name
+	const rightName = comparison.right.name
+
+	switch (key) {
+		case 'training':
+			return {
+				label,
+				selfValue: comparison.training.leftLabel,
+				opponentValue: comparison.training.rightLabel,
+				diffLabel: comparison.training.diffLabel,
+				diffPercentLabel: comparison.training.diffPercentLabel,
+				winner: comparison.training.winner,
+				contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.training.current,
+				selfRankLabel: formatRankLabel(rankings.training, leftName),
+				opponentRankLabel: formatRankLabel(rankings.training, rightName)
+			}
+		case 'guildBoss':
+			return {
+				label,
+				selfValue: comparison.guildBoss.leftHasValue ? comparison.guildBoss.leftLabel : GUILD_EMPTY_VALUE_LABEL,
+				opponentValue: comparison.guildBoss.rightHasValue ? comparison.guildBoss.rightLabel : GUILD_EMPTY_VALUE_LABEL,
+				diffLabel:
+					comparison.guildBoss.leftHasValue && comparison.guildBoss.rightHasValue
+						? comparison.guildBoss.diffLabel
+						: null,
+				diffPercentLabel:
+					comparison.guildBoss.leftHasValue && comparison.guildBoss.rightHasValue
+						? comparison.guildBoss.diffPercentLabel
+						: null,
+				winner: comparison.guildBoss.winner,
+				contentUpdatedAt: GUILD_CONTENT_UPDATED_AT.guildBoss.current,
+				selfRankLabel: comparison.guildBoss.leftHasValue ? formatRankLabel(rankings.guildBoss, leftName) : null,
+				opponentRankLabel: comparison.guildBoss.rightHasValue ? formatRankLabel(rankings.guildBoss, rightName) : null
+			}
+	}
 }
 
 function MemberSummaryCard({ role, name, job }: { role: '나' | '상대방'; name: string; job: string }) {

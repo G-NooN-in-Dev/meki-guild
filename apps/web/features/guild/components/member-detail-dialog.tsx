@@ -15,7 +15,7 @@ import {
 	GUILD_CONTENT_UPDATED_AT,
 	type GuildContentDateRange
 } from '@/libs/guild-content-dates.constants'
-import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
+import { getGuildContentsOrder, type GuildContentsOrderKey } from '@/libs/guild-contents-order.constants'
 import { formatPlacementRank } from '@/utils/format-korean-number'
 
 type MemberDetailDialogProps = {
@@ -119,37 +119,48 @@ function buildDetailRows(
 			previousRankLabel: formatRankLabel(previousRankings.rivalry, name),
 			rankDiffLabel: formatRankDiffLabel(rankings.rivalry, previousRankings.rivalry, name)
 		},
-		...(isGuildMetricVisible('training')
-			? [
-					{
-						label: '수련장',
-						currentLabel: comparison.training.currentLabel,
-						previousLabel: formatPreviousValue(comparison.training.previousLabel),
-						diffLabel: comparison.training.diffLabel,
-						diffPercentLabel: comparison.training.diffPercentLabel,
-						contentDates: GUILD_CONTENT_UPDATED_AT.training,
-						rankLabel: comparison.training.hasValue ? formatRankLabel(rankings.training, name) : null,
-						previousRankLabel: formatRankLabel(previousRankings.training, name),
-						rankDiffLabel: formatRankDiffLabel(rankings.training, previousRankings.training, name)
-					} satisfies DetailRow
-				]
-			: []),
-		...(isGuildMetricVisible('guildBoss')
-			? [
-					{
-						label: '길드보스',
-						currentLabel: comparison.guildBoss.currentLabel,
-						previousLabel: formatPreviousValue(comparison.guildBoss.previousLabel),
-						diffLabel: comparison.guildBoss.diffLabel,
-						diffPercentLabel: comparison.guildBoss.diffPercentLabel,
-						contentDates: GUILD_CONTENT_UPDATED_AT.guildBoss,
-						rankLabel: comparison.guildBoss.hasValue ? formatRankLabel(rankings.guildBoss, name) : null,
-						previousRankLabel: formatRankLabel(previousRankings.guildBoss, name),
-						rankDiffLabel: formatRankDiffLabel(rankings.guildBoss, previousRankings.guildBoss, name)
-					} satisfies DetailRow
-				]
-			: [])
+		...getGuildContentsOrder().map(({ key, label }) =>
+			createOrderedDetailRow(key, label, comparison, rankings, previousRankings)
+		)
 	]
+}
+
+/** 표시 순서 컨텐츠 상세 행 — 키별 비교·순위 매핑 */
+function createOrderedDetailRow(
+	key: GuildContentsOrderKey,
+	label: string,
+	comparison: GuildMemberComparison,
+	rankings: MemberRankings,
+	previousRankings: MemberRankings
+): DetailRow {
+	const name = comparison.name
+
+	switch (key) {
+		case 'training':
+			return {
+				label,
+				currentLabel: comparison.training.currentLabel,
+				previousLabel: formatPreviousValue(comparison.training.previousLabel),
+				diffLabel: comparison.training.diffLabel,
+				diffPercentLabel: comparison.training.diffPercentLabel,
+				contentDates: GUILD_CONTENT_UPDATED_AT.training,
+				rankLabel: comparison.training.hasValue ? formatRankLabel(rankings.training, name) : null,
+				previousRankLabel: formatRankLabel(previousRankings.training, name),
+				rankDiffLabel: formatRankDiffLabel(rankings.training, previousRankings.training, name)
+			}
+		case 'guildBoss':
+			return {
+				label,
+				currentLabel: comparison.guildBoss.currentLabel,
+				previousLabel: formatPreviousValue(comparison.guildBoss.previousLabel),
+				diffLabel: comparison.guildBoss.diffLabel,
+				diffPercentLabel: comparison.guildBoss.diffPercentLabel,
+				contentDates: GUILD_CONTENT_UPDATED_AT.guildBoss,
+				rankLabel: comparison.guildBoss.hasValue ? formatRankLabel(rankings.guildBoss, name) : null,
+				previousRankLabel: formatRankLabel(previousRankings.guildBoss, name),
+				rankDiffLabel: formatRankDiffLabel(rankings.guildBoss, previousRankings.guildBoss, name)
+			}
+	}
 }
 
 type PeriodHeadProps = {

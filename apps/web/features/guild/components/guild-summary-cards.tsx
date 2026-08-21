@@ -4,7 +4,7 @@ import { cn } from '@shared/ui/lib/utils'
 import GrowthDelta from '@/features/guild/components/growth-delta'
 import { calculateGuildSummaryMetrics } from '@/features/guild/lib/guild-summary'
 import { GUILD_ZERO_DELTA_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
+import { getGuildContentsOrder, type GuildContentsOrderKey } from '@/libs/guild-contents-order.constants'
 
 type GuildSummaryMetrics = ReturnType<typeof calculateGuildSummaryMetrics>
 
@@ -229,7 +229,7 @@ function buildSummaryCards(metrics: GuildSummaryMetrics): {
 		]
 	}
 
-	// 수련장·길드보스는 수집 주기가 길어 표시 플래그가 켜진 경우만 포함
+	// 표시 순서 컨텐츠(수련장·길드보스 등)는 상수 순서대로 뒤에 붙음
 	const bottom: SummaryCard[] = [
 		{
 			label: '토벌전 변화',
@@ -269,27 +269,34 @@ function buildSummaryCards(metrics: GuildSummaryMetrics): {
 				}
 			]
 		},
-		...(isGuildMetricVisible('training')
-			? [
-					{
-						label: '수련장 변화',
-						value: metrics.trainingChange,
-						percentLabel: metrics.trainingChangePercent
-					} satisfies SummaryCard
-				]
-			: []),
-		...(isGuildMetricVisible('guildBoss')
-			? [
-					{
-						label: '길드보스 변화',
-						value: metrics.guildBossChange,
-						percentLabel: metrics.guildBossChangePercent
-					} satisfies SummaryCard
-				]
-			: [])
+		...(getGuildContentsOrder().map(({ key, label }) =>
+			createOrderedSummaryCard(key, label, metrics)
+		) satisfies SummaryCard[])
 	]
 
 	return { top, bottom }
+}
+
+/** 표시 순서 컨텐츠 요약 카드 — 키별 메트릭 매핑 */
+function createOrderedSummaryCard(
+	key: GuildContentsOrderKey,
+	label: string,
+	metrics: GuildSummaryMetrics
+): SummaryCard {
+	switch (key) {
+		case 'training':
+			return {
+				label: `${label} 변화`,
+				value: metrics.trainingChange,
+				percentLabel: metrics.trainingChangePercent
+			}
+		case 'guildBoss':
+			return {
+				label: `${label} 변화`,
+				value: metrics.guildBossChange,
+				percentLabel: metrics.guildBossChangePercent
+			}
+	}
 }
 
 /** 길드 요약 카드. 모바일은 아코디언, md 이상은 카드 그리드 */

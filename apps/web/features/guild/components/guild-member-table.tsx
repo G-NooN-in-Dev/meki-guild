@@ -23,11 +23,10 @@ import {
 } from '@/features/guild/lib/sort-guild-members'
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
-import { isGuildMetricVisible } from '@/libs/guild-metric-visibility.constants'
+import { getGuildContentsOrder } from '@/libs/guild-contents-order.constants'
 
-/** 고정 컬럼 9개 + 표시 중인 수련장·길드보스 컬럼 수 (빈 행 colSpan용) */
-const GUILD_MEMBER_TABLE_COLUMN_COUNT =
-	9 + (isGuildMetricVisible('training') ? 1 : 0) + (isGuildMetricVisible('guildBoss') ? 1 : 0)
+/** 고정 컬럼 9개 + 표시 순서 컨텐츠 컬럼 수 (빈 행 colSpan용) */
+const GUILD_MEMBER_TABLE_COLUMN_COUNT = 9 + getGuildContentsOrder().length
 
 /**
  * 가로 스크롤 시 #·이름 열을 왼쪽에 고정합니다.
@@ -156,24 +155,16 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 								sortDirection={sortDirection}
 								onSort={handleSort}
 							/>
-							{isGuildMetricVisible('training') ? (
+							{getGuildContentsOrder().map(({ key, label }) => (
 								<SortableHead
-									label="수련장"
-									sortKey="training"
+									key={key}
+									label={label}
+									sortKey={key}
 									activeSortKey={sortKey}
 									sortDirection={sortDirection}
 									onSort={handleSort}
 								/>
-							) : null}
-							{isGuildMetricVisible('guildBoss') ? (
-								<SortableHead
-									label="길드보스"
-									sortKey="guildBoss"
-									activeSortKey={sortKey}
-									sortDirection={sortDirection}
-									onSort={handleSort}
-								/>
-							) : null}
+							))}
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -255,28 +246,16 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 											percentLabel={comparison.rivalry.diffPercentLabel}
 										/>
 									</TableCell>
-									{isGuildMetricVisible('training') ? (
-										<TableCell>
-											<div className={getValueClassName(comparison.training.currentLabel)}>
-												{comparison.training.currentLabel}
-											</div>
-											<GrowthDelta
-												value={comparison.training.diffLabel}
-												percentLabel={comparison.training.diffPercentLabel}
-											/>
-										</TableCell>
-									) : null}
-									{isGuildMetricVisible('guildBoss') ? (
-										<TableCell>
-											<div className={getValueClassName(comparison.guildBoss.currentLabel)}>
-												{comparison.guildBoss.currentLabel}
-											</div>
-											<GrowthDelta
-												value={comparison.guildBoss.diffLabel}
-												percentLabel={comparison.guildBoss.diffPercentLabel}
-											/>
-										</TableCell>
-									) : null}
+									{getGuildContentsOrder().map(({ key }) => {
+										const metric = comparison[key]
+
+										return (
+											<TableCell key={key}>
+												<div className={getValueClassName(metric.currentLabel)}>{metric.currentLabel}</div>
+												<GrowthDelta value={metric.diffLabel} percentLabel={metric.diffPercentLabel} />
+											</TableCell>
+										)
+									})}
 								</TableRow>
 							))
 						)}
