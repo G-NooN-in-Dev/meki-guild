@@ -41,6 +41,13 @@ export const TIP_ENTRIES = [
 		href: '/tips/content-stage-cut'
 	},
 	{
+		slug: 'boss-raid',
+		title: '보스레이드 명중컷 및 보상',
+		description: '보스레이드 명중컷 및 보상을 확인해보세요.',
+		tags: ['보스레이드'],
+		href: '/tips/boss-raid'
+	},
+	{
 		slug: 'guild-expedition-hit-cut',
 		title: '토벌전 명중컷 · 제한시간',
 		description: '길드 토벌전 단계별 필요 명중과 제한시간을 확인해보세요.',
