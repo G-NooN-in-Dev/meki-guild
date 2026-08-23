@@ -42,7 +42,7 @@ export const TIP_ENTRIES = [
 	},
 	{
 		slug: 'boss-raid',
-		title: '보스레이드 명중컷 및 보상',
+		title: '보스레이드 명중컷 및 보상 정보',
 		description: '보스레이드 명중컷 및 보상을 확인해보세요.',
 		tags: ['보스레이드'],
 		href: '/tips/boss-raid'
