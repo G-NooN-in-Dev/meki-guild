@@ -27,6 +27,13 @@ export const TIP_ENTRIES = [
 		href: '/tips/stage-journey'
 	},
 	{
+		slug: 'job-release-order',
+		title: '직업 출시 순서표',
+		description: '원작 직업 출시 순서로 메이플키우기 다음 직업을 가늠해보세요.',
+		tags: ['직업'],
+		href: '/tips/job-release-order'
+	},
+	{
 		slug: 'content-stage-cut',
 		title: '컨텐츠 별 스테이지컷',
 		description: '컨텐츠 및 난이도 별 스테이지컷을 확인해보세요.',
@@ -34,18 +41,18 @@ export const TIP_ENTRIES = [
 		href: '/tips/content-stage-cut'
 	},
 	{
+		slug: 'guild-expedition-hit-cut',
+		title: '토벌전 명중컷 · 제한시간',
+		description: '길드 토벌전 단계별 필요 명중과 제한시간을 확인해보세요.',
+		tags: ['길드컨텐츠', '토벌전'],
+		href: '/tips/guild-expedition-hit-cut'
+	},
+	{
 		slug: 'guild-rivalry-hit-cut',
 		title: '대항전 명중컷 · 버프 스택',
 		description: '길드 대항전 단계별 필요 명중과, 보스 데미지 증가 스택을 확인해보세요.',
-		tags: ['대항전'],
+		tags: ['길드컨텐츠', '대항전'],
 		href: '/tips/guild-rivalry-hit-cut'
-	},
-	{
-		slug: 'job-release-order',
-		title: '직업 출시 순서표',
-		description: '원작 직업 출시 순서로 메이플키우기 다음 직업을 가늠해보세요.',
-		tags: ['직업'],
-		href: '/tips/job-release-order'
 	}
 ] as const satisfies readonly TipEntry[]
 

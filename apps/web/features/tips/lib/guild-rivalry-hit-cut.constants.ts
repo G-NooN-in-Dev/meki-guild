@@ -1,18 +1,32 @@
 import type { GuildRivalryHitCutEntry } from '@/features/tips/types/guild-rivalry-hit-cut.type'
 
+type GuildRivalryHitTier = {
+	/** 이 구간이 시작되는 단계 */
+	startStage: number
+	/** startStage 단계의 기본 명중컷 */
+	baseHit: number
+	/** startStage 이후 단계마다 더해지는 명중 */
+	increment: number
+}
+
+/** 표에 표시할 최대 단계 */
+export const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 80
+
 /**
- * 단계별 보스/일반몹 기본 명중컷. index 0 = 1단계.
+ * 단계별 보스/일반몹 기본 명중컷 구간.
+ * 구간이 바뀌면 증가폭(increment)만 달라지고, 값은 직전 단계에서 이어집니다.
  * 소환 직후 보정(+20)은 포함하지 않습니다.
  */
-export const GUILD_RIVALRY_BASE_HIT_BY_STAGE = [
-	85, 100, 115, 130, 145, 165, 186, 207, 229, 251, 261, 271, 281, 291, 301, 310, 319, 328, 337, 346, 353, 360, 367, 374,
-	381, 388, 395, 402, 409, 416, 421, 426, 431, 436, 441, 446, 451, 456, 461, 466, 470, 474, 478, 482, 486, 490, 494,
-	498, 502, 506, 510, 514, 518, 522, 526, 530, 534, 538, 542, 546, 550, 554, 558, 562, 566, 570, 574, 578, 582, 586,
-	590, 594, 598, 602, 606, 610, 614, 618, 622, 626, 630
-] as const
-
-/** 표에 표시할 최대 단계. 원본 배열은 이보다 길어도 여기까지만 보여 줍니다. */
-export const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 80
+export const GUILD_RIVALRY_HIT_TIERS = [
+	{ startStage: 1, baseHit: 85, increment: 15 },
+	{ startStage: 6, baseHit: 165, increment: 21 },
+	{ startStage: 9, baseHit: 229, increment: 22 },
+	{ startStage: 11, baseHit: 261, increment: 10 },
+	{ startStage: 16, baseHit: 310, increment: 9 },
+	{ startStage: 21, baseHit: 353, increment: 7 },
+	{ startStage: 31, baseHit: 421, increment: 5 },
+	{ startStage: 41, baseHit: 470, increment: 4 }
+] as const satisfies readonly GuildRivalryHitTier[]
 
 /** 잡몹 등장 시 기본 명중컷에 더해지는 값 */
 export const GUILD_RIVALRY_SPAWN_HIT_BONUS = 20
@@ -57,18 +71,30 @@ function getGuildRivalryBuffStack(stage: number) {
 
 /** 단계 → 보스/일반몹 기본 명중컷 */
 function getGuildRivalryRequiredHit(stage: number) {
-	return GUILD_RIVALRY_BASE_HIT_BY_STAGE[stage - 1]
+	let tier: GuildRivalryHitTier = GUILD_RIVALRY_HIT_TIERS[0]
+
+	for (const candidate of GUILD_RIVALRY_HIT_TIERS) {
+		if (stage >= candidate.startStage) {
+			tier = candidate
+		} else {
+			break
+		}
+	}
+
+	const { baseHit, increment, startStage } = tier
+
+	return baseHit + (stage - startStage) * increment
 }
 
 /** 1~maxStage 단계 표 데이터 */
 function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_MAX_STAGE): GuildRivalryHitCutEntry[] {
-	return GUILD_RIVALRY_BASE_HIT_BY_STAGE.slice(0, maxStage).map((requiredHit, index) => {
+	return Array.from({ length: maxStage }, (_, index) => {
 		const stage = index + 1
 
 		return {
 			stage,
 			buffStack: getGuildRivalryBuffStack(stage),
-			requiredHit
+			requiredHit: getGuildRivalryRequiredHit(stage)
 		}
 	})
 }
@@ -77,3 +103,4 @@ function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_MAX_STA
 export const GUILD_RIVALRY_HIT_CUT_ENTRIES = buildGuildRivalryHitCutEntries()
 
 export { buildGuildRivalryHitCutEntries, getGuildRivalryBuffStack, getGuildRivalryRequiredHit }
+export type { GuildRivalryHitTier }
