@@ -12,8 +12,14 @@ type GrowthDungeonHitCutEntry = {
 type ExperienceDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
 	/** 해당 단계 처치해야 하는 몬스터 수 */
 	requiredKillCount: number
-	/** 주니어 부기 필요 명중 (일반보다 +2) */
-	juniorBoogieRequiredHit: number
 }
 
-export type { ExperienceDungeonHitCutEntry, GrowthDungeonHitCutEntry }
+/** 장비 던전 단계별 표 한 줄 */
+type EquipmentDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
+	/** 해당 단계 제한시간(초) */
+	timeLimitSec: number
+	/** 해당 단계 처치해야 하는 몬스터 수 */
+	requiredKillCount: number
+}
+
+export type { EquipmentDungeonHitCutEntry, ExperienceDungeonHitCutEntry, GrowthDungeonHitCutEntry }

@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 
 import { GROWTH_DUNGEON_TABS } from '../../lib/growth-dungeon.constants'
+import EquipmentDungeonBoard from './equipment-dungeon-board'
 import ExperienceDungeonBoard from './experience-dungeon-board'
 import WeaponDungeonBoard from './weapon-dungeon-board'
 
@@ -26,7 +27,7 @@ function GrowthDungeonHub() {
 			</TabsContent>
 
 			<TabsContent value="equipment">
-				<div>장비 던전</div>
+				<EquipmentDungeonBoard />
 			</TabsContent>
 
 			<TabsContent value="ability">

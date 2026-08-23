@@ -29,7 +29,7 @@ function ExperienceDungeonHitCutTable() {
 								'bg-pastel-green-100 text-pastel-green-900 xs:px-2 w-[22%] px-1.5 text-center text-xs leading-tight md:w-1/4 md:px-3 md:text-sm'
 							)}
 						>
-							처치 수
+							처치 수 (마리)
 						</TableHead>
 						<TableHead
 							className={cn(
@@ -38,54 +38,37 @@ function ExperienceDungeonHitCutTable() {
 						>
 							필요 명중
 						</TableHead>
-						<TableHead
-							className={cn(
-								'bg-pastel-yellow-100 text-pastel-yellow-900 xs:px-2 w-[30%] px-1.5 text-center text-xs leading-tight md:w-[31%] md:px-3 md:text-sm'
-							)}
-						>
-							주니어 부기
-						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{EXPERIENCE_DUNGEON_HIT_CUT_ENTRIES.map(
-						({ stage, requiredKillCount, requiredHit, juniorBoogieRequiredHit, isHardStage }) => (
-							<TableRow key={stage} className="border-grayscale-200 hover:bg-transparent">
-								<TableCell
-									className={cn(
-										cellBaseClassName,
-										isHardStage ? 'bg-red-100 text-red-900' : 'bg-grayscale-50 text-grayscale-800'
-									)}
-								>
-									{stage}
-								</TableCell>
-								<TableCell
-									className={cn(
-										cellBaseClassName,
-										isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-green-50 text-grayscale-900'
-									)}
-								>
-									{formatLocaleNumber(requiredKillCount)}
-								</TableCell>
-								<TableCell
-									className={cn(
-										cellBaseClassName,
-										isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-blue-50 text-grayscale-900'
-									)}
-								>
-									{formatLocaleNumber(requiredHit)}
-								</TableCell>
-								<TableCell
-									className={cn(
-										cellBaseClassName,
-										isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-yellow-50 text-grayscale-900'
-									)}
-								>
-									{formatLocaleNumber(juniorBoogieRequiredHit)}
-								</TableCell>
-							</TableRow>
-						)
-					)}
+					{EXPERIENCE_DUNGEON_HIT_CUT_ENTRIES.map(({ stage, requiredKillCount, requiredHit, isHardStage }) => (
+						<TableRow key={stage} className="border-grayscale-200 hover:bg-transparent">
+							<TableCell
+								className={cn(
+									cellBaseClassName,
+									isHardStage ? 'bg-red-100 text-red-900' : 'bg-grayscale-50 text-grayscale-800'
+								)}
+							>
+								{stage}
+							</TableCell>
+							<TableCell
+								className={cn(
+									cellBaseClassName,
+									isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-green-50 text-grayscale-900'
+								)}
+							>
+								{formatLocaleNumber(requiredKillCount)}
+							</TableCell>
+							<TableCell
+								className={cn(
+									cellBaseClassName,
+									isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-blue-50 text-grayscale-900'
+								)}
+							>
+								{formatLocaleNumber(requiredHit)}
+							</TableCell>
+						</TableRow>
+					))}
 				</TableBody>
 			</Table>
 		</div>
