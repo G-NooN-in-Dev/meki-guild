@@ -1,5 +1,6 @@
 import type {
 	AbilityDungeonHitCutEntry,
+	EnhanceDungeonHitCutEntry,
 	EquipmentDungeonHitCutEntry,
 	ExperienceDungeonHitCutEntry,
 	GrowthDungeonHitCutEntry
@@ -226,12 +227,57 @@ function buildAbilityDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): 
 /** 용사의 수련장 표에 바로 쓰는 단계별 데이터 */
 export const ABILITY_DUNGEON_HIT_CUT_ENTRIES = buildAbilityDungeonHitCutEntries()
 
+/** 강화 던전 발록 처치 제한시간(초). 전 단계 동일 */
+export const ENHANCE_DUNGEON_TIME_LIMIT_SEC = 25
+
+/** 강화 던전 의문의 주문서 획득 확률(%) */
+export const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_DROP_PERCENT = 10
+
+/** 강화 던전 1단계 기준 필요 명중 */
+export const ENHANCE_DUNGEON_BASE_HIT_CUT = 34
+
+/** 강화 던전 1단계 주문의 흔적 획득 개수 */
+export const ENHANCE_DUNGEON_BASE_SPELL_TRACE_COUNT = 155
+
+/** 강화 던전 단계마다 증가하는 주문의 흔적 개수 */
+export const ENHANCE_DUNGEON_SPELL_TRACE_INCREMENT = 5
+
+/** 강화 던전 단계 → 필요 명중 (1단계 34, 이후 공통 구간 증가) */
+function getEnhanceDungeonRequiredHitCut(stage: number) {
+	return getGrowthDungeonRequiredHitCut(stage, ENHANCE_DUNGEON_BASE_HIT_CUT)
+}
+
+/** 강화 던전 단계 → 주문의 흔적 획득 개수 (1단계 155, 이후 +5) */
+function getEnhanceDungeonSpellTraceCount(stage: number) {
+	return ENHANCE_DUNGEON_BASE_SPELL_TRACE_COUNT + (stage - 1) * ENHANCE_DUNGEON_SPELL_TRACE_INCREMENT
+}
+
+/** 강화 던전 1~maxStage 단계 표 데이터 */
+function buildEnhanceDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): EnhanceDungeonHitCutEntry[] {
+	return Array.from({ length: maxStage }, (_, index) => {
+		const stage = index + 1
+
+		return {
+			stage,
+			requiredHit: getEnhanceDungeonRequiredHitCut(stage),
+			spellTraceCount: getEnhanceDungeonSpellTraceCount(stage),
+			isHardStage: isGrowthDungeonHardStage(stage)
+		}
+	})
+}
+
+/** 강화 던전 표에 바로 쓰는 단계별 데이터 */
+export const ENHANCE_DUNGEON_HIT_CUT_ENTRIES = buildEnhanceDungeonHitCutEntries()
+
 export {
 	buildAbilityDungeonHitCutEntries,
+	buildEnhanceDungeonHitCutEntries,
 	buildEquipmentDungeonHitCutEntries,
 	buildExperienceDungeonHitCutEntries,
 	buildWeaponDungeonHitCutEntries,
 	getAbilityDungeonRequiredHitCut,
+	getEnhanceDungeonRequiredHitCut,
+	getEnhanceDungeonSpellTraceCount,
 	getEquipmentDungeonRequiredHitCut,
 	getEquipmentDungeonRequiredKillCount,
 	getEquipmentDungeonTimeLimitSec,

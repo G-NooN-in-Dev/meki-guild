@@ -25,8 +25,15 @@ type EquipmentDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
 /** 용사의 수련장 단계별 표 한 줄 */
 type AbilityDungeonHitCutEntry = GrowthDungeonHitCutEntry & {}
 
+/** 강화 던전 단계별 표 한 줄 */
+type EnhanceDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
+	/** 해당 단계 주문의 흔적 획득 개수 */
+	spellTraceCount: number
+}
+
 export type {
 	AbilityDungeonHitCutEntry,
+	EnhanceDungeonHitCutEntry,
 	EquipmentDungeonHitCutEntry,
 	ExperienceDungeonHitCutEntry,
 	GrowthDungeonHitCutEntry
