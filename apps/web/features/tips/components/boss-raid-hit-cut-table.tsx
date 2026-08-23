@@ -3,8 +3,12 @@ import { cn } from '@shared/ui/utils'
 
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
-import { BOSS_RAID_BOSS_META, BOSS_RAID_BOSS_ORDER, getBossRaidRequiredHit } from '../lib/boss-raid.constants'
-import { CONTENT_DIFFICULTIES } from '../lib/content-stage-cut.constants'
+import {
+	BOSS_RAID_BOSS_META,
+	BOSS_RAID_BOSS_ORDER,
+	BOSS_RAID_DIFFICULTIES,
+	getBossRaidRequiredHit
+} from '../lib/boss-raid.constants'
 import { BossRaidSelection } from '../types/boss-raid.type'
 
 type BossRaidHitCutTableProps = {
@@ -24,13 +28,13 @@ function BossRaidHitCutTable({ selectedBoss, setSelectedBoss }: BossRaidHitCutTa
 			</div>
 
 			<div className="border-grayscale-200 bg-card shadow-soft overflow-auto rounded-xl border">
-				<Table className="w-full min-w-80 table-fixed" containerClassName="overflow-visible">
+				<Table className="w-full min-w-96 table-fixed" containerClassName="overflow-visible">
 					<TableHeader sticky>
 						<TableRow className="border-grayscale-200 hover:bg-transparent">
 							<TableHead className="bg-grayscale-100 text-grayscale-600 w-[22%] text-center text-xs md:w-[18%] md:text-sm">
 								보스 / 난이도
 							</TableHead>
-							{CONTENT_DIFFICULTIES.map(({ key, label, chipClassName }) => (
+							{BOSS_RAID_DIFFICULTIES.map(({ key, label, chipClassName }) => (
 								<TableHead
 									key={key}
 									className={cn('text-center text-xs leading-tight break-keep md:text-sm', chipClassName)}
@@ -46,7 +50,7 @@ function BossRaidHitCutTable({ selectedBoss, setSelectedBoss }: BossRaidHitCutTa
 								<TableCell className={cn(cellBaseClassName, 'bg-grayscale-50 text-grayscale-800')}>
 									{BOSS_RAID_BOSS_META[boss].label}
 								</TableCell>
-								{CONTENT_DIFFICULTIES.map(({ key: difficulty }) => {
+								{BOSS_RAID_DIFFICULTIES.map(({ key: difficulty }) => {
 									const requiredHit = getBossRaidRequiredHit(boss, difficulty)
 									const isSelected = selectedBoss.boss === boss && selectedBoss.difficulty === difficulty
 
@@ -57,7 +61,7 @@ function BossRaidHitCutTable({ selectedBoss, setSelectedBoss }: BossRaidHitCutTa
 												onClick={() => setSelectedBoss({ boss, difficulty })}
 												className={cn(
 													cellBaseClassName,
-													'text-grayscale-900 hover:bg-grayscale-100/80 h-full w-full cursor-pointer transition-colors',
+													'text-grayscale-900 hover:bg-grayscale-100/80 size-full cursor-pointer transition-colors',
 													isSelected && 'ring-grayscale-900 bg-pastel-blue-50 ring-2 ring-inset'
 												)}
 											>

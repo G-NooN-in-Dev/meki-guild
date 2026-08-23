@@ -1,14 +1,25 @@
 import { CONTENT_DIFFICULTIES } from '@/features/tips/lib/content-stage-cut.constants'
 import type {
 	BossRaidBoss,
+	BossRaidDifficulty,
 	BossRaidEntry,
 	BossRaidMaterialReward,
+	BossRaidMilestone,
 	BossRaidReward,
 	BossRaidRewardGrade,
 	BossRaidRewardTier
 } from '@/features/tips/types/boss-raid.type'
-import type { ContentDifficulty } from '@/features/tips/types/content-stage-cut.type'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
+
+/** 보스레이드 난이도 — 일반 4단계 + 길드레이드 */
+export const BOSS_RAID_DIFFICULTIES = [
+	...CONTENT_DIFFICULTIES,
+	{
+		key: 'guild',
+		label: '길드레이드',
+		chipClassName: 'bg-pastel-blue-200 text-pastel-blue-900'
+	}
+] as const satisfies readonly { key: BossRaidDifficulty; label: string; chipClassName: string }[]
 
 /** 보스 표시 메타 */
 export const BOSS_RAID_BOSS_ORDER = ['zakum', 'horntail'] as const satisfies readonly BossRaidBoss[]
@@ -53,19 +64,25 @@ const BOSS_RAID_MATERIAL_IMAGE_SRC = {
 
 /** 장비 이미지 — `public/equipment/` */
 const BOSS_RAID_EQUIPMENT_IMAGE_SRC = {
-	'자쿰의 투구': '/equipment/zakum-helmet.png',
-	'카오스 자쿰의 투구': '/equipment/zakum-helmet.png',
-	'아쿠아틱 레터 눈장식': '/equipment/aquatic-letter-eye-accessory.png',
-	'데아 시두스 이어링': '/equipment/dea-sidus-ear-ring.png',
-	'혼테일의 목걸이': '/equipment/horntail-necklace.png',
-	'카오스 혼테일의 목걸이': '/equipment/chaos-horntail-necklace.png'
-} as const satisfies Record<string, `/equipment/${string}.png`>
+	'자쿰의 투구': '/equipments/zakum-helmet.png',
+	'카오스 자쿰의 투구': '/equipments/zakum-helmet.png',
+	'아쿠아틱 레터 눈장식': '/equipments/aquatic-letter-eye-accessory.png',
+	'데아 시두스 이어링': '/equipments/dea-sidus-ear-ring.png',
+	'혼테일의 목걸이': '/equipments/horntail-necklace.png',
+	'카오스 혼테일의 목걸이': '/equipments/chaos-horntail-necklace.png'
+} as const satisfies Record<string, `/equipments/${string}.png`>
 
 /** 주문서 티어별 이미지 — `public/items/` */
 const BOSS_RAID_SCROLL_TIER_IMAGE_SRC = {
 	low: '/items/scroll-gray.png',
 	mid: '/items/scroll-brown.png'
 } as const satisfies Partial<Record<BossRaidRewardTier, `/items/${string}.png`>>
+
+/** 훈장 이미지 — `public/items/` */
+const BOSS_RAID_MEDAL_IMAGE_SRC = {
+	'팀플레이어 훈장': '/medals/team-player-medal.jpg',
+	'혼테일 원정대 훈장': '/medals/horntail-expedition-medal.jpg'
+} as const satisfies Record<string, `/medals/${string}.jpg`>
 
 /** 대부분 난이도에 공통으로 나오는 재화·재료 */
 const COMMON_BOSS_RAID_MATERIALS = [
@@ -115,6 +132,7 @@ export const BOSS_RAID_ENTRIES = [
 		boss: 'zakum',
 		difficulty: 'easy',
 		requiredHit: 110,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -157,6 +175,7 @@ export const BOSS_RAID_ENTRIES = [
 		boss: 'zakum',
 		difficulty: 'normal',
 		requiredHit: 150,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -206,6 +225,7 @@ export const BOSS_RAID_ENTRIES = [
 		boss: 'zakum',
 		difficulty: 'hard',
 		requiredHit: 230,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -255,6 +275,7 @@ export const BOSS_RAID_ENTRIES = [
 		boss: 'zakum',
 		difficulty: 'chaos',
 		requiredHit: 330,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -292,9 +313,100 @@ export const BOSS_RAID_ENTRIES = [
 		]
 	},
 	{
+		boss: 'zakum',
+		difficulty: 'guild',
+		requiredHit: 190,
+		rewardMode: 'milestone',
+		milestones: [
+			{
+				hpPercent: 10,
+				kind: 'scroll',
+				scrollName: '자쿰의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 20,
+				kind: 'equipment',
+				grade: 'unique',
+				tier: 'top',
+				maxLevel: 95,
+				name: '아쿠아틱 레터 눈장식',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['아쿠아틱 레터 눈장식']
+			},
+			{
+				hpPercent: 30,
+				kind: 'equipment',
+				grade: 'unique',
+				tier: 'top',
+				maxLevel: 95,
+				name: '자쿰의 투구',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['자쿰의 투구']
+			},
+			{
+				hpPercent: 40,
+				kind: 'scroll',
+				scrollName: '자쿰의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 50,
+				kind: 'scroll',
+				scrollName: '자쿰의 주문서',
+				tier: 'mid',
+				quantity: 2,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid
+			},
+			{
+				hpPercent: 60,
+				kind: 'equipment',
+				grade: 'legendary',
+				tier: 'low',
+				maxLevel: 110,
+				name: '아쿠아틱 레터 눈장식',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['아쿠아틱 레터 눈장식']
+			},
+			{
+				hpPercent: 70,
+				kind: 'equipment',
+				grade: 'legendary',
+				tier: 'low',
+				maxLevel: 110,
+				name: '자쿰의 투구',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['자쿰의 투구']
+			},
+			{
+				hpPercent: 80,
+				kind: 'scroll',
+				scrollName: '자쿰의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 90,
+				kind: 'scroll',
+				scrollName: '자쿰의 주문서',
+				tier: 'mid',
+				quantity: 2,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid
+			},
+			{
+				hpPercent: 100,
+				kind: 'medal',
+				name: '팀플레이어 훈장',
+				imageSrc: BOSS_RAID_MEDAL_IMAGE_SRC['팀플레이어 훈장']
+			}
+		]
+	},
+	{
 		boss: 'horntail',
 		difficulty: 'easy',
 		requiredHit: 240,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -328,6 +440,7 @@ export const BOSS_RAID_ENTRIES = [
 		boss: 'horntail',
 		difficulty: 'normal',
 		requiredHit: 330,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -368,6 +481,7 @@ export const BOSS_RAID_ENTRIES = [
 		boss: 'horntail',
 		difficulty: 'hard',
 		requiredHit: 420,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -417,6 +531,7 @@ export const BOSS_RAID_ENTRIES = [
 		boss: 'horntail',
 		difficulty: 'chaos',
 		requiredHit: 510,
+		rewardMode: 'probability',
 		rewards: [
 			{
 				kind: 'equipment',
@@ -438,16 +553,106 @@ export const BOSS_RAID_ENTRIES = [
 			},
 			...COMMON_BOSS_RAID_MATERIALS
 		]
+	},
+	{
+		boss: 'horntail',
+		difficulty: 'guild',
+		requiredHit: 340,
+		rewardMode: 'milestone',
+		milestones: [
+			{
+				hpPercent: 10,
+				kind: 'scroll',
+				scrollName: '혼테일의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 20,
+				kind: 'equipment',
+				grade: 'legendary',
+				tier: 'high',
+				maxLevel: 115,
+				name: '데아 시두스 이어링',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['데아 시두스 이어링']
+			},
+			{
+				hpPercent: 30,
+				kind: 'equipment',
+				grade: 'legendary',
+				tier: 'high',
+				maxLevel: 115,
+				name: '데아 시두스 이어링',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['데아 시두스 이어링']
+			},
+			{
+				hpPercent: 40,
+				kind: 'scroll',
+				scrollName: '혼테일의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 50,
+				kind: 'scroll',
+				scrollName: '혼테일의 주문서',
+				tier: 'mid',
+				quantity: 2,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid
+			},
+			{
+				hpPercent: 60,
+				kind: 'equipment',
+				grade: 'legendary',
+				tier: 'top',
+				maxLevel: 125,
+				name: '데아 시두스 이어링',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['데아 시두스 이어링']
+			},
+			{
+				hpPercent: 70,
+				kind: 'equipment',
+				grade: 'legendary',
+				tier: 'top',
+				maxLevel: 125,
+				name: '데아 시두스 이어링',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['데아 시두스 이어링']
+			},
+			{
+				hpPercent: 80,
+				kind: 'scroll',
+				scrollName: '혼테일의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 90,
+				kind: 'scroll',
+				scrollName: '혼테일의 주문서',
+				tier: 'mid',
+				quantity: 2,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid
+			},
+			{
+				hpPercent: 100,
+				kind: 'medal',
+				name: '혼테일 원정대 훈장',
+				imageSrc: BOSS_RAID_MEDAL_IMAGE_SRC['혼테일 원정대 훈장']
+			}
+		]
 	}
 ] as const satisfies readonly BossRaidEntry[]
 
 /** boss × difficulty 조회 */
-function getBossRaidEntry(boss: BossRaidBoss, difficulty: ContentDifficulty): BossRaidEntry | undefined {
+function getBossRaidEntry(boss: BossRaidBoss, difficulty: BossRaidDifficulty): BossRaidEntry | undefined {
 	return BOSS_RAID_ENTRIES.find((entry) => entry.boss === boss && entry.difficulty === difficulty)
 }
 
 /** 명중컷 요약표용 — boss별 difficulty → requiredHit */
-function getBossRaidRequiredHit(boss: BossRaidBoss, difficulty: ContentDifficulty): number | undefined {
+function getBossRaidRequiredHit(boss: BossRaidBoss, difficulty: BossRaidDifficulty): number | undefined {
 	return getBossRaidEntry(boss, difficulty)?.requiredHit
 }
 
@@ -491,16 +696,36 @@ function getBossRaidEquipmentMaxLevel(reward: BossRaidReward): string | undefine
 }
 
 /** 난이도 라벨 조회 */
-function getBossRaidDifficultyLabel(difficulty: ContentDifficulty): string {
-	return CONTENT_DIFFICULTIES.find((item) => item.key === difficulty)?.label ?? difficulty
+function getBossRaidDifficultyLabel(difficulty: BossRaidDifficulty): string {
+	return BOSS_RAID_DIFFICULTIES.find((item) => item.key === difficulty)?.label ?? difficulty
+}
+
+/** 길드레이드 마일스톤 보상 이름 */
+function formatBossRaidMilestoneRewardName(milestone: BossRaidMilestone): string {
+	if (milestone.kind === 'scroll') {
+		return `${milestone.scrollName} (${BOSS_RAID_REWARD_TIER_LABELS[milestone.tier]}) ${formatLocaleNumber(milestone.quantity)}개`
+	}
+
+	return milestone.name
+}
+
+/** 길드레이드 마일스톤 장비 최대 레벨 */
+function getBossRaidMilestoneEquipmentMaxLevel(milestone: BossRaidMilestone): string | undefined {
+	if (milestone.kind !== 'equipment') {
+		return undefined
+	}
+
+	return formatLocaleNumber(milestone.maxLevel)
 }
 
 export {
+	formatBossRaidMilestoneRewardName,
 	formatBossRaidRewardName,
 	getBossRaidDifficultyLabel,
 	getBossRaidEntry,
 	getBossRaidEquipmentMaxLevel,
 	getBossRaidMaterialQuantity,
+	getBossRaidMilestoneEquipmentMaxLevel,
 	getBossRaidRequiredHit,
 	partitionBossRaidRewards
 }
