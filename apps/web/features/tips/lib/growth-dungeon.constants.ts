@@ -1,4 +1,5 @@
 import type {
+	AbilityDungeonHitCutEntry,
 	EquipmentDungeonHitCutEntry,
 	ExperienceDungeonHitCutEntry,
 	GrowthDungeonHitCutEntry
@@ -185,10 +186,52 @@ function buildEquipmentDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE)
 /** 장비 던전 표에 바로 쓰는 단계별 데이터 */
 export const EQUIPMENT_DUNGEON_HIT_CUT_ENTRIES = buildEquipmentDungeonHitCutEntries()
 
+/** 용사의 수련장 — 일반 몬스터 사냥 제한시간(초). 전 단계 동일 */
+export const ABILITY_DUNGEON_NORMAL_TIME_LIMIT_SEC = 30
+
+/** 용사의 수련장 — 보스 처치 제한시간(초). 전 단계 동일 */
+export const ABILITY_DUNGEON_BOSS_TIME_LIMIT_SEC = 20
+
+/** 일반 몬스터 1마리 처치 시 공격력 증가 버프(%) */
+export const ABILITY_DUNGEON_ATTACK_BUFF_PERCENT_PER_KILL = 2
+
+/** 공격력 증가 버프 최대 스택 */
+export const ABILITY_DUNGEON_ATTACK_BUFF_MAX_STACKS = 100
+
+/** 일반 몬스터 명중컷이 보스 몬스터보다 높은 수치 */
+export const ABILITY_DUNGEON_NORMAL_HIT_CUT_BONUS = 2
+
+/** 용사의 수련장 1단계 기준 필요 명중 (보스 몬스터) */
+export const ABILITY_DUNGEON_BASE_HIT_CUT = 16
+
+/** 용사의 수련장 단계 → 보스 몬스터 필요 명중 (1단계 18, 이후 공통 구간 증가) */
+function getAbilityDungeonRequiredHitCut(stage: number) {
+	return getGrowthDungeonRequiredHitCut(stage, ABILITY_DUNGEON_BASE_HIT_CUT)
+}
+
+/** 용사의 수련장 1~maxStage 단계 표 데이터 */
+function buildAbilityDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): AbilityDungeonHitCutEntry[] {
+	return Array.from({ length: maxStage }, (_, index) => {
+		const stage = index + 1
+		const requiredHit = getAbilityDungeonRequiredHitCut(stage)
+
+		return {
+			stage,
+			requiredHit,
+			isHardStage: isGrowthDungeonHardStage(stage)
+		}
+	})
+}
+
+/** 용사의 수련장 표에 바로 쓰는 단계별 데이터 */
+export const ABILITY_DUNGEON_HIT_CUT_ENTRIES = buildAbilityDungeonHitCutEntries()
+
 export {
+	buildAbilityDungeonHitCutEntries,
 	buildEquipmentDungeonHitCutEntries,
 	buildExperienceDungeonHitCutEntries,
 	buildWeaponDungeonHitCutEntries,
+	getAbilityDungeonRequiredHitCut,
 	getEquipmentDungeonRequiredHitCut,
 	getEquipmentDungeonRequiredKillCount,
 	getEquipmentDungeonTimeLimitSec,

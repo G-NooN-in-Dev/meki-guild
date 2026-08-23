@@ -22,4 +22,12 @@ type EquipmentDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
 	requiredKillCount: number
 }
 
-export type { EquipmentDungeonHitCutEntry, ExperienceDungeonHitCutEntry, GrowthDungeonHitCutEntry }
+/** 용사의 수련장 단계별 표 한 줄 */
+type AbilityDungeonHitCutEntry = GrowthDungeonHitCutEntry & {}
+
+export type {
+	AbilityDungeonHitCutEntry,
+	EquipmentDungeonHitCutEntry,
+	ExperienceDungeonHitCutEntry,
+	GrowthDungeonHitCutEntry
+}
