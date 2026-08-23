@@ -1,6 +1,6 @@
 import { Badge } from '@shared/ui/badge'
 
-import StageJourneyInteractive from '@/features/tips/components/stage-journey-interactive.client'
+import StageJourneyBoard from '@/features/tips/components/stage-journey-board.client'
 import TipsBackLink from '@/features/tips/components/tips-back-link'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
@@ -32,7 +32,7 @@ function StageJourneySection() {
 				</header>
 			</div>
 
-			<StageJourneyInteractive />
+			<StageJourneyBoard />
 		</section>
 	)
 }

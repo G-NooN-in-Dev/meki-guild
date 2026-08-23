@@ -6,7 +6,7 @@ import StageJourneyChapterTable from '@/features/tips/components/stage-journey-c
 import StageJourneyEffectTable from '@/features/tips/components/stage-journey-effect-table'
 import { STAGE_JOURNEY_DEFAULT_CHAPTER } from '@/features/tips/lib/stage-journey.constants'
 
-function StageJourneyInteractive() {
+function StageJourneyBoard() {
 	const [selectedChapter, setSelectedChapter] = useState<number>(STAGE_JOURNEY_DEFAULT_CHAPTER)
 
 	return (
@@ -24,4 +24,4 @@ function StageJourneyInteractive() {
 	)
 }
 
-export default StageJourneyInteractive
+export default StageJourneyBoard
