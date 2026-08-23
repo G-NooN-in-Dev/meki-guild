@@ -1,4 +1,4 @@
-/** 성장 던전(무기) 단계별 필요 명중 한 줄 */
+/** 성장 던전 단계별 필요 명중 한 줄 */
 type GrowthDungeonHitCutEntry = {
 	/** 던전 단계 (1부터) */
 	stage: number
@@ -8,4 +8,12 @@ type GrowthDungeonHitCutEntry = {
 	isHardStage: boolean
 }
 
-export type { GrowthDungeonHitCutEntry }
+/** 경험치 던전 단계별 표 한 줄 */
+type ExperienceDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
+	/** 해당 단계 처치해야 하는 몬스터 수 */
+	requiredKillCount: number
+	/** 주니어 부기 필요 명중 (일반보다 +2) */
+	juniorBoogieRequiredHit: number
+}
+
+export type { ExperienceDungeonHitCutEntry, GrowthDungeonHitCutEntry }
