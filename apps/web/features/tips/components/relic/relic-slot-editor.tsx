@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
 import { useEffect, useState } from 'react'
 
-import GradePortrait from '@/features/tips/components/grade-portrait'
-import RelicAwakeningStepper from '@/features/tips/components/relic-awakening-stepper'
-import RelicPotentialEditor from '@/features/tips/components/relic-potential-editor'
+import GradePortrait from '@/features/tips/components/shared/grade-portrait'
+import RelicAwakeningStepper from '@/features/tips/components/relic/relic-awakening-stepper'
+import RelicPotentialEditor from '@/features/tips/components/relic/relic-potential-editor'
 import { ITEM_GRADE_SLOT_CLASS, ITEM_GRADE_SLOT_HOVER_CLASS } from '@/features/tips/lib/item-grade.constants'
 import {
 	getRelicActivationCondition,

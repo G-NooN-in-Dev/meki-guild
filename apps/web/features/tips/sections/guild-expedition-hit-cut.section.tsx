@@ -1,8 +1,8 @@
 import { Badge } from '@shared/ui/badge'
 
-import GuildExpeditionHitCutSummary from '@/features/tips/components/guild-expedition-hit-cut-summary'
-import GuildExpeditionHitCutTable from '@/features/tips/components/guild-expedition-hit-cut-table'
-import TipsBackLink from '@/features/tips/components/tips-back-link'
+import GuildExpeditionHitCutSummary from '@/features/tips/components/guild-expedition/guild-expedition-hit-cut-summary'
+import GuildExpeditionHitCutTable from '@/features/tips/components/guild-expedition/guild-expedition-hit-cut-table'
+import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 function GuildExpeditionHitCutSection() {

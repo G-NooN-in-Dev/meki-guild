@@ -8,8 +8,8 @@ import {
 	BOSS_RAID_BOSS_ORDER,
 	BOSS_RAID_DIFFICULTIES,
 	getBossRaidRequiredHit
-} from '../lib/boss-raid.constants'
-import { BossRaidSelection } from '../types/boss-raid.type'
+} from '../../lib/boss-raid.constants'
+import { BossRaidSelection } from '../../types/boss-raid.type'
 
 type BossRaidHitCutTableProps = {
 	selectedBoss: BossRaidSelection

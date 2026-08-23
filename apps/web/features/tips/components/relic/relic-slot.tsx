@@ -4,8 +4,8 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 import { PlusIcon } from 'lucide-react'
 
-import GradePortrait from '@/features/tips/components/grade-portrait'
-import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
+import GradePortrait from '@/features/tips/components/shared/grade-portrait'
+import RelicAwakeningStars from '@/features/tips/components/relic/relic-awakening-stars'
 import { ITEM_GRADE_SLOT_CLASS, ITEM_GRADE_SLOT_HOVER_CLASS } from '@/features/tips/lib/item-grade.constants'
 import { RELIC_GRADE_BADGE_CLASS, RELIC_GRADE_META } from '@/features/tips/lib/relic.constants'
 import {

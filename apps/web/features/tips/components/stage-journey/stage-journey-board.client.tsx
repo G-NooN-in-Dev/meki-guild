@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 
-import StageJourneyChapterTable from '@/features/tips/components/stage-journey-chapter-table'
-import StageJourneyEffectTable from '@/features/tips/components/stage-journey-effect-table'
+import StageJourneyChapterTable from '@/features/tips/components/stage-journey/stage-journey-chapter-table'
+import StageJourneyEffectTable from '@/features/tips/components/stage-journey/stage-journey-effect-table'
 import { STAGE_JOURNEY_DEFAULT_CHAPTER } from '@/features/tips/lib/stage-journey.constants'
 
 function StageJourneyBoard() {

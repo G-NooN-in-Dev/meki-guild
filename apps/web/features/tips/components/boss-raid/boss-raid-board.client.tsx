@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { BossRaidSelection } from '../types/boss-raid.type'
+import { BossRaidSelection } from '../../types/boss-raid.type'
 import BossRaidHitCutTable from './boss-raid-hit-cut-table'
 import BossRaidRewardTable from './boss-raid-reward-table'
 

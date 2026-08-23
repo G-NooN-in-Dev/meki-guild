@@ -3,8 +3,8 @@
 import { cn } from '@shared/ui/utils'
 import { useState } from 'react'
 
-import CompanionSlot from '@/features/tips/components/companion-slot'
-import CompanionSlotEditor from '@/features/tips/components/companion-slot-editor'
+import CompanionSlot from '@/features/tips/components/companion/companion-slot'
+import CompanionSlotEditor from '@/features/tips/components/companion/companion-slot-editor'
 import {
 	aggregateEquipEffects,
 	clampCompanionLevel,

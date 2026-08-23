@@ -1,7 +1,7 @@
 import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 
-import GradePortrait from '@/features/tips/components/grade-portrait'
+import GradePortrait from '@/features/tips/components/shared/grade-portrait'
 import { ITEM_GRADE_BADGE_CLASS } from '@/features/tips/lib/item-grade.constants'
 import { RELIC_GRADE_META } from '@/features/tips/lib/relic.constants'
 import type { Relic } from '@/features/tips/types/relic.type'

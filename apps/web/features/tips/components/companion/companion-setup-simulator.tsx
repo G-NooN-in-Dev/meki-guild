@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import CompanionSetupBoard from '@/features/tips/components/companion-setup-board'
+import CompanionSetupBoard from '@/features/tips/components/companion/companion-setup-board'
 import { createEmptyCompanionLoadout } from '@/features/tips/lib/companion-setup.constants'
 import type { CompanionLoadout } from '@/features/tips/types/companion.type'
 

@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 
-import RelicEffectCard from '@/features/tips/components/relic-effect-card'
-import RelicEffectDesktopTable from '@/features/tips/components/relic-effect-desktop-table'
-import RelicPotentialTable from '@/features/tips/components/relic-potential-table'
+import RelicEffectCard from '@/features/tips/components/relic/relic-effect-card'
+import RelicEffectDesktopTable from '@/features/tips/components/relic/relic-effect-desktop-table'
+import RelicPotentialTable from '@/features/tips/components/relic/relic-potential-table'
 import { RELICS, resolveRelicEffects } from '@/features/tips/lib/relic.constants'
 import { resolveRelicPossessionLines } from '@/features/tips/lib/relic-possession.constants'
 import type { RelicEffectRow } from '@/features/tips/types/relic.type'

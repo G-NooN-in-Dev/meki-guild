@@ -1,9 +1,9 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
-import RelicAwakeningCellControl from '@/features/tips/components/relic-awakening-cell-control'
-import RelicEffectLineList from '@/features/tips/components/relic-effect-line-list'
-import RelicIdentity from '@/features/tips/components/relic-identity'
+import RelicAwakeningCellControl from '@/features/tips/components/relic/relic-awakening-cell-control'
+import RelicEffectLineList from '@/features/tips/components/relic/relic-effect-line-list'
+import RelicIdentity from '@/features/tips/components/relic/relic-identity'
 import { ITEM_GRADE_SLOT_CLASS } from '@/features/tips/lib/item-grade.constants'
 import type { RelicEffectRow } from '@/features/tips/types/relic.type'
 

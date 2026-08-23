@@ -7,8 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
 import { useEffect, useState } from 'react'
 
-import CompanionLevelStepper from '@/features/tips/components/companion-level-stepper'
-import GradePortrait from '@/features/tips/components/grade-portrait'
+import CompanionLevelStepper from '@/features/tips/components/companion/companion-level-stepper'
+import GradePortrait from '@/features/tips/components/shared/grade-portrait'
 import {
 	COMPANION_GRADE_BADGE_CLASS,
 	COMPANION_GRADE_MAX_LEVEL,

@@ -4,8 +4,8 @@
 
 import { Badge } from '@shared/ui/badge'
 
-import BossRaidBoard from '../components/boss-raid-board.client'
-import TipsBackLink from '../components/tips-back-link'
+import BossRaidBoard from '../components/boss-raid/boss-raid-board.client'
+import TipsBackLink from '../components/hub/tips-back-link'
 import { getTipTagsBySlug } from '../lib/tips-registry.constants'
 
 function BossRaidSection() {

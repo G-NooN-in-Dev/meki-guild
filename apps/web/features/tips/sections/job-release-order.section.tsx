@@ -1,7 +1,7 @@
 import { Badge } from '@shared/ui/badge'
 
-import JobReleaseOrderTable from '@/features/tips/components/job-release-order-table'
-import TipsBackLink from '@/features/tips/components/tips-back-link'
+import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
+import JobReleaseOrderTable from '@/features/tips/components/job-release-order/job-release-order-table'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 /**

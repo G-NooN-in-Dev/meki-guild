@@ -2,10 +2,10 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 
-import RelicEffectTable from '@/features/tips/components/relic-effect-table'
-import RelicSetupSimulator from '@/features/tips/components/relic-setup-simulator'
+import CompanionEffectTable from '@/features/tips/components/companion/companion-effect-table'
+import CompanionSetupSimulator from '@/features/tips/components/companion/companion-setup-simulator'
 
-function RelicSetupTabs() {
+function CompanionSetupTabs() {
 	return (
 		<Tabs defaultValue="table" className="gap-4">
 			<TabsList className="grid w-full max-w-md grid-cols-2">
@@ -14,14 +14,14 @@ function RelicSetupTabs() {
 			</TabsList>
 
 			<TabsContent value="table" className="mt-0">
-				<RelicEffectTable />
+				<CompanionEffectTable />
 			</TabsContent>
 
 			<TabsContent value="simulation" className="mt-0">
-				<RelicSetupSimulator />
+				<CompanionSetupSimulator />
 			</TabsContent>
 		</Tabs>
 	)
 }
 
-export default RelicSetupTabs
+export default CompanionSetupTabs

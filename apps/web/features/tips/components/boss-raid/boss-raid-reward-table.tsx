@@ -18,8 +18,8 @@ import {
 	getBossRaidMaterialQuantity,
 	getBossRaidMilestoneEquipmentMaxLevel,
 	partitionBossRaidRewards
-} from '../lib/boss-raid.constants'
-import { BossRaidEntry, BossRaidMilestone, BossRaidReward, BossRaidSelection } from '../types/boss-raid.type'
+} from '../../lib/boss-raid.constants'
+import { BossRaidEntry, BossRaidMilestone, BossRaidReward, BossRaidSelection } from '../../types/boss-raid.type'
 
 type BossRaidRewardTableProps = {
 	selectedBoss: BossRaidSelection

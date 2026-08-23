@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import RelicSetupBoard from '@/features/tips/components/relic-setup-board'
+import RelicSetupBoard from '@/features/tips/components/relic/relic-setup-board'
 import { createEmptyRelicLoadout } from '@/features/tips/lib/relic.constants'
 import type { RelicLoadout } from '@/features/tips/types/relic.type'
 

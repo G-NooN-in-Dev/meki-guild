@@ -4,7 +4,7 @@ import { Button } from '@shared/ui/button'
 import { cn } from '@shared/ui/utils'
 import { MinusIcon, PlusIcon } from 'lucide-react'
 
-import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
+import RelicAwakeningStars from '@/features/tips/components/relic/relic-awakening-stars'
 import { RELIC_MAX_AWAKENING_STAGE } from '@/features/tips/lib/relic.constants'
 
 type RelicAwakeningCellControlProps = {

@@ -1,7 +1,7 @@
 import { Badge } from '@shared/ui/badge'
 
-import ContentStageCutChart from '@/features/tips/components/content-stage-cut-chart'
-import TipsBackLink from '@/features/tips/components/tips-back-link'
+import ContentStageCutChart from '@/features/tips/components/content-stage-cut/content-stage-cut-chart'
+import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 function ContentStageCutSection() {

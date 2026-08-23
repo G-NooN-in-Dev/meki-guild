@@ -1,7 +1,7 @@
 import { Badge } from '@shared/ui/badge'
 
-import RelicSetupTabs from '@/features/tips/components/relic-setup-tabs.client'
-import TipsBackLink from '@/features/tips/components/tips-back-link'
+import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
+import RelicSetupTabs from '@/features/tips/components/relic/relic-setup-tabs.client'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 /**

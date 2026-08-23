@@ -4,9 +4,9 @@ import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
 import { useState } from 'react'
 
-import RelicAwakeningStars from '@/features/tips/components/relic-awakening-stars'
-import RelicSlot from '@/features/tips/components/relic-slot'
-import RelicSlotEditor from '@/features/tips/components/relic-slot-editor'
+import RelicAwakeningStars from '@/features/tips/components/relic/relic-awakening-stars'
+import RelicSlot from '@/features/tips/components/relic/relic-slot'
+import RelicSlotEditor from '@/features/tips/components/relic/relic-slot-editor'
 import {
 	aggregateRelicStats,
 	clampRelicAwakeningStage,

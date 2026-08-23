@@ -4,8 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { cn } from '@shared/ui/utils'
 import { useState } from 'react'
 
-import CompanionLevelStepper from '@/features/tips/components/companion-level-stepper'
-import GradePortrait from '@/features/tips/components/grade-portrait'
+import CompanionLevelStepper from '@/features/tips/components/companion/companion-level-stepper'
+import GradePortrait from '@/features/tips/components/shared/grade-portrait'
 import {
 	COMPANION_EQUIP_EFFECT_BASE_BY_JOB,
 	COMPANION_GRADE_MAX_LEVEL,

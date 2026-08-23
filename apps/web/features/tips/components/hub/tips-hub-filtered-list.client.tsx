@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from 'react'
 
-import TipCard from '@/features/tips/components/tip-card'
-import TipTagFilter from '@/features/tips/components/tip-tag-filter'
+import TipCard from '@/features/tips/components/hub/tip-card'
+import TipTagFilter from '@/features/tips/components/hub/tip-tag-filter'
 import type { TipEntry } from '@/features/tips/types/tip.type'
 
 type TipsHubFilteredListProps = {
