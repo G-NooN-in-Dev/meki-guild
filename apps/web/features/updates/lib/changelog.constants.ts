@@ -10,6 +10,10 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 		date: '2026-08-24',
 		sections: [
 			{
+				title: '길드 정보',
+				items: [{ text: '데이터 갱신 - CSV 동기화 방식 적용' }]
+			},
+			{
 				title: '정보/팁',
 				items: [
 					{ text: '토벌전 명중컷 · 제한시간 추가' },
