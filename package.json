@@ -8,7 +8,8 @@
 		"lint": "turbo run lint",
 		"format": "prettier --cache --write .",
 		"check-types": "turbo run check-types",
-		"guild:rotate": "node scripts/rotate-guild-week.mjs"
+		"guild:rotate": "node scripts/rotate-guild-week.mjs",
+		"guild:sync": "node scripts/sync-guild-sheet.mjs"
 	},
 	"lint-staged": {
 		"*": "prettier --cache --write --ignore-unknown"
