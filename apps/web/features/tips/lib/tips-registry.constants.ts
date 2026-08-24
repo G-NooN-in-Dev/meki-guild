@@ -48,6 +48,13 @@ export const TIP_ENTRIES = [
 		href: '/tips/boss-raid'
 	},
 	{
+		slug: 'growth-dungeon',
+		title: '성장 던전 정보',
+		description: '성장 던전 정보를 확인해보세요.',
+		tags: ['성장 던전'],
+		href: '/tips/growth-dungeon'
+	},
+	{
 		slug: 'guild-expedition-hit-cut',
 		title: '토벌전 명중컷 · 제한시간',
 		description: '길드 토벌전 단계별 필요 명중과 제한시간을 확인해보세요.',

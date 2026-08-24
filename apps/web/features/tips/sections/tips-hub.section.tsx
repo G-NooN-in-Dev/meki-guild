@@ -1,4 +1,4 @@
-import TipsHubFilteredList from '@/features/tips/components/tips-hub-filtered-list.client'
+import TipsHubFilteredList from '@/features/tips/components/hub/tips-hub-filtered-list.client'
 import { TIP_ENTRIES, TIP_TAGS } from '@/features/tips/lib/tips-registry.constants'
 
 function TipsHubSection() {

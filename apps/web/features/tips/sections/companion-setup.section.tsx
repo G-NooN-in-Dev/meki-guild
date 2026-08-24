@@ -1,7 +1,7 @@
 import { Badge } from '@shared/ui/badge'
 
-import CompanionSetupTabs from '@/features/tips/components/companion-setup-tabs.client'
-import TipsBackLink from '@/features/tips/components/tips-back-link'
+import CompanionSetupTabs from '@/features/tips/components/companion/companion-setup-tabs.client'
+import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 /**

@@ -1,8 +1,8 @@
 import { Badge } from '@shared/ui/badge'
 
-import GuildRivalryHitCutSummary from '@/features/tips/components/guild-rivalry-hit-cut-summary'
-import GuildRivalryHitCutTable from '@/features/tips/components/guild-rivalry-hit-cut-table'
-import TipsBackLink from '@/features/tips/components/tips-back-link'
+import GuildRivalryHitCutSummary from '@/features/tips/components/guild-rivalry/guild-rivalry-hit-cut-summary'
+import GuildRivalryHitCutTable from '@/features/tips/components/guild-rivalry/guild-rivalry-hit-cut-table'
+import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 function GuildRivalryHitCutSection() {

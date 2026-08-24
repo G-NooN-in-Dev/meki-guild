@@ -1,7 +1,7 @@
 import { Badge } from '@shared/ui/badge'
 
-import StageJourneyBoard from '@/features/tips/components/stage-journey-board.client'
-import TipsBackLink from '@/features/tips/components/tips-back-link'
+import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
+import StageJourneyBoard from '@/features/tips/components/stage-journey/stage-journey-board.client'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 /**
