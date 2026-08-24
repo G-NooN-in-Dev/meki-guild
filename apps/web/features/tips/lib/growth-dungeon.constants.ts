@@ -1,6 +1,9 @@
 import type {
 	AbilityDungeonHitCutEntry,
 	EnhanceDungeonHitCutEntry,
+	EnhanceDungeonMysteriousScrollBandEntry,
+	EnhanceDungeonMysteriousScrollDetailRates,
+	EnhanceDungeonMysteriousScrollTier,
 	EquipmentDungeonHitCutEntry,
 	ExperienceDungeonHitCutEntry,
 	GrowthDungeonHitCutEntry
@@ -233,6 +236,59 @@ export const ENHANCE_DUNGEON_TIME_LIMIT_SEC = 25
 /** 강화 던전 의문의 주문서 획득 확률(%) */
 export const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_DROP_PERCENT = 10
 
+/**
+ * 의문의 주문서 — 단계 구간별 티어 비율(%) 원본.
+ * 동일 비율 구간(1~29)은 한 줄로 합칩니다.
+ */
+const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_TIER_BANDS = [
+	{ stageFrom: 1, stageTo: 29, normal: 100, rare: 0, epic: 0 },
+	{ stageFrom: 30, stageTo: 39, normal: 90, rare: 10, epic: 0 },
+	{ stageFrom: 40, stageTo: 49, normal: 80, rare: 20, epic: 0 },
+	{ stageFrom: 50, stageTo: 59, normal: 70, rare: 30, epic: 0 },
+	{ stageFrom: 60, stageTo: 69, normal: 60, rare: 35, epic: 5 },
+	{ stageFrom: 70, stageTo: 79, normal: 50, rare: 40, epic: 10 },
+	{ stageFrom: 80, stageTo: 89, normal: 40, rare: 45, epic: 15 },
+	{ stageFrom: 90, stageTo: 99, normal: 30, rare: 50, epic: 20 },
+	{ stageFrom: 100, stageTo: 109, normal: 20, rare: 55, epic: 25 },
+	{ stageFrom: 110, stageTo: 119, normal: 10, rare: 60, epic: 30 },
+	{ stageFrom: 120, stageTo: 129, normal: 10, rare: 57.5, epic: 32.5 },
+	{ stageFrom: 130, stageTo: 139, normal: 10, rare: 55, epic: 35 },
+	{ stageFrom: 140, stageTo: 140, normal: 10, rare: 52.5, epic: 37.5 }
+] as const satisfies ReadonlyArray<{ stageFrom: number; stageTo: number } & EnhanceDungeonMysteriousScrollTier>
+
+/**
+ * 티어 비율 → 세부 6종 **실제 획득** 확률(%).
+ * 의문의 주문서 드롭률 × 티어 비율 × (노말 1종 / 레어 2종 균등 / 에픽 3종 균등).
+ */
+function getEnhanceDungeonMysteriousScrollDetailRates(
+	tiers: EnhanceDungeonMysteriousScrollTier
+): EnhanceDungeonMysteriousScrollDetailRates {
+	const { normal, rare, epic } = tiers
+	const dropRate = ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_DROP_PERCENT / 100
+
+	return {
+		normal40: normal * dropRate,
+		rare40: (rare / 2) * dropRate,
+		rare25: (rare / 2) * dropRate,
+		epic70: (epic / 3) * dropRate,
+		epic30: (epic / 3) * dropRate,
+		epic15: (epic / 3) * dropRate
+	}
+}
+
+/** 구간 표에 바로 쓰는 의문의 주문서 확률 데이터 */
+export const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_BAND_ENTRIES: EnhanceDungeonMysteriousScrollBandEntry[] =
+	ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_TIER_BANDS.map(({ stageFrom, stageTo, normal, rare, epic }) => {
+		const tiers = { normal, rare, epic }
+
+		return {
+			stageFrom,
+			stageTo,
+			tiers,
+			details: getEnhanceDungeonMysteriousScrollDetailRates(tiers)
+		}
+	})
+
 /** 강화 던전 1단계 기준 필요 명중 */
 export const ENHANCE_DUNGEON_BASE_HIT_CUT = 34
 
@@ -276,6 +332,7 @@ export {
 	buildExperienceDungeonHitCutEntries,
 	buildWeaponDungeonHitCutEntries,
 	getAbilityDungeonRequiredHitCut,
+	getEnhanceDungeonMysteriousScrollDetailRates,
 	getEnhanceDungeonRequiredHitCut,
 	getEnhanceDungeonSpellTraceCount,
 	getEquipmentDungeonRequiredHitCut,
