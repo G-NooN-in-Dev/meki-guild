@@ -6,6 +6,33 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.5.0',
+		date: '2026-08-24',
+		sections: [
+			{
+				title: '정보/팁',
+				items: [
+					{ text: '토벌전 명중컷 · 제한시간 추가' },
+					{ text: '보스 레이드 명중컷 · 보상 정보 추가' },
+					{
+						text: '성장 던전 정보',
+						children: [
+							{ text: '무기 던전 — 명중컷, 제한시간 추가' },
+							{ text: '경험치 던전 — 명중컷, 처치 몬스터 수 추가' },
+							{ text: '장비 던전 — 명중컷, 제한시간, 처치 몬스터 수 추가' },
+							{ text: '용사의 수련장 — 명중컷 추가' },
+							{ text: '강화 던전 — 명중컷, 주문의 흔적 보상 개수, 의문의 주문서 확률 추가' }
+						]
+					}
+				]
+			},
+			{
+				title: '공통',
+				items: [{ text: '업데이트 일지 추가' }, { text: '탭 UI 애니메이션 개선' }]
+			}
+		]
+	},
+	{
 		version: '1.4.3',
 		date: '2026-08-17',
 		sections: [
