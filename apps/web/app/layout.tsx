@@ -1,13 +1,16 @@
 import '@/global.css'
 
+import { cn } from '@shared/ui/lib/utils'
 import { Toaster } from '@shared/ui/sonner'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
+import AnnouncementBanner from '@/components/announcement-banner'
 import { BgmProvider } from '@/components/bgm.context'
 import Footer from '@/components/footer'
 import Header from '@/components/header'
+import { ANNOUNCEMENT_BANNER_BODY_PADDING_CLASS, hasAnnouncementBanner } from '@/libs/announcement-banner.constants'
 
 // 파비콘·Apple 터치 아이콘·카카오톡 미리보기 모두 public/games.png 사용
 const SITE_URL = 'https://meki-games.vercel.app'
@@ -40,9 +43,16 @@ export const metadata: Metadata = {
 }
 
 function RootLayout({ children }: PropsWithChildren) {
+	const showAnnouncementBanner = hasAnnouncementBanner()
+
 	return (
 		<html lang="ko" className="h-full antialiased">
-			<body className="relative flex min-h-full w-full min-w-0 flex-col pt-14">
+			<body
+				className={cn(
+					'relative flex min-h-full w-full min-w-0 flex-col pt-14',
+					showAnnouncementBanner && ANNOUNCEMENT_BANNER_BODY_PADDING_CLASS
+				)}
+			>
 				<div
 					aria-hidden
 					className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
@@ -52,6 +62,7 @@ function RootLayout({ children }: PropsWithChildren) {
 				{/* 헤더·모바일 Sheet에서 같은 BGM 재생 상태를 공유 */}
 				<BgmProvider>
 					<Header />
+					<AnnouncementBanner />
 					{children}
 					<Footer />
 					<Toaster />

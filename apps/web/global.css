@@ -25,6 +25,17 @@ body {
 	}
 }
 
+/* 헤더 공지 마키 — JS로 측정한 --marquee-distance(px)만 이동해 루프 지점을 픽셀 단위로 맞춥니다 */
+@keyframes marquee-distance {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		transform: translate3d(calc(-1 * var(--marquee-distance, 0px)), 0, 0);
+	}
+}
+
 @theme inline {
 	--animate-bgm-bar: bgm-bar 0.85s ease-in-out infinite;
+	--animate-marquee: marquee-distance linear infinite;
 }
