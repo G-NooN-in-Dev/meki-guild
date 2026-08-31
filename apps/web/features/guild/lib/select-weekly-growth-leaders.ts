@@ -9,11 +9,10 @@ import {
 import { getGuildContentsOrderKeys } from '@/libs/guild-contents-order.constants'
 
 /** 금주의 길드원 점수에 쓰는 지표 키 */
-type WeeklyGrowthMetricKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss'
+type WeeklyGrowthMetricKey = 'expeditionScore' | 'rivalry' | 'training' | 'guildBoss'
 
 /** 지표별 표시 라벨 (Popover 상세용) */
 export const WEEKLY_GROWTH_METRIC_LABELS = {
-	combatPower: '전투력',
 	expeditionScore: '토벌전',
 	rivalry: '대항전',
 	training: '수련장',
@@ -22,13 +21,12 @@ export const WEEKLY_GROWTH_METRIC_LABELS = {
 
 /**
  * 매주 반드시 갱신되는 컨텐츠.
- * 금주의 길드원은 이 세 가지가 모두 이번 주 갱신된 뒤에만 선정합니다.
+ * 금주의 길드원은 이 두 가지가 모두 이번 주 갱신된 뒤에만 선정합니다.
  */
-const REQUIRED_WEEKLY_DATE_KEYS = ['combatPower', 'expedition', 'rivalry'] as const
+const REQUIRED_WEEKLY_DATE_KEYS = ['expedition', 'rivalry'] as const
 
 /** 점수 지표 키 ↔ 수집일 키 */
 const METRIC_TO_DATE_KEY = {
-	combatPower: 'combatPower',
 	expeditionScore: 'expedition',
 	rivalry: 'rivalry',
 	training: 'training',
@@ -45,11 +43,7 @@ const DATE_KEY_LABELS = {
 } as const satisfies Record<keyof typeof GUILD_CONTENT_UPDATED_AT, string>
 
 /** 항상 점수에 포함하는 기본 지표 */
-const BASE_METRIC_KEYS = [
-	'combatPower',
-	'expeditionScore',
-	'rivalry'
-] as const satisfies readonly WeeklyGrowthMetricKey[]
+const BASE_METRIC_KEYS = ['expeditionScore', 'rivalry'] as const satisfies readonly WeeklyGrowthMetricKey[]
 
 /** 같은 주간 사이클로 볼 수 있는 수집일 최대 간격(일). 보통 1~3일 */
 export const WEEKLY_GROWTH_CYCLE_MAX_GAP_DAYS = 3
@@ -73,8 +67,6 @@ type WeeklyGrowthLeader = {
 	scoreLabel: string
 	/** 점수에 실제 반영된 지표들 */
 	metrics: WeeklyGrowthMetricBreakdown[]
-	/** 동점 시 타이브레이커로 쓴 전투력 성장률 (없으면 null) */
-	combatPowerPercent: number | null
 }
 
 /** 선정 가능 여부. ready=false면 아직 주간 업데이트가 끝나지 않음 */
@@ -151,7 +143,7 @@ function isDateInWeeklyCycleWindow(date: string, weeklyCurrentDates: string[], m
 }
 
 /**
- * 주간 필수 3종(전투력·토벌·대항)이 모두 이번 주 갱신됐는지,
+ * 주간 필수 2종(토벌·대항)이 모두 이번 주 갱신됐는지,
  * 그리고 수련장·길드보스를 같은 주 점수에 넣을지 판별합니다.
  */
 function getWeeklyGrowthSelectionStatus(
@@ -172,7 +164,7 @@ function getWeeklyGrowthSelectionStatus(
 
 	const weeklyCurrentDates = getRequiredWeeklyCurrentDates(contentDates)
 
-	// 필수 3종의 최신일이 서로 너무 벌어지면 같은 주로 보기 어려움
+	// 필수 2종의 최신일이 서로 너무 벌어지면 같은 주로 보기 어려움
 	const timestamps = weeklyCurrentDates.map(toGuildContentDateTimestamp)
 	const spanDays = (Math.max(...timestamps) - Math.min(...timestamps)) / (24 * 60 * 60 * 1000)
 
@@ -237,8 +229,6 @@ function getActiveWeeklyGrowthMetricKeys(
 
 function getMetricDelta(comparison: GuildMemberComparison, key: WeeklyGrowthMetricKey): NumericDelta {
 	switch (key) {
-		case 'combatPower':
-			return comparison.combatPower
 		case 'expeditionScore':
 			return comparison.expeditionScore
 		case 'rivalry':
@@ -281,25 +271,23 @@ function scoreMemberGrowth(
 	}
 
 	const score = metrics.reduce((sum, metric) => sum + metric.percent, 0) / metrics.length
-	const combatPowerPercent = getGrowthPercent(comparison.combatPower)
 
 	return {
 		name,
 		job,
 		score,
 		scoreLabel: formatGrowthPercentLabel(score),
-		metrics,
-		combatPowerPercent
+		metrics
 	}
 }
 
 /**
  * 이번 주 성장률 상위 3명을 선정합니다.
- * - 주간 필수 컨텐츠(전투력·토벌·대항)가 모두 갱신된 뒤에만 선정
+ * - 주간 필수 컨텐츠(토벌·대항)가 모두 갱신된 뒤에만 선정
  * - active 멤버만
  * - 지표 가중치 없이 % 평균
  * - 수련장·길드보스는 같은 주간 사이클(±3일)에 갱신됐을 때만 포함
- * - 동점이면 전투력 성장률 우선
+ * - 동점이면 이름 가나다순
  */
 function selectWeeklyGrowthLeaders(
 	comparisons: GuildMemberComparison[],
@@ -320,14 +308,6 @@ function selectWeeklyGrowthLeaders(
 		.sort((left, right) => {
 			if (right.score !== left.score) {
 				return right.score - left.score
-			}
-
-			// 동점 → 전투력 성장률. 없으면 맨 뒤로
-			const leftCombat = left.combatPowerPercent ?? Number.NEGATIVE_INFINITY
-			const rightCombat = right.combatPowerPercent ?? Number.NEGATIVE_INFINITY
-
-			if (rightCombat !== leftCombat) {
-				return rightCombat - leftCombat
 			}
 
 			return left.name.localeCompare(right.name, 'ko')

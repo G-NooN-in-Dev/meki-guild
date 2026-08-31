@@ -112,7 +112,7 @@ type PendingStateProps = {
 function PendingState({ pendingLabels }: PendingStateProps) {
 	return (
 		<div className="text-grayscale-600 flex flex-col gap-2 py-4 text-sm">
-			<p>전투력 · 토벌전 · 대항전이 모두 업데이트된 뒤 선정됩니다.</p>
+			<p>토벌전 · 대항전이 모두 업데이트된 뒤 선정됩니다.</p>
 			{pendingLabels.length > 0 ? (
 				<p className="text-grayscale-500 text-xs">대기 중: {pendingLabels.join(', ')}</p>
 			) : null}
@@ -154,7 +154,9 @@ function WeeklyGrowthLeaders({ comparisons }: WeeklyGrowthLeadersProps) {
 						) : null}
 					</div>
 					<PopoverDescription>
-						{status.ready ? '금주 성장률이 가장 높은 길드원입니다' : '주간 컨텐츠 업데이트가 모두 끝나면 선정됩니다'}
+						{status.ready
+							? '금주 길드 컨텐츠 성장률이 가장 높은 길드원입니다'
+							: '주간 컨텐츠 업데이트가 모두 끝나면 선정됩니다'}
 					</PopoverDescription>
 				</PopoverHeader>
 
