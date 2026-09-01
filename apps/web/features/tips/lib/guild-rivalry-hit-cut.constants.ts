@@ -47,7 +47,8 @@ export const GUILD_RIVALRY_BUFF_STACK_PER_MOB = 1
 export const GUILD_RIVALRY_BUFF_STACK_PER_STAGE = GUILD_RIVALRY_MOBS_PER_STAGE * GUILD_RIVALRY_BUFF_STACK_PER_MOB
 
 /** 보스 몬스터 피격 시 감소하는 스택 */
-export const GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT = 4
+export const GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MIN = 1
+export const GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MAX = 4
 
 /**
  * 필요 명중보다 높을 때 최종 데미지 증가에 반영되는 최대 명중 차이.

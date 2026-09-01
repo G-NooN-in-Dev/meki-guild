@@ -4,7 +4,8 @@ import { cn } from '@shared/ui/utils'
 import { ChevronDownIcon } from 'lucide-react'
 
 import {
-	GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT,
+	GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MAX,
+	GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MIN,
 	GUILD_RIVALRY_BUFF_STACK_PER_MOB,
 	GUILD_RIVALRY_BUFF_STACK_PER_STAGE,
 	GUILD_RIVALRY_HIT_BONUS_MAX_DIFF,
@@ -42,16 +43,19 @@ function SummaryRulesList() {
 				않습니다.
 			</li>
 			<li>
-				보스 몬스터의 공격을 받으면 스택이 <EmphasizedText>−{GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT}</EmphasizedText>{' '}
-				감소합니다.
+				보스 몬스터의 공격을 받으면 스택이 감소합니다. 감소 스택은 디버프 내성에 따라 달라집니다. (
+				<EmphasizedText>
+					- {GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MIN}~{GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MAX}
+				</EmphasizedText>
+				)
 			</li>
 			<li>
 				명중이 필요 수치보다 높으면 최대 <EmphasizedText>{GUILD_RIVALRY_HIT_BONUS_MAX_DIFF}</EmphasizedText> 차이까지{' '}
 				<EmphasizedText>최종 데미지</EmphasizedText> 가 증가합니다.
 			</li>
 			<li>
-				보스 몬스터를 <EmphasizedText>막타</EmphasizedText>칠 때 남아 있던 <EmphasizedText>보스의 체력</EmphasizedText>{' '}
-				에 따라 <EmphasizedText>점수</EmphasizedText>가 증가합니다.
+				보스 몬스터를 <EmphasizedText>막타</EmphasizedText>칠 때 남아 있던 <EmphasizedText>보스의 체력</EmphasizedText>
+				과 <EmphasizedText>딜량</EmphasizedText>에 따라 <EmphasizedText>점수</EmphasizedText>가 증가합니다.
 			</li>
 		</ul>
 	)
