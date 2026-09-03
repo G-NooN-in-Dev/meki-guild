@@ -389,7 +389,5 @@ function MobileNav() {
 	)
 }
 
-export { MobileNav }
-export default Nav
-
+export { MobileNav, Nav }
 export type { NavItem, NavSection }

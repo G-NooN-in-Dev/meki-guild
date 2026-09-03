@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 import BgmToggle from '@/components/bgm-toggle'
-import Nav, { MobileNav } from '@/components/nav'
+import { MobileNav, Nav } from '@/components/nav'
 import { formatAppVersionLabel } from '@/libs/app-version.constants'
 
 function Header() {
