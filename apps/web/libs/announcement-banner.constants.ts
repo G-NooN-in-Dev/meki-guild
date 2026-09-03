@@ -22,8 +22,8 @@ const ANNOUNCEMENT_BANNER_ITEMS = [
 	},
 	{
 		kind: 'link',
-		label: '9월 3일 (목) 업데이트 미리보기',
-		href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3533653&board=6633'
+		label: '9월 3일 (목) 패치노트',
+		href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3535860&board=6698'
 	}
 ] satisfies AnnouncementBannerItem[]
 
