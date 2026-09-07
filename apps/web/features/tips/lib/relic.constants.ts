@@ -66,6 +66,7 @@ const RELIC_CATALOG_SOURCE = [
 	{ name: '헬레나의 오래된 장갑', grade: 'unique', iconKey: 'helenas-old-gloves' },
 	{ name: '자쿰의 돌조각', grade: 'unique', iconKey: 'zakum-stone-fragment' },
 	{ name: '혼테일의 비늘', grade: 'unique', iconKey: 'horntail-scale' },
+	{ name: '핑크빈의 왕갈비', grade: 'unique', iconKey: 'pink-bean-rib' },
 	{ name: '성배', grade: 'legendary', iconKey: 'holy-grail' },
 	{ name: '낡은 오르골', grade: 'legendary', iconKey: 'old-music-box' },
 	{ name: '은 펜던트', grade: 'legendary', iconKey: 'silver-pendant' },
@@ -514,6 +515,19 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 			createRelicStat('최종 데미지', [20, 28, 36, 44, 52, 60], stage, 'percent', '혼테일'),
 			createRelicStat('HP 물약 재사용 대기시간 감소', [20, 28, 36, 44, 52, 60], stage, 'percent', '혼테일'),
 			createRelicStat('특정 디버프 제거 쿨타임(초)', [60, 54, 48, 42, 36, 30], stage, 'flat', '혼테일')
+		]
+	},
+	'unique-pink-bean-rib': {
+		activationCondition: '핑크빈',
+		resolveLines: (stage) => [
+			`전투 시 최종 데미지 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 증가`,
+			`HP 물약 재사용 대기시간 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 감소`,
+			`석상을 처치하여 획득하는 특수 효과의 지속시간 ${stagePercent([25, 35, 45, 55, 65, 75], stage)} 증가`
+		],
+		resolveStats: (stage) => [
+			createRelicStat('최종 데미지', [20, 28, 36, 44, 52, 60], stage, 'percent', '핑크빈'),
+			createRelicStat('HP 물약 재사용 대기시간 감소', [20, 28, 36, 44, 52, 60], stage, 'percent', '핑크빈'),
+			createRelicStat('석상 특수 효과 지속시간', [25, 35, 45, 55, 65, 75], stage, 'percent', '핑크빈')
 		]
 	},
 	'epic-charm-of-the-dead': {
