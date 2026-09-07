@@ -1,3 +1,4 @@
+import GuildContentSeasonsStatus from '@/features/guild/components/guild-content-seasons-status'
 import GuildMemberTable from '@/features/guild/components/guild-member-table'
 import GuildSummaryCards from '@/features/guild/components/guild-summary-cards'
 import { calculateGuildSummaryMetrics } from '@/features/guild/lib/guild-summary'
@@ -31,6 +32,8 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 			</header>
 
 			<GuildSummaryCards metrics={metrics} />
+
+			<GuildContentSeasonsStatus />
 
 			<GuildMemberTable
 				comparisons={data.comparisons}

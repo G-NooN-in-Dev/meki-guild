@@ -5,6 +5,7 @@ import { Switch } from '@shared/ui/switch'
 
 import ContentUpdatedAtGuide from '@/features/guild/components/content-updated-at-guide'
 import ExpeditionTierGuide from '@/features/guild/components/expedition-tier-guide'
+import GuildContentSeasonsGuide from '@/features/guild/components/guild-content-seasons-guide'
 import GuildMemberFilters from '@/features/guild/components/guild-member-filters'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import RivalryRankPointsGuide from '@/features/guild/components/rivalry-rank-points-guide'
@@ -71,6 +72,7 @@ function GuildMemberToolbar({
 				<WeeklyGrowthLeaders comparisons={comparisons} />
 				<ContentUpdatedAtGuide />
 				<JobDistributionGuide comparisons={comparisons} />
+				<GuildContentSeasonsGuide />
 				<ExpeditionTierGuide />
 				<RivalryRankPointsGuide />
 			</div>
