@@ -37,6 +37,9 @@ importers:
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+      dayjs:
+        specifier: ^1.11.23
+        version: 1.11.23
       lucide-react:
         specifier: ^1.17.0
         version: 1.23.0(react@19.2.4)
@@ -1464,6 +1467,10 @@ packages:
   date-fns@4.4.0:
     resolution:
       { integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w== }
+
+  dayjs@1.11.23:
+    resolution:
+      { integrity: sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ== }
 
   debug@3.2.7:
     resolution:
@@ -4195,6 +4202,8 @@ snapshots:
       is-data-view: 1.0.2
 
   date-fns@4.4.0: {}
+
+  dayjs@1.11.23: {}
 
   debug@3.2.7:
     dependencies:

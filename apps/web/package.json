@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@shared/ui": "workspace:*",
 		"@vercel/analytics": "^2.0.1",
+		"dayjs": "^1.11.23",
 		"lucide-react": "^1.17.0",
 		"mongodb": "^7.5.0",
 		"next": "16.2.4",
