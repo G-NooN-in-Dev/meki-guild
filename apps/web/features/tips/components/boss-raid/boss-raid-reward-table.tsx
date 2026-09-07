@@ -1,16 +1,23 @@
+'use client'
+
 import { Badge } from '@shared/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card'
+import { Label } from '@shared/ui/label'
+import { Switch } from '@shared/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 import Image from 'next/image'
+import { useState } from 'react'
 
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {
+	applyBossRaidBurningRates,
 	BOSS_RAID_BOSS_META,
 	BOSS_RAID_REWARD_GRADE_META,
 	BOSS_RAID_REWARD_TIER_LABELS,
 	formatBossRaidMilestoneRewardName,
+	formatBossRaidRatePercent,
 	formatBossRaidRewardName,
 	getBossRaidDifficultyLabel,
 	getBossRaidEntry,
@@ -134,28 +141,63 @@ function BossRaidMilestoneRewardItemCell({ milestone }: { milestone: BossRaidMil
 function BossRaidRewardTableHeader({
 	bossName,
 	difficultyLabel,
-	requiredHit
+	requiredHit,
+	showBurningToggle,
+	burningOn,
+	onBurningChange
 }: {
 	bossName: string
 	difficultyLabel: string
 	requiredHit: number
+	showBurningToggle: boolean
+	burningOn: boolean
+	onBurningChange: (checked: boolean) => void
 }) {
 	return (
 		<CardHeader className="gap-2">
-			<div className="flex flex-wrap items-center gap-2">
-				<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
-					{bossName} · {difficultyLabel}
-				</CardTitle>
-				<Badge variant="secondary" className="tabular-nums">
-					필요 명중 : {formatLocaleNumber(requiredHit)}
-				</Badge>
+			<div className="flex flex-wrap items-center justify-between gap-2">
+				<div className="flex flex-wrap items-center gap-2">
+					<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
+						{bossName} · {difficultyLabel}
+					</CardTitle>
+					<Badge variant="secondary" className="tabular-nums">
+						필요 명중 : {formatLocaleNumber(requiredHit)}
+					</Badge>
+				</div>
+
+				{showBurningToggle ? (
+					<Label
+						htmlFor="boss-raid-burning"
+						className={cn(
+							'gap-2 rounded-md border px-3 py-1.5 font-medium shadow-xs transition-colors',
+							burningOn
+								? 'border-warning-500/40 bg-warning-50 text-warning-700'
+								: 'border-grayscale-200 bg-card text-grayscale-600'
+						)}
+					>
+						<span className="text-sm tabular-nums">버닝 {burningOn ? 'ON' : 'OFF'}</span>
+						<Switch
+							id="boss-raid-burning"
+							checked={burningOn}
+							onCheckedChange={onBurningChange}
+							aria-label="버닝 이벤트"
+							className={cn(burningOn && 'data-checked:bg-warning')}
+						/>
+					</Label>
+				) : null}
 			</div>
 		</CardHeader>
 	)
 }
 
-function BossRaidProbabilityRewardTable({ entry }: { entry: Extract<BossRaidEntry, { rewardMode: 'probability' }> }) {
-	const { rewards } = entry
+function BossRaidProbabilityRewardTable({
+	entry,
+	burningOn
+}: {
+	entry: Extract<BossRaidEntry, { rewardMode: 'probability' }>
+	burningOn: boolean
+}) {
+	const rewards = burningOn ? applyBossRaidBurningRates(entry.rewards) : entry.rewards
 	const { primary, materials } = partitionBossRaidRewards(rewards)
 	const rowCount = Math.max(primary.length, materials.length)
 
@@ -180,14 +222,20 @@ function BossRaidProbabilityRewardTable({ entry }: { entry: Extract<BossRaidEntr
 								<TableCell className={cn(itemCellClassName, 'align-middle')}>
 									{primaryReward ? <BossRaidPrimaryRewardItemCell reward={primaryReward} /> : null}
 								</TableCell>
-								<TableCell className={cn(cellBaseClassName, 'text-grayscale-900 text-center')}>
-									{primaryReward ? `${primaryReward.ratePercent}%` : null}
+								<TableCell
+									className={cn(
+										cellBaseClassName,
+										'text-center',
+										burningOn ? 'text-warning-700' : 'text-grayscale-900'
+									)}
+								>
+									{primaryReward ? formatBossRaidRatePercent(primaryReward.ratePercent) : null}
 								</TableCell>
 								<TableCell className={cn(itemCellClassName, 'border-l-grayscale-200 border-l align-middle')}>
 									{materialReward ? <BossRaidRewardItemCell reward={materialReward} /> : null}
 								</TableCell>
 								<TableCell className={cn(cellBaseClassName, 'text-grayscale-900 text-center')}>
-									{materialReward ? `${materialReward.ratePercent}%` : null}
+									{materialReward ? formatBossRaidRatePercent(materialReward.ratePercent) : null}
 								</TableCell>
 							</TableRow>
 						)
@@ -226,6 +274,7 @@ function BossRaidMilestoneRewardTable({ milestones }: { milestones: readonly Bos
 }
 
 function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
+	const [burningOn, setBurningOn] = useState(false)
 	const { boss, difficulty } = selectedBoss
 	const bossName = BOSS_RAID_BOSS_META[boss].label
 	const difficultyLabel = getBossRaidDifficultyLabel(difficulty)
@@ -251,12 +300,19 @@ function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 			</div>
 
 			<Card className="border-grayscale-200 shadow-soft">
-				<BossRaidRewardTableHeader bossName={bossName} difficultyLabel={difficultyLabel} requiredHit={requiredHit} />
+				<BossRaidRewardTableHeader
+					bossName={bossName}
+					difficultyLabel={difficultyLabel}
+					requiredHit={requiredHit}
+					showBurningToggle={!isMilestone}
+					burningOn={burningOn}
+					onBurningChange={setBurningOn}
+				/>
 				<CardContent>
 					{isMilestone ? (
 						<BossRaidMilestoneRewardTable milestones={bossRaidEntry.milestones} />
 					) : (
-						<BossRaidProbabilityRewardTable entry={bossRaidEntry} />
+						<BossRaidProbabilityRewardTable entry={bossRaidEntry} burningOn={burningOn} />
 					)}
 				</CardContent>
 			</Card>

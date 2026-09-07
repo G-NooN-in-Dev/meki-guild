@@ -668,6 +668,35 @@ function partitionBossRaidRewards(rewards: readonly BossRaidReward[]) {
 	return { primary, materials }
 }
 
+/**
+ * 버닝 이벤트 — 장비/주문서 확률 2배, 남은 비율을 기타 재화가 기존 비중대로 나눔.
+ * 총합은 100%를 넘지 않는다.
+ */
+function applyBossRaidBurningRates(rewards: readonly BossRaidReward[]): BossRaidReward[] {
+	const primary = rewards.filter((reward) => reward.kind === 'equipment' || reward.kind === 'scroll')
+	const materials = rewards.filter((reward) => reward.kind === 'material')
+
+	const burnedPrimary = primary.map((reward) => ({
+		...reward,
+		ratePercent: reward.ratePercent * 2
+	}))
+	const primarySum = burnedPrimary.reduce((sum, reward) => sum + reward.ratePercent, 0)
+	const remaining = Math.max(0, 100 - primarySum)
+	const materialBaseSum = materials.reduce((sum, reward) => sum + reward.ratePercent, 0)
+
+	const burnedMaterials = materials.map((reward) => ({
+		...reward,
+		ratePercent: materialBaseSum === 0 ? 0 : (reward.ratePercent / materialBaseSum) * remaining
+	}))
+
+	return [...burnedPrimary, ...burnedMaterials]
+}
+
+/** 확률(%) 표시 — 소수점은 반올림해 정수로 표시 (모바일 셀 너비) */
+function formatBossRaidRatePercent(value: number) {
+	return `${Math.round(value)}%`
+}
+
 /** 보상 이름 */
 function formatBossRaidRewardName(reward: BossRaidReward): string {
 	if (reward.kind === 'scroll') {
@@ -719,7 +748,9 @@ function getBossRaidMilestoneEquipmentMaxLevel(milestone: BossRaidMilestone): st
 }
 
 export {
+	applyBossRaidBurningRates,
 	formatBossRaidMilestoneRewardName,
+	formatBossRaidRatePercent,
 	formatBossRaidRewardName,
 	getBossRaidDifficultyLabel,
 	getBossRaidEntry,
