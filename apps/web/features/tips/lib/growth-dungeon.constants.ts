@@ -21,7 +21,7 @@ export const GROWTH_DUNGEON_TABS = [
 export const GROWTH_DUNGEON_HARD_STAGE_INTERVAL = 10
 
 /** 성장 던전 최대 단계 */
-export const GROWTH_DUNGEON_MAX_STAGE = 140
+export const GROWTH_DUNGEON_MAX_STAGE = 150
 
 /**
  * 성장 던전 공통 명중컷 증가 구간
@@ -205,10 +205,10 @@ export const ABILITY_DUNGEON_ATTACK_BUFF_MAX_STACKS = 100
 /** 일반 몬스터 명중컷이 보스 몬스터보다 높은 수치 */
 export const ABILITY_DUNGEON_NORMAL_HIT_CUT_BONUS = 2
 
-/** 용사의 수련장 1단계 기준 필요 명중 (보스 몬스터) */
-export const ABILITY_DUNGEON_BASE_HIT_CUT = 16
+/** 용사의 수련장 1단계 기준 필요 명중 (일반 몬스터). 보스는 이보다 NORMAL_HIT_CUT_BONUS만큼 낮음 */
+export const ABILITY_DUNGEON_BASE_HIT_CUT = 18
 
-/** 용사의 수련장 단계 → 보스 몬스터 필요 명중 (1단계 18, 이후 공통 구간 증가) */
+/** 용사의 수련장 단계 → 일반 몬스터 필요 명중 (1단계 18, 이후 공통 구간 증가) */
 function getAbilityDungeonRequiredHitCut(stage: number) {
 	return getGrowthDungeonRequiredHitCut(stage, ABILITY_DUNGEON_BASE_HIT_CUT)
 }
@@ -253,7 +253,7 @@ const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_TIER_BANDS = [
 	{ stageFrom: 110, stageTo: 119, normal: 10, rare: 60, epic: 30 },
 	{ stageFrom: 120, stageTo: 129, normal: 10, rare: 57.5, epic: 32.5 },
 	{ stageFrom: 130, stageTo: 139, normal: 10, rare: 55, epic: 35 },
-	{ stageFrom: 140, stageTo: 140, normal: 10, rare: 52.5, epic: 37.5 }
+	{ stageFrom: 140, stageTo: 150, normal: 10, rare: 52.5, epic: 37.5 }
 ] as const satisfies ReadonlyArray<{ stageFrom: number; stageTo: number } & EnhanceDungeonMysteriousScrollTier>
 
 /**
