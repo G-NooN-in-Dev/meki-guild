@@ -9,19 +9,20 @@ import { CircleHelpIcon } from 'lucide-react'
 import {
 	getRivalryRankPointTextClass,
 	getRivalryRankPointTone,
-	RIVALRY_RANK_POINT_BANDS,
+	RIVALRY_RANK_POINT_DISPLAY_BANDS,
 	RIVALRY_RANK_POINT_ENTRIES,
 	RIVALRY_RANK_POINT_TONE_META,
-	type RivalryRankPointBand,
+	type RivalryRankPointDisplayBand,
 	type RivalryRankPointEntry
 } from '@/libs/rivalry-rank-points.constants'
 import { formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
-type RivalryRankPointRow = { type: 'band'; band: RivalryRankPointBand } | { type: 'rank'; entry: RivalryRankPointEntry }
+type RivalryRankPointRow =
+	{ type: 'band'; band: RivalryRankPointDisplayBand } | { type: 'rank'; entry: RivalryRankPointEntry }
 
-/** 감소폭이 바뀌는 구간 헤더를 끼워 한 덩어리로 보이지 않게 합니다. */
+/** 표시용 구간 헤더를 끼워 표가 한 덩어리로 보이지 않게 합니다. */
 function buildRivalryRankPointRows(
-	bands: readonly RivalryRankPointBand[],
+	bands: readonly RivalryRankPointDisplayBand[],
 	entries: readonly RivalryRankPointEntry[]
 ): RivalryRankPointRow[] {
 	const rows: RivalryRankPointRow[] = []
@@ -39,8 +40,16 @@ function buildRivalryRankPointRows(
 	return rows
 }
 
+function formatRivalryRankPointBandLabel(fromRank: number, toRank: number): string {
+	if (fromRank === toRank) {
+		return `${fromRank}위`
+	}
+
+	return `${fromRank}~${toRank}위`
+}
+
 function RivalryRankPointsGuide() {
-	const rows = buildRivalryRankPointRows(RIVALRY_RANK_POINT_BANDS, RIVALRY_RANK_POINT_ENTRIES)
+	const rows = buildRivalryRankPointRows(RIVALRY_RANK_POINT_DISPLAY_BANDS, RIVALRY_RANK_POINT_ENTRIES)
 
 	return (
 		<Dialog>
@@ -93,7 +102,7 @@ function RivalryRankPointsGuide() {
 													headerClassName
 												)}
 											>
-												{fromRank}~{toRank} 위
+												{formatRivalryRankPointBandLabel(fromRank, toRank)}
 											</TableCell>
 										</TableRow>
 									)

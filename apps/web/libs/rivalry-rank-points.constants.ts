@@ -5,6 +5,12 @@ type RivalryRankPointBand = {
 	step: number
 }
 
+/** 표 UI 구간 헤더용. 계산용 step 구간과 분리해 한 자리 구간(6~6위)이 보이지 않게 합니다. */
+type RivalryRankPointDisplayBand = {
+	fromRank: number
+	toRank: number
+}
+
 type RivalryRankPointEntry = {
 	rank: number
 	points: number
@@ -65,24 +71,41 @@ function getRivalryRankPointTextClass(rank: number): string {
 }
 
 /** 1위 포인트. 이후 순위는 구간 step만큼 줄어듭니다. */
-const RIVALRY_RANK_POINT_START = 1_000_000
+const RIVALRY_RANK_POINT_START = 1_500_000
 
 /**
  * 대항전 개인 순위 → 길드 포인트 규칙.
  * 구간이 바뀌면 감소폭(step)만 달라지고, 값은 직전 순위에서 이어집니다.
  */
 const RIVALRY_RANK_POINT_BANDS = [
-	{ fromRank: 1, toRank: 3, step: 100_000 },
-	{ fromRank: 4, toRank: 5, step: 70_000 },
-	{ fromRank: 6, toRank: 10, step: 50_000 },
-	{ fromRank: 11, toRank: 15, step: 30_000 },
-	{ fromRank: 16, toRank: 20, step: 10_000 },
-	{ fromRank: 21, toRank: 30, step: 5_000 },
+	{ fromRank: 1, toRank: 2, step: 300_000 },
+	{ fromRank: 3, toRank: 3, step: 250_000 },
+	{ fromRank: 4, toRank: 4, step: 100_000 },
+	{ fromRank: 5, toRank: 5, step: 70_000 },
+	{ fromRank: 6, toRank: 6, step: 60_000 },
+	{ fromRank: 7, toRank: 7, step: 50_000 },
+	{ fromRank: 8, toRank: 9, step: 40_000 },
+	{ fromRank: 10, toRank: 20, step: 30_000 },
+	{ fromRank: 21, toRank: 30, step: 10_000 },
 	{ fromRank: 31, toRank: 40, step: 3_000 },
 	{ fromRank: 41, toRank: 50, step: 2_000 },
 	{ fromRank: 51, toRank: 99, step: 1_000 },
 	{ fromRank: 100, toRank: 150, step: 700 }
 ] as const satisfies readonly RivalryRankPointBand[]
+
+/**
+ * 가이드 표 구간 헤더.
+ * 상위권은 step이 잦아도 읽기 쉬운 묶음으로 보여 줍니다.
+ */
+const RIVALRY_RANK_POINT_DISPLAY_BANDS = [
+	{ fromRank: 1, toRank: 10 },
+	{ fromRank: 11, toRank: 20 },
+	{ fromRank: 21, toRank: 30 },
+	{ fromRank: 31, toRank: 40 },
+	{ fromRank: 41, toRank: 50 },
+	{ fromRank: 51, toRank: 99 },
+	{ fromRank: 100, toRank: 150 }
+] as const satisfies readonly RivalryRankPointDisplayBand[]
 
 function buildRivalryRankPointEntries(
 	bands: readonly RivalryRankPointBand[] = RIVALRY_RANK_POINT_BANDS
@@ -127,8 +150,9 @@ export {
 	getRivalryRankPointTextClass,
 	getRivalryRankPointTone,
 	RIVALRY_RANK_POINT_BANDS,
+	RIVALRY_RANK_POINT_DISPLAY_BANDS,
 	RIVALRY_RANK_POINT_ENTRIES,
 	RIVALRY_RANK_POINT_START,
 	RIVALRY_RANK_POINT_TONE_META
 }
-export type { RivalryRankPointBand, RivalryRankPointEntry, RivalryRankPointTone }
+export type { RivalryRankPointBand, RivalryRankPointDisplayBand, RivalryRankPointEntry, RivalryRankPointTone }
