@@ -20,7 +20,7 @@ import {
 	type WeeklyGrowthLeader
 } from '@/features/guild/lib/select-weekly-growth-leaders'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { formatGuildContentDate } from '@/libs/guild-content-dates.constants'
+import { formatDate } from '@/utils/dayjs'
 
 type WeeklyGrowthLeadersProps = {
 	comparisons: GuildMemberComparison[]
@@ -148,9 +148,7 @@ function WeeklyGrowthLeaders({ comparisons }: WeeklyGrowthLeadersProps) {
 					<div className="flex items-baseline justify-between gap-2">
 						<PopoverTitle>금주의 길드원</PopoverTitle>
 						{status.ready ? (
-							<p className="text-grayscale-500 shrink-0 text-xs tabular-nums">
-								선정일 {formatGuildContentDate(status.selectedAt)}
-							</p>
+							<p className="text-grayscale-500 shrink-0 text-xs tabular-nums">선정일 {formatDate(status.selectedAt)}</p>
 						) : null}
 					</div>
 					<PopoverDescription>

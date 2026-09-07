@@ -3,9 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shar
 import { cn } from '@shared/ui/utils'
 
 import ChangelogItemList from '@/features/updates/components/changelog-item-list'
-import { formatChangelogDate } from '@/features/updates/lib/changelog.constants'
 import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
 import { formatAppVersionLabel } from '@/libs/app-version.constants'
+import { formatDate } from '@/utils/dayjs'
 
 type ChangelogEntryCardProps = {
 	entry: ChangelogEntry
@@ -26,7 +26,7 @@ function ChangelogEntryCard({ entry, isLatest, className }: ChangelogEntryCardPr
 						{formatAppVersionLabel(version)}
 					</CardTitle>
 					<time dateTime={date} className="text-grayscale-500 text-sm tabular-nums">
-						{formatChangelogDate(date)}
+						{formatDate(date)}
 					</time>
 					{hotfix ? <Badge variant="destructive">HOTFIX</Badge> : null}
 					{isLatest ? <Badge variant="secondary">현재</Badge> : null}

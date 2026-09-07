@@ -67,12 +67,6 @@ function getJobReleaseDisplayName({ job, label }: Pick<JobReleaseEntry, 'job' | 
 	return label ?? job
 }
 
-/** 표 날짜 셀 표기. 같은 날짜 병합 시에도 한 줄로 맞춰 둡니다. */
-function formatReleaseDateLabel(releasedAt: string) {
-	const [year, month, day] = releasedAt.split('-')
-	return `${year}.${month}.${day}`
-}
-
 /**
  * 같은 날짜 직업을 묶어 날짜 셀 rowSpan을 계산합니다.
  * 출시 여부는 길드 직업 상수와 맞춰, 메키에 직업이 추가되면 표도 같이 바뀝니다.
@@ -119,10 +113,4 @@ const UPCOMING_ENTRIES = JOB_RELEASE_ENTRIES.filter((entry) => !isMapleIdleRelea
 export const JOB_RELEASED_TABLE_ROWS = buildJobReleaseTableRows(RELEASED_ENTRIES)
 export const JOB_UPCOMING_TABLE_ROWS = buildJobReleaseTableRows(UPCOMING_ENTRIES)
 
-export {
-	buildJobReleaseTableRows,
-	formatReleaseDateLabel,
-	getJobReleaseDisplayName,
-	getJobReleaseStats,
-	isMapleIdleReleasedJob
-}
+export { buildJobReleaseTableRows, getJobReleaseDisplayName, getJobReleaseStats, isMapleIdleReleasedJob }

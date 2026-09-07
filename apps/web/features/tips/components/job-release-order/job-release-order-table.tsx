@@ -3,7 +3,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { cn } from '@shared/ui/utils'
 
 import {
-	formatReleaseDateLabel,
 	getJobReleaseDisplayName,
 	JOB_RELEASE_STATS,
 	JOB_RELEASED_TABLE_ROWS,
@@ -11,6 +10,7 @@ import {
 } from '@/features/tips/lib/job-release-order.constants'
 import type { JobReleaseTableRow } from '@/features/tips/types/job-release-order.type'
 import { getJobClassLineBadgeClass, type JobClassLine } from '@/libs/job-class.constants'
+import { formatDate } from '@/utils/dayjs'
 
 const gridBorderClassName = 'border-grayscale-300 border-r border-b last:border-r-0'
 const headerClassName = cn(
@@ -87,7 +87,7 @@ function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobRele
 												'bg-grayscale-100 text-grayscale-800 text-center font-medium tabular-nums'
 											)}
 										>
-											{formatReleaseDateLabel(releasedAt)}
+											{formatDate(releasedAt)}
 										</TableCell>
 									) : null}
 									<TableCell

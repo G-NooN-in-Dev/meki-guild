@@ -1,4 +1,5 @@
 import guildContentDatesJson from '@/data/guild-content-dates.json'
+import dayjs, { formatDate } from '@/utils/dayjs'
 
 /** 컨텐츠별 최근·직전 수집일 (YYYY-MM-DD). 아직 없으면 null */
 type GuildContentDateRange = {
@@ -17,15 +18,9 @@ type GuildContentDates = {
 /** 길드 컨텐츠별 최근·직전 데이터 수집일 */
 export const GUILD_CONTENT_UPDATED_AT = guildContentDatesJson as GuildContentDates
 
-/** 컨텐츠 업데이트일을 화면 표기용(2026.07.05)으로 변환합니다. */
-function formatGuildContentDate(date: string): string {
-	const [year, month, day] = date.split('-')
-	return `${year}.${month}.${day}`
-}
-
 /** 날짜가 없으면 '없음'으로 표시합니다. */
 function formatGuildContentDateOrNone(date: string | null): string {
-	return date ? formatGuildContentDate(date) : '없음'
+	return date ? formatDate(date) : '없음'
 }
 
 /** 1 vs 1 비교 테이블 등에서 쓸 컨텐츠 기준일 안내 문구 (최근 수집일 기준) */
@@ -34,7 +29,7 @@ function getGuildContentCriteriaLabel(date: string | null): string {
 		return '기준 : 아직 업데이트 없음'
 	}
 
-	return `기준 : ${formatGuildContentDate(date)}`
+	return `기준 : ${formatDate(date)}`
 }
 
 /**
@@ -57,22 +52,15 @@ function isGuildContentUpdatedThisWeek({ current, previous }: GuildContentDateRa
 
 /** YYYY-MM-DD → UTC 자정 타임스탬프 (요일 계산용) */
 function toGuildContentDateTimestamp(date: string): number {
-	const [yearText, monthText, dayText] = date.split('-')
-	const year = Number(yearText)
-	const month = Number(monthText)
-	const day = Number(dayText)
-
-	return Date.UTC(year, month - 1, day)
+	return dayjs.utc(date, 'YYYY-MM-DD').valueOf()
 }
 
 /** 두 수집일 사이의 일수 차이(절댓값) */
 function getGuildContentDateDayDiff(left: string, right: string): number {
-	const msPerDay = 24 * 60 * 60 * 1000
-	return Math.abs(toGuildContentDateTimestamp(left) - toGuildContentDateTimestamp(right)) / msPerDay
+	return Math.abs(dayjs.utc(left, 'YYYY-MM-DD').diff(dayjs.utc(right, 'YYYY-MM-DD'), 'day'))
 }
 
 export {
-	formatGuildContentDate,
 	formatGuildContentDateOrNone,
 	getGuildContentCriteriaLabel,
 	getGuildContentDateDayDiff,

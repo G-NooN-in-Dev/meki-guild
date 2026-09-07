@@ -232,12 +232,3 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 		]
 	}
 ]
-
-/** YYYY-MM-DD → 화면 표기(2026.08.19) */
-function formatChangelogDate(date: string): string {
-	const [year, month, day] = date.split('-')
-
-	return `${year}.${month}.${day}`
-}
-
-export { formatChangelogDate }
