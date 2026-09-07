@@ -1,13 +1,16 @@
 'use client'
 
 import { Badge } from '@shared/ui/badge'
+import { Button } from '@shared/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card'
 import { Label } from '@shared/ui/label'
+import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from '@shared/ui/popover'
 import { Switch } from '@shared/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
+import { InfoIcon } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -19,6 +22,7 @@ import {
 	formatBossRaidMilestoneRewardName,
 	formatBossRaidRatePercent,
 	formatBossRaidRewardName,
+	getBossRaidBonusOptionCountRates,
 	getBossRaidDifficultyLabel,
 	getBossRaidEntry,
 	getBossRaidEquipmentMaxLevel,
@@ -26,7 +30,13 @@ import {
 	getBossRaidMilestoneEquipmentMaxLevel,
 	partitionBossRaidRewards
 } from '../../lib/boss-raid.constants'
-import { BossRaidEntry, BossRaidMilestone, BossRaidReward, BossRaidSelection } from '../../types/boss-raid.type'
+import type {
+	BossRaidBonusOptionCountRates,
+	BossRaidEntry,
+	BossRaidMilestone,
+	BossRaidReward,
+	BossRaidSelection
+} from '../../types/boss-raid.type'
 
 type BossRaidRewardTableProps = {
 	selectedBoss: BossRaidSelection
@@ -56,6 +66,66 @@ function BossRaidRewardGradeBadge({ reward }: { reward: BossRaidReward | BossRai
 	)
 }
 
+/** 부가옵션 개수(0~4개) 확률 미니 표 */
+function BossRaidBonusOptionCountTable({ rates }: { rates: BossRaidBonusOptionCountRates }) {
+	return (
+		<div className="border-grayscale-200 w-full min-w-0 overflow-hidden rounded-md border">
+			<div className="bg-grayscale-100 text-grayscale-600 border-b-grayscale-200 grid grid-cols-5 border-b text-center text-[10px] font-medium md:text-xs">
+				{rates.map((_, count) => (
+					<span
+						key={`bonus-option-head-${count}`}
+						className={cn(count < rates.length - 1 && 'border-r-grayscale-200 border-r', 'px-0.5 py-1')}
+					>
+						{count}개
+					</span>
+				))}
+			</div>
+			<div className="grid grid-cols-5 text-center text-[10px] font-semibold tabular-nums md:text-xs">
+				{rates.map((rate, count) => (
+					<span
+						key={`bonus-option-rate-${count}`}
+						className={cn(
+							count < rates.length - 1 && 'border-r-grayscale-200 border-r',
+							'px-0.5 py-1',
+							rate > 0 ? 'text-grayscale-900' : 'text-grayscale-400'
+						)}
+					>
+						{rate > 0 ? `${rate}%` : '—'}
+					</span>
+				))}
+			</div>
+		</div>
+	)
+}
+
+/** 부가옵션 확률 — 탭/클릭으로 열리므로 모바일에서도 사용 가능 */
+function BossRaidBonusOptionCountPopover({ rates }: { rates: BossRaidBonusOptionCountRates }) {
+	return (
+		<Popover>
+			<PopoverTrigger
+				render={
+					<Button
+						type="button"
+						variant="ghost"
+						size="sm"
+						className="text-grayscale-500 hover:text-grayscale-700 h-auto min-h-0 gap-0.5 px-0 py-0 text-[10px] font-medium hover:bg-transparent md:text-xs"
+						aria-label="부가 옵션 개수 확률 보기"
+					>
+						부가 옵션 개수
+						<InfoIcon className="size-3" />
+					</Button>
+				}
+			/>
+			<PopoverContent align="start" className="w-auto min-w-56 gap-2 p-3" collisionPadding={8}>
+				<PopoverHeader>
+					<PopoverTitle className="text-sm">부가 옵션 개수 확률</PopoverTitle>
+				</PopoverHeader>
+				<BossRaidBonusOptionCountTable rates={rates} />
+			</PopoverContent>
+		</Popover>
+	)
+}
+
 function BossRaidRewardItemCell({ reward }: { reward: BossRaidReward }) {
 	const name = formatBossRaidRewardName(reward)
 	const quantity = getBossRaidMaterialQuantity(reward)
@@ -81,10 +151,21 @@ function BossRaidRewardItemCell({ reward }: { reward: BossRaidReward }) {
 	)
 }
 
-function BossRaidPrimaryRewardItemCell({ reward }: { reward: BossRaidReward }) {
-	const { imageSrc } = reward
-	const name = formatBossRaidRewardName(reward)
-	const maxLevel = getBossRaidEquipmentMaxLevel(reward)
+/** 장비 셀 공통 레이아웃: [이미지] 등급+이름 / 레벨·부가옵션 */
+function BossRaidEquipmentItemLayout({
+	imageSrc,
+	name,
+	gradeBadge,
+	maxLevel,
+	bonusOptionRates
+}: {
+	imageSrc: string
+	name: string
+	gradeBadge: ReactNode
+	maxLevel?: string
+	bonusOptionRates?: BossRaidBonusOptionCountRates
+}) {
+	const hasMeta = Boolean(maxLevel || bonusOptionRates)
 
 	return (
 		<div className="flex min-w-0 items-start gap-1.5 sm:gap-2">
@@ -97,44 +178,54 @@ function BossRaidPrimaryRewardItemCell({ reward }: { reward: BossRaidReward }) {
 				draggable={false}
 				className="bg-card border-grayscale-200 size-8 shrink-0 rounded-md border object-contain md:size-9"
 			/>
-			<span className="mt-0.5 flex min-w-0 flex-1 flex-col gap-0.5 md:mt-1 md:flex-row md:flex-wrap md:items-center md:gap-x-1.5 md:gap-y-0.5">
-				<BossRaidRewardGradeBadge reward={reward} />
-				<span className="text-grayscale-700 min-w-0 text-xs leading-snug font-medium break-keep md:flex-1 md:text-sm">
-					{name}
-				</span>
-				{maxLevel ? (
-					<span className="text-grayscale-500 text-[10px] tabular-nums md:text-xs">(~ Lv.{maxLevel})</span>
+			<div className="mt-0.5 flex min-w-0 flex-1 flex-col gap-0.5 md:mt-1">
+				<div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5">
+					{gradeBadge}
+					<span className="text-grayscale-700 min-w-0 text-xs leading-snug font-medium break-keep md:text-sm">
+						{name}
+					</span>
+				</div>
+				{hasMeta ? (
+					<div className="text-grayscale-500 flex min-w-0 flex-wrap items-center gap-x-1 text-[10px] md:text-xs">
+						{maxLevel ? <span className="tabular-nums">~ Lv.{maxLevel}</span> : null}
+						{maxLevel && bonusOptionRates ? <span aria-hidden>·</span> : null}
+						{bonusOptionRates ? <BossRaidBonusOptionCountPopover rates={bonusOptionRates} /> : null}
+					</div>
 				) : null}
-			</span>
+			</div>
 		</div>
+	)
+}
+
+function BossRaidPrimaryRewardItemCell({ reward }: { reward: BossRaidReward }) {
+	const name = formatBossRaidRewardName(reward)
+	const maxLevel = getBossRaidEquipmentMaxLevel(reward)
+	const bonusOptionRates = reward.kind === 'equipment' ? getBossRaidBonusOptionCountRates(reward) : undefined
+
+	return (
+		<BossRaidEquipmentItemLayout
+			imageSrc={reward.imageSrc}
+			name={name}
+			gradeBadge={<BossRaidRewardGradeBadge reward={reward} />}
+			maxLevel={maxLevel}
+			bonusOptionRates={bonusOptionRates}
+		/>
 	)
 }
 
 function BossRaidMilestoneRewardItemCell({ milestone }: { milestone: BossRaidMilestone }) {
 	const name = formatBossRaidMilestoneRewardName(milestone)
 	const maxLevel = getBossRaidMilestoneEquipmentMaxLevel(milestone)
+	const bonusOptionRates = milestone.kind === 'equipment' ? getBossRaidBonusOptionCountRates(milestone) : undefined
 
 	return (
-		<div className="flex min-w-0 items-start gap-1">
-			<Image
-				src={milestone.imageSrc}
-				alt={name}
-				width={64}
-				height={64}
-				unoptimized
-				draggable={false}
-				className="bg-card border-grayscale-200 size-8 shrink-0 rounded-md border object-contain md:size-9"
-			/>
-			<span className="mt-0.5 flex min-w-0 flex-1 flex-wrap items-center gap-1 md:mt-1">
-				<BossRaidRewardGradeBadge reward={milestone} />
-				<span className="text-grayscale-700 min-w-0 text-xs leading-snug font-medium break-keep md:flex-1 md:text-sm">
-					{name}
-				</span>
-				{maxLevel ? (
-					<span className="text-grayscale-500 text-[10px] tabular-nums md:text-xs">(~ Lv.{maxLevel})</span>
-				) : null}
-			</span>
-		</div>
+		<BossRaidEquipmentItemLayout
+			imageSrc={milestone.imageSrc}
+			name={name}
+			gradeBadge={<BossRaidRewardGradeBadge reward={milestone} />}
+			maxLevel={maxLevel}
+			bonusOptionRates={bonusOptionRates}
+		/>
 	)
 }
 

@@ -9,6 +9,9 @@ type BossRaidRewardGrade = 'unique' | 'legendary' | 'legendaryPlus'
 
 type BossRaidRewardTier = 'top' | 'high' | 'mid' | 'low'
 
+/** 부가옵션 개수(0~4개)별 확률(%) */
+type BossRaidBonusOptionCountRates = readonly [number, number, number, number, number]
+
 type BossRaidEquipmentReward = {
 	kind: 'equipment'
 	grade: BossRaidRewardGrade
@@ -76,6 +79,7 @@ type BossRaidSelection = {
 }
 
 export type {
+	BossRaidBonusOptionCountRates,
 	BossRaidBoss,
 	BossRaidDifficulty,
 	BossRaidEntry,

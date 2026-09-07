@@ -1,8 +1,10 @@
 import { CONTENT_DIFFICULTIES } from '@/features/tips/lib/content-stage-cut.constants'
 import type {
+	BossRaidBonusOptionCountRates,
 	BossRaidBoss,
 	BossRaidDifficulty,
 	BossRaidEntry,
+	BossRaidEquipmentReward,
 	BossRaidMaterialReward,
 	BossRaidMilestone,
 	BossRaidReward,
@@ -52,6 +54,38 @@ export const BOSS_RAID_REWARD_TIER_LABELS = {
 	mid: '중급',
 	low: '하급'
 } as const satisfies Record<BossRaidRewardTier, string>
+
+/**
+ * 장비 부가옵션 개수(0~4개) 확률(%) — 이름 × 등급 기준.
+ * tier·maxLevel과 무관하며, 데이터가 없는 장비는 룩업에서 제외한다.
+ * `reward.name`(string) 인덱싱을 위해 Record로 둔다. (`as const`면 키가 리터럴로 좁혀져 에러)
+ */
+const BOSS_RAID_BONUS_OPTION_COUNT_RATES: Record<
+	string,
+	Partial<Record<BossRaidRewardGrade, BossRaidBonusOptionCountRates>>
+> = {
+	'자쿰의 투구': {
+		unique: [30, 40, 30, 0, 0],
+		legendary: [30, 35, 25, 10, 0]
+	},
+	'카오스 자쿰의 투구': {
+		legendary: [30, 35, 25, 10, 0]
+	},
+	'아쿠아틱 레터 눈장식': {
+		unique: [0, 30, 40, 30, 0],
+		legendary: [0, 30, 35, 25, 10]
+	},
+	'데아 시두스 이어링': {
+		legendary: [30, 35, 25, 10, 0],
+		legendaryPlus: [30, 35, 25, 10, 0]
+	},
+	'혼테일의 목걸이': {
+		legendaryPlus: [30, 35, 25, 10, 0]
+	},
+	'카오스 혼테일의 목걸이': {
+		legendaryPlus: [30, 35, 25, 10, 0]
+	}
+}
 
 /** 재화·재료 이미지 — `public/items/` */
 const BOSS_RAID_MATERIAL_IMAGE_SRC = {
@@ -724,6 +758,17 @@ function getBossRaidEquipmentMaxLevel(reward: BossRaidReward): string | undefine
 	return formatLocaleNumber(reward.maxLevel)
 }
 
+/** 장비 부가옵션 개수 확률 — 이름 × 등급 룩업 */
+function getBossRaidBonusOptionCountRates(
+	reward: Pick<BossRaidEquipmentReward, 'kind' | 'name' | 'grade'>
+): BossRaidBonusOptionCountRates | undefined {
+	if (reward.kind !== 'equipment') {
+		return undefined
+	}
+
+	return BOSS_RAID_BONUS_OPTION_COUNT_RATES[reward.name]?.[reward.grade]
+}
+
 /** 난이도 라벨 조회 */
 function getBossRaidDifficultyLabel(difficulty: BossRaidDifficulty): string {
 	return BOSS_RAID_DIFFICULTIES.find((item) => item.key === difficulty)?.label ?? difficulty
@@ -752,6 +797,7 @@ export {
 	formatBossRaidMilestoneRewardName,
 	formatBossRaidRatePercent,
 	formatBossRaidRewardName,
+	getBossRaidBonusOptionCountRates,
 	getBossRaidDifficultyLabel,
 	getBossRaidEntry,
 	getBossRaidEquipmentMaxLevel,
