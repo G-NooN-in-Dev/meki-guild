@@ -57,8 +57,9 @@ function getStageJourneyPortraitSrc(chapter: number) {
 }
 
 /**
- * 용사의 발자취 챕터 목록 (20~44).
+ * 용사의 발자취 챕터 목록 (20~47).
  * 클리어 보상·보유 효과 3슬롯·특수 옵션을 챕터별로 둡니다.
+ * 42~47은 공격력·최대 HP 추정값만 두고, 3번째 슬롯·보상·특수 옵션은 미확정입니다.
  */
 const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 	{
@@ -1264,6 +1265,108 @@ const STAGE_JOURNEY_CHAPTERS: readonly StageJourneyChapter[] = [
 					legendary: 69000,
 					mystic: 207000,
 					mysticPlus: 414000
+				}
+			}
+		]
+	},
+	{
+		chapter: 45,
+		name: '보라조개 슬라임',
+		slots: [
+			{
+				label: '공격력',
+				unit: 'flat',
+				isEstimated: true,
+				values: {
+					normal: 950,
+					rare: 1900,
+					epic: 3800,
+					unique: 5700,
+					legendary: 14250,
+					mystic: 42750,
+					mysticPlus: 85500
+				}
+			},
+			{
+				label: '최대 HP',
+				unit: 'flat',
+				isEstimated: true,
+				values: {
+					normal: 4750,
+					rare: 9500,
+					epic: 19000,
+					unique: 28500,
+					legendary: 71250,
+					mystic: 213750,
+					mysticPlus: 427500
+				}
+			}
+		]
+	},
+	{
+		chapter: 46,
+		name: '갈매기 슬라임',
+		slots: [
+			{
+				label: '공격력',
+				unit: 'flat',
+				isEstimated: true,
+				values: {
+					normal: 980,
+					rare: 1960,
+					epic: 3920,
+					unique: 5880,
+					legendary: 14700,
+					mystic: 44100,
+					mysticPlus: 88200
+				}
+			},
+			{
+				label: '최대 HP',
+				unit: 'flat',
+				isEstimated: true,
+				values: {
+					normal: 4900,
+					rare: 9800,
+					epic: 19600,
+					unique: 29400,
+					legendary: 73500,
+					mystic: 220500,
+					mysticPlus: 441000
+				}
+			}
+		]
+	},
+	{
+		chapter: 47,
+		name: '캡틴 블랙 슬라임',
+		slots: [
+			{
+				label: '공격력',
+				unit: 'flat',
+				isEstimated: true,
+				values: {
+					normal: 1010,
+					rare: 2020,
+					epic: 4040,
+					unique: 6060,
+					legendary: 15150,
+					mystic: 45450,
+					mysticPlus: 90900
+				}
+			},
+			{
+				label: '최대 HP',
+				unit: 'flat',
+				isEstimated: true,
+				values: {
+					normal: 5050,
+					rare: 10100,
+					epic: 20200,
+					unique: 30300,
+					legendary: 75750,
+					mystic: 227250,
+					mysticPlus: 454500
 				}
 			}
 		]
