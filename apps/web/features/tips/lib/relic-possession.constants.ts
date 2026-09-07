@@ -20,7 +20,7 @@ const EPIC_COMMON_POSSESSION = [
 	{ label: '최대 HP', unit: 'flat', values: [500, 1000, 1500, 3000, 5000, 10000] }
 ] as const satisfies readonly RelicPossessionStatLine[]
 
-/** 자쿰·혼테일 전용. 혼테일은 제공표가 비어 있어 자쿰과 같은 최종 데미지로 둡니다. */
+/** 자쿰·혼테일·핑크빈 전용. 혼테일은 제공표가 비어 있어 자쿰과 같은 최종 데미지로 둡니다. */
 const RAID_UNIQUE_POSSESSION = [
 	{ label: '최종 데미지', unit: 'percent', values: [1, 1.2, 1.4, 1.6, 1.8, 2] }
 ] as const satisfies readonly RelicPossessionStatLine[]
@@ -59,7 +59,8 @@ const RELIC_POSSESSION_STATS_BY_ID: Record<string, readonly RelicPossessionStatL
 	'legendary-secret-map': [percentLine('최종 데미지', [2, 2.4, 2.8, 3.2, 3.6, 4])],
 	'legendary-circulation-ring': [percentLine('크리티컬 데미지', [10, 12, 14, 16, 18, 20])],
 	'unique-zakum-stone-fragment': RAID_UNIQUE_POSSESSION,
-	'unique-horntail-scale': RAID_UNIQUE_POSSESSION
+	'unique-horntail-scale': RAID_UNIQUE_POSSESSION,
+	'unique-pink-bean-rib': RAID_UNIQUE_POSSESSION
 }
 
 function getRelicPossessionStats(relicId: string): readonly RelicPossessionStatLine[] | undefined {

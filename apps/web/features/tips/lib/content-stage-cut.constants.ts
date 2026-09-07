@@ -78,6 +78,12 @@ export const CONTENT_STAGE_CUTS = [
 		rewards: ['귀걸이', '목걸이'],
 		kind: 'boss-raid',
 		stageCuts: { easy: '26-10', normal: '31-15', hard: '36-15', chaos: '41-20' }
+	},
+	{
+		name: '핑크빈',
+		rewards: ['포켓', '눈장식'],
+		kind: 'boss-raid',
+		stageCuts: { easy: '32-10', normal: '37-15', hard: '42-20', chaos: null }
 	}
 ] as const satisfies readonly ContentStageCutEntry[]
 

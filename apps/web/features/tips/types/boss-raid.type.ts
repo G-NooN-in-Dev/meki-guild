@@ -1,6 +1,6 @@
 import type { ContentDifficulty } from '@/features/tips/types/content-stage-cut.type'
 
-type BossRaidBoss = 'zakum' | 'horntail'
+type BossRaidBoss = 'zakum' | 'horntail' | 'pinkBean'
 
 /** 보스레이드 전용 난이도 — 길드레이드는 마일스톤 확정 보상 */
 type BossRaidDifficulty = ContentDifficulty | 'guild'

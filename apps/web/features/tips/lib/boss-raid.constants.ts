@@ -24,11 +24,12 @@ export const BOSS_RAID_DIFFICULTIES = [
 ] as const satisfies readonly { key: BossRaidDifficulty; label: string; chipClassName: string }[]
 
 /** 보스 표시 메타 */
-export const BOSS_RAID_BOSS_ORDER = ['zakum', 'horntail'] as const satisfies readonly BossRaidBoss[]
+export const BOSS_RAID_BOSS_ORDER = ['zakum', 'horntail', 'pinkBean'] as const satisfies readonly BossRaidBoss[]
 
 export const BOSS_RAID_BOSS_META = {
 	zakum: { label: '자쿰' },
-	horntail: { label: '혼테일' }
+	horntail: { label: '혼테일' },
+	pinkBean: { label: '핑크빈' }
 } as const satisfies Record<BossRaidBoss, { label: string }>
 
 /** 장비 등급 Badge */
@@ -84,6 +85,16 @@ const BOSS_RAID_BONUS_OPTION_COUNT_RATES: Record<
 	},
 	'카오스 혼테일의 목걸이': {
 		legendaryPlus: [30, 35, 25, 10, 0]
+	},
+	'핑크빛 성배': {
+		legendary: [0, 30, 40, 30, 0],
+		legendaryPlus: [0, 30, 35, 25, 10]
+	},
+	'블랙빈 마크': {
+		legendaryPlus: [30, 35, 25, 10, 0]
+	},
+	'카오스 핑크빈 마크': {
+		legendaryPlus: [30, 35, 25, 10, 0]
 	}
 }
 
@@ -103,7 +114,10 @@ const BOSS_RAID_EQUIPMENT_IMAGE_SRC = {
 	'아쿠아틱 레터 눈장식': '/equipments/aquatic-letter-eye-accessory.png',
 	'데아 시두스 이어링': '/equipments/dea-sidus-ear-ring.png',
 	'혼테일의 목걸이': '/equipments/horntail-necklace.png',
-	'카오스 혼테일의 목걸이': '/equipments/chaos-horntail-necklace.png'
+	'카오스 혼테일의 목걸이': '/equipments/chaos-horntail-necklace.png',
+	'핑크빛 성배': '/equipments/pink-bean-holy-grail.png',
+	'블랙빈 마크': '/equipments/pink-bean-black-bean-mark.png',
+	'카오스 핑크빈 마크': '/equipments/chaos-pink-bean-mark.png'
 } as const satisfies Record<string, `/equipments/${string}.png`>
 
 /** 주문서 티어별 이미지 — `public/items/` */
@@ -676,6 +690,131 @@ export const BOSS_RAID_ENTRIES = [
 				name: '혼테일 원정대 훈장',
 				imageSrc: BOSS_RAID_MEDAL_IMAGE_SRC['혼테일 원정대 훈장']
 			}
+		]
+	},
+	{
+		boss: 'pinkBean',
+		difficulty: 'easy',
+		requiredHit: 360,
+		rewardMode: 'probability',
+		rewards: [
+			{
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'low',
+				maxLevel: 120,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배'],
+				ratePercent: 2
+			},
+			{
+				kind: 'equipment',
+				grade: 'legendary',
+				tier: 'high',
+				maxLevel: 110,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배'],
+				ratePercent: 23
+			},
+			{
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'low',
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low,
+				ratePercent: 4
+			},
+			...COMMON_BOSS_RAID_MATERIALS
+		]
+	},
+	{
+		boss: 'pinkBean',
+		difficulty: 'normal',
+		requiredHit: 450,
+		rewardMode: 'probability',
+		rewards: [
+			{
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'mid',
+				maxLevel: 130,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배'],
+				ratePercent: 2
+			},
+			{
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'low',
+				maxLevel: 120,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배'],
+				ratePercent: 23
+			},
+			{
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'mid',
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid,
+				ratePercent: 1
+			},
+			{
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'low',
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low,
+				ratePercent: 3
+			},
+			...COMMON_BOSS_RAID_MATERIALS
+		]
+	},
+	{
+		boss: 'pinkBean',
+		difficulty: 'hard',
+		requiredHit: 540,
+		rewardMode: 'probability',
+		rewards: [
+			{
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'top',
+				maxLevel: 130,
+				name: '카오스 핑크빈 마크',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['카오스 핑크빈 마크'],
+				ratePercent: 1
+			},
+			{
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'high',
+				maxLevel: 130,
+				name: '블랙빈 마크',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['블랙빈 마크'],
+				ratePercent: 9
+			},
+			{
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'mid',
+				maxLevel: 130,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배'],
+				ratePercent: 15
+			},
+			{
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'mid',
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid,
+				ratePercent: 1
+			},
+			{
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'low',
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low,
+				ratePercent: 3
+			},
+			...COMMON_BOSS_RAID_MATERIALS
 		]
 	}
 ] as const satisfies readonly BossRaidEntry[]
