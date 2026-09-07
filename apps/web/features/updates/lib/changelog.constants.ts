@@ -6,6 +6,37 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.5.1',
+		date: '2026-09-07',
+		sections: [
+			{
+				title: '길드 정보',
+				items: [{ text: '길드 컨텐츠 시즌 일정 추가' }, { text: '길드 대항전 포인트 정보 수정' }]
+			},
+			{
+				title: '정보/팁',
+				items: [
+					{
+						text: '핑크빈 정보 추가',
+						children: [{ text: '스테이지 컷 · 보스 레이드 정보 · 유물 정보' }]
+					},
+					{
+						text: '보스 레이드',
+						children: [
+							{ text: '버닝 ON/OFF 스위치 추가' },
+							{ text: '재화 수급량 정보 수정' },
+							{ text: '장비 부가 옵션 줄 개수 확률 정보 추가' }
+						]
+					},
+					{
+						text: '단계 확장',
+						children: [{ text: '성장 던전 (140 -> 150)' }, { text: '용사의 발자취 챕터 (44 -> 47)' }]
+					}
+				]
+			}
+		]
+	},
+	{
 		version: '1.5.0',
 		date: '2026-08-24',
 		sections: [

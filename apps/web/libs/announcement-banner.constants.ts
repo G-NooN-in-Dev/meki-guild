@@ -16,15 +16,16 @@ type AnnouncementBannerItem = AnnouncementBannerTextItem | AnnouncementBannerLin
  * 비우면 배너·추가 여백이 모두 숨겨집니다.
  */
 const ANNOUNCEMENT_BANNER_ITEMS = [
-	{
-		kind: 'text',
-		label: '메키 업데이트 및 개인 사정으로 인해 사이트 업데이트가 지연될 예정입니다. 양해 부탁드립니다.'
-	},
-	{
-		kind: 'link',
-		label: '9월 3일 (목) 패치노트',
-		href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3535860&board=6698'
-	}
+	// FIXME - 배너 내용
+	// {
+	// 	kind: 'text',
+	// 	label: '메키 업데이트 및 개인 사정으로 인해 사이트 업데이트가 지연될 예정입니다. 양해 부탁드립니다.'
+	// },
+	// {
+	// 	kind: 'link',
+	// 	label: '9월 3일 (목) 패치노트',
+	// 	href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3535860&board=6698'
+	// }
 ] satisfies AnnouncementBannerItem[]
 
 /** 배너 표시 여부 */
