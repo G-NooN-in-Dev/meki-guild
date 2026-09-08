@@ -61,7 +61,7 @@ function BossRaidRewardGradeBadge({ reward }: { reward: BossRaidReward | BossRai
 	const { label, badgeClassName } = BOSS_RAID_REWARD_GRADE_META[grade]
 
 	return (
-		<Badge className={cn('shrink-0 px-1.5 py-0 text-[10px] font-medium md:text-xs', badgeClassName)}>
+		<Badge className={cn('shrink-0 px-1 py-0 text-[10px] font-medium md:px-1.5 md:text-xs', badgeClassName)}>
 			{label} ({BOSS_RAID_REWARD_TIER_LABELS[tier]})
 		</Badge>
 	)
@@ -169,30 +169,31 @@ function BossRaidEquipmentItemLayout({
 	const hasMeta = Boolean(maxLevel || bonusOptionRates)
 
 	return (
-		<div className="flex min-w-0 items-start gap-1.5 sm:gap-2">
-			<Image
-				src={imageSrc}
-				alt={name}
-				width={64}
-				height={64}
-				unoptimized
-				draggable={false}
-				className="bg-card border-grayscale-200 size-8 shrink-0 rounded-md border object-contain md:size-9"
-			/>
-			<div className="mt-0.5 flex min-w-0 flex-1 flex-col gap-0.5 md:mt-1">
-				<div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5">
-					{gradeBadge}
+		<div className="flex min-w-0 flex-col gap-0.5">
+			{/* 모바일에서도 등급 Badge가 이미지 폭에 가려지지 않도록 셀 전체 폭에 배치 */}
+			{gradeBadge}
+			<div className="flex min-w-0 items-start gap-1.5 sm:gap-2">
+				<Image
+					src={imageSrc}
+					alt={name}
+					width={64}
+					height={64}
+					unoptimized
+					draggable={false}
+					className="bg-card border-grayscale-200 size-8 shrink-0 rounded-md border object-contain md:size-9"
+				/>
+				<div className="mt-0.5 flex min-w-0 flex-1 flex-col gap-0.5 md:mt-1">
 					<span className="text-grayscale-700 min-w-0 text-xs leading-snug font-medium break-keep md:text-sm">
 						{name}
 					</span>
+					{hasMeta ? (
+						<div className="text-grayscale-500 flex min-w-0 flex-wrap items-center gap-x-1 text-[10px] md:text-xs">
+							{maxLevel ? <span className="tabular-nums">~ Lv.{maxLevel}</span> : null}
+							{maxLevel && bonusOptionRates ? <span aria-hidden>·</span> : null}
+							{bonusOptionRates ? <BossRaidBonusOptionCountPopover rates={bonusOptionRates} /> : null}
+						</div>
+					) : null}
 				</div>
-				{hasMeta ? (
-					<div className="text-grayscale-500 flex min-w-0 flex-wrap items-center gap-x-1 text-[10px] md:text-xs">
-						{maxLevel ? <span className="tabular-nums">~ Lv.{maxLevel}</span> : null}
-						{maxLevel && bonusOptionRates ? <span aria-hidden>·</span> : null}
-						{bonusOptionRates ? <BossRaidBonusOptionCountPopover rates={bonusOptionRates} /> : null}
-					</div>
-				) : null}
 			</div>
 		</div>
 	)
@@ -298,9 +299,9 @@ function BossRaidProbabilityRewardTable({
 			<Table className="w-full table-fixed" containerClassName="overflow-visible">
 				<TableHeader>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
-						<TableHead className={cn(tableHeadClassName, 'w-[38%]')}>장비/주문서</TableHead>
+						<TableHead className={cn(tableHeadClassName, 'w-[43%] md:w-[38%]')}>장비/주문서</TableHead>
 						<TableHead className={cn(tableHeadClassName, 'w-[12%]')}>확률</TableHead>
-						<TableHead className={cn(tableHeadClassName, 'w-[38%]')}>기타 재화</TableHead>
+						<TableHead className={cn(tableHeadClassName, 'w-[33%] md:w-[38%]')}>기타 재화</TableHead>
 						<TableHead className={cn(tableHeadClassName, 'w-[12%]')}>확률</TableHead>
 					</TableRow>
 				</TableHeader>

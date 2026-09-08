@@ -31,15 +31,18 @@ function BossRaidHitCutTable({ selectedBoss, setSelectedBoss }: BossRaidHitCutTa
 				<Table className="w-full min-w-96 table-fixed" containerClassName="overflow-visible">
 					<TableHeader sticky>
 						<TableRow className="border-grayscale-200 hover:bg-transparent">
-							<TableHead className="bg-grayscale-100 text-grayscale-600 w-[22%] text-center text-xs md:w-[18%] md:text-sm">
+							<TableHead className="bg-grayscale-100 text-grayscale-600 xs:text-xs h-auto w-[22%] min-w-0 overflow-hidden px-1 py-2 text-center text-[10px] leading-tight break-keep whitespace-normal md:w-[18%] md:px-2 md:text-sm">
 								보스 / 난이도
 							</TableHead>
 							{BOSS_RAID_DIFFICULTIES.map(({ key, label, chipClassName }) => (
 								<TableHead
 									key={key}
-									className={cn('text-center text-xs leading-tight break-keep md:text-sm', chipClassName)}
+									className={cn(
+										'xs:px-1 xs:text-xs h-auto min-w-0 overflow-hidden px-0.5 py-2 text-center text-[10px] leading-tight break-keep whitespace-normal md:px-2 md:text-sm',
+										chipClassName
+									)}
 								>
-									<span className={cn('inline-block rounded-md px-1.5 py-0.5 md:px-2 md:py-1')}>{label}</span>
+									{label}
 								</TableHead>
 							))}
 						</TableRow>
