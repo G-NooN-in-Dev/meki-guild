@@ -3,12 +3,13 @@
 import { Badge } from '@shared/ui/badge'
 import { Button } from '@shared/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@shared/ui/empty'
 import { Label } from '@shared/ui/label'
 import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from '@shared/ui/popover'
 import { Switch } from '@shared/ui/switch'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
-import { InfoIcon } from 'lucide-react'
+import { InfoIcon, LockIcon } from 'lucide-react'
 import Image from 'next/image'
 import { type ReactNode, useState } from 'react'
 
@@ -364,6 +365,23 @@ function BossRaidMilestoneRewardTable({ milestones }: { milestones: readonly Bos
 	)
 }
 
+/** 아직 해금되지 않은 난이도 — 보상 표 대신 안내 */
+function BossRaidLockedDifficultyEmpty({ bossName, difficultyLabel }: { bossName: string; difficultyLabel: string }) {
+	return (
+		<Empty className="border-grayscale-200 bg-card/50 shadow-soft border border-dashed py-10 md:py-12">
+			<EmptyHeader>
+				<EmptyMedia variant="icon">
+					<LockIcon />
+				</EmptyMedia>
+				<EmptyTitle className="text-base md:text-lg">
+					{bossName} · {difficultyLabel}
+				</EmptyTitle>
+				<EmptyDescription>아직 해금되지 않은 난이도입니다. 해금되면 보상 정보를 확인할 수 있습니다.</EmptyDescription>
+			</EmptyHeader>
+		</Empty>
+	)
+}
+
 function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 	const [burningOn, setBurningOn] = useState(false)
 	const { boss, difficulty } = selectedBoss
@@ -373,7 +391,15 @@ function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 	const bossRaidEntry = getBossRaidEntry(boss, difficulty)
 
 	if (!bossRaidEntry) {
-		return null
+		return (
+			<div className="flex flex-col gap-2 md:gap-4">
+				<div className="flex flex-col gap-2">
+					<h2 className="text-grayscale-900 text-base font-semibold md:text-lg">보상 상세</h2>
+					<p className="text-grayscale-600 text-sm">선택한 보스·난이도의 보상 정보를 확인할 수 있습니다.</p>
+				</div>
+				<BossRaidLockedDifficultyEmpty bossName={bossName} difficultyLabel={difficultyLabel} />
+			</div>
+		)
 	}
 
 	const { requiredHit, rewardMode } = bossRaidEntry
