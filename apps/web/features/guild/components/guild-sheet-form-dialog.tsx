@@ -390,7 +390,16 @@ function GuildSheetFormDialog({ members, previousMembers }: GuildSheetFormDialog
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger render={<Button type="button" variant="outline" size="sm" className="shrink-0 gap-1.5" />}>
+			<DialogTrigger
+				render={
+					<Button
+						type="button"
+						variant="default"
+						size="default"
+						className="bg-pastel-navy hover:bg-pastel-navy-700 shrink-0 gap-1.5 rounded-lg"
+					/>
+				}
+			>
 				<PlusIcon className="size-4" />
 				데이터 등록
 			</DialogTrigger>
