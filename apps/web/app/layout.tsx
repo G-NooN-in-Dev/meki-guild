@@ -65,7 +65,7 @@ function RootLayout({ children }: PropsWithChildren) {
 					<AnnouncementBanner />
 					{children}
 					<Footer />
-					<Toaster />
+					<Toaster richColors position="top-center" />
 				</BgmProvider>
 				<Analytics />
 			</body>

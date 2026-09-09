@@ -8,9 +8,6 @@ const currentWeekPath = join(dataDirectory, 'current-week.json')
 const previousWeekPath = join(dataDirectory, 'previous-week.json')
 const contentDatesPath = join(dataDirectory, 'guild-content-dates.json')
 
-/** 링크 공유된 입력 시트. `GUILD_SHEET_ID`로 덮어쓸 수 있습니다. */
-const DEFAULT_SHEET_ID = '1AYYb-bDBxFmEK0ldTfClTIS25R74z7dAXB729TGkZqE'
-
 const MEMBER_SHEETS = ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss']
 const REQUIRED_HEADERS = {
 	combatPower: ['collectedAt', 'name', 'level', 'job', 'combatPower'],
@@ -256,7 +253,12 @@ function formatDateLabel(date) {
 }
 
 async function syncGuildSheet() {
-	const sheetId = process.env.GUILD_SHEET_ID ?? DEFAULT_SHEET_ID
+	const sheetId = process.env.GOOGLE_SHEETS_SHEET_ID
+
+	if (!sheetId) {
+		throw new Error('GOOGLE_SHEETS_SHEET_ID 환경 변수가 설정되지 않았습니다.')
+	}
+
 	const [combatPowerRows, expeditionRows, rivalryRows, trainingRows, guildBossRows, guildRows] = await Promise.all([
 		...MEMBER_SHEETS.map((sheetName) => fetchSheetRows(sheetId, sheetName)),
 		fetchSheetRows(sheetId, 'guild')

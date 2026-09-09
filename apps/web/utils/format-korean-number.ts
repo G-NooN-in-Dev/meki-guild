@@ -1,4 +1,5 @@
 import { GUILD_EMPTY_VALUE_LABEL, GUILD_ZERO_DELTA_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { TRAINING_KOREAN_FORMAT_THRESHOLD } from '@/utils/parse-korean-number'
 
 const KOREAN_UNITS = [
 	['경', 10_000_000_000_000_000n],
@@ -6,8 +7,6 @@ const KOREAN_UNITS = [
 	['억', 100_000_000n],
 	['만', 10_000n]
 ] as const
-
-const TRAINING_KOREAN_FORMAT_THRESHOLD = 10_000_000n
 
 /**
  * 숫자를 한국어 locale 천 단위 구분 문자열로 변환합니다.
