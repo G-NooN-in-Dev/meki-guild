@@ -6,6 +6,16 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.5.2',
+		date: '2026-09-09',
+		sections: [
+			{
+				title: '길드 정보',
+				items: [{ text: '점수 데이터 자가 입력 시스템 추가' }]
+			}
+		]
+	},
+	{
 		version: '1.5.1',
 		date: '2026-09-07',
 		sections: [
