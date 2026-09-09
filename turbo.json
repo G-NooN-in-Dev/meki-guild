@@ -6,7 +6,13 @@
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
 			"outputs": [".next/**", "!.next/cache/**"],
-			"env": ["MONGODB_URI", "MONGODB_DB"]
+			"env": [
+				"MONGODB_URI",
+				"MONGODB_DB",
+				"GOOGLE_SHEETS_SHEET_ID",
+				"GOOGLE_SHEETS_CLIENT_EMAIL",
+				"GOOGLE_SHEETS_PRIVATE_KEY"
+			]
 		},
 		"lint": {
 			"dependsOn": ["^lint"]
