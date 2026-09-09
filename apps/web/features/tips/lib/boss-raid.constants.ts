@@ -137,35 +137,35 @@ const COMMON_BOSS_RAID_MATERIALS = [
 	{
 		kind: 'material',
 		name: '시간 단축 티켓',
-		quantity: 600,
+		quantity: 200,
 		imageSrc: BOSS_RAID_MATERIAL_IMAGE_SRC['시간 단축 티켓'],
 		ratePercent: 3
 	},
 	{
 		kind: 'material',
 		name: '주문의 흔적',
-		quantity: 1200,
+		quantity: 400,
 		imageSrc: BOSS_RAID_MATERIAL_IMAGE_SRC['주문의 흔적'],
 		ratePercent: 7
 	},
 	{
 		kind: 'material',
 		name: '무기 강화석',
-		quantity: 60_000,
+		quantity: 20_000,
 		imageSrc: BOSS_RAID_MATERIAL_IMAGE_SRC['무기 강화석'],
 		ratePercent: 10
 	},
 	{
 		kind: 'material',
 		name: '엘리트 몬스터 소환 포인트',
-		quantity: 1200,
+		quantity: 400,
 		imageSrc: BOSS_RAID_MATERIAL_IMAGE_SRC['엘리트 몬스터 소환 포인트'],
 		ratePercent: 16
 	},
 	{
 		kind: 'material',
 		name: '메소',
-		quantity: 300_000,
+		quantity: 100_000,
 		imageSrc: BOSS_RAID_MATERIAL_IMAGE_SRC.메소,
 		ratePercent: 35
 	}
