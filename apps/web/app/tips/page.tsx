@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import PageShell from '@/components/page-shell'
 import TipsHubSection from '@/features/tips/sections/tips-hub.section'
 
 export const metadata: Metadata = {
@@ -9,13 +10,9 @@ export const metadata: Metadata = {
 
 function TipsPage() {
 	return (
-		<div className="min-h-screen-safe flex w-full flex-1 font-sans">
-			<main className="flex w-full flex-1">
-				<div className="max-w-content container mx-auto flex w-full flex-col px-4 py-8 md:px-6">
-					<TipsHubSection />
-				</div>
-			</main>
-		</div>
+		<PageShell>
+			<TipsHubSection />
+		</PageShell>
 	)
 }
 
