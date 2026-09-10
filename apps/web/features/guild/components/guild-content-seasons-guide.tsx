@@ -3,9 +3,9 @@
 import { Badge } from '@shared/ui/badge'
 import { Button } from '@shared/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog'
-import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
+import { cn } from '@shared/ui/utils'
 import { CalendarRangeIcon } from 'lucide-react'
 
 import {

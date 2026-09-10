@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import PageShell from '@/components/page-shell'
 import SiteHubSection from '@/features/home/sections/site-hub.section'
 
 // 루트 title.template이 붙지 않도록 absolute로 기본 사이트 제목을 유지합니다.
@@ -12,13 +13,9 @@ export const metadata: Metadata = {
 
 function Homepage() {
 	return (
-		<div className="min-h-screen-safe flex w-full min-w-0 flex-1 font-sans">
-			<main className="flex w-full min-w-0 flex-1">
-				<div className="max-w-content container mx-auto flex w-full min-w-0 flex-col px-4 md:px-6">
-					<SiteHubSection />
-				</div>
-			</main>
-		</div>
+		<PageShell>
+			<SiteHubSection />
+		</PageShell>
 	)
 }
 

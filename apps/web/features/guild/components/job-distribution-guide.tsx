@@ -3,8 +3,8 @@
 import { Badge } from '@shared/ui/badge'
 import { Button } from '@shared/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog'
-import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
+import { cn } from '@shared/ui/utils'
 import { UsersIcon } from 'lucide-react'
 import { useState } from 'react'
 

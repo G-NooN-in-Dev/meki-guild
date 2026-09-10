@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@shared/ui/accordion'
-import { cn } from '@shared/ui/lib/utils'
+import { cn } from '@shared/ui/utils'
 
 import GrowthDelta from '@/features/guild/components/growth-delta'
 import { calculateGuildSummaryMetrics } from '@/features/guild/lib/guild-summary'

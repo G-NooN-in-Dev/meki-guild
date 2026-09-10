@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@shared/ui/button'
-import { cn } from '@shared/ui/lib/utils'
 import { Slider } from '@shared/ui/slider'
+import { cn } from '@shared/ui/utils'
 import { PauseIcon, PlayIcon, Volume2Icon, VolumeXIcon } from 'lucide-react'
 
 import { useBgm } from '@/components/bgm.context'

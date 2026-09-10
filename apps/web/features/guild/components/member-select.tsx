@@ -1,7 +1,7 @@
 'use client'
 
-import { cn } from '@shared/ui/lib/utils'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/select'
+import { cn } from '@shared/ui/utils'
 
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName from '@/features/guild/components/member-display-name'

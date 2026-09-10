@@ -1,7 +1,7 @@
 'use client'
 
 import { Badge } from '@shared/ui/badge'
-import { cn } from '@shared/ui/lib/utils'
+import { cn } from '@shared/ui/utils'
 import type { ReactNode } from 'react'
 
 import { GUILD_ZERO_DELTA_LABEL } from '@/features/guild/types/guild-snapshot.type'

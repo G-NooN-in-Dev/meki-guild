@@ -1,7 +1,7 @@
 import '@/global.css'
 
-import { cn } from '@shared/ui/lib/utils'
 import { Toaster } from '@shared/ui/sonner'
+import { cn } from '@shared/ui/utils'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import { PropsWithChildren } from 'react'

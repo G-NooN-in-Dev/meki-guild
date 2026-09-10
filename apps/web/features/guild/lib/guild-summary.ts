@@ -36,6 +36,8 @@ type NumericDeltaLike = {
 	hasValue: boolean
 }
 
+// --- 멤버 비교 배열 기반 합산·증감율 ---
+
 /**
  * 신규·이탈을 반영한 길드 전체 수치 변화를 합산합니다.
  * - active: diff (입력된 값만)
@@ -161,6 +163,8 @@ function calculateAverageLevelChange(comparisons: GuildMemberComparison[]): stri
 	return formatArrowDelta(currentAverage - previousAverage)
 }
 
+// --- 토벌전 등급 포인트·길드 순위(등수) ---
+
 function formatPointsDelta(diff: number): string | null {
 	if (diff === 0) {
 		return null
@@ -245,6 +249,8 @@ function calculateGuildPlacementRank(rank: GuildPlacementRankInput): {
 }
 
 const calculateGuildExpeditionRank = calculateGuildPlacementRank
+
+// --- 길드 메타(대항전 포인트 등) 파싱·표시 ---
 
 function hasKoreanUnits(value: number | string | null | undefined): boolean {
 	return typeof value === 'string' && /[경조억만]/.test(value)
@@ -332,6 +338,8 @@ function hasGuildBossContribution(comparison: GuildMemberComparison): boolean {
 
 	return comparison.guildBoss.previous !== null
 }
+
+// --- 요약 지표 조합 (public API) ---
 
 function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guildMeta?: GuildSummaryMetaInput) {
 	const combatPowerField = (comparison: GuildMemberComparison) => comparison.combatPower

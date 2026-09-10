@@ -70,6 +70,8 @@ type WeeklyGrowthLeader = {
 }
 
 /** 선정 가능 여부. ready=false면 아직 주간 업데이트가 끝나지 않음 */
+// --- 선정 준비 상태 (주간 필수 컨텐츠·수집일 창) ---
+
 type WeeklyGrowthSelectionStatus =
 	| {
 			ready: true

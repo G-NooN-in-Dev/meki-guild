@@ -10,30 +10,25 @@ import {
 	DialogTitle,
 	DialogTrigger
 } from '@shared/ui/dialog'
-import { Input } from '@shared/ui/input'
 import { Label } from '@shared/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/select'
 import { toast } from '@shared/ui/sonner'
 import { PlusIcon } from 'lucide-react'
 import { useActionState, useCallback, useEffect, useMemo, useState } from 'react'
 
+import GuildSheetTabFieldInputs from '@/features/guild/components/guild-sheet-form-fields'
 import MemberSelect, { type MemberSelectOption } from '@/features/guild/components/member-select'
 import { loadGuildSheetRowFields } from '@/features/guild/lib/load-guild-sheet-row.action'
 import {
-	GUILD_SHEET_FIELD_LABELS,
-	GUILD_SHEET_KOREAN_NUMBER_PLACEHOLDERS,
 	GUILD_SHEET_MEMBER_TABS,
 	GUILD_SHEET_TAB_INPUT_FIELDS,
 	GUILD_SHEET_TAB_LABELS,
-	type GuildSheetMemberTab,
-	isGuildSheetKoreanNumberField
+	type GuildSheetMemberTab
 } from '@/features/guild/lib/sheet-form.schema'
 import { getGuildSheetRoundOptions } from '@/features/guild/lib/sheet-form-rounds'
 import { submitGuildSheetForm } from '@/features/guild/lib/submit-guild-sheet-form.action'
 import { INITIAL_SUBMIT_GUILD_SHEET_FORM_STATE } from '@/features/guild/lib/submit-guild-sheet-form.state'
 import type { GuildMemberInput } from '@/features/guild/types/guild-snapshot.type'
-import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
-import { JOB_CLASS_LINE_ORDER, JOBS_BY_CLASS_LINE } from '@/libs/job-class.constants'
 
 type CombatPowerDefaults = {
 	job: string
@@ -46,9 +41,6 @@ type GuildSheetFormDialogProps = {
 	/** 전투력 탭 프리필용 직전 주 원본 멤버 */
 	previousMembers: GuildMemberInput[]
 }
-
-const JOB_OPTIONS = JOB_CLASS_LINE_ORDER.flatMap((classLine) => [...JOBS_BY_CLASS_LINE[classLine]])
-const EXPEDITION_GRADE_OPTIONS = EXPEDITION_GUILD_TIERS.map((tier) => tier.rank)
 
 function emptyFieldsForTab(tab: GuildSheetMemberTab): Record<string, string> {
 	return Object.fromEntries(GUILD_SHEET_TAB_INPUT_FIELDS[tab].map((field) => [field, '']))
@@ -267,98 +259,12 @@ function GuildSheetFormFields({ members, previousMembers, onSuccess }: GuildShee
 				<p className="text-grayscale-500 text-sm">이미 등록된 데이터가 있어 수정 모드로 열었습니다.</p>
 			) : null}
 
-			{GUILD_SHEET_TAB_INPUT_FIELDS[tab].map((field) => {
-				const fieldId = `guild-sheet-field-${field}`
-				const label = GUILD_SHEET_FIELD_LABELS[field as keyof typeof GUILD_SHEET_FIELD_LABELS]
-				const value = fields[field] ?? ''
-
-				if (field === 'job') {
-					return (
-						<div key={field} className="flex flex-col gap-2">
-							<Label htmlFor={fieldId}>{label}</Label>
-							<input type="hidden" name={field} value={value} />
-							<Select
-								value={value || null}
-								onValueChange={(next) => {
-									if (next) {
-										patchField(field, next)
-									}
-								}}
-								disabled={isLoadingDefaults}
-							>
-								<SelectTrigger id={fieldId} className="w-full">
-									<SelectValue placeholder="직업을 선택하세요" />
-								</SelectTrigger>
-								<SelectContent className="max-h-72">
-									{JOB_OPTIONS.map((job) => (
-										<SelectItem key={job} value={job}>
-											{job}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
-					)
-				}
-
-				if (field === 'grade') {
-					return (
-						<div key={field} className="flex flex-col gap-2">
-							<Label htmlFor={fieldId}>{label}</Label>
-							<input type="hidden" name={field} value={value} />
-							<Select
-								value={value || null}
-								onValueChange={(next) => {
-									if (next) {
-										patchField(field, next)
-									}
-								}}
-								disabled={isLoadingDefaults}
-							>
-								<SelectTrigger id={fieldId} className="w-full">
-									<SelectValue placeholder="등급을 선택하세요" />
-								</SelectTrigger>
-								<SelectContent className="max-h-72">
-									{EXPEDITION_GRADE_OPTIONS.map((grade) => (
-										<SelectItem key={grade} value={grade}>
-											{grade}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
-					)
-				}
-
-				const inputType = field === 'level' || field === 'placement' ? 'number' : 'text'
-				const isKoreanNumberField = isGuildSheetKoreanNumberField(field)
-				const placeholder = isKoreanNumberField ? GUILD_SHEET_KOREAN_NUMBER_PLACEHOLDERS[field] : label
-
-				return (
-					<div key={field} className="flex flex-col gap-2">
-						<Label htmlFor={fieldId}>{label}</Label>
-						<Input
-							id={fieldId}
-							name={field}
-							type={inputType}
-							inputMode={inputType === 'number' ? 'numeric' : undefined}
-							min={inputType === 'number' ? 1 : undefined}
-							value={value}
-							placeholder={placeholder}
-							onChange={(event) => patchField(field, event.target.value)}
-							required
-							disabled={isLoadingDefaults}
-						/>
-						{isKoreanNumberField ? (
-							<p className="text-grayscale-500 text-xs">
-								{field === 'training'
-									? '게임에서 보여지는 형태 그대로 입력하세요.(예: 1000만 101, 9000000)'
-									: '경/조/억/만 단위를 포함해 입력하세요.'}
-							</p>
-						) : null}
-					</div>
-				)
-			})}
+			<GuildSheetTabFieldInputs
+				tab={tab}
+				fields={fields}
+				patchField={patchField}
+				isLoadingDefaults={isLoadingDefaults}
+			/>
 
 			{state.message ? (
 				<p className={state.ok ? 'text-pastel-green-800 text-sm' : 'text-pastel-red-700 text-sm'} role="status">

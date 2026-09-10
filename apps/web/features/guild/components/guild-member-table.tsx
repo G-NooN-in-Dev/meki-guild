@@ -1,7 +1,7 @@
 'use client'
 
-import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
+import { cn } from '@shared/ui/utils'
 import { useState } from 'react'
 
 import GrowthDelta, { MemberStatusBadge } from '@/features/guild/components/growth-delta'

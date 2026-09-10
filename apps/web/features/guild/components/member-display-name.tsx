@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@shared/ui/lib/utils'
+import { cn } from '@shared/ui/utils'
 
 import { useNameReveal } from '@/features/guild/context/name-reveal.context'
 import { getMemberDisplayName } from '@/features/guild/lib/member-display-name'

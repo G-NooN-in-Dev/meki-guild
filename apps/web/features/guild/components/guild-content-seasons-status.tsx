@@ -1,5 +1,5 @@
 import { Badge } from '@shared/ui/badge'
-import { cn } from '@shared/ui/lib/utils'
+import { cn } from '@shared/ui/utils'
 import { connection } from 'next/server'
 
 import {

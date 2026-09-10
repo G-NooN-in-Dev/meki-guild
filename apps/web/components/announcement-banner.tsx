@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@shared/ui/lib/utils'
+import { cn } from '@shared/ui/utils'
 import { type CSSProperties, type Ref, type RefObject, useLayoutEffect, useRef, useState } from 'react'
 
 import {

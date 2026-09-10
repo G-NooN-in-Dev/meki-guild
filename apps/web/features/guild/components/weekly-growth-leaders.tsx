@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@shared/ui/button'
-import { cn } from '@shared/ui/lib/utils'
 import {
 	Popover,
 	PopoverContent,
@@ -10,6 +9,7 @@ import {
 	PopoverTitle,
 	PopoverTrigger
 } from '@shared/ui/popover'
+import { cn } from '@shared/ui/utils'
 import { TrophyIcon } from 'lucide-react'
 
 import JobBadge from '@/features/guild/components/job-badge'

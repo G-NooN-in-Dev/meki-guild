@@ -2,8 +2,8 @@
 
 import { Button } from '@shared/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@shared/ui/collapsible'
-import { cn } from '@shared/ui/lib/utils'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@shared/ui/sheet'
+import { cn } from '@shared/ui/utils'
 import { ChevronDownIcon, MenuIcon, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'

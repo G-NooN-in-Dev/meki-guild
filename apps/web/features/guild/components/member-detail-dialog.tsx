@@ -1,8 +1,8 @@
 'use client'
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog'
-import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
+import { cn } from '@shared/ui/utils'
 
 import GrowthDelta, { MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
