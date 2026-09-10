@@ -3,13 +3,13 @@
 import { Label } from '@shared/ui/label'
 import { Switch } from '@shared/ui/switch'
 
+import ContentAwards from '@/features/guild/components/content-awards'
 import ContentUpdatedAtGuide from '@/features/guild/components/content-updated-at-guide'
 import ExpeditionTierGuide from '@/features/guild/components/expedition-tier-guide'
 import GuildContentSeasonsGuide from '@/features/guild/components/guild-content-seasons-guide'
 import GuildMemberFilters from '@/features/guild/components/guild-member-filters'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import RivalryRankPointsGuide from '@/features/guild/components/rivalry-rank-points-guide'
-import WeeklyGrowthLeaders from '@/features/guild/components/weekly-growth-leaders'
 import type { GuildMemberFilterState } from '@/features/guild/lib/filter-guild-members'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 
@@ -69,7 +69,7 @@ function GuildMemberToolbar({
 			</div>
 			{/* min-w-0: flex 한 줄에서도 줄어들 수 있게. 좁으면 가로 스크롤 */}
 			<div className="flex min-w-0 scrollbar-none items-center gap-1.5 overflow-x-auto [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-				<WeeklyGrowthLeaders comparisons={comparisons} />
+				<ContentAwards comparisons={comparisons} />
 				<ContentUpdatedAtGuide />
 				<JobDistributionGuide comparisons={comparisons} />
 				<GuildContentSeasonsGuide />
