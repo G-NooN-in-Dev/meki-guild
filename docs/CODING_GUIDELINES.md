@@ -3,7 +3,7 @@
 이 문서는 이 레포(및 동일 스택을 복제한 프로젝트)의 **코딩 컨벤션 단일 소스(SSOT)** 입니다.  
 에이전트용 `.cursor/rules`는 요약·체크리스트만 두고, **상세는 이 문서를 따릅니다**.
 
-> 다른 레포로 복제할 때: 프로젝트명·앱 경로(`apps/web`)·도메인 예시(weather)만 바꿔도 대부분 그대로 쓸 수 있습니다.
+> 다른 레포로 복제할 때: 프로젝트명·앱 경로(`apps/web`)·도메인 예시(길드/팁)만 바꿔도 대부분 그대로 쓸 수 있습니다.
 
 ---
 
@@ -32,16 +32,16 @@
 - 값과 타입을 함께 내보낼 때는 `export`와 `export type` 블록을 분리합니다.
 
 ```ts
-function createHourlyWeatherTimeline() {
+function computeMemberRankings(members: ParsedGuildMember[]) {
 	// ...
 }
 
-type HourlyWeatherTimeline = {
+type MemberRankings = {
 	// ...
 }
 
-export { createHourlyWeatherTimeline }
-export type { HourlyWeatherTimeline }
+export { computeMemberRankings }
+export type { MemberRankings }
 ```
 
 ### 타입 정의 파일 (`*.type.ts` 등)
@@ -50,12 +50,13 @@ export type { HourlyWeatherTimeline }
 - 선언부에 `export type`을 붙이지 않습니다.
 
 ```ts
-type WeatherSummary = {
-	realtime: WeatherApiRealtimeResponse
-	forecast: WeatherApiForecastResponse
+type GuildDashboardData = {
+	currentWeek: GuildWeekSnapshot
+	previousWeek: GuildWeekSnapshot
+	comparisons: GuildMemberComparison[]
 }
 
-export type { WeatherSummary }
+export type { GuildDashboardData }
 ```
 
 ### `const` 화살표 함수를 쓰는 경우
@@ -108,9 +109,9 @@ export default ComponentName
 
 | 파일명                        | 컴포넌트명              |
 | ----------------------------- | ----------------------- |
-| `current-location.tsx`        | `CurrentLocation`       |
+| `member-display-name.tsx`     | `MemberDisplayName`     |
 | `example.section.tsx`         | `ExampleSection`        |
-| `current-weather.section.tsx` | `CurrentWeatherSection` |
+| `guild-dashboard.section.tsx` | `GuildDashboardSection` |
 
 ### Next.js 라우트
 

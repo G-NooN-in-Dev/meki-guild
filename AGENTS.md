@@ -10,6 +10,10 @@
 | 주제                                                                | 문서                                                                       |
 | ------------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | 문서 맵                                                             | [`docs/README.md`](docs/README.md)                                         |
+| 제품·실행 (포트폴리오 README)                                       | [`README.md`](README.md)                                                   |
+| 아키텍처                                                            | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)                             |
+| 운영 (Sheets · sync/rotate)                                         | [`docs/OPERATIONS.md`](docs/OPERATIONS.md)                                 |
+| web 앱                                                              | [`apps/web/README.md`](apps/web/README.md)                                 |
 | 코딩 가이드 (함수·컴포넌트·TS·React 19·주석·Tailwind·반응형·레이어) | [`docs/CODING_GUIDELINES.md`](docs/CODING_GUIDELINES.md)                   |
 | 커밋 메시지                                                         | [`docs/COMMIT_MESSAGE_GUIDE.md`](docs/COMMIT_MESSAGE_GUIDE.md)             |
 | 신규 앱 세팅                                                        | [`docs/APP_SETUP.md`](docs/APP_SETUP.md)                                   |

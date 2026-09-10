@@ -3,12 +3,20 @@
 이 폴더는 프로젝트 공통 가이드의 **공유 문서(SSOT)** 입니다.  
 로컬 전용 `.cursor/rules`는 요약·체크리스트만 두고, 상세는 여기 문서를 따릅니다.
 
+## 제품 · 아키텍처
+
+| 문서                                           | 설명                                     |
+| ---------------------------------------------- | ---------------------------------------- |
+| [ARCHITECTURE.md](./ARCHITECTURE.md)           | 라우트·레이어·길드 데이터 흐름           |
+| [OPERATIONS.md](./OPERATIONS.md)               | env · `guild:sync` / `guild:rotate` 운영 |
+| [../README.md](../README.md)                   | 포트폴리오용 제품 소개·스택·실행         |
+| [../apps/web/README.md](../apps/web/README.md) | web 앱 개발·feature 관례                 |
+
 ## 온보딩
 
 | 문서                           | 설명                            |
 | ------------------------------ | ------------------------------- |
 | [APP_SETUP.md](./APP_SETUP.md) | `apps/*` 신규 앱 공통 초기 세팅 |
-| [../README.md](../README.md)   | 모노레포 구성·스크립트          |
 
 ## 컨벤션
 
