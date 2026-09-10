@@ -1,12 +1,25 @@
-import { writeFileSync } from 'node:fs'
+import { existsSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url))
-const dataDirectory = join(scriptDirectory, '../apps/web/data')
+const webAppDirectory = join(scriptDirectory, '../apps/web')
+const dataDirectory = join(webAppDirectory, 'data')
 const currentWeekPath = join(dataDirectory, 'current-week.json')
 const previousWeekPath = join(dataDirectory, 'previous-week.json')
 const contentDatesPath = join(dataDirectory, 'guild-content-dates.json')
+
+/** Next 앱과 동일하게 .env.local 이 .env 보다 우선 (이미 있는 키는 덮어쓰지 않음) */
+function loadWebAppEnv() {
+	for (const fileName of ['.env.local', '.env']) {
+		const envPath = join(webAppDirectory, fileName)
+		if (!existsSync(envPath)) continue
+		process.loadEnvFile(envPath)
+	}
+}
+
+loadWebAppEnv()
 
 const MEMBER_SHEETS = ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss']
 const REQUIRED_HEADERS = {
@@ -256,7 +269,7 @@ async function syncGuildSheet() {
 	const sheetId = process.env.GOOGLE_SHEETS_SHEET_ID
 
 	if (!sheetId) {
-		throw new Error('GOOGLE_SHEETS_SHEET_ID 환경 변수가 설정되지 않았습니다.')
+		throw new Error('GOOGLE_SHEETS_SHEET_ID 환경 변수가 설정되지 않았습니다. apps/web/.env 를 확인하세요.')
 	}
 
 	const [combatPowerRows, expeditionRows, rivalryRows, trainingRows, guildBossRows, guildRows] = await Promise.all([

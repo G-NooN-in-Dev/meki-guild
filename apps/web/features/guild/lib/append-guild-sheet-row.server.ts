@@ -34,7 +34,7 @@ function getGuildSheetId(): string {
 	const sheetId = process.env.GOOGLE_SHEETS_SHEET_ID?.trim()
 
 	if (!sheetId) {
-		throw new Error('GOOGLE_SHEETS_SHEET_ID 환경 변수가 설정되지 않았습니다.')
+		throw new Error('GOOGLE_SHEETS_SHEET_ID 환경 변수가 설정되지 않았습니다. apps/web/.env 를 확인하세요.')
 	}
 
 	return sheetId

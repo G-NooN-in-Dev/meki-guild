@@ -24,7 +24,7 @@ function getMongoUri(): string {
 	const { MONGODB_URI: uri } = process.env
 
 	if (!uri) {
-		throw new Error('MONGODB_URI 환경 변수가 없습니다. apps/web/.env.local 또는 Vercel env를 확인하세요.')
+		throw new Error('MONGODB_URI 환경 변수가 없습니다. apps/web/.env 또는 Vercel env를 확인하세요.')
 	}
 
 	return uri
