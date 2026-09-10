@@ -5,10 +5,6 @@
 
 **데모:** [https://meki-games.vercel.app](https://meki-games.vercel.app)
 
-## Overview (EN)
-
-A Turborepo monorepo for the Maple Keep Growing (메이플키우기) Games guild site. It ships a password-gated guild dashboard fed by Google Sheets → static JSON snapshots, member 1v1 compare, a tips hub (hit-cut tables, simulators), and a changelog — built with Next.js 16, React 19 (Compiler), Tailwind v4, and shared `@shared/*` packages.
-
 ## 주요 기능
 
 | 영역          | 설명                                                |
@@ -72,11 +68,7 @@ pnpm guild:sync              # Sheets → data/*.json
 pnpm guild:rotate <mode>     # 주간 이월 (all | character | expedition | …)
 ```
 
-환경 변수·운영 루틴은 [`docs/OPERATIONS.md`](docs/OPERATIONS.md)를 참고하세요. **비밀값·토큰은 커밋하지 마세요.**
-
-## 스크린샷
-
-포트폴리오용 이미지는 [`docs/assets/`](docs/assets/)에 두고 README에서 링크하면 됩니다. (예: `docs/assets/guild-dashboard.png`)
+환경 변수·운영 루틴은 [`docs/OPERATIONS.md`](docs/OPERATIONS.md)를 참고하세요.
 
 ## 문서 맵
 
