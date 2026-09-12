@@ -1,13 +1,10 @@
+import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
 import {
 	GUILD_EXPEDITION_LATE_TIER_START_STAGE,
 	GUILD_EXPEDITION_TIME_LIMIT_REFILL_SEC,
 	GUILD_EXPEDITION_TIME_LIMIT_SEC
 } from '@/features/tips/lib/guild-expedition-hit-cut.constants'
-
-function EmphasizedText({ children }: { children: React.ReactNode }) {
-	return <span className="text-grayscale-900 font-medium">{children}</span>
-}
 
 function SummaryRulesList() {
 	return (
