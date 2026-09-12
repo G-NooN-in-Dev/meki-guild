@@ -6,6 +6,28 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.6.0',
+		date: '2026-09-13',
+		sections: [
+			{
+				title: '길드 정보',
+				items: [
+					{ text: '컨텐츠별 성장률 1등 시상대 추가' },
+					{ text: '길드원 이미지 추가' },
+					{ text: '길드 수련장 - 길드 순위 변동 추가' }
+				]
+			},
+			{
+				title: '정보/팁',
+				items: [
+					{ text: '길드 수련장 명중컷 · 처치 점수 추가' },
+					{ text: '파티 퀘스트 명중컷 · 보상 정보 추가' },
+					{ text: '몬스터 이미지 추가' }
+				]
+			}
+		]
+	},
+	{
 		version: '1.5.2',
 		date: '2026-09-09',
 		sections: [
