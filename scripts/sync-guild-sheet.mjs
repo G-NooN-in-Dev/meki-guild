@@ -28,7 +28,7 @@ const REQUIRED_HEADERS = {
 	rivalry: ['collectedAt', 'name', 'rivalry'],
 	training: ['collectedAt', 'name', 'training'],
 	guildBoss: ['collectedAt', 'name', 'guildBoss'],
-	guild: ['collectedAt', 'content', 'expeditionRank', 'rivalryRank', 'rivalryPoints']
+	guild: ['collectedAt', 'content', 'expeditionRank', 'rivalryRank', 'rivalryPoints', 'trainingRank']
 }
 
 function sheetCsvUrl(sheetId, sheetName) {
@@ -212,14 +212,16 @@ function toLevel(value) {
 	return toNumberOrNull(value) ?? 0
 }
 
-function buildGuildMeta(guildRows, expeditionDate, rivalryDate) {
+function buildGuildMeta(guildRows, expeditionDate, rivalryDate, trainingDate) {
 	const expeditionRow = guildRows.find((row) => row.content === 'expedition' && row.collectedAt === expeditionDate)
 	const rivalryRow = guildRows.find((row) => row.content === 'rivalry' && row.collectedAt === rivalryDate)
+	const trainingRow = guildRows.find((row) => row.content === 'training' && row.collectedAt === trainingDate)
 
 	return {
 		expeditionRank: toNumberOrNull(expeditionRow?.expeditionRank),
 		rivalryRank: toNumberOrNull(rivalryRow?.rivalryRank),
-		rivalryPoints: toNumberOrNull(rivalryRow?.rivalryPoints)
+		rivalryPoints: toNumberOrNull(rivalryRow?.rivalryPoints),
+		trainingRank: toNumberOrNull(trainingRow?.trainingRank)
 	}
 }
 
@@ -326,12 +328,12 @@ async function syncGuildSheet() {
 	const currentWeek = buildSnapshot(
 		rowsOnDate(combatPowerRows, dates.combatPower.current),
 		currentLookups,
-		buildGuildMeta(guildRows, dates.expedition.current, dates.rivalry.current)
+		buildGuildMeta(guildRows, dates.expedition.current, dates.rivalry.current, dates.training.current)
 	)
 	const previousWeek = buildSnapshot(
 		rowsOnDate(combatPowerRows, dates.combatPower.previous),
 		previousLookups,
-		buildGuildMeta(guildRows, dates.expedition.previous, dates.rivalry.previous)
+		buildGuildMeta(guildRows, dates.expedition.previous, dates.rivalry.previous, dates.training.previous)
 	)
 
 	writeJson(currentWeekPath, currentWeek)

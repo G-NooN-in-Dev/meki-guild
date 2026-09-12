@@ -172,6 +172,17 @@ function SummaryCardBody({ card, sharesRowAtXl = false }: { card: SummaryCard; s
 		)
 	}
 
+	// valueLabel 없이 metaRows만 있으면 동등 열(수련장: 점수·순위 1줄)
+	if (card.metaRows && card.metaRows.length > 0) {
+		return (
+			<div className={cn('mt-2 grid gap-3', card.metaRows.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4')}>
+				{card.metaRows.map((row) => (
+					<SummaryMetaItem key={row.label} row={row} />
+				))}
+			</div>
+		)
+	}
+
 	return <SummaryCardValue value={card.value} percentLabel={card.percentLabel} />
 }
 
@@ -288,7 +299,18 @@ function createOrderedSummaryCard(
 			return {
 				label: `${label} 변화`,
 				value: metrics.trainingChange,
-				percentLabel: metrics.trainingChangePercent
+				metaRows: [
+					{
+						label: '수련장 점수 총합',
+						value: metrics.trainingChange,
+						percentLabel: metrics.trainingChangePercent
+					},
+					{
+						label: '길드 순위',
+						value: metrics.guildTrainingRankLabel,
+						delta: metrics.guildTrainingRankChange
+					}
+				]
 			}
 		case 'guildBoss':
 			return {
@@ -305,7 +327,7 @@ function GuildSummaryCards({ metrics }: GuildSummaryCardsProps) {
 	const splitSummaryCards = bottomSummaryCards.filter((card) => card.columnSpan === 2)
 	const restSummaryCards = bottomSummaryCards.filter((card) => card.columnSpan !== 2)
 	const summaryCards = [topSummaryCard, ...splitSummaryCards, ...restSummaryCards]
-	// 토벌전·대항전처럼 2열 카드가 둘이면 xl에서 한 줄을 나눠 씁니다
+	// 토벌전·대항전처럼 2열 카드가 둘 이상이면 xl에서 한 줄을 나눠 씁니다
 	const sharesRowAtXl = splitSummaryCards.length >= 2
 
 	return (

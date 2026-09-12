@@ -22,6 +22,10 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		rivalryPoints: {
 			current: data.currentWeek.guild?.rivalryPoints,
 			previous: data.previousWeek.guild?.rivalryPoints
+		},
+		trainingRank: {
+			current: data.currentWeek.guild?.trainingRank,
+			previous: data.previousWeek.guild?.trainingRank
 		}
 	})
 

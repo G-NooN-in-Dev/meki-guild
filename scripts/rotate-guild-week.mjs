@@ -200,6 +200,10 @@ function rotateGuildWeek(mode) {
 		rotateGuildMetaFields(currentWeek, previousWeek, ['rivalryRank', 'rivalryPoints'])
 	}
 
+	if (fields.includes('training')) {
+		rotateGuildMetaFields(currentWeek, previousWeek, ['trainingRank'])
+	}
+
 	// 분야별 수집일: 기존 current → previous 로 밀고, current 는 오늘(새 수집 시작일)
 	for (const field of fields) {
 		const dateKey = CONTENT_DATE_KEYS[field]

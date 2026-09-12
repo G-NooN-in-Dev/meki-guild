@@ -2,7 +2,8 @@
 	"guild": {
 		"expeditionRank": 18,
 		"rivalryRank": 1,
-		"rivalryPoints": 5436200
+		"rivalryPoints": 5436200,
+		"trainingRank": null
 	},
 	"members": [
 		{

@@ -25,6 +25,7 @@ type GuildSummaryMetaInput = {
 	expeditionRank?: GuildPlacementRankInput
 	rivalryRank?: GuildPlacementRankInput
 	rivalryPoints?: GuildMetaPointsInput
+	trainingRank?: GuildPlacementRankInput
 }
 
 type NumericFieldSelector = (_comparison: GuildMemberComparison) => NumericDeltaLike
@@ -230,7 +231,7 @@ function parseGuildPlacementRank(value: number | null | undefined): number | nul
 	return Math.floor(value)
 }
 
-/** 길드 순위 표시·증감(등수라 숫자가 작을수록 상위). 토벌전·대항전 공통 */
+/** 길드 순위 표시·증감(등수라 숫자가 작을수록 상위). 토벌전·대항전·수련장 공통 */
 function calculateGuildPlacementRank(rank: GuildPlacementRankInput): {
 	label: string
 	changeLabel: string | null
@@ -352,6 +353,7 @@ function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guil
 	const expeditionRank = calculateGuildPlacementRank(guildMeta?.expeditionRank ?? emptyRank)
 	const rivalryRank = calculateGuildPlacementRank(guildMeta?.rivalryRank ?? emptyRank)
 	const rivalryPoints = calculateGuildRivalryPoints(guildMeta?.rivalryPoints ?? emptyPoints)
+	const trainingRank = calculateGuildPlacementRank(guildMeta?.trainingRank ?? emptyRank)
 
 	return {
 		combatPowerTotal: calculateCombatPowerTotal(comparisons),
@@ -373,6 +375,8 @@ function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guil
 		guildRivalryRankChange: rivalryRank.changeLabel,
 		trainingChange: formatTrainingDelta(calculateTotalNumericChange(comparisons, trainingField)),
 		trainingChangePercent: calculateTotalChangePercent(comparisons, trainingField),
+		guildTrainingRankLabel: trainingRank.label,
+		guildTrainingRankChange: trainingRank.changeLabel,
 		guildBossChange: formatKoreanDelta(
 			calculateTotalNumericChange(comparisons, guildBossField, hasGuildBossContribution)
 		),
