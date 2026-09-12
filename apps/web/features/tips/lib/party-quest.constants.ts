@@ -25,11 +25,11 @@ export const PARTY_QUEST_ORDER = [
 ] as const satisfies readonly PartyQuestId[]
 
 export const PARTY_QUEST_META = {
-	ring: { label: '첫 번째 동행' },
-	necklace: { label: '차원의 균열' },
-	faceAccessory: { label: '여신의 흔적' },
-	ring2: { label: '로미오와 줄리엣' }
-} as const satisfies Record<PartyQuestId, { label: string }>
+	ring: { label: '첫 번째 동행', imageSrc: '/monsters/king-slime.gif' },
+	necklace: { label: '차원의 균열', imageSrc: '/monsters/alishar.gif' },
+	faceAccessory: { label: '여신의 흔적', imageSrc: '/monsters/papa-pixie.gif' },
+	ring2: { label: '로미오와 줄리엣', imageSrc: '/monsters/frankenroid.gif' }
+} as const satisfies Record<PartyQuestId, { label: string; imageSrc: `/monsters/${string}` }>
 
 /** 장비 등급 Badge — ItemGrade 톤 재사용 */
 export const PARTY_QUEST_REWARD_GRADE_META = {
