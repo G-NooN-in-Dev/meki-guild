@@ -67,6 +67,13 @@ export const TIP_ENTRIES = [
 		description: '길드 대항전 단계별 필요 명중과, 보스 데미지 증가 스택을 확인해보세요.',
 		tags: ['길드컨텐츠', '대항전'],
 		href: '/tips/guild-rivalry-hit-cut'
+	},
+	{
+		slug: 'guild-training-info',
+		title: '길드 수련장 명중컷 · 처치 점수',
+		description: '길드 수련장 단계별 필요 명중과 처치 점수를 확인해보세요.',
+		tags: ['길드컨텐츠', '수련장'],
+		href: '/tips/guild-training-info'
 	}
 ] as const satisfies readonly TipEntry[]
 
