@@ -7,6 +7,7 @@ import { cn } from '@shared/ui/utils'
 import GrowthDelta, { MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName, { useMemberDisplayName } from '@/features/guild/components/member-display-name'
+import MemberPortrait from '@/features/guild/components/member-portrait'
 import { formatRankDiffLabel, formatRankLabel, type MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
@@ -227,21 +228,24 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 				}
 			/>
 			{/* 모바일: 좌우 여백 최소화하여 넓게, 데스크탑: 테이블 4컬럼 + 순위·날짜 정보가 여유롭게 들어갈 폭 */}
-			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-2xl sm:gap-6 sm:p-6">
+			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-2 overflow-hidden p-4 sm:max-w-2xl sm:gap-3 sm:p-6">
 				<DialogHeader>
-					{/* 이름·상태·직업을 한 줄로 나란히 표시 */}
-					<DialogTitle className="flex flex-wrap items-center gap-1.5">
-						<MemberDisplayName name={comparison.name} />
-						<MemberStatusBadge status={comparison.status} />
-						{comparison.jobChanged && comparison.previousJob ? (
-							<span className="inline-flex flex-wrap items-center gap-1">
-								<JobBadge job={comparison.previousJob} />
-								<span className="text-grayscale-400 text-xs font-normal">→</span>
+					{/* 초상화 + 이름·상태·직업을 한 줄로 나란히 표시 */}
+					<DialogTitle className="flex flex-wrap items-center gap-2">
+						<MemberPortrait name={comparison.name} size="sm" alt={displayName} zoom={2.25} />
+						<span className="inline-flex flex-wrap items-center gap-1.5">
+							<MemberDisplayName name={comparison.name} />
+							<MemberStatusBadge status={comparison.status} />
+							{comparison.jobChanged && comparison.previousJob ? (
+								<span className="inline-flex flex-wrap items-center gap-1">
+									<JobBadge job={comparison.previousJob} />
+									<span className="text-grayscale-400 text-xs font-normal">→</span>
+									<JobBadge job={comparison.job} />
+								</span>
+							) : (
 								<JobBadge job={comparison.job} />
-							</span>
-						) : (
-							<JobBadge job={comparison.job} />
-						)}
+							)}
+						</span>
 					</DialogTitle>
 					{/* DialogDescription은 a11y용으로 숨기고, 직업은 색상 Badge로 표시 */}
 					<DialogDescription className="sr-only">

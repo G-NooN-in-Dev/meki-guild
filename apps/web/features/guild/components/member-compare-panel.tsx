@@ -3,8 +3,9 @@
 import JobBadge from '@/features/guild/components/job-badge'
 import { buildCompareRows, CompareRowItem } from '@/features/guild/components/member-compare-rows'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
+import MemberPortrait from '@/features/guild/components/member-portrait'
 import { type MemberRankings } from '@/features/guild/lib/compute-member-rankings'
-import type { MemberVsMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import { type MemberVsMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 
 type MemberComparePanelProps = {
 	comparison: MemberVsMemberComparison
@@ -15,8 +16,11 @@ function MemberSummaryCard({ role, name, job }: { role: '나' | '상대방'; nam
 	return (
 		<div className="border-grayscale-200 bg-card shadow-soft min-w-0 rounded-xl border p-3 text-center md:p-4">
 			<p className="text-grayscale-500 text-[11px] md:text-xs">{role}</p>
+			<div className="mt-1.5 flex justify-center">
+				<MemberPortrait name={name} size="md" className="size-14 md:size-16" zoom={2.25} />
+			</div>
 			{/* 잠금 시 별칭 — 비교 로직의 name 키는 실명 그대로 */}
-			<p className="text-grayscale-900 mt-1 truncate text-base font-semibold md:text-xl">
+			<p className="text-grayscale-900 mt-1.5 truncate text-base font-semibold md:text-xl">
 				<MemberDisplayName name={name} />
 			</p>
 			{/* 멤버 테이블·상세와 동일하게 직업별 색상 Badge로 표시 */}
