@@ -7,7 +7,7 @@ import type { ItemGrade } from '@/features/tips/types/item-grade.type'
 type GradePortraitSize = 'sm' | 'md' | 'lg'
 
 type GradePortraitProps = {
-	/** public 경로 (예: /tips/companions/hero.png) */
+	/** public 경로 (예: /companions/hero.png) */
 	src: string
 	alt: string
 	/** 있으면 등급색 테두리 */

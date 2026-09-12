@@ -13,6 +13,7 @@ import { InfoIcon, LockIcon } from 'lucide-react'
 import Image from 'next/image'
 import { type ReactNode, useState } from 'react'
 
+import MonsterPortrait from '@/features/tips/components/shared/monster-portrait'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {
@@ -233,6 +234,7 @@ function BossRaidMilestoneRewardItemCell({ milestone }: { milestone: BossRaidMil
 
 function BossRaidRewardTableHeader({
 	bossName,
+	bossImageSrc,
 	difficultyLabel,
 	requiredHit,
 	showBurningToggle,
@@ -240,6 +242,7 @@ function BossRaidRewardTableHeader({
 	onBurningChange
 }: {
 	bossName: string
+	bossImageSrc: string
 	difficultyLabel: string
 	requiredHit: number
 	showBurningToggle: boolean
@@ -248,21 +251,24 @@ function BossRaidRewardTableHeader({
 }) {
 	return (
 		<CardHeader className="gap-2">
-			<div className="flex flex-wrap items-center justify-between gap-2">
-				<div className="flex flex-wrap items-center gap-2">
-					<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
-						{bossName} · {difficultyLabel}
-					</CardTitle>
-					<Badge variant="secondary" className="tabular-nums">
-						필요 명중 : {formatLocaleNumber(requiredHit)}
-					</Badge>
+			<div className="flex items-start justify-between gap-2">
+				<div className="flex min-w-0 items-start gap-2">
+					<MonsterPortrait src={bossImageSrc} alt={bossName} size="sm" />
+					<div className="flex min-w-0 flex-col gap-1">
+						<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
+							{bossName} · {difficultyLabel}
+						</CardTitle>
+						<Badge variant="secondary" className="w-fit tabular-nums">
+							필요 명중 : {formatLocaleNumber(requiredHit)}
+						</Badge>
+					</div>
 				</div>
 
 				{showBurningToggle ? (
 					<Label
 						htmlFor="boss-raid-burning"
 						className={cn(
-							'gap-2 rounded-md border px-3 py-1.5 font-medium shadow-xs transition-colors',
+							'shrink-0 gap-2 rounded-md border px-3 py-1.5 font-medium shadow-xs transition-colors',
 							burningOn
 								? 'border-warning-500/40 bg-warning-50 text-warning-700'
 								: 'border-grayscale-200 bg-card text-grayscale-600'
@@ -386,7 +392,7 @@ function BossRaidLockedDifficultyEmpty({ bossName, difficultyLabel }: { bossName
 function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 	const [burningOn, setBurningOn] = useState(false)
 	const { boss, difficulty } = selectedBoss
-	const bossName = BOSS_RAID_BOSS_META[boss].label
+	const { label: bossName, imageSrc: bossImageSrc } = BOSS_RAID_BOSS_META[boss]
 	const difficultyLabel = getBossRaidDifficultyLabel(difficulty)
 
 	const bossRaidEntry = getBossRaidEntry(boss, difficulty)
@@ -420,6 +426,7 @@ function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 			<Card className="border-grayscale-200 shadow-soft">
 				<BossRaidRewardTableHeader
 					bossName={bossName}
+					bossImageSrc={bossImageSrc}
 					difficultyLabel={difficultyLabel}
 					requiredHit={requiredHit}
 					showBurningToggle={!isMilestone}

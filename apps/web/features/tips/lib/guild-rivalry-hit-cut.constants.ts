@@ -9,6 +9,13 @@ type GuildRivalryHitTier = {
 	increment: number
 }
 
+/** 대항전 보스 이미지 */
+export const RIVALRY_BOSS_PORTRAITS = [
+	{ src: '/monsters/guild-rivalry-boss-1.gif', alt: '대항전 보스 1' },
+	{ src: '/monsters/guild-rivalry-boss-2.gif', alt: '대항전 보스 2' },
+	{ src: '/monsters/guild-rivalry-boss-3.gif', alt: '대항전 보스 3' }
+] as const
+
 /** 표에 표시할 최대 단계 */
 export const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 80
 

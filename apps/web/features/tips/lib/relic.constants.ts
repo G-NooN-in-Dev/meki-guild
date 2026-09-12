@@ -64,7 +64,7 @@ export const RELIC_ICON_KEY = Object.fromEntries(
 
 /** iconKey → public 경로 */
 function getRelicImageSrcByIconKey(iconKey: string) {
-	return iconKey ? `/tips/relics/${iconKey}.png` : ''
+	return iconKey ? `/relics/${iconKey}.png` : ''
 }
 
 /** 유물 표시명 → public 경로. 매핑이 없으면 빈 문자열. */

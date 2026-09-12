@@ -51,7 +51,7 @@ const RELIC_CATALOG_SOURCE: readonly RelicCatalogEntry[] = [
 }[]
 
 /**
- * 유물 이름 → public/tips/relics 파일명 키.
+ * 유물 이름 → public/relics 파일명 키.
  * 등급별 이미지는 없고 유물당 PNG 1장입니다.
  */
 

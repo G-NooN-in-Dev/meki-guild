@@ -34,6 +34,13 @@ export const TIP_ENTRIES = [
 		href: '/tips/job-release-order'
 	},
 	{
+		slug: 'growth-dungeon',
+		title: '성장 던전 정보',
+		description: '성장 던전 정보를 확인해보세요.',
+		tags: ['성장 던전'],
+		href: '/tips/growth-dungeon'
+	},
+	{
 		slug: 'content-stage-cut',
 		title: '컨텐츠 별 스테이지컷',
 		description: '컨텐츠 및 난이도 별 스테이지컷을 확인해보세요.',
@@ -48,11 +55,11 @@ export const TIP_ENTRIES = [
 		href: '/tips/boss-raid'
 	},
 	{
-		slug: 'growth-dungeon',
-		title: '성장 던전 정보',
-		description: '성장 던전 정보를 확인해보세요.',
-		tags: ['성장 던전'],
-		href: '/tips/growth-dungeon'
+		slug: 'party-quest',
+		title: '파티퀘스트 명중컷 및 보상 정보',
+		description: '파티퀘스트 명중컷 및 보상을 확인해보세요.',
+		tags: ['파티퀘스트'],
+		href: '/tips/party-quest'
 	},
 	{
 		slug: 'guild-expedition-hit-cut',

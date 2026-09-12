@@ -41,7 +41,7 @@ type Companion = {
 	/** 대응 직업 */
 	job: string
 	grade: CompanionGrade
-	/** public 기준 초상화 경로 (예: /tips/companions/hero.png) */
+	/** public 기준 초상화 경로 (예: /companions/hero.png) */
 	imageSrc: string
 }
 

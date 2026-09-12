@@ -48,9 +48,9 @@ type Relic = {
 	/** 게임/MGF 표시명 */
 	name: string
 	grade: RelicGrade
-	/** public/tips/relics 파일명 키 (확장자 제외) */
+	/** public/relics 파일명 키 (확장자 제외) */
 	iconKey: string
-	/** public 기준 아이콘 경로 (예: /tips/relics/holy-grail.png) */
+	/** public 기준 아이콘 경로 (예: /relics/holy-grail.png) */
 	imageSrc: string
 	/** 특정 콘텐츠에서만 발동하는 유물 조건 (없으면 항상 발동) */
 	activationCondition?: string
