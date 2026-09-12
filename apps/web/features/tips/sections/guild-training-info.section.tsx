@@ -6,6 +6,7 @@ import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 import MonsterPortrait from '../components/shared/monster-portrait'
+import { GUILD_TRAINING_BOT_PORTRAIT } from '../lib/guild-training-info.constants'
 
 function GuildTrainingInfoSection() {
 	const tags = getTipTagsBySlug('guild-training-info')
@@ -30,12 +31,7 @@ function GuildTrainingInfoSection() {
 						</p>
 					</div>
 
-					<MonsterPortrait
-						src="/monsters/guild-training-bot.png"
-						alt="허수아비"
-						size="lg"
-						className="size-20 md:size-24"
-					/>
+					<MonsterPortrait src={GUILD_TRAINING_BOT_PORTRAIT} alt="허수아비" size="lg" className="size-20 md:size-24" />
 				</header>
 			</div>
 

@@ -6,6 +6,8 @@ import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import MonsterPortrait from '@/features/tips/components/shared/monster-portrait'
 import { getTipTagsBySlug } from '@/features/tips/lib/tips-registry.constants'
 
+import { GUILD_EXPEDITION_BOSS_PORTRAIT } from '../lib/guild-expedition-hit-cut.constants'
+
 function GuildExpeditionHitCutSection() {
 	const tags = getTipTagsBySlug('guild-expedition-hit-cut')
 
@@ -29,7 +31,12 @@ function GuildExpeditionHitCutSection() {
 						</p>
 					</div>
 
-					<MonsterPortrait src="/monsters/arcanus.gif" alt="아르카누스" size="lg" className="size-20 md:size-24" />
+					<MonsterPortrait
+						src={GUILD_EXPEDITION_BOSS_PORTRAIT}
+						alt="아르카누스"
+						size="lg"
+						className="size-20 md:size-24"
+					/>
 				</header>
 			</div>
 
