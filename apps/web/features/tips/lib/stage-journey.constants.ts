@@ -54,7 +54,7 @@ const STAGE_JOURNEY_GRADE_META = {
 
 /** 보스 초상화 public 경로 (기본값) */
 function getStageJourneyPortraitSrc(chapter: number) {
-	return `/tips/stage-boss/stage-boss-${chapter}.gif`
+	return `/stage-boss/stage-boss-${chapter}.gif`
 }
 
 /**
