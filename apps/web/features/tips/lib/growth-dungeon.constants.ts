@@ -17,6 +17,21 @@ export const GROWTH_DUNGEON_TABS = [
 	{ label: '강화 던전', value: 'enhance' }
 ] as const
 
+type GrowthDungeonTabValue = (typeof GROWTH_DUNGEON_TABS)[number]['value']
+
+/** 탭별 대표 몬스터 — `public/monsters/` (원본 GIF/PNG/WebP, MonsterPortrait용) */
+export const GROWTH_DUNGEON_MONSTER_SRC = {
+	weapon: '/monsters/mush-mom.webp',
+	experience: '/monsters/zombie-mush-mom.png',
+	equipment: '/monsters/poison-poopa.gif',
+	ability: '/monsters/eliza.gif',
+	enhance: '/monsters/crimson-barlog.gif'
+} as const satisfies Record<GrowthDungeonTabValue, string>
+
+function isGrowthDungeonTabValue(value: string): value is GrowthDungeonTabValue {
+	return GROWTH_DUNGEON_TABS.some((tab) => tab.value === value)
+}
+
 /** 10, 20, 30… 처럼 어려운 단계가 반복되는 간격 */
 export const GROWTH_DUNGEON_HARD_STAGE_INTERVAL = 10
 
@@ -342,5 +357,8 @@ export {
 	getExperienceDungeonRequiredKillCount,
 	getGrowthDungeonRequiredHitCut,
 	getWeaponDungeonRequiredHitCut,
-	isGrowthDungeonHardStage
+	isGrowthDungeonHardStage,
+	isGrowthDungeonTabValue
 }
+
+export type { GrowthDungeonTabValue }
