@@ -214,7 +214,7 @@ function aggregateEquipEffects(effects: readonly CompanionEquipEffect[]): readon
 }
 
 /**
- * 직업 → public/tips/companions 파일명 키.
+ * 직업 → public/companions 파일명 키.
  * 등급별 이미지는 없고 직업당 PNG 1장입니다.
  */
 export const COMPANION_JOB_ICON_KEY = {
@@ -237,7 +237,7 @@ export const COMPANION_JOB_ICON_KEY = {
 /** 직업 초상화 public 경로. 매핑이 없으면 빈 문자열. */
 function getCompanionImageSrc(job: string) {
 	const iconKey = COMPANION_JOB_ICON_KEY[job as keyof typeof COMPANION_JOB_ICON_KEY]
-	return iconKey ? `/tips/companions/${iconKey}.png` : ''
+	return iconKey ? `/companions/${iconKey}.png` : ''
 }
 
 /** 직업 × 등급 조합으로 동료 카탈로그를 만듭니다. */
