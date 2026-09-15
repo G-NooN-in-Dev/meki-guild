@@ -182,8 +182,8 @@ const BOSS_RAID_ENTRIES = [
 				grade: 'legendary',
 				tier: 'top',
 				maxLevel: 110,
-				name: '자쿰의 투구',
-				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['자쿰의 투구'],
+				name: '카오스 자쿰의 투구',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['카오스 자쿰의 투구'],
 				ratePercent: 1
 			},
 			{
@@ -232,8 +232,8 @@ const BOSS_RAID_ENTRIES = [
 				grade: 'legendary',
 				tier: 'top',
 				maxLevel: 110,
-				name: '자쿰의 투구',
-				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['자쿰의 투구'],
+				name: '카오스 자쿰의 투구',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['카오스 자쿰의 투구'],
 				ratePercent: 5
 			},
 			{

@@ -56,45 +56,82 @@ export const BOSS_RAID_REWARD_TIER_LABELS = {
 	low: '하급'
 } as const satisfies Record<BossRaidRewardTier, string>
 
+/** 부가옵션 개수(0~4개) 확률 프로필 — 장비·등급·티어에서 재사용 */
+const BONUS_OPTION_COUNT_RATES_30_40_30 = [30, 40, 30, 0, 0] as const satisfies BossRaidBonusOptionCountRates
+const BONUS_OPTION_COUNT_RATES_30_35_25_10 = [30, 35, 25, 10, 0] as const satisfies BossRaidBonusOptionCountRates
+const BONUS_OPTION_COUNT_RATES_0_30_40_30 = [0, 30, 40, 30, 0] as const satisfies BossRaidBonusOptionCountRates
+const BONUS_OPTION_COUNT_RATES_0_30_35_25_10 = [0, 30, 35, 25, 10] as const satisfies BossRaidBonusOptionCountRates
+
 /**
- * 장비 부가옵션 개수(0~4개) 확률(%) — 이름 × 등급 기준.
- * tier·maxLevel과 무관하며, 데이터가 없는 장비는 룩업에서 제외한다.
- * `reward.name`(string) 인덱싱을 위해 Record로 둔다. (`as const`면 키가 리터럴로 좁혀져 에러)
+ * 장비 부가옵션 개수(0~4개) 확률(%) — 이름 × 등급 × 티어.
+ * maxLevel과 무관. `reward.name`(string) 인덱싱을 위해 Record로 둔다. (`as const`면 키가 리터럴로 좁혀져 에러)
  */
 const BOSS_RAID_BONUS_OPTION_COUNT_RATES: Record<
 	string,
-	Partial<Record<BossRaidRewardGrade, BossRaidBonusOptionCountRates>>
+	Partial<Record<BossRaidRewardGrade, Partial<Record<BossRaidRewardTier, BossRaidBonusOptionCountRates>>>>
 > = {
 	'자쿰의 투구': {
-		unique: [30, 40, 30, 0, 0],
-		legendary: [30, 35, 25, 10, 0]
+		unique: {
+			top: BONUS_OPTION_COUNT_RATES_30_40_30,
+			high: BONUS_OPTION_COUNT_RATES_30_40_30
+		},
+		legendary: {
+			low: BONUS_OPTION_COUNT_RATES_30_35_25_10
+		}
 	},
 	'카오스 자쿰의 투구': {
-		legendary: [30, 35, 25, 10, 0]
+		legendary: {
+			top: BONUS_OPTION_COUNT_RATES_30_35_25_10
+		}
 	},
 	'아쿠아틱 레터 눈장식': {
-		unique: [0, 30, 40, 30, 0],
-		legendary: [0, 30, 35, 25, 10]
+		unique: {
+			top: BONUS_OPTION_COUNT_RATES_0_30_40_30,
+			high: BONUS_OPTION_COUNT_RATES_0_30_40_30
+		},
+		legendary: {
+			mid: BONUS_OPTION_COUNT_RATES_0_30_35_25_10,
+			low: BONUS_OPTION_COUNT_RATES_0_30_35_25_10
+		}
 	},
 	'데아 시두스 이어링': {
-		legendary: [30, 35, 25, 10, 0],
-		legendaryPlus: [30, 35, 25, 10, 0]
+		legendary: {
+			mid: BONUS_OPTION_COUNT_RATES_0_30_40_30,
+			high: BONUS_OPTION_COUNT_RATES_0_30_40_30,
+			top: BONUS_OPTION_COUNT_RATES_0_30_35_25_10
+		},
+		legendaryPlus: {
+			low: BONUS_OPTION_COUNT_RATES_0_30_35_25_10
+		}
 	},
 	'혼테일의 목걸이': {
-		legendaryPlus: [30, 35, 25, 10, 0]
+		legendaryPlus: {
+			low: BONUS_OPTION_COUNT_RATES_30_35_25_10
+		}
 	},
 	'카오스 혼테일의 목걸이': {
-		legendaryPlus: [30, 35, 25, 10, 0]
+		legendaryPlus: {
+			mid: BONUS_OPTION_COUNT_RATES_30_35_25_10
+		}
 	},
 	'핑크빛 성배': {
-		legendary: [0, 30, 40, 30, 0],
-		legendaryPlus: [0, 30, 35, 25, 10]
+		legendary: {
+			high: BONUS_OPTION_COUNT_RATES_0_30_40_30
+		},
+		legendaryPlus: {
+			mid: BONUS_OPTION_COUNT_RATES_0_30_35_25_10,
+			low: BONUS_OPTION_COUNT_RATES_0_30_35_25_10
+		}
 	},
 	'블랙빈 마크': {
-		legendaryPlus: [30, 35, 25, 10, 0]
+		legendaryPlus: {
+			high: BONUS_OPTION_COUNT_RATES_30_35_25_10
+		}
 	},
 	'카오스 핑크빈 마크': {
-		legendaryPlus: [30, 35, 25, 10, 0]
+		legendaryPlus: {
+			top: BONUS_OPTION_COUNT_RATES_30_35_25_10
+		}
 	}
 }
 
@@ -175,15 +212,15 @@ function getBossRaidEquipmentMaxLevel(reward: BossRaidReward): string | undefine
 	return formatLocaleNumber(reward.maxLevel)
 }
 
-/** 장비 부가옵션 개수 확률 — 이름 × 등급 룩업 */
+/** 장비 부가옵션 개수 확률 — 이름 × 등급 × 티어 룩업 */
 function getBossRaidBonusOptionCountRates(
-	reward: Pick<BossRaidEquipmentReward, 'kind' | 'name' | 'grade'>
+	reward: Pick<BossRaidEquipmentReward, 'kind' | 'name' | 'grade' | 'tier'>
 ): BossRaidBonusOptionCountRates | undefined {
 	if (reward.kind !== 'equipment') {
 		return undefined
 	}
 
-	return BOSS_RAID_BONUS_OPTION_COUNT_RATES[reward.name]?.[reward.grade]
+	return BOSS_RAID_BONUS_OPTION_COUNT_RATES[reward.name]?.[reward.grade]?.[reward.tier]
 }
 
 /** 난이도 라벨 조회 */
