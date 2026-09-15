@@ -114,7 +114,7 @@ function GuildSheetTabFieldInputs({ tab, fields, patchField, isLoadingDefaults }
 							<p className="text-grayscale-500 text-xs">
 								{field === 'training'
 									? '게임에서 보여지는 형태 그대로 입력하세요.(예: 1000만 101, 9000000)'
-									: '경/조/억/만 단위를 포함해 입력하세요.'}
+									: '경/조/억/만 단위를 포함해 입력하세요. (예: 1234조 5678억, 1234억 5678만)'}
 							</p>
 						) : null}
 					</div>

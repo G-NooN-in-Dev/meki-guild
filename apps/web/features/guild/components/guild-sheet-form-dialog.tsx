@@ -125,6 +125,7 @@ function GuildSheetFormFields({ members, previousMembers, onSuccess }: GuildShee
 				if (existing) {
 					setFields(existing)
 					setHasExistingRow(true)
+					toast.info('기존에 등록된 데이터가 존재합니다. 수정 모드로 전환합니다.')
 					return
 				}
 
@@ -256,7 +257,7 @@ function GuildSheetFormFields({ members, previousMembers, onSuccess }: GuildShee
 			{isLoadingDefaults ? <p className="text-grayscale-500 text-sm">기존 데이터를 불러오는 중…</p> : null}
 
 			{hasExistingRow && !isLoadingDefaults ? (
-				<p className="text-grayscale-500 text-sm">이미 등록된 데이터가 있어 수정 모드로 열었습니다.</p>
+				<p className="text-grayscale-500 text-sm">기존에 등록된 데이터가 존재합니다. 수정 모드로 전환합니다.</p>
 			) : null}
 
 			<GuildSheetTabFieldInputs
