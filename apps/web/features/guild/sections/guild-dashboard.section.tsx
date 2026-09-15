@@ -43,7 +43,8 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 				<p className="text-grayscale-500 text-sm">길드 종합 현황</p>
 				<div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
 					<h1 className="text-grayscale-900 text-3xl font-semibold">메이플키우기 게임즈 길드</h1>
-					<GuildSheetFormDialog members={sheetFormMembers} previousMembers={data.previousWeek.members} />
+					{/* 다음 회차 프리필 = 동기화된 최신 주(current). previousWeek는 대시보드 비교용 */}
+					<GuildSheetFormDialog members={sheetFormMembers} previousMembers={data.currentWeek.members} />
 				</div>
 			</header>
 
