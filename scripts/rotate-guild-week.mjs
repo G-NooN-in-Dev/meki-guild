@@ -26,6 +26,19 @@ const CONTENT_DATE_KEYS = {
 	guildBoss: 'guildBoss'
 }
 
+/** 멤버 필드 이월 시 함께 밀 길드 메타 (sync 의 GUILD_META_BY_FIELD 와 동일) */
+const GUILD_META_BY_FIELD = {
+	expedition: ['expeditionRank'],
+	rivalry: ['rivalryRank', 'rivalryPoints'],
+	training: ['trainingRank']
+}
+
+const GUILD_META_LOG_LABELS = {
+	expedition: '길드 토벌전 순위',
+	rivalry: '길드 대항전 순위·포인트',
+	training: '길드 수련장 순위'
+}
+
 const MODE_LABELS = {
 	all: '전체',
 	character: '전투력·레벨·직업',
@@ -192,16 +205,12 @@ function rotateGuildWeek(mode) {
 
 	currentWeek.members = currentWeek.members.map((member) => clearFieldsInCurrent(member, fields))
 
-	if (fields.includes('expedition')) {
-		rotateGuildMetaFields(currentWeek, previousWeek, ['expeditionRank'])
-	}
-
-	if (fields.includes('rivalry')) {
-		rotateGuildMetaFields(currentWeek, previousWeek, ['rivalryRank', 'rivalryPoints'])
-	}
-
-	if (fields.includes('training')) {
-		rotateGuildMetaFields(currentWeek, previousWeek, ['trainingRank'])
+	const rotatedGuildMetaFields = []
+	for (const field of fields) {
+		const metaFields = GUILD_META_BY_FIELD[field]
+		if (!metaFields) continue
+		rotateGuildMetaFields(currentWeek, previousWeek, metaFields)
+		rotatedGuildMetaFields.push(field)
 	}
 
 	// 분야별 수집일: 기존 current → previous 로 밀고, current 는 오늘(새 수집 시작일)
@@ -225,11 +234,8 @@ function rotateGuildWeek(mode) {
 	console.log(`✅ ${MODE_LABELS[mode]} 이월 완료`)
 	console.log(`   previous-week.json ← ${carried} 반영`)
 	console.log(`   current-week.json ${cleared} 초기화`)
-	if (fields.includes('expedition')) {
-		console.log(`   (길드 토벌전 순위도 함께 이월)`)
-	}
-	if (fields.includes('rivalry')) {
-		console.log(`   (길드 대항전 순위·포인트도 함께 이월)`)
+	for (const field of rotatedGuildMetaFields) {
+		console.log(`   (${GUILD_META_LOG_LABELS[field]}도 함께 이월)`)
 	}
 	if (fields.includes('combatPower')) {
 		console.log(`   (레벨·직업은 current 에 유지)`)

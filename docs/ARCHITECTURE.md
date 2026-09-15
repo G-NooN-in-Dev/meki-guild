@@ -64,7 +64,7 @@ flowchart LR
 ### 읽기
 
 1. 운영자가 Sheets에 주간 데이터를 쌓거나, 사이트의 시트 입력 폼으로 행을 upsert합니다.
-2. `pnpm guild:sync`가 탭별 CSV를 읽어 `current-week.json` / `previous-week.json` / `guild-content-dates.json`을 갱신합니다.
+2. `pnpm guild:sync [mode]`가 탭별 CSV를 읽어 `current-week.json` / `previous-week.json` / `guild-content-dates.json`을 갱신합니다. (`mode`로 부분 동기화 가능)
 3. `loadGuildDashboardData` / `loadGuildComparePageData`가 JSON을 파싱·비교·순위 계산해 RSC에 넘깁니다.
 
 ### 쓰기

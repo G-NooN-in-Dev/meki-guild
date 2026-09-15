@@ -64,7 +64,7 @@ pnpm check-types
 길드 스냅샷 운영:
 
 ```sh
-pnpm guild:sync              # Sheets → data/*.json
+pnpm guild:sync [mode]       # Sheets → data/*.json (mode: all|character|expedition|…)
 pnpm guild:rotate <mode>     # 주간 이월 (all | character | expedition | …)
 ```
 

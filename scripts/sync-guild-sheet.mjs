@@ -1,4 +1,4 @@
-import { existsSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -20,6 +20,40 @@ function loadWebAppEnv() {
 }
 
 loadWebAppEnv()
+
+/** CLI 인자로 받는 동기화 대상 (rotate 와 동일) */
+const SYNC_MODES = {
+	all: ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss'],
+	character: ['combatPower'],
+	expedition: ['expedition'],
+	rivalry: ['rivalry'],
+	training: ['training'],
+	'guild-boss': ['guildBoss']
+}
+
+const MODE_LABELS = {
+	all: '전체',
+	character: '전투력·레벨·직업',
+	expedition: '토벌전(등급·등수·점수)',
+	rivalry: '대항전',
+	training: '수련장',
+	'guild-boss': '길드보스'
+}
+
+const FIELD_LABELS = {
+	combatPower: '전투력',
+	expedition: '토벌전',
+	rivalry: '대항전',
+	training: '수련장',
+	guildBoss: '길드보스'
+}
+
+/** 멤버 탭 sync 시 함께 갱신할 guild 메타 필드 */
+const GUILD_META_BY_FIELD = {
+	expedition: ['expeditionRank'],
+	rivalry: ['rivalryRank', 'rivalryPoints'],
+	training: ['trainingRank']
+}
 
 const MEMBER_SHEETS = ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss']
 const REQUIRED_HEADERS = {
@@ -178,6 +212,10 @@ function assertUniqueKeys(rows, sheetName, keyFn) {
 	}
 }
 
+function assertMemberSheetKeys(rows, sheetName) {
+	assertUniqueKeys(rows, sheetName, (row) => (row.collectedAt && row.name ? `${row.collectedAt} / ${row.name}` : ''))
+}
+
 function rowsOnDate(rows, date) {
 	if (!date) {
 		return []
@@ -259,6 +297,10 @@ function buildSnapshot(rosterRows, lookups, guildMeta) {
 	}
 }
 
+function readJson(path) {
+	return JSON.parse(readFileSync(path, 'utf8'))
+}
+
 function writeJson(path, data) {
 	writeFileSync(path, `${JSON.stringify(data, null, '\t')}\n`, 'utf8')
 }
@@ -267,33 +309,81 @@ function formatDateLabel(date) {
 	return date ?? '없음'
 }
 
-async function syncGuildSheet() {
-	const sheetId = process.env.GOOGLE_SHEETS_SHEET_ID
-
-	if (!sheetId) {
-		throw new Error('GOOGLE_SHEETS_SHEET_ID 환경 변수가 설정되지 않았습니다. apps/web/.env 를 확인하세요.')
+function printUsageAndExit() {
+	console.error('❌ 사용법: pnpm guild:sync [대상]')
+	console.error('')
+	console.error('대상 (생략 시 전체):')
+	for (const [key, label] of Object.entries(MODE_LABELS)) {
+		console.error(`  ${key.padEnd(14)} ${label}`)
 	}
+	process.exit(1)
+}
 
+/** 시트 행 값으로 멤버의 해당 필드만 덮어씁니다. */
+function applyFieldFromRow(member, field, row) {
+	switch (field) {
+		case 'combatPower':
+			member.level = toLevel(row?.level)
+			member.job = row?.job ?? ''
+			member.combatPower = row?.combatPower ?? ''
+			break
+		case 'expedition':
+			member.expedition = {
+				grade: row?.grade ?? '',
+				placement: toNumberOrNull(row?.placement),
+				score: row?.score ?? ''
+			}
+			break
+		case 'rivalry':
+			member.rivalry = row?.rivalry ?? ''
+			break
+		case 'training':
+			member.training = row?.training ?? ''
+			break
+		case 'guildBoss':
+			if (row?.guildBoss) {
+				member.guildBoss = row.guildBoss
+			} else {
+				delete member.guildBoss
+			}
+			break
+		default:
+			throw new Error(`알 수 없는 동기화 필드: ${field}`)
+	}
+}
+
+function patchMembersField(members, lookup, field) {
+	for (const member of members) {
+		applyFieldFromRow(member, field, lookup.get(member.name))
+	}
+}
+
+function patchGuildMetaFields(week, guildRows, content, date, fieldNames) {
+	const row = date ? guildRows.find((entry) => entry.content === content && entry.collectedAt === date) : null
+
+	week.guild = { ...(week.guild ?? {}) }
+
+	for (const fieldName of fieldNames) {
+		week.guild[fieldName] = toNumberOrNull(row?.[fieldName])
+	}
+}
+
+function logFieldDates(field, dates) {
+	const label = FIELD_LABELS[field].padEnd(8)
+	console.log(`   ${label} 직전=${formatDateLabel(dates.previous)}  최신=${formatDateLabel(dates.current)}`)
+}
+
+async function syncAllSheets(sheetId) {
 	const [combatPowerRows, expeditionRows, rivalryRows, trainingRows, guildBossRows, guildRows] = await Promise.all([
 		...MEMBER_SHEETS.map((sheetName) => fetchSheetRows(sheetId, sheetName)),
 		fetchSheetRows(sheetId, 'guild')
 	])
 
-	assertUniqueKeys(combatPowerRows, 'combatPower', (row) =>
-		row.collectedAt && row.name ? `${row.collectedAt} / ${row.name}` : ''
-	)
-	assertUniqueKeys(expeditionRows, 'expedition', (row) =>
-		row.collectedAt && row.name ? `${row.collectedAt} / ${row.name}` : ''
-	)
-	assertUniqueKeys(rivalryRows, 'rivalry', (row) =>
-		row.collectedAt && row.name ? `${row.collectedAt} / ${row.name}` : ''
-	)
-	assertUniqueKeys(trainingRows, 'training', (row) =>
-		row.collectedAt && row.name ? `${row.collectedAt} / ${row.name}` : ''
-	)
-	assertUniqueKeys(guildBossRows, 'guildBoss', (row) =>
-		row.collectedAt && row.name ? `${row.collectedAt} / ${row.name}` : ''
-	)
+	assertMemberSheetKeys(combatPowerRows, 'combatPower')
+	assertMemberSheetKeys(expeditionRows, 'expedition')
+	assertMemberSheetKeys(rivalryRows, 'rivalry')
+	assertMemberSheetKeys(trainingRows, 'training')
+	assertMemberSheetKeys(guildBossRows, 'guildBoss')
 	assertUniqueKeys(guildRows, 'guild', (row) =>
 		row.collectedAt && row.content ? `${row.collectedAt} / ${row.content}` : ''
 	)
@@ -340,27 +430,94 @@ async function syncGuildSheet() {
 	writeJson(previousWeekPath, previousWeek)
 	writeJson(contentDatesPath, dates)
 
-	console.log('✅ 시트 → JSON 동기화 완료')
-	console.log(
-		`   전투력     직전=${formatDateLabel(dates.combatPower.previous)}  최신=${formatDateLabel(dates.combatPower.current)}`
-	)
-	console.log(
-		`   토벌전     직전=${formatDateLabel(dates.expedition.previous)}  최신=${formatDateLabel(dates.expedition.current)}`
-	)
-	console.log(
-		`   대항전     직전=${formatDateLabel(dates.rivalry.previous)}  최신=${formatDateLabel(dates.rivalry.current)}`
-	)
-	console.log(
-		`   수련장     직전=${formatDateLabel(dates.training.previous)}  최신=${formatDateLabel(dates.training.current)}`
-	)
-	console.log(
-		`   길드보스   직전=${formatDateLabel(dates.guildBoss.previous)}  최신=${formatDateLabel(dates.guildBoss.current)}`
-	)
+	console.log('✅ 시트 → JSON 전체 동기화 완료')
+	for (const field of MEMBER_SHEETS) {
+		logFieldDates(field, dates[field])
+	}
 	console.log(`   current-week.json 멤버 ${currentWeek.members.length}명`)
 	console.log(`   previous-week.json 멤버 ${previousWeek.members.length}명`)
 }
 
-syncGuildSheet().catch((error) => {
+async function syncPartialSheets(sheetId, mode, fields) {
+	for (const path of [currentWeekPath, previousWeekPath, contentDatesPath]) {
+		if (!existsSync(path)) {
+			throw new Error(
+				'부분 동기화는 기존 JSON이 필요합니다. 먼저 `pnpm guild:sync` 또는 `pnpm guild:sync all`을 실행하세요.'
+			)
+		}
+	}
+
+	const needsGuild = fields.some((field) => GUILD_META_BY_FIELD[field])
+	const sheetNames = needsGuild ? [...fields, 'guild'] : [...fields]
+	const fetchedRows = await Promise.all(sheetNames.map((sheetName) => fetchSheetRows(sheetId, sheetName)))
+	const rowsBySheet = Object.fromEntries(sheetNames.map((sheetName, index) => [sheetName, fetchedRows[index]]))
+
+	for (const field of fields) {
+		assertMemberSheetKeys(rowsBySheet[field], field)
+	}
+
+	if (needsGuild) {
+		assertUniqueKeys(rowsBySheet.guild, 'guild', (row) =>
+			row.collectedAt && row.content ? `${row.collectedAt} / ${row.content}` : ''
+		)
+	}
+
+	const currentWeek = readJson(currentWeekPath)
+	const previousWeek = readJson(previousWeekPath)
+	const contentDates = readJson(contentDatesPath)
+	const syncedDates = {}
+
+	for (const field of fields) {
+		const rows = rowsBySheet[field]
+		const dates = latestTwoDates(rows)
+		syncedDates[field] = dates
+		contentDates[field] = dates
+
+		patchMembersField(currentWeek.members, mapByName(rows, dates.current), field)
+		patchMembersField(previousWeek.members, mapByName(rows, dates.previous), field)
+
+		const metaFields = GUILD_META_BY_FIELD[field]
+		if (metaFields) {
+			patchGuildMetaFields(currentWeek, rowsBySheet.guild, field, dates.current, metaFields)
+			patchGuildMetaFields(previousWeek, rowsBySheet.guild, field, dates.previous, metaFields)
+		}
+	}
+
+	writeJson(currentWeekPath, currentWeek)
+	writeJson(previousWeekPath, previousWeek)
+	writeJson(contentDatesPath, contentDates)
+
+	console.log(`✅ 시트 → JSON 부분 동기화 완료 (${MODE_LABELS[mode]})`)
+	for (const field of fields) {
+		logFieldDates(field, syncedDates[field])
+	}
+	console.log(`   current-week.json 멤버 ${currentWeek.members.length}명 유지`)
+	console.log(`   previous-week.json 멤버 ${previousWeek.members.length}명 유지`)
+}
+
+async function syncGuildSheet(modeArg) {
+	const mode = modeArg ?? 'all'
+	const fields = SYNC_MODES[mode]
+
+	if (!fields) {
+		printUsageAndExit()
+	}
+
+	const sheetId = process.env.GOOGLE_SHEETS_SHEET_ID
+
+	if (!sheetId) {
+		throw new Error('GOOGLE_SHEETS_SHEET_ID 환경 변수가 설정되지 않았습니다. apps/web/.env 를 확인하세요.')
+	}
+
+	if (mode === 'all') {
+		await syncAllSheets(sheetId)
+		return
+	}
+
+	await syncPartialSheets(sheetId, mode, fields)
+}
+
+syncGuildSheet(process.argv[2]).catch((error) => {
 	console.error(`❌ ${error.message}`)
 	process.exit(1)
 })
