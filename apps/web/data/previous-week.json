@@ -2,8 +2,8 @@
 	"guild": {
 		"expeditionRank": 17,
 		"rivalryRank": 1,
-		"rivalryPoints": 5436200,
-		"trainingRank": null
+		"rivalryPoints": 7360000,
+		"trainingRank": 1
 	},
 	"members": [
 		{
@@ -16,8 +16,8 @@
 				"placement": 341,
 				"score": "2479억 8198만"
 			},
-			"rivalry": "1123억 8999만",
-			"training": "8740860",
+			"rivalry": "1258억 871만",
+			"training": "2209만 7163",
 			"guildBoss": "639억 9만"
 		},
 		{
@@ -30,8 +30,8 @@
 				"placement": 1182,
 				"score": "903억 3500만"
 			},
-			"rivalry": "415억 9482만",
-			"training": "4335402",
+			"rivalry": "512억 7056만",
+			"training": "9024750",
 			"guildBoss": "211억 5901만"
 		},
 		{
@@ -44,8 +44,8 @@
 				"placement": 638,
 				"score": "1429억 9994만"
 			},
-			"rivalry": "786억 6840만",
-			"training": "1300만 539",
+			"rivalry": "787억 444만",
+			"training": "1752만 1899",
 			"guildBoss": "503억 8351만"
 		},
 		{
@@ -58,8 +58,8 @@
 				"placement": 1603,
 				"score": "590억 1976만"
 			},
-			"rivalry": "485억 7697만",
-			"training": "3775788",
+			"rivalry": "516억 1048만",
+			"training": "8887320",
 			"guildBoss": "188억 9960만"
 		},
 		{
@@ -72,8 +72,8 @@
 				"placement": 1166,
 				"score": "922억 779만"
 			},
-			"rivalry": "404억 520만",
-			"training": "5532267",
+			"rivalry": "400억 4634만",
+			"training": "6151671",
 			"guildBoss": "204억 5364만"
 		},
 		{
@@ -86,8 +86,8 @@
 				"placement": 353,
 				"score": "2397억 9002만"
 			},
-			"rivalry": "1198억 8704만",
-			"training": "1282만 8843",
+			"rivalry": "1199억 2864만",
+			"training": "1541만 5146",
 			"guildBoss": "833억 1428만"
 		},
 		{
@@ -100,8 +100,8 @@
 				"placement": 690,
 				"score": "1359억 854만"
 			},
-			"rivalry": "803억 2980만",
-			"training": "6773724",
+			"rivalry": "739억 303만",
+			"training": "8181798",
 			"guildBoss": "489억 8889만"
 		},
 		{
@@ -114,8 +114,8 @@
 				"placement": 745,
 				"score": "1291억 1043만"
 			},
-			"rivalry": "533억 1551만",
-			"training": "7066392",
+			"rivalry": "637억 1244만",
+			"training": "9542439",
 			"guildBoss": "337억 4671만"
 		},
 		{
@@ -128,8 +128,8 @@
 				"placement": 463,
 				"score": "1860억 1007만"
 			},
-			"rivalry": "885억 9135만",
-			"training": "9338385",
+			"rivalry": "919억 3401만",
+			"training": "1362만 153",
 			"guildBoss": "554억 7355만"
 		},
 		{
@@ -142,8 +142,8 @@
 				"placement": 395,
 				"score": "2116억 4354만"
 			},
-			"rivalry": "1054억 884만",
-			"training": "0",
+			"rivalry": "1227억 672만",
+			"training": "1265만 8674",
 			"guildBoss": "653억 4506만"
 		},
 		{
@@ -156,8 +156,8 @@
 				"placement": 504,
 				"score": "1757억 4182만"
 			},
-			"rivalry": "1051억 5580만",
-			"training": "1464만 1872",
+			"rivalry": "1120억 9364만",
+			"training": "1036만 434",
 			"guildBoss": "492억 5806만"
 		},
 		{
@@ -170,8 +170,8 @@
 				"placement": 524,
 				"score": "1678억 4754만"
 			},
-			"rivalry": "854억 5999만",
-			"training": "6192693",
+			"rivalry": "1025억 1978만",
+			"training": "1081만 9134",
 			"guildBoss": "383억 6528만"
 		},
 		{
@@ -184,8 +184,8 @@
 				"placement": 204,
 				"score": "4133억 5127만"
 			},
-			"rivalry": "1612억 1174만",
-			"training": "1985만 7693",
+			"rivalry": "1891억 6292만",
+			"training": "2337만 6",
 			"guildBoss": "1119억 7001만"
 		},
 		{
@@ -198,8 +198,8 @@
 				"placement": 574,
 				"score": "1554억 1649만"
 			},
-			"rivalry": "807억 2246만",
-			"training": "7292736",
+			"rivalry": "906억 2131만",
+			"training": "1092만 1389",
 			"guildBoss": "436억 2414만"
 		},
 		{
@@ -212,8 +212,8 @@
 				"placement": 576,
 				"score": "1550억 6560만"
 			},
-			"rivalry": "1040억 6800만",
-			"training": "7998285",
+			"rivalry": "1038억 5105만",
+			"training": "1056만 8724",
 			"guildBoss": "437억 4148만"
 		},
 		{
@@ -226,8 +226,8 @@
 				"placement": 897,
 				"score": "1129억 9791만"
 			},
-			"rivalry": "391억 7520만",
-			"training": "4711956",
+			"rivalry": "539억 5669만",
+			"training": "7885536",
 			"guildBoss": "182억 9174만"
 		},
 		{
@@ -240,8 +240,8 @@
 				"placement": 646,
 				"score": "1417억 7522만"
 			},
-			"rivalry": "424억 7672만",
-			"training": "5337306",
+			"rivalry": "508억 2892만",
+			"training": "8534931",
 			"guildBoss": "225억 5778만"
 		},
 		{
@@ -254,8 +254,8 @@
 				"placement": 119,
 				"score": "7405억 6975만"
 			},
-			"rivalry": "2354억 2872만",
-			"training": "2125만 2444",
+			"rivalry": "2811억 4795만",
+			"training": "2527만 6800",
 			"guildBoss": "1756억 2208만"
 		},
 		{
@@ -268,8 +268,8 @@
 				"placement": 767,
 				"score": "1256억 4276만"
 			},
-			"rivalry": "628억 2405만",
-			"training": "6845544",
+			"rivalry": "636억 4318만",
+			"training": "7443585",
 			"guildBoss": "321억 7905만"
 		},
 		{
@@ -282,8 +282,8 @@
 				"placement": 493,
 				"score": "1786억 8433만"
 			},
-			"rivalry": "825억 188만",
-			"training": "1039만 1007",
+			"rivalry": "900억 1130만",
+			"training": "1332만 7260",
 			"guildBoss": "549억 2093만"
 		},
 		{
@@ -296,8 +296,8 @@
 				"placement": 1069,
 				"score": "1011억 7001만"
 			},
-			"rivalry": "636억 2160만",
-			"training": "5803758",
+			"rivalry": "636억 9164만",
+			"training": "6464109",
 			"guildBoss": "286억 1500만"
 		},
 		{
@@ -310,8 +310,8 @@
 				"placement": 909,
 				"score": "1120억 4235만"
 			},
-			"rivalry": "501억 4712만",
-			"training": "7253559",
+			"rivalry": "601억 414만",
+			"training": "1013만 4663",
 			"guildBoss": "271억 2460만"
 		},
 		{
@@ -324,8 +324,8 @@
 				"placement": 251,
 				"score": "3385억 3372만"
 			},
-			"rivalry": "1375억 7350만",
-			"training": "1375만 1841",
+			"rivalry": "1704억 5931만",
+			"training": "1887만 87",
 			"guildBoss": "1038억 3319만"
 		},
 		{
@@ -338,8 +338,8 @@
 				"placement": 781,
 				"score": "1236억 5186만"
 			},
-			"rivalry": "693억 5079만",
-			"training": "1114만 9134",
+			"rivalry": "1016억 4749만",
+			"training": "1583만 2986",
 			"guildBoss": "351억 7851만"
 		},
 		{
@@ -352,8 +352,8 @@
 				"placement": 790,
 				"score": "1228억 212만"
 			},
-			"rivalry": "589억 804만",
-			"training": "7062054",
+			"rivalry": "583억 8277만",
+			"training": "1309만 7373",
 			"guildBoss": "344억 1131만"
 		},
 		{
@@ -366,8 +366,8 @@
 				"placement": 91,
 				"score": "1조 512억"
 			},
-			"rivalry": "3181억 8225만",
-			"training": "2053만 9143",
+			"rivalry": "3935억 1095만",
+			"training": "2374만 1004",
 			"guildBoss": "1773억 5871만"
 		},
 		{
@@ -380,8 +380,8 @@
 				"placement": 441,
 				"score": "1935억 4044만"
 			},
-			"rivalry": "1264억 1441만",
-			"training": "1282만 6365",
+			"rivalry": "1263억 5385만",
+			"training": "1878만 9054",
 			"guildBoss": "812억 786만"
 		},
 		{
@@ -394,8 +394,8 @@
 				"placement": 1424,
 				"score": "702억 8859만"
 			},
-			"rivalry": "321억 1416만",
-			"training": "0",
+			"rivalry": "315억 8436만",
+			"training": "3874734",
 			"guildBoss": "171억 9548만"
 		},
 		{
@@ -408,8 +408,8 @@
 				"placement": 247,
 				"score": "3430억 9547만"
 			},
-			"rivalry": "1374억 2598만",
-			"training": "1713만 1254",
+			"rivalry": "1726억 7515만",
+			"training": "2196만 5481",
 			"guildBoss": "980억 9903만"
 		},
 		{
@@ -422,8 +422,8 @@
 				"placement": 1109,
 				"score": "988억 6715만"
 			},
-			"rivalry": "392억 5326만",
-			"training": "4868103",
+			"rivalry": "386억 6034만",
+			"training": "6968808",
 			"guildBoss": "231억 7226만"
 		}
 	]
