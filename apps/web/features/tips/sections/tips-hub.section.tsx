@@ -1,7 +1,9 @@
-import TipsHubFilteredList from '@/features/tips/components/hub/tips-hub-filtered-list.client'
-import { TIP_ENTRIES, TIP_TAGS } from '@/features/tips/lib/tips-registry.constants'
+import TipsCategoryGrid from '@/features/tips/components/hub/tips-category-grid'
+import { getTipsGroupedByCategory } from '@/features/tips/lib/tips-registry.constants'
 
 function TipsHubSection() {
+	const groups = getTipsGroupedByCategory()
+
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-4 md:gap-6">
 			<header className="flex flex-col gap-2">
@@ -12,7 +14,7 @@ function TipsHubSection() {
 				</p>
 			</header>
 
-			<TipsHubFilteredList tags={TIP_TAGS} tips={TIP_ENTRIES} />
+			<TipsCategoryGrid groups={groups} />
 		</section>
 	)
 }
