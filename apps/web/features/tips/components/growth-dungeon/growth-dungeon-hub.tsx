@@ -19,10 +19,11 @@ import ExperienceDungeonBoard from './experience-dungeon-board'
 import WeaponDungeonBoard from './weapon-dungeon-board'
 
 type GrowthDungeonHubProps = {
+	title: string
 	tags: readonly string[]
 }
 
-function GrowthDungeonHub({ tags }: GrowthDungeonHubProps) {
+function GrowthDungeonHub({ title, tags }: GrowthDungeonHubProps) {
 	const [activeTab, setActiveTab] = useState<GrowthDungeonTabValue>('weapon')
 	const activeLabel = GROWTH_DUNGEON_TABS.find((tab) => tab.value === activeTab)?.label ?? '무기 던전'
 
@@ -37,7 +38,7 @@ function GrowthDungeonHub({ tags }: GrowthDungeonHubProps) {
 							</Badge>
 						))}
 					</div>
-					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">성장 던전 정보</h1>
+					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 				</div>
 
 				<MonsterPortrait
