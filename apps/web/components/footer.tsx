@@ -7,7 +7,8 @@ const FOOTER_LINKS = [
 	{
 		label: '메키 갤러리',
 		href: 'https://gall.dcinside.com/mgallery/board/lists/?id=maplerpg'
-	}
+	},
+	{ label: 'MGF.GG', href: 'https://mgf.gg' }
 ] as const
 
 function Footer() {
