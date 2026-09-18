@@ -9,6 +9,7 @@ import GuildMemberToolbar from '@/features/guild/components/guild-member-toolbar
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDetailDialog from '@/features/guild/components/member-detail-dialog'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
+import MemberPortrait from '@/features/guild/components/member-portrait'
 import type { MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import {
 	createEmptyGuildMemberFilter,
@@ -30,13 +31,14 @@ const GUILD_MEMBER_TABLE_COLUMN_COUNT = 9 + getGuildContentsOrder().length
 
 /**
  * 가로 스크롤 시 #·이름 열을 왼쪽에 고정합니다.
- * 이름 열 `left-12`는 # 열 너비(`w-12`)와 같아야 겹치지 않습니다.
+ * 이름 열 `left-10`는 # 열 너비(`w-10`)와 같아야 겹치지 않습니다.
  */
-const stickyIndexHeadClassName = 'sticky left-0 w-12 min-w-12'
-const stickyNameHeadClassName = 'sticky left-12 min-w-28 border-r border-grayscale-200'
-const stickyIndexCellClassName = 'sticky left-0 z-[1] w-12 min-w-12 bg-card group-hover:bg-grayscale-50'
+const stickyIndexHeadClassName = 'sticky left-0 w-10 min-w-10'
+/** 이름 열: 모바일은 텍스트만, lg+는 초상화(size-8)+gap 만큼 너비 확보 */
+const stickyNameHeadClassName = 'sticky left-10 min-w-24 border-r border-grayscale-200 lg:min-w-32'
+const stickyIndexCellClassName = 'sticky left-0 z-[1] w-10 min-w-10 bg-card group-hover:bg-grayscale-50'
 const stickyNameCellClassName =
-	'sticky left-12 z-[1] min-w-28 border-r border-grayscale-200 bg-card group-hover:bg-grayscale-50'
+	'sticky left-10 z-[1] min-w-24 border-r border-grayscale-200 bg-card group-hover:bg-grayscale-50 lg:min-w-32'
 
 type GuildMemberTableProps = {
 	comparisons: GuildMemberComparison[]
@@ -179,18 +181,27 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 								<TableRow key={comparison.name} className={cn('group', comparison.status === 'left' && 'opacity-60')}>
 									<TableCell className={cn('text-grayscale-400', stickyIndexCellClassName)}>{index + 1}</TableCell>
 									<TableCell className={stickyNameCellClassName}>
-										{/* 이름은 주 정보, 자세히 보기는 이름 아래 보조 링크로 배치 */}
-										<div className="flex flex-col items-start gap-0.5">
-											<span className="inline-flex items-center font-bold">
-												{/* 잠금 시 별칭, 해제 시 실명 — row key는 실명 유지 */}
-												<MemberDisplayName name={comparison.name} />
-												<MemberStatusBadge status={comparison.status} />
-											</span>
-											<MemberDetailDialog
-												comparison={comparison}
-												rankings={rankings}
-												previousRankings={previousRankings}
+										{/* 데스크탑: 초상화 + 이름. 모바일은 이름만 */}
+										<div className="flex items-center gap-2">
+											<MemberPortrait
+												name={comparison.name}
+												size="sm"
+												className="hidden size-8 rounded-lg lg:block"
+												zoom={2.25}
 											/>
+											{/* 이름은 주 정보, 자세히 보기는 이름 아래 보조 링크로 배치 */}
+											<div className="flex min-w-0 flex-col items-start gap-0.5">
+												<span className="inline-flex items-center font-bold">
+													{/* 잠금 시 별칭, 해제 시 실명 — row key는 실명 유지 */}
+													<MemberDisplayName name={comparison.name} />
+													<MemberStatusBadge status={comparison.status} />
+												</span>
+												<MemberDetailDialog
+													comparison={comparison}
+													rankings={rankings}
+													previousRankings={previousRankings}
+												/>
+											</div>
 										</div>
 									</TableCell>
 									<TableCell>
