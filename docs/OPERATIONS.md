@@ -47,6 +47,21 @@
 
 배포 전에 sync한 JSON을 커밋하거나, CI/수동으로 반영한 뒤 빌드합니다.
 
+## `pnpm guild:sync-portraits`
+
+스크립트: `scripts/sync-member-portraits.mjs`
+
+`current-week.json` 로스터의 닉네임으로 mgf.gg 초상화를 받아 `apps/web/public/members/{닉네임}.png`에 저장합니다.
+
+| 동작      | 설명                                                  |
+| --------- | ----------------------------------------------------- |
+| 다운로드  | `https://mgf.gg/ranking/ranking_image.php?n={닉네임}` |
+| 동일 파일 | 바이트 해시가 같으면 skip (불필요한 git diff 방지)    |
+| 실패      | 해당 닉네임만 로그하고 기존 PNG 유지                  |
+| 정리      | 로스터에 없는 `public/members/*.png` 삭제             |
+
+시트 sync와 분리되어 있습니다. 로스터가 바뀐 뒤·캐릭터 외형 변경을 반영할 때 실행합니다.
+
 ## `pnpm guild:rotate <mode>`
 
 스크립트: `scripts/rotate-guild-week.mjs`
@@ -76,8 +91,9 @@
 1. (선택) 콘텐츠별 `guild:rotate`로 주차 경계 정리
 2. Sheets / 사이트 폼으로 금주 데이터 수집
 3. `pnpm guild:sync` 또는 콘텐츠별 `pnpm guild:sync <mode>`로 JSON 반영
-4. 로컬에서 대시보드·비교 확인
-5. JSON 커밋 또는 배포 파이프라인에 반영 후 Vercel 배포
+4. `pnpm guild:sync-portraits`로 길드원 초상화 갱신
+5. 로컬에서 대시보드·비교 확인
+6. JSON·PNG 커밋 또는 배포 파이프라인에 반영 후 Vercel 배포
 
 ## 관련 문서
 
