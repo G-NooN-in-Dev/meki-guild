@@ -75,6 +75,14 @@ export const TIP_ENTRIES = [
 		tags: ['대항전'],
 		href: '/tips/guild-rivalry-rank-predict'
 	},
+	{
+		slug: 'guild-training-rank-predict',
+		title: '길드 수련장 순위 예측',
+		description: '길드원 전투력 기준 수련장 예상 순위',
+		category: 'predict-calculator',
+		tags: ['수련장'],
+		href: '/tips/guild-training-rank-predict'
+	},
 	// 각종 정보
 	{
 		slug: 'companion-setup',
