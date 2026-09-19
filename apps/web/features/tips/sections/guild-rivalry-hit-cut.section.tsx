@@ -27,7 +27,7 @@ function GuildRivalryHitCutSection() {
 							))}
 						</div>
 						<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
-						<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
+						<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
 							길드 대항전 단계별 필요 명중과, 잡몹 처치로 쌓이는 보스 데미지 증가 스택을 확인해보세요.
 						</p>
 					</div>

@@ -9,7 +9,7 @@ function TipsHubSection() {
 			<header className="flex flex-col gap-2">
 				<p className="text-grayscale-500 text-sm">메이플키우기 참고 자료</p>
 				<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">정보 / 팁</h1>
-				<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
+				<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
 					길드 운영·콘텐츠에 도움이 되는 정보와 팁을 모아둔 공간입니다.
 				</p>
 			</header>

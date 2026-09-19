@@ -26,7 +26,7 @@ function CompanionSetupSection() {
 						))}
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
-					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
+					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
 						직업별 장착 효과를 등급·레벨로 비교하거나, 세팅 보드로 최적 세팅을 시뮬레이션해 보세요.
 					</p>
 				</header>

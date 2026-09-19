@@ -22,7 +22,7 @@ function ContentStageCutSection() {
 						))}
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
-					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
+					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
 						컨텐츠 및 난이도 별 스테이지 컷을 확인해보세요.
 					</p>
 				</header>
