@@ -6,10 +6,11 @@ import { Badge } from '@shared/ui/badge'
 
 import TipsBackLink from '../components/hub/tips-back-link'
 import PartyQuestBoard from '../components/party-quest/party-quest-board.client'
-import { getTipTagsBySlug } from '../lib/tips-registry.constants'
+import { getTipBadgeLabelsBySlug, getTipTitleBySlug } from '../lib/tips-registry.constants'
 
 function PartyQuestSection() {
-	const tags = getTipTagsBySlug('party-quest')
+	const title = getTipTitleBySlug('party-quest')
+	const badges = getTipBadgeLabelsBySlug('party-quest')
 
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-6 md:gap-8">
@@ -18,14 +19,14 @@ function PartyQuestSection() {
 
 				<header className="flex flex-col gap-2">
 					<div className="flex flex-wrap gap-1.5">
-						{tags.map((tag) => (
-							<Badge key={tag} variant="secondary">
-								{tag}
+						{badges.map((label) => (
+							<Badge key={label} variant="secondary">
+								{label}
 							</Badge>
 						))}
 					</div>
-					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">파티퀘스트 명중컷 및 보상 정보</h1>
-					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
+					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
+					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
 						파티퀘스트·난이도별 필요 명중과 클리어 보상을 확인해보세요.
 					</p>
 				</header>
