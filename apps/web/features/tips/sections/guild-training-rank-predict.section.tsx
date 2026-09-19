@@ -1,12 +1,13 @@
 import { Badge } from '@shared/ui/badge'
 
-import ContentStageCutChart from '@/features/tips/components/content-stage-cut/content-stage-cut-chart'
+import GuildTrainingRankPredictBoard from '@/features/tips/components/guild-training-rank-predict/guild-training-rank-predict-board.client'
 import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import { getTipBadgeLabelsBySlug, getTipTitleBySlug } from '@/features/tips/lib/tips-registry.constants'
 
-function ContentStageCutSection() {
-	const title = getTipTitleBySlug('content-stage-cut')
-	const badges = getTipBadgeLabelsBySlug('content-stage-cut')
+/** 길드 수련장 순위 예측 — 길드명 입력 후 전투력 기반 예상 순위를 보여 줍니다. */
+function GuildTrainingRankPredictSection() {
+	const title = getTipTitleBySlug('guild-training-rank-predict')
+	const badges = getTipBadgeLabelsBySlug('guild-training-rank-predict')
 
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-6 md:gap-8">
@@ -23,14 +24,14 @@ function ContentStageCutSection() {
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
-						컨텐츠 및 난이도 별 스테이지 컷을 확인해보세요.
+						매칭된 길드들의 길드원 전투력을 기준으로, 수련장 길드 예상 순위를 대략적으로 예측합니다.
 					</p>
 				</header>
 			</div>
 
-			<ContentStageCutChart />
+			<GuildTrainingRankPredictBoard />
 		</section>
 	)
 }
 
-export default ContentStageCutSection
+export default GuildTrainingRankPredictSection

@@ -26,7 +26,7 @@ function RelicSetupSection() {
 						))}
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
-					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base">
+					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
 						유물별 장착·보유 효과와 잠재 옵션을 확인하거나, 세팅 보드로 장착 합산을 시뮬레이션해 보세요.
 					</p>
 				</header>
