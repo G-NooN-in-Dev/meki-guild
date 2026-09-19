@@ -66,6 +66,15 @@ export const TIP_ENTRIES = [
 		tags: ['수련장'],
 		href: '/tips/guild-training-info'
 	},
+	// 예측·계산기
+	{
+		slug: 'guild-rivalry-rank-predict',
+		title: '길드 대항전 순위 예측',
+		description: '길드원 전투력 기준 대항전 예상 순위',
+		category: 'predict-calculator',
+		tags: ['대항전'],
+		href: '/tips/guild-rivalry-rank-predict'
+	},
 	// 각종 정보
 	{
 		slug: 'companion-setup',
@@ -138,7 +147,7 @@ function getTipBadgeLabelsBySlug(slug: TipSlug): readonly string[] {
 
 /**
  * 카테고리 순서대로 팁을 묶습니다.
- * 소속 팁이 없는 카테고리(예: 예측·계산기)는 제외합니다.
+ * 소속 팁이 없는 카테고리는 제외합니다.
  */
 function getTipsGroupedByCategory(): TipCategoryGroup[] {
 	return TIP_CATEGORIES.flatMap((category) => {
