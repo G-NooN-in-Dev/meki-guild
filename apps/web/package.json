@@ -12,6 +12,7 @@
 	"dependencies": {
 		"@shared/ui": "workspace:*",
 		"@vercel/analytics": "^2.0.1",
+		"cheerio": "^1.2.0",
 		"dayjs": "^1.11.23",
 		"google-auth-library": "^11.0.2",
 		"lucide-react": "^1.17.0",
