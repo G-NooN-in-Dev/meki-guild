@@ -36,7 +36,7 @@ function RivalryPredictGuildTable({ rows }: RivalryPredictGuildTableProps) {
 										<span className="text-grayscale-500 ml-1.5 text-xs font-medium">{serverLabel}</span>
 									) : null}
 								</TableCell>
-								<TableCell className="text-right font-semibold tabular-nums">
+								<TableCell className="pr-4 text-right font-semibold tabular-nums">
 									{formatLocaleNumber(totalPoints)}
 								</TableCell>
 							</TableRow>
