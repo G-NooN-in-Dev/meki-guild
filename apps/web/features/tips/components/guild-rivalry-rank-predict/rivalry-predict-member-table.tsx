@@ -3,12 +3,11 @@
 import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 
-import { getRivalryPredictGuildRowClass } from '@/features/tips/lib/guild-rivalry-rank-predict.constants'
+import PredictMemberPortrait from '@/features/tips/components/guild-rank-predict/predict-member-portrait'
+import { getPredictGuildRowClass } from '@/features/tips/lib/guild-rank-predict.constants'
 import type { RivalryPredictMemberRow } from '@/features/tips/types/guild-rivalry-rank-predict.type'
 import { getRivalryRankPointTextClass } from '@/libs/rivalry-rank-points.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
-
-import PredictMemberPortrait from './predict-member-portrait'
 
 type RivalryPredictMemberTableProps = {
 	rows: readonly RivalryPredictMemberRow[]
@@ -32,7 +31,7 @@ function RivalryPredictMemberTable({ rows }: RivalryPredictMemberTableProps) {
 						const { combatPowerLabel, guildIndex, guildName, job, level, name, points, portraitUrl, rank } = row
 
 						return (
-							<TableRow key={`${guildName}-${name}-${rank}`} className={cn(getRivalryPredictGuildRowClass(guildIndex))}>
+							<TableRow key={`${guildName}-${name}-${rank}`} className={cn(getPredictGuildRowClass(guildIndex))}>
 								<TableCell className="text-center font-semibold tabular-nums">{formatLocaleNumber(rank)}</TableCell>
 								<TableCell>
 									<div className="flex min-w-0 items-center gap-2.5">

@@ -1,7 +1,7 @@
 import type { CheerioAPI } from 'cheerio'
 import { load } from 'cheerio'
 
-import type { MgfGuildInfoResponse, MgfGuildMemberDto } from '@/features/tips/types/guild-rivalry-rank-predict.type'
+import type { MgfGuildInfoResponse, MgfGuildMemberDto } from '@/features/tips/types/guild-rank-predict.type'
 import { formatKoreanNumber } from '@/utils/format-korean-number'
 
 import { getMgfGuildInfoHtml, MGF_ORIGIN } from './mgf-guild-info.service.server'

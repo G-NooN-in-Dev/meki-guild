@@ -3,7 +3,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
-import { getRivalryPredictGuildRowClass } from '@/features/tips/lib/guild-rivalry-rank-predict.constants'
+import { getPredictGuildRowClass } from '@/features/tips/lib/guild-rank-predict.constants'
 import type { RivalryPredictGuildRow } from '@/features/tips/types/guild-rivalry-rank-predict.type'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -28,7 +28,7 @@ function RivalryPredictGuildTable({ rows }: RivalryPredictGuildTableProps) {
 						const { guildIndex, guildName, rank, serverLabel, totalPoints } = row
 
 						return (
-							<TableRow key={guildName} className={cn(getRivalryPredictGuildRowClass(guildIndex))}>
+							<TableRow key={guildName} className={cn(getPredictGuildRowClass(guildIndex))}>
 								<TableCell className="text-center font-semibold tabular-nums">{formatLocaleNumber(rank)}</TableCell>
 								<TableCell>
 									<span className="font-semibold">{guildName}</span>

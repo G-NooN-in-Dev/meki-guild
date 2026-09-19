@@ -3,7 +3,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
-import { getTrainingPredictGuildRowClass } from '@/features/tips/lib/guild-training-rank-predict.constants'
+import { getPredictGuildRowClass } from '@/features/tips/lib/guild-rank-predict.constants'
 import type { TrainingPredictGuildRow } from '@/features/tips/types/guild-training-rank-predict.type'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -27,7 +27,7 @@ function TrainingPredictGuildTable({ rows }: TrainingPredictGuildTableProps) {
 						const { guildIndex, guildName, rank, serverLabel } = row
 
 						return (
-							<TableRow key={guildName} className={cn(getTrainingPredictGuildRowClass(guildIndex))}>
+							<TableRow key={guildName} className={cn(getPredictGuildRowClass(guildIndex))}>
 								<TableCell className="text-center font-semibold tabular-nums">{formatLocaleNumber(rank)}</TableCell>
 								<TableCell>
 									<span className="font-semibold">{guildName}</span>

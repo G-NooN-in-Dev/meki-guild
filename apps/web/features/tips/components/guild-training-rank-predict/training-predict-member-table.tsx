@@ -3,8 +3,8 @@
 import { cn } from '@shared/ui/lib/utils'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 
-import PredictMemberPortrait from '@/features/tips/components/guild-rivalry-rank-predict/predict-member-portrait'
-import { getTrainingPredictGuildRowClass } from '@/features/tips/lib/guild-training-rank-predict.constants'
+import PredictMemberPortrait from '@/features/tips/components/guild-rank-predict/predict-member-portrait'
+import { getPredictGuildRowClass } from '@/features/tips/lib/guild-rank-predict.constants'
 import type { TrainingPredictMemberRow } from '@/features/tips/types/guild-training-rank-predict.type'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -21,7 +21,7 @@ function TrainingPredictMemberTable({ rows }: TrainingPredictMemberTableProps) {
 					<TableRow className="bg-grayscale-50 hover:bg-grayscale-50">
 						<TableHead className="w-10 text-center">순위</TableHead>
 						<TableHead>길드원</TableHead>
-						<TableHead className="pr-2 text-right lg:pr-4">전투력</TableHead>
+						<TableHead>전투력</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -29,10 +29,7 @@ function TrainingPredictMemberTable({ rows }: TrainingPredictMemberTableProps) {
 						const { combatPowerLabel, guildIndex, guildName, job, level, name, portraitUrl, rank } = row
 
 						return (
-							<TableRow
-								key={`${guildName}-${name}-${rank}`}
-								className={cn(getTrainingPredictGuildRowClass(guildIndex))}
-							>
+							<TableRow key={`${guildName}-${name}-${rank}`} className={cn(getPredictGuildRowClass(guildIndex))}>
 								<TableCell className="text-center font-semibold tabular-nums">{formatLocaleNumber(rank)}</TableCell>
 								<TableCell>
 									<div className="flex min-w-0 items-center gap-2.5">
@@ -51,7 +48,7 @@ function TrainingPredictMemberTable({ rows }: TrainingPredictMemberTableProps) {
 										</div>
 									</div>
 								</TableCell>
-								<TableCell className="pr-2 text-right text-sm font-semibold whitespace-nowrap tabular-nums lg:pr-4">
+								<TableCell className="truncate text-sm font-semibold whitespace-nowrap tabular-nums">
 									{combatPowerLabel}
 								</TableCell>
 							</TableRow>
