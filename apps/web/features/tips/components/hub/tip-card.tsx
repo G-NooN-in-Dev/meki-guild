@@ -24,7 +24,7 @@ function TipCard({ tip }: TipCardProps) {
 		>
 			<Card
 				size="sm"
-				className="border-grayscale-200 shadow-soft hover:border-grayscale-300 hover:bg-grayscale-50 h-full duration-200 hover:scale-110"
+				className="border-grayscale-200 shadow-soft hover:border-grayscale-300 hover:bg-grayscale-50 h-full duration-200 hover:scale-105"
 			>
 				<CardHeader className="gap-2">
 					<div className="flex items-center justify-between gap-3">
