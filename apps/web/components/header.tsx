@@ -18,12 +18,13 @@ function Header() {
 					<Nav />
 				</div>
 				<div className="flex shrink-0 items-center gap-2 md:gap-3">
-					<span
-						className="text-grayscale-400 shrink-0 text-xs font-medium tabular-nums md:text-sm"
-						aria-label={`현재 버전 ${formatAppVersionLabel()}`}
+					<Link
+						href="/updates"
+						className="text-grayscale-400 hover:text-grayscale-600 shrink-0 text-xs font-medium tabular-nums transition-colors md:text-sm"
+						aria-label={`현재 버전 ${formatAppVersionLabel()}, 업데이트 내역으로 이동`}
 					>
 						{formatAppVersionLabel()}
-					</span>
+					</Link>
 					{/* 허브에서는 모바일 메뉴가 없어 헤더에서 항상 BGM을 노출합니다 */}
 					<BgmToggle />
 				</div>
