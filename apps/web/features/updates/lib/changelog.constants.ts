@@ -7,6 +7,24 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
 		version: '1.6.0',
+		date: '2026-09-20',
+		sections: [
+			{
+				title: '길드 정보',
+				items: [{ text: '길드원 초상화 이미지 연동' }]
+			},
+			{
+				title: '정보/팁',
+				items: [
+					{ text: '예측 · 계산기 카테고리 추가' },
+					{ text: '길드 대항전 순위 예측 페이지 추가' },
+					{ text: '길드 수련장 순위 예측 페이지 추가' }
+				]
+			}
+		]
+	},
+	{
+		version: '1.5.3',
 		date: '2026-09-13',
 		sections: [
 			{
