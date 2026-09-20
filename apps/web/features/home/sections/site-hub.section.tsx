@@ -41,8 +41,7 @@ function SiteHubSection() {
 						>
 							<Card
 								className={cn(
-									'border-grayscale-200 shadow-soft h-full transition-colors',
-									'hover:border-grayscale-300 group-hover:bg-grayscale-50/50'
+									'border-grayscale-200 shadow-soft hover:border-grayscale-300 group-hover:bg-grayscale-50 h-full duration-200 hover:scale-105'
 								)}
 							>
 								<CardHeader className="gap-3 p-6 md:gap-4 md:p-8">

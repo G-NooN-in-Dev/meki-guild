@@ -24,14 +24,14 @@ function TipCard({ tip }: TipCardProps) {
 		>
 			<Card
 				size="sm"
-				className="border-grayscale-200 shadow-soft hover:border-grayscale-300 group-hover:bg-grayscale-50/50 h-full transition-colors"
+				className="border-grayscale-200 shadow-soft hover:border-grayscale-300 hover:bg-grayscale-50 h-full duration-200 hover:scale-110"
 			>
 				<CardHeader className="gap-2">
 					<div className="flex items-center justify-between gap-3">
 						<CardTitle className="text-grayscale-900 line-clamp-1 min-h-7 min-w-0 text-lg leading-7 font-semibold">
 							{title}
 						</CardTitle>
-						<ChevronRightIcon className="text-grayscale-400 group-hover:text-grayscale-600 size-4 shrink-0 transition-colors" />
+						<ChevronRightIcon className="text-grayscale-400 hover:text-grayscale-600 size-4 shrink-0 transition-colors" />
 					</div>
 					<CardDescription className="text-grayscale-600 line-clamp-2 min-h-10 leading-5 md:line-clamp-1 md:min-h-5">
 						{description}
