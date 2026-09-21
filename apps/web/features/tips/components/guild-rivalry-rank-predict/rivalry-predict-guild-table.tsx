@@ -28,7 +28,7 @@ function RivalryPredictGuildTable({ rows }: RivalryPredictGuildTableProps) {
 						const { guildIndex, guildName, rank, serverLabel, totalPoints } = row
 
 						return (
-							<TableRow key={guildName} className={cn(getPredictGuildRowClass(guildIndex))}>
+							<TableRow key={guildName} className={cn(getPredictGuildRowClass(guildIndex, rows.length))}>
 								<TableCell className="text-center font-semibold tabular-nums">{formatLocaleNumber(rank)}</TableCell>
 								<TableCell>
 									<span className="font-semibold">{guildName}</span>

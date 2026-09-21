@@ -1,5 +1,6 @@
 'use client'
 
+import RivalryRankPointsGuide from '@/features/guild/components/rivalry-rank-points-guide'
 import GuildRankPredictBoard from '@/features/tips/components/guild-rank-predict/guild-rank-predict-board.client'
 import { RIVALRY_PREDICT_MAX_GUILDS } from '@/features/tips/lib/guild-rivalry-rank-predict.constants'
 import { buildRivalryPredictResult } from '@/features/tips/lib/guild-rivalry-rank-predict.helpers'
@@ -19,8 +20,11 @@ function GuildRivalryRankPredictBoard() {
 			GuildTable={RivalryPredictGuildTable}
 			hint={
 				<>
-					대항전에 매칭된 길드명을 순서대로 입력하세요. 전투력 데이터는 MGF.GG 기준입니다. <br />
-					단순 전투력 기준 비교이므로 실제 결과와 다를 수 있습니다.
+					<span>
+						대항전에 매칭된 길드명을 순서대로 입력하세요. 전투력 데이터는 MGF.GG 기준입니다. <br />
+						단순 전투력 기준 비교이므로 실제 결과와 다를 수 있습니다.
+					</span>
+					<RivalryRankPointsGuide compactMobileLabel={false} />
 				</>
 			}
 		/>

@@ -15,6 +15,8 @@ type RivalryPredictMemberTableProps = {
 
 /** 대항전 참가 길드원 전투력 순위 표 */
 function RivalryPredictMemberTable({ rows }: RivalryPredictMemberTableProps) {
+	const guildCount = new Set(rows.map((row) => row.guildIndex)).size
+
 	return (
 		<div className="border-grayscale-200 overflow-hidden rounded-xl border">
 			<Table className="w-full table-fixed">
@@ -31,7 +33,10 @@ function RivalryPredictMemberTable({ rows }: RivalryPredictMemberTableProps) {
 						const { combatPowerLabel, guildIndex, guildName, job, level, name, points, portraitUrl, rank } = row
 
 						return (
-							<TableRow key={`${guildName}-${name}-${rank}`} className={cn(getPredictGuildRowClass(guildIndex))}>
+							<TableRow
+								key={`${guildName}-${name}-${rank}`}
+								className={cn(getPredictGuildRowClass(guildIndex, guildCount))}
+							>
 								<TableCell className="text-center font-semibold tabular-nums">{formatLocaleNumber(rank)}</TableCell>
 								<TableCell>
 									<div className="flex min-w-0 items-center gap-2.5">

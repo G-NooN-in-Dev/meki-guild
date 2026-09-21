@@ -151,7 +151,8 @@ function GuildRankPredictBoard<TResult extends RankPredictResultBase>({
 					)}
 				</div>
 
-				<p className="text-grayscale-500 text-xs">{hint}</p>
+				{/* div: hint에 Dialog 트리거 등 블록 요소가 올 수 있음 */}
+				<div className="text-grayscale-500 flex flex-wrap items-center justify-between gap-2 text-xs">{hint}</div>
 			</div>
 
 			{loadingMessage && (

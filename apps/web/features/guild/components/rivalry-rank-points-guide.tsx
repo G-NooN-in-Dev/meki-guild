@@ -48,7 +48,12 @@ function formatRivalryRankPointBandLabel(fromRank: number, toRank: number): stri
 	return `${fromRank}~${toRank}위`
 }
 
-function RivalryRankPointsGuide() {
+type RivalryRankPointsGuideProps = {
+	/** true면 lg 미만에서 '대항'으로 줄임. 툴바 기본값, 예측 페이지는 false */
+	compactMobileLabel?: boolean
+}
+
+function RivalryRankPointsGuide({ compactMobileLabel = true }: RivalryRankPointsGuideProps) {
 	const rows = buildRivalryRankPointRows(RIVALRY_RANK_POINT_DISPLAY_BANDS, RIVALRY_RANK_POINT_ENTRIES)
 
 	return (
@@ -62,9 +67,15 @@ function RivalryRankPointsGuide() {
 						aria-label="대항전 순위별 포인트"
 					>
 						<CircleHelpIcon className="size-4" />
-						{/* 태블릿 이하는 짧은 라벨, lg 이상에서 전체 문구 */}
-						<span className="lg:hidden">대항</span>
-						<span className="hidden lg:inline">대항전 순위별 포인트</span>
+						{compactMobileLabel ? (
+							<>
+								{/* 태블릿 이하는 짧은 라벨, lg 이상에서 전체 문구 */}
+								<span className="lg:hidden">대항</span>
+								<span className="hidden lg:inline">대항전 순위별 포인트</span>
+							</>
+						) : (
+							<span>대항전 순위별 포인트</span>
+						)}
 					</Button>
 				}
 			/>
