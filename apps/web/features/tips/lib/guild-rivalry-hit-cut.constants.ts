@@ -53,9 +53,8 @@ export const GUILD_RIVALRY_BUFF_STACK_PER_MOB = 1
 /** 단계마다 잡몹을 모두 처치했을 때 얻는 스택 (마리 수 × 마리당 스택) */
 export const GUILD_RIVALRY_BUFF_STACK_PER_STAGE = GUILD_RIVALRY_MOBS_PER_STAGE * GUILD_RIVALRY_BUFF_STACK_PER_MOB
 
-/** 보스 몬스터 피격 시 감소하는 스택 */
-export const GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MIN = 1
-export const GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MAX = 4
+/** 보스 몬스터 피격 시 감소하는 스택 기본값 */
+export const GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT = 1
 
 /**
  * 필요 명중보다 높을 때 최종 데미지 증가에 반영되는 최대 명중 차이.

@@ -1,8 +1,7 @@
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
 import {
-	GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MAX,
-	GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MIN,
+	GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT,
 	GUILD_RIVALRY_BUFF_STACK_PER_MOB,
 	GUILD_RIVALRY_BUFF_STACK_PER_STAGE,
 	GUILD_RIVALRY_HIT_BONUS_MAX_DIFF,
@@ -41,9 +40,8 @@ function SummaryRulesList() {
 				최종적으로 단계마다 <EmphasizedText>+{GUILD_RIVALRY_BUFF_STACK_PER_STAGE}</EmphasizedText> 스택이 증가합니다.
 			</li>
 			<li>
-				보스 몬스터의 공격을 받으면 스택이 감소합니다. 감소 스택은 최소{' '}
-				<EmphasizedText>−{GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MIN}</EmphasizedText> 부터 최대{' '}
-				<EmphasizedText>−{GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT_MAX}</EmphasizedText> 까지 감소합니다.
+				보스 몬스터의 공격을 받으면 스택이 감소합니다. 감소 스택은 단계와 스탯에 따라{' '}
+				<EmphasizedText>−{GUILD_RIVALRY_BUFF_STACK_LOSS_ON_BOSS_HIT}</EmphasizedText> 부터 시작합니다.
 			</li>
 			<li>
 				플레이어의 명중이 필요 명중컷보다 높으면 최대{' '}
