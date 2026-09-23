@@ -397,20 +397,6 @@
 			"rivalry": "684억 3105만",
 			"training": "1038만 1020",
 			"guildBoss": "308억 123만"
-		},
-		{
-			"name": "홍진영",
-			"level": 109,
-			"job": "바이퍼",
-			"combatPower": "237조 5743억",
-			"expedition": {
-				"grade": "마스터2",
-				"placement": 1456,
-				"score": "822억 4254만"
-			},
-			"rivalry": "326억 9251만",
-			"training": "3226107",
-			"guildBoss": "202억 5257만"
 		}
 	]
 }
