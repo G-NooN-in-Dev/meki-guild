@@ -177,98 +177,111 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 								</TableCell>
 							</TableRow>
 						) : (
-							sortedComparisons.map((comparison, index) => (
-								<TableRow key={comparison.name} className={cn('group', comparison.status === 'left' && 'opacity-60')}>
-									<TableCell className={cn('text-grayscale-400', stickyIndexCellClassName)}>{index + 1}</TableCell>
-									<TableCell className={stickyNameCellClassName}>
-										{/* 데스크탑: 초상화 + 이름. 모바일은 이름만 */}
-										<div className="flex items-center gap-2">
-											<MemberPortrait
-												name={comparison.name}
-												size="sm"
-												className="hidden size-8 rounded-lg lg:block"
-												zoom={2.25}
-											/>
-											{/* 이름은 주 정보, 자세히 보기는 이름 아래 보조 링크로 배치 */}
-											<div className="flex min-w-0 flex-col items-start gap-0.5">
-												<span className="inline-flex items-center font-bold">
-													{/* 잠금 시 별칭, 해제 시 실명 — row key는 실명 유지 */}
-													<MemberDisplayName name={comparison.name} />
-													<MemberStatusBadge status={comparison.status} />
-												</span>
-												<MemberDetailDialog
-													comparison={comparison}
-													rankings={rankings}
-													previousRankings={previousRankings}
-												/>
-											</div>
-										</div>
-									</TableCell>
-									<TableCell>
-										<JobBadge job={comparison.job} />
-									</TableCell>
-									<TableCell>
-										<div className={getValueClassName(comparison.level.currentLabel)}>
-											{comparison.level.currentLabel}
-										</div>
-										<GrowthDelta value={comparison.level.diffLabel} />
-									</TableCell>
-									<TableCell>
-										<div className={getValueClassName(comparison.combatPower.currentLabel)}>
-											{comparison.combatPower.currentLabel}
-										</div>
-										<GrowthDelta
-											value={comparison.combatPower.diffLabel}
-											percentLabel={comparison.combatPower.diffPercentLabel}
-										/>
-									</TableCell>
-									<TableCell>
-										<div
-											className={cn(
-												getValueClassName(comparison.expeditionGrade.currentLabel),
-												getExpeditionGradeTextClass(comparison.expeditionGrade.currentLabel)
-											)}
-										>
-											{comparison.expeditionGrade.currentLabel}
-										</div>
-										<GrowthDelta value={comparison.expeditionGrade.diffLabel} />
-									</TableCell>
-									<TableCell>
-										<div className={getValueClassName(comparison.expeditionPlacement.currentLabel)}>
-											{comparison.expeditionPlacement.currentLabel}
-										</div>
-										<GrowthDelta value={comparison.expeditionPlacement.diffLabel} />
-									</TableCell>
-									<TableCell>
-										<div className={getValueClassName(comparison.expeditionScore.currentLabel)}>
-											{comparison.expeditionScore.currentLabel}
-										</div>
-										<GrowthDelta
-											value={comparison.expeditionScore.diffLabel}
-											percentLabel={comparison.expeditionScore.diffPercentLabel}
-										/>
-									</TableCell>
-									<TableCell>
-										<div className={getValueClassName(comparison.rivalry.currentLabel)}>
-											{comparison.rivalry.currentLabel}
-										</div>
-										<GrowthDelta
-											value={comparison.rivalry.diffLabel}
-											percentLabel={comparison.rivalry.diffPercentLabel}
-										/>
-									</TableCell>
-									{getGuildContentsOrder().map(({ key }) => {
-										const metric = comparison[key]
+							sortedComparisons.map((comparison, index) => {
+								// 이탈은 성장이 아니라 부재이므로, 0−이전값으로 만든 delta는 표시하지 않음
+								const showGrowthDelta = comparison.status !== 'left'
 
-										return (
-											<TableCell key={key}>
-												<div className={getValueClassName(metric.currentLabel)}>{metric.currentLabel}</div>
-												<GrowthDelta value={metric.diffLabel} percentLabel={metric.diffPercentLabel} />
-											</TableCell>
-										)
-									})}
-								</TableRow>
-							))
+								return (
+									<TableRow key={comparison.name} className={cn('group', comparison.status === 'left' && 'opacity-60')}>
+										<TableCell className={cn('text-grayscale-400', stickyIndexCellClassName)}>{index + 1}</TableCell>
+										<TableCell className={stickyNameCellClassName}>
+											{/* 데스크탑: 초상화 + 이름. 모바일은 이름만 */}
+											<div className="flex items-center gap-2">
+												<MemberPortrait
+													name={comparison.name}
+													size="sm"
+													className="hidden size-8 rounded-lg lg:block"
+													zoom={2.25}
+												/>
+												{/* 이름은 주 정보, 자세히 보기는 이름 아래 보조 링크로 배치 */}
+												<div className="flex min-w-0 flex-col items-start gap-0.5">
+													<span className="inline-flex items-center font-bold">
+														{/* 잠금 시 별칭, 해제 시 실명 — row key는 실명 유지 */}
+														<MemberDisplayName name={comparison.name} />
+														<MemberStatusBadge status={comparison.status} />
+													</span>
+													<MemberDetailDialog
+														comparison={comparison}
+														rankings={rankings}
+														previousRankings={previousRankings}
+													/>
+												</div>
+											</div>
+										</TableCell>
+										<TableCell>
+											<JobBadge job={comparison.job} />
+										</TableCell>
+										<TableCell>
+											<div className={getValueClassName(comparison.level.currentLabel)}>
+												{comparison.level.currentLabel}
+											</div>
+											{showGrowthDelta ? <GrowthDelta value={comparison.level.diffLabel} /> : null}
+										</TableCell>
+										<TableCell>
+											<div className={getValueClassName(comparison.combatPower.currentLabel)}>
+												{comparison.combatPower.currentLabel}
+											</div>
+											{showGrowthDelta ? (
+												<GrowthDelta
+													value={comparison.combatPower.diffLabel}
+													percentLabel={comparison.combatPower.diffPercentLabel}
+												/>
+											) : null}
+										</TableCell>
+										<TableCell>
+											<div
+												className={cn(
+													getValueClassName(comparison.expeditionGrade.currentLabel),
+													getExpeditionGradeTextClass(comparison.expeditionGrade.currentLabel)
+												)}
+											>
+												{comparison.expeditionGrade.currentLabel}
+											</div>
+											{showGrowthDelta ? <GrowthDelta value={comparison.expeditionGrade.diffLabel} /> : null}
+										</TableCell>
+										<TableCell>
+											<div className={getValueClassName(comparison.expeditionPlacement.currentLabel)}>
+												{comparison.expeditionPlacement.currentLabel}
+											</div>
+											{showGrowthDelta ? <GrowthDelta value={comparison.expeditionPlacement.diffLabel} /> : null}
+										</TableCell>
+										<TableCell>
+											<div className={getValueClassName(comparison.expeditionScore.currentLabel)}>
+												{comparison.expeditionScore.currentLabel}
+											</div>
+											{showGrowthDelta ? (
+												<GrowthDelta
+													value={comparison.expeditionScore.diffLabel}
+													percentLabel={comparison.expeditionScore.diffPercentLabel}
+												/>
+											) : null}
+										</TableCell>
+										<TableCell>
+											<div className={getValueClassName(comparison.rivalry.currentLabel)}>
+												{comparison.rivalry.currentLabel}
+											</div>
+											{showGrowthDelta ? (
+												<GrowthDelta
+													value={comparison.rivalry.diffLabel}
+													percentLabel={comparison.rivalry.diffPercentLabel}
+												/>
+											) : null}
+										</TableCell>
+										{getGuildContentsOrder().map(({ key }) => {
+											const metric = comparison[key]
+
+											return (
+												<TableCell key={key}>
+													<div className={getValueClassName(metric.currentLabel)}>{metric.currentLabel}</div>
+													{showGrowthDelta ? (
+														<GrowthDelta value={metric.diffLabel} percentLabel={metric.diffPercentLabel} />
+													) : null}
+												</TableCell>
+											)
+										})}
+									</TableRow>
+								)
+							})
 						)}
 					</TableBody>
 				</Table>

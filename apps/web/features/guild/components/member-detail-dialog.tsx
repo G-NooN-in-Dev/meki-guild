@@ -290,19 +290,24 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 										/>
 									</TableCell>
 									<TableCell className="py-3 text-right">
-										<div className="flex flex-col items-end gap-0.5">
-											<GrowthDelta value={row.diffLabel} percentLabel={row.diffPercentLabel} />
-											{row.rankLabel ? (
-												<span className="inline-flex items-center gap-1.5 text-[11px]">
-													<span className="text-grayscale-500">순위 변화</span>
-													{row.rankDiffLabel ? (
-														<GrowthDelta value={row.rankDiffLabel} className="text-[11px]" />
-													) : (
-														<span className="text-grayscale-400 text-[11px]">-</span>
-													)}
-												</span>
-											) : null}
-										</div>
+										{/* 이탈은 성장이 아니라 부재이므로 인위적 delta·순위 변화를 숨김 */}
+										{comparison.status === 'left' ? (
+											<span className="text-grayscale-400 text-xs">-</span>
+										) : (
+											<div className="flex flex-col items-end gap-0.5">
+												<GrowthDelta value={row.diffLabel} percentLabel={row.diffPercentLabel} />
+												{row.rankLabel ? (
+													<span className="inline-flex items-center gap-1.5 text-[11px]">
+														<span className="text-grayscale-500">순위 변화</span>
+														{row.rankDiffLabel ? (
+															<GrowthDelta value={row.rankDiffLabel} className="text-[11px]" />
+														) : (
+															<span className="text-grayscale-400 text-[11px]">-</span>
+														)}
+													</span>
+												) : null}
+											</div>
+										)}
 									</TableCell>
 								</TableRow>
 							))}
