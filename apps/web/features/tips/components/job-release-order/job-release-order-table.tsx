@@ -42,13 +42,21 @@ type JobReleaseGroupTableProps = {
 	rows: readonly JobReleaseTableRow[]
 	/** false면 높이 제한 없이 행을 모두 보여 줍니다. 기본은 표 안 스크롤입니다. */
 	scrollable?: boolean
+	/** false면 메키 출시 열을 숨깁니다. 미출시 표에서 사용합니다. */
+	showMekiDate?: boolean
 }
 
 /**
  * 출시/미출시 한쪽 표.
  * 넘긴 행의 순서를 그대로 그리므로, 호출 쪽에서 정렬·그룹 기준을 맞춥니다.
  */
-function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobReleaseGroupTableProps) {
+function JobReleaseGroupTable({
+	title,
+	count,
+	rows,
+	scrollable = true,
+	showMekiDate = true
+}: JobReleaseGroupTableProps) {
 	return (
 		<section className="flex min-w-0 flex-col gap-3">
 			<h2 className="text-grayscale-900 text-lg font-semibold md:text-xl">
@@ -68,13 +76,21 @@ function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobRele
 					<TableHeader className="[&_tr]:border-0">
 						<TableRow className="hover:bg-transparent">
 							<TableHead className={cn(headerClassName, dateColumnClassName)}>
-								<span className="lg:hidden">원작</span>
-								<span className="hidden lg:inline">원작 출시</span>
+								{showMekiDate ? (
+									<>
+										<span className="lg:hidden">원작</span>
+										<span className="hidden lg:inline">원작 출시</span>
+									</>
+								) : (
+									'출시 날짜'
+								)}
 							</TableHead>
-							<TableHead className={cn(headerClassName, dateColumnClassName)}>
-								<span className="lg:hidden">메키</span>
-								<span className="hidden lg:inline">메키 출시</span>
-							</TableHead>
+							{showMekiDate ? (
+								<TableHead className={cn(headerClassName, dateColumnClassName)}>
+									<span className="lg:hidden">메키</span>
+									<span className="hidden lg:inline">메키 출시</span>
+								</TableHead>
+							) : null}
 							<TableHead className={cn(headerClassName, classLineColumnClassName)}>직업군</TableHead>
 							<TableHead className={cn(headerClassName, 'text-left')}>직업명</TableHead>
 						</TableRow>
@@ -105,24 +121,26 @@ function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobRele
 											{formatDate(releasedAt)}
 										</TableCell>
 									) : null}
-									{mekiReleasedAt ? (
-										isFirstOfMekiDate ? (
-											<TableCell rowSpan={mekiDateRowSpan} className={mergedDateCellClassName}>
-												{formatDate(mekiReleasedAt)}
+									{showMekiDate ? (
+										mekiReleasedAt ? (
+											isFirstOfMekiDate ? (
+												<TableCell rowSpan={mekiDateRowSpan} className={mergedDateCellClassName}>
+													{formatDate(mekiReleasedAt)}
+												</TableCell>
+											) : null
+										) : (
+											<TableCell
+												className={cn(
+													cellClassName,
+													dateColumnClassName,
+													'text-grayscale-400 text-center tabular-nums',
+													zebraClassName
+												)}
+											>
+												—
 											</TableCell>
-										) : null
-									) : (
-										<TableCell
-											className={cn(
-												cellClassName,
-												dateColumnClassName,
-												'text-grayscale-400 text-center tabular-nums',
-												zebraClassName
-											)}
-										>
-											—
-										</TableCell>
-									)}
+										)
+									) : null}
 									<TableCell className={cn(cellClassName, classLineColumnClassName, zebraClassName)}>
 										<JobClassLineBadges classLines={classLines} />
 									</TableCell>
@@ -150,7 +168,13 @@ function JobReleaseOrderTable() {
 	return (
 		<div className="grid gap-6 sm:grid-cols-2 sm:items-start lg:gap-8">
 			<JobReleaseGroupTable title="출시" count={releasedCount} rows={JOB_RELEASED_TABLE_ROWS} scrollable={false} />
-			<JobReleaseGroupTable title="미출시" count={upcomingCount} rows={JOB_UPCOMING_TABLE_ROWS} scrollable={false} />
+			<JobReleaseGroupTable
+				title="미출시"
+				count={upcomingCount}
+				rows={JOB_UPCOMING_TABLE_ROWS}
+				scrollable={false}
+				showMekiDate={false}
+			/>
 		</div>
 	)
 }
