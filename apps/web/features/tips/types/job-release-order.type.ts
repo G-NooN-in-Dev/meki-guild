@@ -14,10 +14,16 @@ type JobReleaseEntry = {
 
 /** 같은 날짜 행을 병합해 표에 그릴 때 쓰는 한 줄 */
 type JobReleaseTableRow = JobReleaseEntry & {
-	/** 해당 날짜 그룹의 첫 행이면 날짜 셀을 그립니다 */
-	isFirstOfDate: boolean
-	/** 같은 날짜 직업 수 — 날짜 셀 rowSpan */
-	dateRowSpan: number
+	/** 메이플키우기 출시일 (YYYY-MM-DD). 미출시면 null */
+	mekiReleasedAt: string | null
+	/** 연속된 같은 원작 출시일 그룹의 첫 행이면 원작 날짜 셀을 그립니다 */
+	isFirstOfOriginalDate: boolean
+	/** 연속된 같은 원작 출시일 직업 수 — 원작 날짜 셀 rowSpan */
+	originalDateRowSpan: number
+	/** 연속된 같은 메키 출시일 그룹의 첫 행이면 메키 날짜 셀을 그립니다. 미출시(null)는 행마다 표시 */
+	isFirstOfMekiDate: boolean
+	/** 연속된 같은 메키 출시일 직업 수 — 메키 날짜 셀 rowSpan */
+	mekiDateRowSpan: number
 	/** 메이플키우기에 이미 나온 직업인지 */
 	isReleased: boolean
 }

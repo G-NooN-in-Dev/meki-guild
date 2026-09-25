@@ -57,9 +57,34 @@ export const JOB_RELEASE_ENTRIES = [
 	{ releasedAt: '2026-06-18', classLines: ['마법사'], job: '레테' }
 ] as const satisfies readonly JobReleaseEntry[]
 
+/**
+ * 메이플키우기 직업 출시일 (YYYY-MM-DD).
+ * job 키는 JOB_RELEASE_ENTRIES·길드 직업명과 동일합니다.
+ */
+const MEKI_JOB_RELEASED_AT = {
+	히어로: '2025-11-06',
+	다크나이트: '2025-11-06',
+	불독: '2025-11-06',
+	썬콜: '2025-11-06',
+	보우마스터: '2025-11-06',
+	신궁: '2025-11-06',
+	나이트로드: '2025-11-06',
+	섀도어: '2025-11-06',
+	팔라딘: '2026-01-29',
+	비숍: '2026-01-29',
+	캡틴: '2026-04-30',
+	바이퍼: '2026-04-30',
+	윈드브레이커: '2026-07-23',
+	나이트워커: '2026-07-23'
+} as const satisfies Record<string, string>
+
 /** 길드 직업 매핑에 있으면 메이플키우기에 출시된 직업으로 봅니다. */
 function isMapleIdleReleasedJob(job: string) {
 	return getJobClassLine(job) !== null
+}
+
+function getMekiReleasedAt(job: string): string | null {
+	return job in MEKI_JOB_RELEASED_AT ? MEKI_JOB_RELEASED_AT[job as keyof typeof MEKI_JOB_RELEASED_AT] : null
 }
 
 /** 표에 보여줄 직업명. 불독·썬콜은 아크메이지 표기를 씁니다. */
@@ -68,28 +93,69 @@ function getJobReleaseDisplayName({ job, label }: Pick<JobReleaseEntry, 'job' | 
 }
 
 /**
- * 같은 날짜 직업을 묶어 날짜 셀 rowSpan을 계산합니다.
+ * 연속된 같은 날짜(또는 null) 구간의 rowSpan 메타를 만듭니다.
+ * null은 병합하지 않고 행마다 셀을 둡니다.
+ */
+function buildConsecutiveDateGroupMeta(keys: readonly (string | null)[]) {
+	const meta = keys.map(() => ({ isFirst: true, rowSpan: 1 }))
+	let index = 0
+
+	while (index < keys.length) {
+		const key = keys[index]
+
+		if (key === null) {
+			meta[index] = { isFirst: true, rowSpan: 1 }
+			index += 1
+			continue
+		}
+
+		let end = index + 1
+		while (end < keys.length && keys[end] === key) {
+			end += 1
+		}
+
+		const rowSpan = end - index
+		meta[index] = { isFirst: true, rowSpan }
+		for (let cursor = index + 1; cursor < end; cursor += 1) {
+			meta[cursor] = { isFirst: false, rowSpan }
+		}
+		index = end
+	}
+
+	return meta
+}
+
+/**
+ * 넘긴 행 순서 그대로 원작·메키 날짜 그룹 rowSpan을 붙입니다.
  * 출시 여부는 길드 직업 상수와 맞춰, 메키에 직업이 추가되면 표도 같이 바뀝니다.
  */
 function buildJobReleaseTableRows(entries: readonly JobReleaseEntry[] = JOB_RELEASE_ENTRIES): JobReleaseTableRow[] {
-	const dateCounts = new Map<string, number>()
+	const mekiDates = entries.map((entry) => getMekiReleasedAt(entry.job))
+	const originalGroups = buildConsecutiveDateGroupMeta(entries.map((entry) => entry.releasedAt))
+	const mekiGroups = buildConsecutiveDateGroupMeta(mekiDates)
 
-	for (const { releasedAt } of entries) {
-		dateCounts.set(releasedAt, (dateCounts.get(releasedAt) ?? 0) + 1)
-	}
-
-	let previousDate: string | null = null
-
-	return entries.map((entry) => {
-		const isFirstOfDate = entry.releasedAt !== previousDate
-		previousDate = entry.releasedAt
+	return entries.map((entry, index) => {
+		const originalGroup = originalGroups[index]
+		const mekiGroup = mekiGroups[index]
 
 		return {
 			...entry,
-			isFirstOfDate,
-			dateRowSpan: dateCounts.get(entry.releasedAt) ?? 1,
+			mekiReleasedAt: mekiDates[index] ?? null,
+			isFirstOfOriginalDate: originalGroup?.isFirst ?? true,
+			originalDateRowSpan: originalGroup?.rowSpan ?? 1,
+			isFirstOfMekiDate: mekiGroup?.isFirst ?? true,
+			mekiDateRowSpan: mekiGroup?.rowSpan ?? 1,
 			isReleased: isMapleIdleReleasedJob(entry.job)
 		}
+	})
+}
+
+/** 메키 출시일 오름차순. 같은 날이면 JOB_RELEASE_ENTRIES 상대 순서를 유지합니다. */
+function sortReleasedEntriesByMekiDate(entries: readonly JobReleaseEntry[]): JobReleaseEntry[] {
+	return [...entries].sort((left, right) => {
+		const leftMeki = getMekiReleasedAt(left.job) ?? ''
+		const rightMeki = getMekiReleasedAt(right.job) ?? ''
+		return leftMeki.localeCompare(rightMeki)
 	})
 }
 
@@ -106,10 +172,12 @@ function getJobReleaseStats(entries: readonly JobReleaseEntry[] = JOB_RELEASE_EN
 
 export const JOB_RELEASE_STATS = getJobReleaseStats()
 
-const RELEASED_ENTRIES = JOB_RELEASE_ENTRIES.filter((entry) => isMapleIdleReleasedJob(entry.job))
+const RELEASED_ENTRIES = sortReleasedEntriesByMekiDate(
+	JOB_RELEASE_ENTRIES.filter((entry) => isMapleIdleReleasedJob(entry.job))
+)
 const UPCOMING_ENTRIES = JOB_RELEASE_ENTRIES.filter((entry) => !isMapleIdleReleasedJob(entry.job))
 
-/** 메키 출시·미출시 표용. 각 목록 안에서는 원작 출시일 순서를 유지합니다. */
+/** 출시 표: 메키 출시일 순·그룹. 미출시 표: 원작 출시일 순·그룹. */
 export const JOB_RELEASED_TABLE_ROWS = buildJobReleaseTableRows(RELEASED_ENTRIES)
 export const JOB_UPCOMING_TABLE_ROWS = buildJobReleaseTableRows(UPCOMING_ENTRIES)
 

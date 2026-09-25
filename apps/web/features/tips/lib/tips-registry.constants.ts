@@ -119,7 +119,7 @@ export const TIP_ENTRIES = [
 	{
 		slug: 'job-release-order',
 		title: '직업 출시 순서표',
-		description: '원작 메이플 출시 순서',
+		description: '메이플스토리 직업 출시 순서',
 		category: 'info',
 		tags: ['직업'],
 		href: '/tips/job-release-order'

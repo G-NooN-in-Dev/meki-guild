@@ -27,8 +27,7 @@ function JobReleaseOrderSection() {
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 					<p className="text-grayscale-600 text-sm md:text-base">
-						원작 메이플스토리 직업 출시 순서입니다. 왼쪽은 메이플키우기에 이미 나온 직업, 오른쪽은 아직 안 나온
-						직업입니다. 각 표 안에서는 원작 출시일 순서를 유지합니다.
+						원작 메이플스토리 직업 출시 순서표로 다음에 나올 직업을 가늠해보세요.
 					</p>
 				</header>
 			</div>

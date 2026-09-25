@@ -19,10 +19,10 @@ const headerClassName = cn(
 )
 const cellClassName = cn(gridBorderClassName, 'px-2 py-2 text-xs whitespace-nowrap lg:px-3 lg:py-2.5 lg:text-sm')
 
-/** YYYY.MM.DD · sm 2열에서는 좁게, lg부터 헤더 문구가 여유 있게 */
-const dateColumnClassName = 'w-28 lg:w-32 xl:w-36'
+/** YYYY.MM.DD · 원작/메키 두 열이므로 sm 2열 레이아웃에서는 더 좁게 */
+const dateColumnClassName = 'w-22 lg:w-28 xl:w-32'
 /** 뱃지 1개 기준. xl에서 제논처럼 계열이 둘이면 한 줄에 들어가도록 더 넓힘 */
-const classLineColumnClassName = 'w-24 lg:w-28 xl:w-32'
+const classLineColumnClassName = 'w-20 lg:w-28 xl:w-32'
 
 function JobClassLineBadges({ classLines }: { classLines: readonly JobClassLine[] }) {
 	return (
@@ -46,7 +46,7 @@ type JobReleaseGroupTableProps = {
 
 /**
  * 출시/미출시 한쪽 표.
- * 넘긴 행의 순서를 그대로 그리므로, 호출 쪽에서 원작 출시일 순을 유지합니다.
+ * 넘긴 행의 순서를 그대로 그리므로, 호출 쪽에서 정렬·그룹 기준을 맞춥니다.
  */
 function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobReleaseGroupTableProps) {
 	return (
@@ -67,39 +67,66 @@ function JobReleaseGroupTable({ title, count, rows, scrollable = true }: JobRele
 				<Table className="w-full table-fixed border-separate border-spacing-0">
 					<TableHeader className="[&_tr]:border-0">
 						<TableRow className="hover:bg-transparent">
-							<TableHead className={cn(headerClassName, dateColumnClassName)}>출시 일자</TableHead>
+							<TableHead className={cn(headerClassName, dateColumnClassName)}>
+								<span className="lg:hidden">원작</span>
+								<span className="hidden lg:inline">원작 출시</span>
+							</TableHead>
+							<TableHead className={cn(headerClassName, dateColumnClassName)}>
+								<span className="lg:hidden">메키</span>
+								<span className="hidden lg:inline">메키 출시</span>
+							</TableHead>
 							<TableHead className={cn(headerClassName, classLineColumnClassName)}>직업군</TableHead>
 							<TableHead className={cn(headerClassName, 'text-left')}>직업명</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody className="[&_tr:last-child>td]:border-b-0">
 						{rows.map((row, index) => {
-							const { classLines, dateRowSpan, isFirstOfDate, job, releasedAt } = row
+							const {
+								classLines,
+								isFirstOfMekiDate,
+								isFirstOfOriginalDate,
+								job,
+								mekiDateRowSpan,
+								mekiReleasedAt,
+								originalDateRowSpan,
+								releasedAt
+							} = row
+							const zebraClassName = index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50'
+							const mergedDateCellClassName = cn(
+								cellClassName,
+								dateColumnClassName,
+								'bg-grayscale-100 text-grayscale-800 text-center font-medium tabular-nums'
+							)
 
 							return (
 								<TableRow key={job} className="border-0 hover:bg-transparent">
-									{isFirstOfDate ? (
-										<TableCell
-											rowSpan={dateRowSpan}
-											className={cn(
-												cellClassName,
-												dateColumnClassName,
-												'bg-grayscale-100 text-grayscale-800 text-center font-medium tabular-nums'
-											)}
-										>
+									{isFirstOfOriginalDate ? (
+										<TableCell rowSpan={originalDateRowSpan} className={mergedDateCellClassName}>
 											{formatDate(releasedAt)}
 										</TableCell>
 									) : null}
-									<TableCell
-										className={cn(
-											cellClassName,
-											classLineColumnClassName,
-											index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50'
-										)}
-									>
+									{mekiReleasedAt ? (
+										isFirstOfMekiDate ? (
+											<TableCell rowSpan={mekiDateRowSpan} className={mergedDateCellClassName}>
+												{formatDate(mekiReleasedAt)}
+											</TableCell>
+										) : null
+									) : (
+										<TableCell
+											className={cn(
+												cellClassName,
+												dateColumnClassName,
+												'text-grayscale-400 text-center tabular-nums',
+												zebraClassName
+											)}
+										>
+											—
+										</TableCell>
+									)}
+									<TableCell className={cn(cellClassName, classLineColumnClassName, zebraClassName)}>
 										<JobClassLineBadges classLines={classLines} />
 									</TableCell>
-									<TableCell className={cn(cellClassName, 'min-w-0', index % 2 === 0 ? 'bg-card' : 'bg-grayscale-50')}>
+									<TableCell className={cn(cellClassName, 'min-w-0', zebraClassName)}>
 										<span className="text-grayscale-900 font-medium">{getJobReleaseDisplayName(row)}</span>
 									</TableCell>
 								</TableRow>
