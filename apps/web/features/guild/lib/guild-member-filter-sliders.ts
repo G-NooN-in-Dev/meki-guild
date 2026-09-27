@@ -20,7 +20,7 @@ const SLIDER_FIELDS: ReadonlyArray<{ key: SliderFieldKey; label: string }> = [
 	...getGuildContentsOrder().map(({ key, label }) => ({ key, label }))
 ]
 
-/** 토벌 등급 슬라이더 전체 구간 (1=챌린저1 … 15=마스터5) */
+/** 토벌 등급 슬라이더 전체 구간 (1=챔피언1 … N=브론즈1) */
 const EXPEDITION_GRADE_BOUNDS = {
 	min: 1,
 	max: EXPEDITION_GUILD_TIERS.length
@@ -121,7 +121,7 @@ function rangeToSliderValues(range: NumberRange, bounds: RangeBounds): [number, 
 	return [range.min ?? bounds.min, range.max ?? bounds.max]
 }
 
-/** 등급 순위(1~15) → 챌린저1 등 표시명 */
+/** 등급 순위(1~N) → 챔피언1 등 표시명 */
 function formatGradeRank(rank: number): string {
 	return EXPEDITION_GUILD_TIERS[Math.round(rank) - 1]?.rank ?? String(Math.round(rank))
 }

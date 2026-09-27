@@ -19,7 +19,7 @@ type GuildMemberFilterState = {
 	jobs: string[]
 	level: NumberRange
 	combatPower: NumberRange
-	/** 토벌 등급: getExpeditionGradeRank 기준 (1=챌린저1 … 15=마스터5) */
+	/** 토벌 등급: getExpeditionGradeRank 기준 (1=챔피언1 … 브론즈1) */
 	expeditionGradeRank: NumberRange
 	expeditionScore: NumberRange
 	rivalry: NumberRange
@@ -221,7 +221,6 @@ export {
 	createEmptyGuildMemberFilter,
 	filterGuildMembers,
 	isGuildMemberFilterActive,
-	isJobTaxonomyFilterActive,
-	isNumberRangeActive
+	isJobTaxonomyFilterActive
 }
 export type { GuildMemberFilterState, NumberRange }

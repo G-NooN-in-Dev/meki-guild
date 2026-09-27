@@ -29,7 +29,7 @@ type KnownJob = (typeof JOBS_BY_CLASS_LINE_MAP)[JobClassLine][number]
 export const JOBS_BY_CLASS_LINE: Record<JobClassLine, readonly string[]> = JOBS_BY_CLASS_LINE_MAP
 
 /** 4차 전직 직업명 → 계열 매핑. JOBS_BY_CLASS_LINE_MAP에서 파생합니다. */
-export const JOB_TO_CLASS_LINE = Object.fromEntries(
+const JOB_TO_CLASS_LINE = Object.fromEntries(
 	JOB_CLASS_LINE_ORDER.flatMap((classLine) => JOBS_BY_CLASS_LINE_MAP[classLine].map((job) => [job, classLine] as const))
 ) as Record<KnownJob, JobClassLine>
 
@@ -61,7 +61,7 @@ function getJobClassLine(job: string): JobClassLine | null {
  * 직업 분포 UI용 계열 Badge 클래스.
  * 셀 전체를 칠하지 않고, 디자인 토큰 pastel-* 로 은은하게 구분합니다.
  */
-export const JOB_CLASS_LINE_BADGE_CLASS = {
+const JOB_CLASS_LINE_BADGE_CLASS = {
 	전사: 'border-transparent bg-pastel-orange-100 text-pastel-orange-800',
 	마법사: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800',
 	궁수: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
@@ -75,38 +75,11 @@ function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): strin
 }
 
 /**
- * 직업명 text 색.
- * 스프레드시트 배경색 톤을 따르되, 밝은 테이블에서도 읽히도록 700~800 계열로 맞춥니다.
+ * 직업명 Badge 클래스.
+ * 배경(100) + 글자색으로 테이블·상세에서 한눈에 구분합니다.
  * 캡틴은 총기·제복 톤에 맞춰 pastel-navy를 씁니다.
  */
-export const JOB_TEXT_CLASS = {
-	다크나이트: 'text-grayscale-600',
-	팔라딘: 'text-pastel-yellow-800',
-	히어로: 'text-pastel-orange-700',
-	불독: 'text-pastel-red-700',
-	비숍: 'text-pastel-yellow-700',
-	썬콜: 'text-pastel-blue-700',
-	보우마스터: 'text-pastel-green-700',
-	신궁: 'text-pastel-green-800',
-	윈드브레이커: 'text-pastel-green-700',
-	나이트로드: 'text-pastel-blue-800',
-	섀도어: 'text-pastel-purple-700',
-	나이트워커: 'text-pastel-purple-700',
-	바이퍼: 'text-pastel-red-800',
-	캡틴: 'text-pastel-navy-800'
-} as const satisfies Record<KnownJob, string>
-
-const FALLBACK_JOB_TEXT_CLASS = 'text-grayscale-700'
-
-function getJobTextClass(job: string): string {
-	return lookupByJobKey(job, JOB_TEXT_CLASS, FALLBACK_JOB_TEXT_CLASS)
-}
-
-/**
- * 직업명 Badge 클래스.
- * JOB_TEXT_CLASS 톤과 맞추되, 배경(100) + 글자색으로 테이블·상세에서 한눈에 구분합니다.
- */
-export const JOB_BADGE_CLASS = {
+const JOB_BADGE_CLASS = {
 	다크나이트: 'border-transparent bg-grayscale-100 text-grayscale-700',
 	팔라딘: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
 	히어로: 'border-transparent bg-pastel-orange-100 text-pastel-orange-700',
@@ -129,5 +102,5 @@ function getJobBadgeClass(job: string): string {
 	return lookupByJobKey(job, JOB_BADGE_CLASS, FALLBACK_JOB_BADGE_CLASS)
 }
 
-export { getJobBadgeClass, getJobClassLine, getJobClassLineBadgeClass, getJobTextClass, resolveJobKey }
+export { getJobBadgeClass, getJobClassLine, getJobClassLineBadgeClass, resolveJobKey }
 export type { JobClassLine }

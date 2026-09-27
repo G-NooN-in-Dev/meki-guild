@@ -7,7 +7,7 @@ const HUB_ENTRIES = [
 	{
 		href: '/guild',
 		title: '길드 정보',
-		description: '길드 현황·1 vs 1 내전 결과를 확인합니다. 비밀번호를 모르신다구요? 저리 가세요.',
+		description: '길드의 주간 현황을 보여줍니다. 비밀번호를 모르신다구요? 저리 가세요.',
 		icon: UsersIcon
 	},
 	{
