@@ -34,4 +34,4 @@ function getMemberDisplayName(realName: string, isUnlocked: boolean): string {
 	return isUnlocked ? realName : getMaskedMemberName(realName)
 }
 
-export { getMaskedMemberName, getMemberDisplayName }
+export { getMemberDisplayName }

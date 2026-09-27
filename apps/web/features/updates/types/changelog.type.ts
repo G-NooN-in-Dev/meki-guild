@@ -21,4 +21,4 @@ type ChangelogEntry = {
 	sections: readonly ChangelogSection[]
 }
 
-export type { ChangelogEntry, ChangelogItem, ChangelogSection }
+export type { ChangelogEntry, ChangelogItem }

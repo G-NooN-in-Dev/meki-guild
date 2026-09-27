@@ -58,7 +58,7 @@ export const PARTY_QUEST_REWARD_TIER_LABELS = {
  * 장비 획득 확률(%) — 전 파티퀘스트·난이도 공통.
  * 버닝 시 장비 확률을 올리고, 남은 비율을 기타 재화가 기존 비중대로 나눈다.
  */
-export const PARTY_QUEST_EQUIPMENT_RATES = {
+const PARTY_QUEST_EQUIPMENT_RATES = {
 	easy: { normal: 25, burning: 35 },
 	normal: { normal: 20, burning: 30 },
 	hard: { normal: 20, burning: 30 },
@@ -137,9 +137,7 @@ export {
 	getPartyQuestDifficultyLabel,
 	getPartyQuestEntry,
 	getPartyQuestEquipmentMaxLevel,
-	getPartyQuestEquipmentRatePercent,
 	getPartyQuestMaterialQuantity,
 	getPartyQuestRequiredHit,
-	PARTY_QUEST_ENTRIES,
 	sortPartyQuestMaterials
 }

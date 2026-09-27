@@ -149,10 +149,8 @@ export {
 	getRivalryRankPoints,
 	getRivalryRankPointTextClass,
 	getRivalryRankPointTone,
-	RIVALRY_RANK_POINT_BANDS,
 	RIVALRY_RANK_POINT_DISPLAY_BANDS,
 	RIVALRY_RANK_POINT_ENTRIES,
-	RIVALRY_RANK_POINT_START,
 	RIVALRY_RANK_POINT_TONE_META
 }
-export type { RivalryRankPointBand, RivalryRankPointDisplayBand, RivalryRankPointEntry, RivalryRankPointTone }
+export type { RivalryRankPointDisplayBand, RivalryRankPointEntry }

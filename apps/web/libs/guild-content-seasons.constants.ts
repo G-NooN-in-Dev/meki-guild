@@ -181,10 +181,9 @@ export {
 	getSeasonsByContent,
 	getSeasonStatus,
 	GUILD_CONTENT_SEASON_STATUS_LABEL,
-	GUILD_CONTENT_SEASONS,
 	GUILD_SEASONAL_CONTENT_META,
 	GUILD_SEASONAL_CONTENT_ORDER,
 	SEASON_STATUS_BADGE_CLASS,
 	SEASON_STATUS_CARD_CLASS
 }
-export type { GuildContentSeason, GuildContentSeasonStatus, GuildContentSeasonSummary, GuildSeasonalContentKey }
+export type { GuildContentSeason, GuildContentSeasonSummary, GuildSeasonalContentKey }

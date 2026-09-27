@@ -35,11 +35,4 @@ type StageJourneyChapter = {
 	special?: StageJourneySpecialOption
 }
 
-export type {
-	StageJourneyChapter,
-	StageJourneyEffectSlot,
-	StageJourneyGrade,
-	StageJourneyReward,
-	StageJourneySpecialOption,
-	StageJourneyStatUnit
-}
+export type { StageJourneyChapter, StageJourneyEffectSlot, StageJourneyGrade }

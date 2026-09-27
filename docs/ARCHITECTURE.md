@@ -4,16 +4,15 @@ meki-guild `apps/web`의 라우트·레이어·데이터 흐름을 정리합니�
 
 ## 라우트 맵
 
-| 경로             | 역할                                          |
-| ---------------- | --------------------------------------------- |
-| `/`              | 사이트 허브 (길드 / 팁 진입)                  |
-| `/guild`         | 길드 대시보드 (게이트 + 실명 마스킹 레이아웃) |
-| `/guild/compare` | 길드원 1 vs 1 비교                            |
-| `/tips`          | 정보·팁 허브                                  |
-| `/tips/*`        | 개별 팁 (동료·유물·스테이지·던전·명중컷 등)   |
-| `/updates`       | 사이트 업데이트 일지                          |
-
-`app/api` 라우트는 없습니다. 데이터는 RSC + Server Actions + 정적 JSON으로 처리합니다.
+| 경로                      | 역할                                                  |
+| ------------------------- | ----------------------------------------------------- |
+| `/`                       | 사이트 허브 (길드 / 팁 진입)                          |
+| `/guild`                  | 길드 대시보드 (게이트 + 실명 마스킹 레이아웃)         |
+| `/tips`                   | 정보·팁 허브                                          |
+| `/tips/character-compare` | 캐릭터 1 vs 1 비교 (mgf 프로필)                       |
+| `/tips/*`                 | 개별 팁 (동료·유물·스테이지·던전·명중컷·순위 예측 등) |
+| `/updates`                | 사이트 업데이트 일지                                  |
+| `/api/tips/*`             | tips용 mgf 프록시 (길드·캐릭터·초상화)                |
 
 ## 레이어
 
@@ -46,26 +45,29 @@ flowchart LR
   Sync["scripts/sync-guild-sheet.mjs"]
   JSON["data/*.json"]
   Loader["libs/guild-snapshot.loader.ts"]
-  Compare["compare-snapshots / rankings"]
-  UI[Guild Dashboard / Compare UI]
+  Diff["주간 증감 · 순위 (compare-snapshots)"]
+  UI[Guild Dashboard]
   Action[Server Action]
   Append["append-guild-sheet-row.server.ts"]
 
   Sheets -->|CSV fetch| Sync
   Sync --> JSON
   JSON --> Loader
-  Loader --> Compare
-  Compare --> UI
+  Loader --> Diff
+  Diff --> UI
   UI --> Action
   Action --> Append
   Append --> Sheets
 ```
 
+대시보드의 “비교”는 **주간 스냅샷 증감·길드 내 순위**입니다.  
+캐릭터 1 vs 1 비교는 `/tips/character-compare`이며 아래 tips mgf 프록시를 씁니다.
+
 ### 읽기
 
 1. 운영자가 Sheets에 주간 데이터를 쌓거나, 사이트의 시트 입력 폼으로 행을 upsert합니다.
 2. `pnpm guild:sync [mode]`가 탭별 CSV를 읽어 `current-week.json` / `previous-week.json` / `guild-content-dates.json`을 갱신합니다. (`mode`로 부분 동기화 가능)
-3. `loadGuildDashboardData` / `loadGuildComparePageData`가 JSON을 파싱·비교·순위 계산해 RSC에 넘깁니다.
+3. `loadGuildDashboardData`가 JSON을 파싱·주간 증감·순위 계산해 RSC에 넘깁니다.
 
 ### 쓰기
 
@@ -84,10 +86,22 @@ flowchart LR
 
 ## 의도적으로 없는 것
 
-- REST `app/api` — RSC / Server Actions로 충분
+- 범용 REST API — tips용 mgf 프록시(`/api/tips/*`)만 예외로 둡니다
 - MongoDB — 스냅샷 JSON + Sheets만 사용 (레거시 헬퍼는 제거됨)
 - 실시간 DB — 주간 배치 스냅샷 모델
 
 ## 예약 자산
 
 `apps/web/public/members/*.png`는 멤버 초상화 등으로 쓸 수 있도록 둔 예약 자산입니다. 현재 TS 코드에서 필수로 참조하지는 않습니다.
+
+## tips mgf 프록시
+
+브라우저에서 `mgf.gg`를 직접 호출하지 않습니다. tips UI(캐릭터 비교·길드 순위 예측 등)는 `/api/tips/*`만 사용합니다.
+
+| 경로                              | 역할                                                                   |
+| --------------------------------- | ---------------------------------------------------------------------- |
+| `/api/tips/guild-info?g_name=`    | 길드원 목록·전투력 등 JSON                                             |
+| `/api/tips/character-info?n=`     | 캐릭터 비교용 프로필 JSON                                              |
+| `/api/tips/character-portrait?n=` | 초상화 이미지 (same-origin). mgf `ranking_image.php` Referer 차단 우회 |
+
+`portraitUrl` 필드는 `https://mgf.gg/...`가 아니라 `/api/tips/character-portrait?n=…` 상대 경로입니다.

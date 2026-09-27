@@ -17,14 +17,14 @@ export const RIVALRY_BOSS_PORTRAITS = [
 ] as const
 
 /** 표에 표시할 최대 단계 */
-export const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 80
+const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 80
 
 /**
  * 단계별 보스/일반몹 기본 명중컷 구간.
  * 구간이 바뀌면 증가폭(increment)만 달라지고, 값은 직전 단계에서 이어집니다.
  * 소환 직후 보정(+20)은 포함하지 않습니다.
  */
-export const GUILD_RIVALRY_HIT_TIERS = [
+const GUILD_RIVALRY_HIT_TIERS = [
 	{ startStage: 1, baseHit: 85, increment: 15 },
 	{ startStage: 6, baseHit: 165, increment: 21 },
 	{ startStage: 9, baseHit: 229, increment: 22 },
@@ -108,6 +108,3 @@ function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_MAX_STA
 
 /** 페이지 표에 바로 쓰는 단계별 데이터 */
 export const GUILD_RIVALRY_HIT_CUT_ENTRIES = buildGuildRivalryHitCutEntries()
-
-export { buildGuildRivalryHitCutEntries, getGuildRivalryBuffStack, getGuildRivalryRequiredHit }
-export type { GuildRivalryHitTier }

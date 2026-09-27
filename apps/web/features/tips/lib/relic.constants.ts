@@ -58,19 +58,9 @@ function createEmptyRelicLoadout(): RelicLoadout {
 	return Object.fromEntries(RELIC_SETUP_SLOTS.map((slot) => [slot.id, { ...EMPTY_SLOT_LOADOUT }]))
 }
 
-export const RELIC_ICON_KEY = Object.fromEntries(
-	RELIC_CATALOG_SOURCE.map((relic) => [relic.name, relic.iconKey])
-) as Record<(typeof RELIC_CATALOG_SOURCE)[number]['name'], (typeof RELIC_CATALOG_SOURCE)[number]['iconKey']>
-
 /** iconKey → public 경로 */
 function getRelicImageSrcByIconKey(iconKey: string) {
 	return iconKey ? `/relics/${iconKey}.png` : ''
-}
-
-/** 유물 표시명 → public 경로. 매핑이 없으면 빈 문자열. */
-function getRelicImageSrc(name: string) {
-	const iconKey = RELIC_ICON_KEY[name as keyof typeof RELIC_ICON_KEY]
-	return iconKey ? getRelicImageSrcByIconKey(iconKey) : ''
 }
 
 function createRelic(entry: (typeof RELIC_CATALOG_SOURCE)[number]): Relic {
@@ -95,10 +85,6 @@ export const RELICS: readonly Relic[] = [...RELIC_CATALOG_SOURCE].map(createReli
 
 function getRelicById(id: string): Relic | undefined {
 	return RELICS.find((relic) => relic.id === id)
-}
-
-function getRelicByName(name: string): Relic | undefined {
-	return RELICS.find((relic) => relic.name === name)
 }
 
 function getRelicsByGrade(grade: RelicGrade): readonly Relic[] {
@@ -168,9 +154,6 @@ export {
 	createEmptyRelicLoadout,
 	getRelicActivationCondition,
 	getRelicById,
-	getRelicByName,
-	getRelicImageSrc,
-	getRelicImageSrcByIconKey,
 	getRelicsByGrade,
 	resolveRelicEffects
 }

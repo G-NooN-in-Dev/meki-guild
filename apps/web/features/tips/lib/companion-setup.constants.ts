@@ -41,7 +41,7 @@ export const COMPANION_GRADE_TAB_CLASS = ITEM_GRADE_TAB_CLASS
  * 레전더리 1레벨 대비 등급별 1레벨 수치 배율.
  * 유니크·에픽으로 갈수록 절반씩 줄어듭니다. (1 → 0.5 → 0.25)
  */
-export const COMPANION_GRADE_LEVEL1_MULTIPLIER = {
+const COMPANION_GRADE_LEVEL1_MULTIPLIER = {
 	legendary: 1,
 	unique: 0.5,
 	epic: 0.25
@@ -51,7 +51,7 @@ export const COMPANION_GRADE_LEVEL1_MULTIPLIER = {
  * 레벨당 상승률 (해당 등급 1레벨 수치 대비).
  * 실측: 레전더리/에픽 10%, 유니크 11%.
  */
-export const COMPANION_GRADE_LEVEL_GROWTH_RATE = {
+const COMPANION_GRADE_LEVEL_GROWTH_RATE = {
 	legendary: 0.1,
 	unique: 0.11,
 	epic: 0.1
@@ -79,7 +79,7 @@ export const COMPANION_SETUP_SLOTS = [
  * 동료 선택·보유 UI 직업 배치 순서.
  * 길드 직업 분포(JOBS_BY_CLASS_LINE)와 별도로 둡니다.
  */
-export const COMPANION_JOB_ORDER = [
+const COMPANION_JOB_ORDER = [
 	'히어로',
 	'팔라딘',
 	'다크나이트',
@@ -100,7 +100,7 @@ export const COMPANION_JOB_ORDER = [
  * 아직 출시되지 않아 동료 정보가 없는 직업.
  * 출시 후 COMPANION_EQUIP_EFFECT_BASE_BY_JOB에 수치를 넣고 여기서 제거합니다.
  */
-export const UNRELEASED_COMPANION_JOBS = [] as const
+const UNRELEASED_COMPANION_JOBS = [] as const
 
 const UNRELEASED_COMPANION_JOB_SET = new Set<string>(UNRELEASED_COMPANION_JOBS)
 
@@ -217,7 +217,7 @@ function aggregateEquipEffects(effects: readonly CompanionEquipEffect[]): readon
  * 직업 → public/companions 파일명 키.
  * 등급별 이미지는 없고 직업당 PNG 1장입니다.
  */
-export const COMPANION_JOB_ICON_KEY = {
+const COMPANION_JOB_ICON_KEY = {
 	히어로: 'hero',
 	팔라딘: 'paladin',
 	다크나이트: 'darkknight',

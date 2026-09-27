@@ -23,7 +23,8 @@ function formatLocaleNumber(value: number | bigint): string {
  * bigint 값을 경/조/억/만 단위 문자열로 변환합니다.
  *
  * @example
- * formatKoreanNumber(1739115000000000n) // '1739조 115억'
+ * formatKoreanNumber(50_000_000n) // '5000만'
+ * formatKoreanNumber(1_739_115_000_000_000n) // '1739조 115억'
  */
 function formatKoreanNumber(value: bigint): string {
 	if (value === 0n) {

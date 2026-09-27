@@ -7,22 +7,21 @@ import { cn } from '@shared/ui/utils'
 import { CircleHelpIcon } from 'lucide-react'
 
 import {
-	EXPEDITION_GUILD_TIERS,
-	EXPEDITION_TIER_BAND_META,
-	type ExpeditionGuildTier,
-	type ExpeditionTierBand,
-	getExpeditionGradeTextClass,
-	getExpeditionTierBand
-} from '@/libs/expedition-guild-tier.constants'
-import { formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
+	CONTENT_TIER_BAND_META,
+	type ContentTierBand,
+	getContentGradeTextClass,
+	getContentTierBand
+} from '@/libs/content-tier-band.constants'
+import { EXPEDITION_GUILD_TIERS, type ExpeditionGuildTier } from '@/libs/expedition-guild-tier.constants'
+import { formatKoreanNumber, formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
 /** 등급 구간 헤더를 끼워 넣어 한 덩어리로 보이지 않게 합니다. */
 function buildTierRows(tiers: readonly ExpeditionGuildTier[]) {
-	const rows: Array<{ type: 'band'; band: ExpeditionTierBand } | { type: 'tier'; tier: ExpeditionGuildTier }> = []
-	let previousBand: ExpeditionTierBand | null = null
+	const rows: Array<{ type: 'band'; band: ContentTierBand } | { type: 'tier'; tier: ExpeditionGuildTier }> = []
+	let previousBand: ContentTierBand | null = null
 
 	for (const tier of tiers) {
-		const band = getExpeditionTierBand(tier.rank)
+		const band = getContentTierBand(tier.rank)
 
 		if (band === null) {
 			continue
@@ -64,8 +63,8 @@ function ExpeditionTierGuide() {
 					<DialogTitle>토벌전 길드 포인트</DialogTitle>
 					{/* DialogDescription 기본 태그는 <p>라서, 문단이 둘 이상이면 div로 렌더해야 hydration 오류가 없다 */}
 					<DialogDescription render={<div />} className="space-y-1">
-						<p>토벌전 순위와 점수에 따른 길드 포인트입니다.</p>
-						<p>자격 등수 이내에 들어야 해당 포인트를 받을 수 있습니다.</p>
+						<p>토벌전 등수·최소 점수에 따른 길드 포인트입니다.</p>
+						<p>자격 등수와 최소 점수를 모두 만족해야 해당 등급 포인트를 받을 수 있습니다.</p>
 					</DialogDescription>
 				</DialogHeader>
 				<div className="border-grayscale-200 bg-card shadow-soft max-h-[60dvh] overflow-y-auto rounded-xl border sm:max-h-[65dvh]">
@@ -77,6 +76,9 @@ function ExpeditionTierGuide() {
 									자격 등수
 								</TableHead>
 								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">
+									최소 점수
+								</TableHead>
+								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">
 									포인트
 								</TableHead>
 							</TableRow>
@@ -84,12 +86,12 @@ function ExpeditionTierGuide() {
 						<TableBody>
 							{rows.map((row) => {
 								if (row.type === 'band') {
-									const { label, headerClassName } = EXPEDITION_TIER_BAND_META[row.band]
+									const { label, headerClassName } = CONTENT_TIER_BAND_META[row.band]
 
 									return (
 										<TableRow key={`band-${row.band}`} className="hover:bg-transparent">
 											<TableCell
-												colSpan={3}
+												colSpan={4}
 												className={cn(
 													'border-grayscale-200 px-3 py-1.5 text-[11px] font-semibold tracking-wide',
 													headerClassName
@@ -105,11 +107,14 @@ function ExpeditionTierGuide() {
 
 								return (
 									<TableRow key={tier.rank} className="border-grayscale-100 hover:bg-grayscale-50/80">
-										<TableCell className={cn('px-3 py-2.5', getExpeditionGradeTextClass(tier.rank))}>
+										<TableCell className={cn('px-3 py-2.5', getContentGradeTextClass(tier.rank))}>
 											{tier.rank}
 										</TableCell>
 										<TableCell className="text-grayscale-600 px-3 py-2.5 tabular-nums">
 											{formatPlacementRank(tier.maxPlacement)}
+										</TableCell>
+										<TableCell className="text-grayscale-600 px-3 py-2.5 tabular-nums">
+											{formatKoreanNumber(BigInt(tier.minScore))}
 										</TableCell>
 										<TableCell className="text-grayscale-900 px-3 py-2.5 font-semibold tabular-nums">
 											{formatLocaleNumber(tier.points)}

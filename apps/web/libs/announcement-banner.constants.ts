@@ -37,4 +37,4 @@ function hasAnnouncementBanner(): boolean {
 const ANNOUNCEMENT_BANNER_BODY_PADDING_CLASS = 'pt-22'
 
 export { ANNOUNCEMENT_BANNER_BODY_PADDING_CLASS, ANNOUNCEMENT_BANNER_ITEMS, hasAnnouncementBanner }
-export type { AnnouncementBannerItem, AnnouncementBannerLinkItem, AnnouncementBannerTextItem }
+export type { AnnouncementBannerItem }

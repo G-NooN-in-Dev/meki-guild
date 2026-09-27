@@ -77,4 +77,3 @@ function GradePortrait({
 }
 
 export default GradePortrait
-export type { ItemGrade }

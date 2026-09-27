@@ -23,7 +23,7 @@ import {
 	sortGuildMembers
 } from '@/features/guild/lib/sort-guild-members'
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
+import { getContentGradeTextClass } from '@/libs/content-tier-band.constants'
 import { getGuildContentsOrder } from '@/libs/guild-contents-order.constants'
 
 /** 고정 컬럼 9개 + 표시 순서 컨텐츠 컬럼 수 (빈 행 colSpan용) */
@@ -232,7 +232,7 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 											<div
 												className={cn(
 													getValueClassName(comparison.expeditionGrade.currentLabel),
-													getExpeditionGradeTextClass(comparison.expeditionGrade.currentLabel)
+													getContentGradeTextClass(comparison.expeditionGrade.currentLabel)
 												)}
 											>
 												{comparison.expeditionGrade.currentLabel}

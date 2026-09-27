@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
-import { loadMgfGuildInfo, MgfGuildInfoError } from '@/libs/mgf-guild-info.loader.server'
+import { MgfRequestError } from '@/libs/mgf.client.server'
+import { loadMgfGuildInfo } from '@/libs/mgf-guild-info.loader.server'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,7 +18,7 @@ async function GET(request: Request) {
 		const data = await loadMgfGuildInfo(guildName)
 		return NextResponse.json(data)
 	} catch (error) {
-		if (error instanceof MgfGuildInfoError) {
+		if (error instanceof MgfRequestError) {
 			return NextResponse.json({ message: error.message }, { status: error.status })
 		}
 

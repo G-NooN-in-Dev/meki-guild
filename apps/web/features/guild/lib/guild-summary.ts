@@ -249,12 +249,10 @@ function calculateGuildPlacementRank(rank: GuildPlacementRankInput): {
 	}
 }
 
-const calculateGuildExpeditionRank = calculateGuildPlacementRank
-
 // --- 길드 메타(대항전 포인트 등) 파싱·표시 ---
 
 function hasKoreanUnits(value: number | string | null | undefined): boolean {
-	return typeof value === 'string' && /[경조억만]/.test(value)
+	return typeof value === 'string' && /[해경조억만]/.test(value)
 }
 
 function parseGuildMetaPoints(value: number | string | null | undefined): bigint | null {
@@ -384,16 +382,4 @@ function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guil
 	}
 }
 
-export {
-	calculateAverageLevel,
-	calculateAverageLevelChange,
-	calculateCombatPowerTotal,
-	calculateExpeditionGradePointsChange,
-	calculateExpeditionGradePointsTotal,
-	calculateGuildExpeditionRank,
-	calculateGuildPlacementRank,
-	calculateGuildRivalryPoints,
-	calculateGuildSummaryMetrics,
-	calculateTotalNumericChange,
-	calculateTotalPrevious
-}
+export { calculateGuildSummaryMetrics }

@@ -7,6 +7,7 @@ type MgfGuildMemberDto = {
 	combatPower: string
 	/** 표시용 한국어 전투력 */
 	combatPowerLabel: string
+	/** same-origin 초상화 프록시 경로 (`/api/tips/character-portrait?n=…`) */
 	portraitUrl: string | null
 }
 

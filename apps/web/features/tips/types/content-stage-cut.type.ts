@@ -23,4 +23,4 @@ type ContentStageCutEntry = {
 	stageCuts: StageCutByDifficulty
 }
 
-export type { ContentDifficulty, ContentKind, ContentStageCutEntry, StageCutByDifficulty }
+export type { ContentDifficulty, ContentKind, ContentStageCutEntry }

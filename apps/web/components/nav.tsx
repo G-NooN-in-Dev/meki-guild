@@ -2,6 +2,7 @@
 
 import { Button } from '@shared/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@shared/ui/collapsible'
+import { Separator } from '@shared/ui/separator'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@shared/ui/sheet'
 import { cn } from '@shared/ui/utils'
 import { ChevronDownIcon, MenuIcon, XIcon } from 'lucide-react'
@@ -10,7 +11,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState, useSyncExternalStore } from 'react'
 
 import LinkPendingHint from '@/components/link-pending-hint'
-import { TIP_ENTRIES } from '@/features/tips/lib/tips-registry.constants'
+import { getTipsGroupedByCategory } from '@/features/tips/lib/tips-registry.constants'
 
 type NavSection = 'guild' | 'tips'
 
@@ -22,14 +23,23 @@ type NavChildLink = {
 	label: string
 }
 
+/** 모바일 Sheet 하위 메뉴의 카테고리 묶음 (라벨 + 링크 목록) */
+type NavChildGroup = {
+	label: string
+	items: readonly NavChildLink[]
+}
+
 type NavLinkItem = {
 	type: 'link'
 	href: string
 	label: string
 	/** 어느 구역 헤더에 노출할지. shared는 길드·팁 모두 */
 	section: NavItemSection
-	/** 있으면 모바일 Sheet에서만 하위 링크로 표시 */
-	children?: readonly NavChildLink[]
+	/**
+	 * 있으면 모바일 Sheet에서만 하위 링크로 표시.
+	 * 카테고리 라벨·구분선으로 묶여 한 번 펼치면 전체를 스캔할 수 있습니다.
+	 */
+	children?: readonly NavChildGroup[]
 }
 
 type NavComingSoonItem = {
@@ -40,20 +50,32 @@ type NavComingSoonItem = {
 
 type NavItem = NavLinkItem | NavComingSoonItem
 
+/** 팁 허브 카테고리 순서·라벨과 동기화된 모바일 하위 메뉴 그룹 */
+function buildTipsNavChildGroups(): readonly NavChildGroup[] {
+	const tipGroups = getTipsGroupedByCategory()
+
+	return tipGroups.map((group) => {
+		const { category, tips } = group
+		return {
+			label: category.label,
+			items: tips.map(({ href, title }) => ({
+				href,
+				label: title
+			}))
+		}
+	})
+}
+
 /** 메뉴 추가 시 여기만 확장하면 인라인·모바일 Sheet에 함께 반영됩니다 */
-export const NAV_ITEMS: NavItem[] = [
+const NAV_ITEMS: NavItem[] = [
 	{ type: 'link', href: '/guild', label: '메인', section: 'guild' },
-	{ type: 'link', href: '/guild/compare', label: '1 vs 1 비교', section: 'guild' },
 	{
 		type: 'link',
 		href: '/tips',
 		label: '정보/팁',
 		section: 'tips',
 		// 팁 허브 레지스트리와 동기화 — 새 팁 추가 시 모바일 하위 메뉴도 함께 갱신됩니다
-		children: TIP_ENTRIES.map((tip) => ({
-			href: tip.href,
-			label: tip.title
-		}))
+		children: buildTipsNavChildGroups()
 	},
 	{ type: 'link', href: '/updates', label: '업데이트 일지', section: 'shared' }
 ]
@@ -193,12 +215,12 @@ function closeSheetAfterNavigate(onNavigate?: () => void) {
 	})
 }
 
-/** 모바일 Sheet 전용 — 부모 링크 + 펼칠 수 있는 하위 메뉴 */
+/** 모바일 Sheet 전용 — 부모 링크 + 카테고리별 하위 메뉴 */
 function MobileNavGroup({
 	item,
 	onNavigate
 }: {
-	item: NavLinkItem & { children: readonly NavChildLink[] }
+	item: NavLinkItem & { children: readonly NavChildGroup[] }
 	onNavigate?: () => void
 }) {
 	const pathname = usePathname()
@@ -240,27 +262,34 @@ function MobileNavGroup({
 				</CollapsibleTrigger>
 			</div>
 
-			<CollapsibleContent className="flex flex-col gap-0.5 pb-1 pl-3">
-				{item.children.map((child) => {
-					const childActive = pathname === child.href || pathname.startsWith(`${child.href}/`)
+			{/* 중첩 Collapsible 대신 라벨+구분선으로 묶어, 한 번 펼치면 전체를 스캔할 수 있게 합니다 */}
+			<CollapsibleContent className="flex flex-col pb-1 pl-3">
+				{item.children.map((group, groupIndex) => (
+					<div key={group.label} className="flex flex-col gap-0.5">
+						{groupIndex > 0 ? <Separator className="my-1.5" /> : null}
+						<p className="text-grayscale-400 px-3 pt-1.5 pb-0.5 text-xs font-medium tracking-wide">{group.label}</p>
+						{group.items.map((child) => {
+							const childActive = pathname === child.href || pathname.startsWith(`${child.href}/`)
 
-					return (
-						<Link
-							key={child.href}
-							href={child.href}
-							onClick={() => closeSheetAfterNavigate(onNavigate)}
-							className={cn(
-								'hover:bg-grayscale-50 inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors',
-								childActive
-									? 'text-grayscale-900 bg-grayscale-50 font-semibold'
-									: 'text-grayscale-600 hover:text-grayscale-900'
-							)}
-						>
-							{child.label}
-							<LinkPendingHint />
-						</Link>
-					)
-				})}
+							return (
+								<Link
+									key={child.href}
+									href={child.href}
+									onClick={() => closeSheetAfterNavigate(onNavigate)}
+									className={cn(
+										'hover:bg-grayscale-50 inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors',
+										childActive
+											? 'text-grayscale-900 bg-grayscale-50 font-semibold'
+											: 'text-grayscale-600 hover:text-grayscale-900'
+									)}
+								>
+									{child.label}
+									<LinkPendingHint />
+								</Link>
+							)
+						})}
+					</div>
+				))}
 			</CollapsibleContent>
 		</Collapsible>
 	)
@@ -390,4 +419,3 @@ function MobileNav() {
 }
 
 export { MobileNav, Nav }
-export type { NavItem, NavSection }

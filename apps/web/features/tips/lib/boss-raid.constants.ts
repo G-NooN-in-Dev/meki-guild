@@ -248,7 +248,6 @@ function getBossRaidMilestoneEquipmentMaxLevel(milestone: BossRaidMilestone): st
 
 export {
 	applyBossRaidBurningRates,
-	BOSS_RAID_ENTRIES,
 	formatBossRaidMilestoneRewardName,
 	formatBossRaidRatePercent,
 	formatBossRaidRewardName,

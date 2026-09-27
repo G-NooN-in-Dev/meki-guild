@@ -88,4 +88,3 @@ function MonsterPortraitStack({ items, label, size = 'md', className }: MonsterP
 }
 
 export default MonsterPortraitStack
-export type { MonsterPortraitStackItem, MonsterPortraitStackProps }

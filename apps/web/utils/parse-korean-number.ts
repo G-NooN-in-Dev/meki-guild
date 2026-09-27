@@ -2,6 +2,7 @@
 const TRAINING_KOREAN_FORMAT_THRESHOLD = 10_000_000n
 
 const KOREAN_UNIT_MULTIPLIERS = {
+	해: 1_000_000_000_000_000_000n,
 	경: 10_000_000_000_000_000n,
 	조: 1_000_000_000_000n,
 	억: 100_000_000n,
@@ -10,10 +11,10 @@ const KOREAN_UNIT_MULTIPLIERS = {
 
 type KoreanUnit = keyof typeof KOREAN_UNIT_MULTIPLIERS
 
-const KOREAN_NUMBER_PATTERN = /(\d+(?:\.\d+)?)(경|조|억|만)?/g
+const KOREAN_NUMBER_PATTERN = /(\d+(?:\.\d+)?)(해|경|조|억|만)?/g
 /** 단위 숫자 전체 형식. 공백 유무 모두 허용. 예: `1경 200억`, `2023만4234` */
-const KOREAN_UNIT_NUMBER_FULL_PATTERN = /^(?:\d+(?:\.\d+)?(?:경|조|억|만)?)(?:\s*\d+(?:\.\d+)?(?:경|조|억|만)?)*$/
-const KOREAN_UNIT_CHAR_PATTERN = /[경조억만]/
+const KOREAN_UNIT_NUMBER_FULL_PATTERN = /^(?:\d+(?:\.\d+)?(?:해|경|조|억|만)?)(?:\s*\d+(?:\.\d+)?(?:해|경|조|억|만)?)*$/
+const KOREAN_UNIT_CHAR_PATTERN = /[해경조억만]/
 
 function parsePlainNumber(value: string): bigint | null {
 	if (!/^\d+(?:\.\d+)?$/.test(value)) {
@@ -192,10 +193,4 @@ function normalizeTrainingScoreNumber(input: string): string {
 	return formatTrainingScoreForSheet(parsed)
 }
 
-export {
-	hasKoreanNumberUnits,
-	normalizeKoreanUnitNumber,
-	normalizeTrainingScoreNumber,
-	parseKoreanNumber,
-	TRAINING_KOREAN_FORMAT_THRESHOLD
-}
+export { normalizeKoreanUnitNumber, normalizeTrainingScoreNumber, parseKoreanNumber, TRAINING_KOREAN_FORMAT_THRESHOLD }

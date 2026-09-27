@@ -140,83 +140,13 @@ type GuildDashboardData = {
 	previousRankings: import('@/features/guild/lib/compute-member-rankings').MemberRankings
 }
 
-/** 1 vs 1 비교에서 우세한 쪽 */
-type MemberVsWinner = 'left' | 'right' | 'tie'
-
-type MemberVsNumericField = {
-	left: bigint
-	right: bigint
-	leftLabel: string
-	rightLabel: string
-	diff: bigint
-	diffLabel: string | null
-	winner: MemberVsWinner
-	diffPercentLabel: string | null
-}
-
-type MemberVsLevelField = {
-	left: number
-	right: number
-	diff: number
-	diffLabel: string | null
-	winner: MemberVsWinner
-}
-
-type MemberVsExpeditionGradeField = {
-	left: string
-	right: string
-	diff: number | null
-	diffLabel: string | null
-	winner: MemberVsWinner
-}
-
-/** 토벌전 등수 1vs1. 낮은 등수가 우세. 미입력 시 leftHasValue/rightHasValue로 구분 */
-type MemberVsPlacementField = {
-	left: number
-	right: number
-	leftLabel: string
-	rightLabel: string
-	diff: number
-	diffLabel: string | null
-	winner: MemberVsWinner
-	leftHasValue: boolean
-	rightHasValue: boolean
-}
-
-/** 두 길드원 간 스펙 비교 결과 */
-type MemberVsMemberComparison = {
-	left: Pick<ParsedGuildMember, 'name' | 'job'>
-	right: Pick<ParsedGuildMember, 'name' | 'job'>
-	level: MemberVsLevelField
-	combatPower: MemberVsNumericField
-	expeditionGrade: MemberVsExpeditionGradeField
-	expeditionPlacement: MemberVsPlacementField
-	expeditionScore: MemberVsNumericField
-	rivalry: MemberVsNumericField
-	training: MemberVsNumericField
-	guildBoss: MemberVsNumericField & { leftHasValue: boolean; rightHasValue: boolean }
-}
-
-type GuildComparePageData = {
-	members: GuildMemberInput[]
-	rankings: import('@/features/guild/lib/compute-member-rankings').MemberRankings
-}
-
 export type {
-	GuildComparePageData,
 	GuildDashboardData,
 	GuildMemberComparison,
 	GuildMemberInput,
-	GuildWeekMeta,
 	GuildWeekSnapshot,
 	LevelDelta,
 	MemberComparisonStatus,
-	MemberVsExpeditionGradeField,
-	MemberVsLevelField,
-	MemberVsMemberComparison,
-	MemberVsNumericField,
-	MemberVsPlacementField,
-	MemberVsWinner,
 	NumericDelta,
 	ParsedGuildMember
 }

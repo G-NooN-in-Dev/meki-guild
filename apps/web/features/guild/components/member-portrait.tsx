@@ -108,4 +108,3 @@ function MemberPortrait({ name, alt = '', size = 'md', className, zoom = true }:
 }
 
 export default MemberPortrait
-export type { MemberPortraitProps, MemberPortraitSize }

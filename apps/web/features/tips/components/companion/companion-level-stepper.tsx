@@ -16,8 +16,6 @@ type CompanionLevelStepperProps = {
 	 * header: 표 헤더용 — 위에 Lv.n/max, 아래 −/+/MAX (입력 없음)
 	 */
 	density?: 'default' | 'compact' | 'header'
-	/** @deprecated density="compact" 사용 */
-	compact?: boolean
 	className?: string
 }
 
@@ -45,12 +43,10 @@ function CompanionLevelStepper({
 	level,
 	maxLevel,
 	onLevelChange,
-	density,
-	compact = false,
+	density = 'default',
 	className
 }: CompanionLevelStepperProps) {
-	const resolvedDensity = density ?? (compact ? 'compact' : 'default')
-	const isHeader = resolvedDensity === 'header'
+	const isHeader = density === 'header'
 	const [isEditing, setIsEditing] = useState(false)
 	const [draft, setDraft] = useState(String(level))
 	const canDecrease = level > 1
@@ -147,11 +143,7 @@ function CompanionLevelStepper({
 
 	return (
 		<div
-			className={cn(
-				'flex items-center',
-				resolvedDensity === 'compact' ? 'flex-nowrap gap-0.5' : 'flex-wrap gap-1',
-				className
-			)}
+			className={cn('flex items-center', density === 'compact' ? 'flex-nowrap gap-0.5' : 'flex-wrap gap-1', className)}
 			onClick={(event) => event.stopPropagation()}
 			onKeyDown={(event) => event.stopPropagation()}
 		>

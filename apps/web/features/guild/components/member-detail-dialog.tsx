@@ -10,7 +10,7 @@ import MemberDisplayName, { useMemberDisplayName } from '@/features/guild/compon
 import MemberPortrait from '@/features/guild/components/member-portrait'
 import { formatRankDiffLabel, formatRankLabel, type MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { getExpeditionGradeTextClass } from '@/libs/expedition-guild-tier.constants'
+import { getContentGradeTextClass } from '@/libs/content-tier-band.constants'
 import {
 	formatGuildContentDateOrNone,
 	GUILD_CONTENT_UPDATED_AT,
@@ -196,7 +196,7 @@ function PeriodValueCell({ value, updatedAt, emphasize = false, rankLabel, value
 					'tabular-nums',
 					emphasize && 'font-semibold',
 					getValueClassName(value),
-					valueKind === 'expeditionGrade' && getExpeditionGradeTextClass(value)
+					valueKind === 'expeditionGrade' && getContentGradeTextClass(value)
 				)}
 			>
 				{value}

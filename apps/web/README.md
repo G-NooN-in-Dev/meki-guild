@@ -6,7 +6,7 @@
 
 ## 목적
 
-- 주간 스냅샷 기반 **길드 대시보드** · **1 vs 1 비교**
+- 주간 스냅샷 기반 **길드 대시보드**
 - 콘텐츠 **정보/팁** (명중컷, 시뮬레이터 등)
 - **업데이트 일지**
 
@@ -36,8 +36,8 @@ pnpm build
 
 ```text
 features/
-  guild/     # 대시보드 · 비교 · 시트 입력 · 접근 게이트
-  tips/      # 팁 허브 · 개별 콘텐츠
+  guild/     # 대시보드 · 시트 입력 · 접근 게이트
+  tips/      # 팁 허브 · 개별 콘텐츠 (캐릭터 비교 포함)
   home/      # 사이트 허브
   updates/   # 변경 로그
 ```
@@ -58,7 +58,8 @@ features/
 | `data/previous-week.json`       | 직전 스냅샷          |
 | `data/guild-content-dates.json` | 콘텐츠별 수집일 메타 |
 
-`libs/guild-snapshot.loader.ts`가 대시보드·비교 페이지 진입점입니다.
+`libs/guild-snapshot.loader.ts`가 길드 대시보드 진입점입니다.  
+캐릭터 1 vs 1 비교(`/tips/character-compare`)는 tips feature + `/api/tips/character-*` 프록시를 사용합니다.
 
 ## 예약 자산
 

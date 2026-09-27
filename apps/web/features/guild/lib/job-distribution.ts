@@ -105,4 +105,4 @@ function sortJobDistributionRows(rows: JobDistributionRow[], direction: JobCount
 }
 
 export { calculateJobDistribution, sortJobDistributionRows }
-export type { JobCountSortDirection, JobDistribution, JobDistributionRow }
+export type { JobCountSortDirection }

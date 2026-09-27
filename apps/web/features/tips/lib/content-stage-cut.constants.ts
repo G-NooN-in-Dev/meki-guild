@@ -42,7 +42,7 @@ export const CONTENT_KIND_LABELS = {
  * 배열 순서가 타임라인 열 순서입니다.
  * 표기 `스테이지-컷` (예: 7-5). 카오스가 없는 컨텐츠는 chaos = null.
  */
-export const CONTENT_STAGE_CUTS = [
+const CONTENT_STAGE_CUTS = [
 	{
 		name: '첫 번째 동행',
 		rewards: ['반지'],
@@ -129,7 +129,7 @@ function compareStageCut(left: { stage: number; cut: number }, right: { stage: n
 }
 
 /** 열 목록 — CONTENT_STAGE_CUTS 선언 순서를 그대로 사용합니다. */
-export const CONTENT_STAGE_CUT_COLUMNS = CONTENT_STAGE_CUTS
+const CONTENT_STAGE_CUT_COLUMNS = CONTENT_STAGE_CUTS
 
 /** 한 컨텐츠의 raw("25-5") → 파싱된 컷 */
 function buildStageCutByRaw(entry: ContentStageCutEntry) {
@@ -198,5 +198,5 @@ function getDifficultyChipClassName(difficulty: ContentDifficulty) {
 	)
 }
 
-export { compareStageCut, formatStageCutLabel, getDifficultyChipClassName, parseStageCut }
+export { formatStageCutLabel, getDifficultyChipClassName }
 export type { ParsedStageCut, StageCutRow }

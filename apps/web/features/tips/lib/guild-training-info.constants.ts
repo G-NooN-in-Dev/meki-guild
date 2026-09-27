@@ -4,7 +4,7 @@ import type { GuildTrainingHitTier, GuildTrainingStageEntry } from '@/features/t
 export const GUILD_TRAINING_BOT_PORTRAIT = '/monsters/guild-training-bot.png'
 
 /** 표에 표시할 최대 단계 */
-export const GUILD_TRAINING_MAX_STAGE = 50
+const GUILD_TRAINING_MAX_STAGE = 50
 
 /** 시작 제한시간(초) */
 export const GUILD_TRAINING_TIME_LIMIT_SEC = 90
@@ -28,28 +28,28 @@ export const GUILD_TRAINING_SPECIAL_MOB_COUNT = 3
 export const GUILD_TRAINING_SPECIAL_MOB_SPAWN_COOLDOWN_SEC = 20
 
 /** 1단계 특수몹 필요 타수 */
-export const GUILD_TRAINING_SPECIAL_HITS_BASE = 20
+const GUILD_TRAINING_SPECIAL_HITS_BASE = 20
 
 /** 단계마다 특수몹 필요 타수 증가 */
-export const GUILD_TRAINING_SPECIAL_HITS_INCREMENT = 4
+const GUILD_TRAINING_SPECIAL_HITS_INCREMENT = 4
 
 /** 1단계 일반몹 처치 점수 */
-export const GUILD_TRAINING_NORMAL_KILL_SCORE_BASE = 300
+const GUILD_TRAINING_NORMAL_KILL_SCORE_BASE = 300
 
 /** 일반몹 점수 — 단계 증가 1차 항 계수 */
-export const GUILD_TRAINING_NORMAL_KILL_SCORE_LINEAR = 309
+const GUILD_TRAINING_NORMAL_KILL_SCORE_LINEAR = 309
 
 /** 일반몹 점수 — 단계 증가 3차 항 계수 */
-export const GUILD_TRAINING_NORMAL_KILL_SCORE_CUBIC = 9
+const GUILD_TRAINING_NORMAL_KILL_SCORE_CUBIC = 9
 
 /** 1단계 특수몹 처치 점수 */
-export const GUILD_TRAINING_SPECIAL_KILL_SCORE_BASE = 3750
+const GUILD_TRAINING_SPECIAL_KILL_SCORE_BASE = 3750
 
 /** 특수몹 점수 — 단계 증가 1차 항 계수 */
-export const GUILD_TRAINING_SPECIAL_KILL_SCORE_LINEAR = 3780
+const GUILD_TRAINING_SPECIAL_KILL_SCORE_LINEAR = 3780
 
 /** 특수몹 점수 — 단계 증가 3차 항 계수 */
-export const GUILD_TRAINING_SPECIAL_KILL_SCORE_CUBIC = 30
+const GUILD_TRAINING_SPECIAL_KILL_SCORE_CUBIC = 30
 
 /** 특수몹 처치 효과 지속 시간(초) */
 export const GUILD_TRAINING_SPECIAL_KILL_EFFECT_DURATION_SEC = 10
@@ -61,7 +61,7 @@ export const GUILD_TRAINING_NORMAL_DEATH_STATE_RECOVERY_SEC = 3
  * 일반몹 명중컷 구간.
  * 특수몹 명중컷은 `2 × 일반몹 명중컷 − 1단계 기준(80)`으로 유도합니다.
  */
-export const GUILD_TRAINING_HIT_TIERS = [
+const GUILD_TRAINING_HIT_TIERS = [
 	{ startStage: 1, baseHit: 80, increment: 18 },
 	{ startStage: 4, baseHit: 130, increment: 14 },
 	{ startStage: 6, baseHit: 154, increment: 10 },
@@ -72,7 +72,7 @@ export const GUILD_TRAINING_HIT_TIERS = [
 ] as const satisfies readonly GuildTrainingHitTier[]
 
 /** 1단계 일반/특수 공통 명중컷 (특수몹 공식의 기준값) */
-export const GUILD_TRAINING_BASE_HIT_CUT = GUILD_TRAINING_HIT_TIERS[0].baseHit
+const GUILD_TRAINING_BASE_HIT_CUT = GUILD_TRAINING_HIT_TIERS[0].baseHit
 
 /** 단계 → 특수몹 필요 타수 (1단계 20, 이후 +4) */
 function getGuildTrainingSpecialRequiredHits(stage: number) {
@@ -143,12 +143,3 @@ function buildGuildTrainingStageEntries(maxStage = GUILD_TRAINING_MAX_STAGE): Gu
 
 /** 페이지 표에 바로 쓰는 단계별 데이터 */
 export const GUILD_TRAINING_STAGE_ENTRIES = buildGuildTrainingStageEntries()
-
-export {
-	buildGuildTrainingStageEntries,
-	getGuildTrainingNormalHitCut,
-	getGuildTrainingNormalKillScore,
-	getGuildTrainingSpecialHitCut,
-	getGuildTrainingSpecialKillScore,
-	getGuildTrainingSpecialRequiredHits
-}

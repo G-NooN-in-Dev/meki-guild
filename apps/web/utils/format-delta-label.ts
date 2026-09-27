@@ -3,6 +3,8 @@
  * GrowthDelta가 접두사로 상승/하락 색을 입히므로, 여기선 문자열만 맞춥니다.
  */
 
+import { formatLocaleNumber } from '@/utils/format-korean-number'
+
 /**
  * 값이 커질수록 좋은 지표(레벨·등급·인원 등).
  * 상승=▲, 하락=▼. 변동 없거나 비교 불가면 null.
@@ -12,7 +14,9 @@ function formatArrowDelta(diff: number | null): string | null {
 		return null
 	}
 
-	return diff > 0 ? `▲${diff}` : `▼${Math.abs(diff)}`
+	const absLabel = formatLocaleNumber(Math.abs(diff))
+
+	return diff > 0 ? `▲${absLabel}` : `▼${absLabel}`
 }
 
 /**
@@ -25,7 +29,9 @@ function formatRankArrowDelta(rawDiff: number | null): string | null {
 		return null
 	}
 
-	return rawDiff < 0 ? `▲${Math.abs(rawDiff)}` : `▼${rawDiff}`
+	const absLabel = formatLocaleNumber(Math.abs(rawDiff))
+
+	return rawDiff < 0 ? `▲${absLabel}` : `▼${absLabel}`
 }
 
 export { formatArrowDelta, formatRankArrowDelta }

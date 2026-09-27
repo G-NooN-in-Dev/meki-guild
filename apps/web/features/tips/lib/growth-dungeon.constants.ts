@@ -33,20 +33,20 @@ function isGrowthDungeonTabValue(value: string): value is GrowthDungeonTabValue 
 }
 
 /** 10, 20, 30… 처럼 어려운 단계가 반복되는 간격 */
-export const GROWTH_DUNGEON_HARD_STAGE_INTERVAL = 10
+const GROWTH_DUNGEON_HARD_STAGE_INTERVAL = 10
 
 /** 성장 던전 최대 단계 */
-export const GROWTH_DUNGEON_MAX_STAGE = 150
+const GROWTH_DUNGEON_MAX_STAGE = 150
 
 /**
  * 성장 던전 공통 명중컷 증가 구간
  * ~110: +2 / 111~120: +10 / 121~: +8
  */
-export const GROWTH_DUNGEON_HIT_CUT_EARLY_INCREMENT = 2
-export const GROWTH_DUNGEON_HIT_CUT_MID_START_STAGE = 111
-export const GROWTH_DUNGEON_HIT_CUT_MID_END_STAGE = 120
-export const GROWTH_DUNGEON_HIT_CUT_MID_INCREMENT = 10
-export const GROWTH_DUNGEON_HIT_CUT_LATE_INCREMENT = 8
+const GROWTH_DUNGEON_HIT_CUT_EARLY_INCREMENT = 2
+const GROWTH_DUNGEON_HIT_CUT_MID_START_STAGE = 111
+const GROWTH_DUNGEON_HIT_CUT_MID_END_STAGE = 120
+const GROWTH_DUNGEON_HIT_CUT_MID_INCREMENT = 10
+const GROWTH_DUNGEON_HIT_CUT_LATE_INCREMENT = 8
 
 /** 성장 던전 공통 — 10의 배수 단계는 어려운 단계 */
 function isGrowthDungeonHardStage(stage: number) {
@@ -76,7 +76,7 @@ function getGrowthDungeonRequiredHitCut(stage: number, baseHit: number) {
 export const WEAPON_DUNGEON_TIME_LIMIT_SEC = 22
 
 /** 무기 던전 1단계 기준 필요 명중 */
-export const WEAPON_DUNGEON_BASE_HIT_CUT = 7
+const WEAPON_DUNGEON_BASE_HIT_CUT = 7
 
 /** 무기 던전 단계 → 필요 명중 (1단계 7, 이후 공통 구간 증가) */
 function getWeaponDungeonRequiredHitCut(stage: number) {
@@ -109,7 +109,7 @@ export const EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_TIME_BONUS_SEC = 4
 export const EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_HIT_CUT_BONUS = 2
 
 /** 경험치 던전 1단계 기준 필요 명중 */
-export const EXPERIENCE_DUNGEON_BASE_HIT_CUT = 8
+const EXPERIENCE_DUNGEON_BASE_HIT_CUT = 8
 
 /** 경험치 던전 단계 → 필요 명중 (1단계 8, 이후 공통 구간 증가) */
 function getExperienceDungeonRequiredHitCut(stage: number) {
@@ -153,7 +153,7 @@ export const EXPERIENCE_DUNGEON_HIT_CUT_ENTRIES = buildExperienceDungeonHitCutEn
 export const EQUIPMENT_DUNGEON_POISON_PUFFER_HIT_CUT_BONUS = 3
 
 /** 장비 던전 1단계 기준 필요 명중 */
-export const EQUIPMENT_DUNGEON_BASE_HIT_CUT = 12
+const EQUIPMENT_DUNGEON_BASE_HIT_CUT = 12
 
 /** 장비 던전 단계 → 필요 명중 (1단계 12, 이후 공통 구간 증가) */
 function getEquipmentDungeonRequiredHitCut(stage: number) {
@@ -221,7 +221,7 @@ export const ABILITY_DUNGEON_ATTACK_BUFF_MAX_STACKS = 100
 export const ABILITY_DUNGEON_NORMAL_HIT_CUT_BONUS = 2
 
 /** 용사의 수련장 1단계 기준 필요 명중 (일반 몬스터). 보스는 이보다 NORMAL_HIT_CUT_BONUS만큼 낮음 */
-export const ABILITY_DUNGEON_BASE_HIT_CUT = 18
+const ABILITY_DUNGEON_BASE_HIT_CUT = 18
 
 /** 용사의 수련장 단계 → 일반 몬스터 필요 명중 (1단계 18, 이후 공통 구간 증가) */
 function getAbilityDungeonRequiredHitCut(stage: number) {
@@ -305,13 +305,13 @@ export const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_BAND_ENTRIES: EnhanceDungeonMyste
 	})
 
 /** 강화 던전 1단계 기준 필요 명중 */
-export const ENHANCE_DUNGEON_BASE_HIT_CUT = 34
+const ENHANCE_DUNGEON_BASE_HIT_CUT = 34
 
 /** 강화 던전 1단계 주문의 흔적 획득 개수 */
-export const ENHANCE_DUNGEON_BASE_SPELL_TRACE_COUNT = 155
+const ENHANCE_DUNGEON_BASE_SPELL_TRACE_COUNT = 155
 
 /** 강화 던전 단계마다 증가하는 주문의 흔적 개수 */
-export const ENHANCE_DUNGEON_SPELL_TRACE_INCREMENT = 5
+const ENHANCE_DUNGEON_SPELL_TRACE_INCREMENT = 5
 
 /** 강화 던전 단계 → 필요 명중 (1단계 34, 이후 공통 구간 증가) */
 function getEnhanceDungeonRequiredHitCut(stage: number) {
@@ -340,25 +340,6 @@ function buildEnhanceDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): 
 /** 강화 던전 표에 바로 쓰는 단계별 데이터 */
 export const ENHANCE_DUNGEON_HIT_CUT_ENTRIES = buildEnhanceDungeonHitCutEntries()
 
-export {
-	buildAbilityDungeonHitCutEntries,
-	buildEnhanceDungeonHitCutEntries,
-	buildEquipmentDungeonHitCutEntries,
-	buildExperienceDungeonHitCutEntries,
-	buildWeaponDungeonHitCutEntries,
-	getAbilityDungeonRequiredHitCut,
-	getEnhanceDungeonMysteriousScrollDetailRates,
-	getEnhanceDungeonRequiredHitCut,
-	getEnhanceDungeonSpellTraceCount,
-	getEquipmentDungeonRequiredHitCut,
-	getEquipmentDungeonRequiredKillCount,
-	getEquipmentDungeonTimeLimitSec,
-	getExperienceDungeonRequiredHitCut,
-	getExperienceDungeonRequiredKillCount,
-	getGrowthDungeonRequiredHitCut,
-	getWeaponDungeonRequiredHitCut,
-	isGrowthDungeonHardStage,
-	isGrowthDungeonTabValue
-}
+export { isGrowthDungeonTabValue }
 
 export type { GrowthDungeonTabValue }

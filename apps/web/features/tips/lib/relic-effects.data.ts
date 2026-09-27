@@ -345,4 +345,3 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 }
 
 export { RELIC_EFFECT_DEFINITION_BY_ID }
-export type { RelicEffectDefinition }
