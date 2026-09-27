@@ -12,12 +12,12 @@ import {
 	getContentGradeTextClass,
 	getContentTierBand
 } from '@/libs/content-tier-band.constants'
-import { EXPEDITION_GUILD_TIERS, type ExpeditionGuildTier } from '@/libs/expedition-guild-tier.constants'
-import { formatKoreanNumber, formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
+import { WORLD_BOSS_TIERS, type WorldBossTier } from '@/libs/world-boss-tier.constants'
+import { formatKoreanNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
 /** 등급 구간 헤더를 끼워 넣어 한 덩어리로 보이지 않게 합니다. */
-function buildTierRows(tiers: readonly ExpeditionGuildTier[]) {
-	const rows: Array<{ type: 'band'; band: ContentTierBand } | { type: 'tier'; tier: ExpeditionGuildTier }> = []
+function buildTierRows(tiers: readonly WorldBossTier[]) {
+	const rows: Array<{ type: 'band'; band: ContentTierBand } | { type: 'tier'; tier: WorldBossTier }> = []
 	let previousBand: ContentTierBand | null = null
 
 	for (const tier of tiers) {
@@ -38,51 +38,44 @@ function buildTierRows(tiers: readonly ExpeditionGuildTier[]) {
 	return rows
 }
 
-type ExpeditionTierGuideProps = {
-	/** true면 lg 미만에서 '토벌'으로 줄임. 툴바 기본값, 캐릭터 비교 등은 false */
+type WorldBossTierGuideProps = {
+	/** true면 lg 미만에서 '월드'로 줄임. 툴바 기본값, 캐릭터 비교 등은 false */
 	compactMobileLabel?: boolean
-	/** false면 포인트 열을 숨기고 '토벌전 등급 정보'로 표시. 캐릭터 비교용 */
-	showPoints?: boolean
 }
 
-function ExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: ExpeditionTierGuideProps) {
-	const rows = buildTierRows(EXPEDITION_GUILD_TIERS)
-	const triggerLabel = showPoints ? '토벌전 등급별 포인트' : '토벌전 등급 정보'
-	const columnCount = showPoints ? 4 : 3
+function WorldBossTierGuide({ compactMobileLabel = true }: WorldBossTierGuideProps) {
+	const rows = buildTierRows(WORLD_BOSS_TIERS)
 
 	return (
 		<Dialog>
 			<DialogTrigger
 				render={
-					<Button variant="outline" size="sm" className="text-grayscale-600 shrink-0 gap-1.5" aria-label={triggerLabel}>
+					<Button
+						variant="outline"
+						size="sm"
+						className="text-grayscale-600 shrink-0 gap-1.5"
+						aria-label="월드보스 등급 정보"
+					>
 						<CircleHelpIcon className="size-4" />
 						{compactMobileLabel ? (
 							<>
 								{/* 태블릿 이하는 짧은 라벨, lg 이상에서 전체 문구 */}
-								<span className="lg:hidden">토벌</span>
-								<span className="hidden lg:inline">{triggerLabel}</span>
+								<span className="lg:hidden">월드</span>
+								<span className="hidden lg:inline">월드보스 등급 정보</span>
 							</>
 						) : (
-							<span>{triggerLabel}</span>
+							<span>월드보스 등급 정보</span>
 						)}
 					</Button>
 				}
 			/>
 			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-lg sm:gap-6 sm:p-6">
 				<DialogHeader>
-					<DialogTitle>{triggerLabel}</DialogTitle>
+					<DialogTitle>월드보스 등급</DialogTitle>
+					{/* DialogDescription 기본 태그는 <p>라서, 문단이 둘 이상이면 div로 렌더해야 hydration 오류가 없다 */}
 					<DialogDescription render={<div />} className="space-y-1">
-						{showPoints ? (
-							<>
-								<p>토벌전 등수·최소 점수에 따른 길드 포인트입니다.</p>
-								<p>자격 등수와 최소 점수를 모두 만족해야 해당 등급 포인트를 받을 수 있습니다.</p>
-							</>
-						) : (
-							<>
-								<p>토벌전 등수·최소 점수에 따른 등급 목록입니다.</p>
-								<p>자격 등수와 최소 점수를 모두 만족해야 해당 등급을 받을 수 있습니다.</p>
-							</>
-						)}
+						<p>월드보스 등수·최소 점수에 따른 등급입니다.</p>
+						<p>자격 등수와 최소 점수를 모두 만족해야 해당 등급을 받을 수 있습니다.</p>
 					</DialogDescription>
 				</DialogHeader>
 				<div className="border-grayscale-200 bg-card shadow-soft max-h-[60dvh] overflow-y-auto rounded-xl border sm:max-h-[65dvh]">
@@ -96,11 +89,6 @@ function ExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: E
 								<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">
 									최소 점수
 								</TableHead>
-								{showPoints && (
-									<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">
-										포인트
-									</TableHead>
-								)}
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -111,7 +99,7 @@ function ExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: E
 									return (
 										<TableRow key={`band-${row.band}`} className="hover:bg-transparent">
 											<TableCell
-												colSpan={columnCount}
+												colSpan={3}
 												className={cn(
 													'border-grayscale-200 px-3 py-1.5 text-[11px] font-semibold tracking-wide',
 													headerClassName
@@ -133,19 +121,9 @@ function ExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: E
 										<TableCell className="text-grayscale-600 px-3 py-2.5 tabular-nums">
 											{formatPlacementRank(tier.maxPlacement)}
 										</TableCell>
-										<TableCell
-											className={cn(
-												'px-3 py-2.5 tabular-nums',
-												showPoints ? 'text-grayscale-600' : 'text-grayscale-900 font-semibold'
-											)}
-										>
+										<TableCell className="text-grayscale-900 px-3 py-2.5 font-semibold tabular-nums">
 											{formatKoreanNumber(BigInt(tier.minScore))}
 										</TableCell>
-										{showPoints && (
-											<TableCell className="text-grayscale-900 px-3 py-2.5 font-semibold tabular-nums">
-												{formatLocaleNumber(tier.points)}
-											</TableCell>
-										)}
 									</TableRow>
 								)
 							})}
@@ -157,4 +135,4 @@ function ExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: E
 	)
 }
 
-export default ExpeditionTierGuide
+export default WorldBossTierGuide

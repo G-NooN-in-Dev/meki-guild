@@ -63,4 +63,5 @@ function getWorldBossGradeDiff(previous: string, current: string): number | null
 	return getGradeDiffFromRanks(getWorldBossGradeRank, previous, current)
 }
 
-export { getWorldBossGradeDiff, getWorldBossGradeFromStats }
+export { getWorldBossGradeDiff, getWorldBossGradeFromStats, WORLD_BOSS_TIERS }
+export type { WorldBossTier }

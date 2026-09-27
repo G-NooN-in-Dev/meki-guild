@@ -6,6 +6,8 @@ import { Label } from '@shared/ui/label'
 import { Spinner } from '@shared/ui/spinner'
 import { useState } from 'react'
 
+import ExpeditionTierGuide from '@/features/guild/components/expedition-tier-guide'
+import WorldBossTierGuide from '@/features/guild/components/world-boss-tier-guide'
 import CharacterCompareResultBoard from '@/features/tips/components/character-compare/character-compare-result-board'
 import { compareCharacters, fetchCharacterInfo, wait } from '@/features/tips/lib/character-compare.helpers'
 import type { CharacterCompareResult } from '@/features/tips/types/character-compare.type'
@@ -106,9 +108,13 @@ function CharacterCompareBoard() {
 					)}
 				</div>
 
-				<p className="text-grayscale-500 text-xs">
-					나와 상대방의 닉네임을 차례대로 입력하세요. 데이터는 MGF.GG 기준입니다.
-				</p>
+				<div className="text-grayscale-500 flex flex-wrap items-center justify-between gap-2 text-xs">
+					<span>나와 상대방의 닉네임을 차례대로 입력하세요. 데이터는 MGF.GG 기준입니다.</span>
+					<div className="flex flex-wrap items-center gap-2">
+						<ExpeditionTierGuide compactMobileLabel={false} showPoints={false} />
+						<WorldBossTierGuide compactMobileLabel={false} />
+					</div>
+				</div>
 			</div>
 
 			{loadingMessage && (
