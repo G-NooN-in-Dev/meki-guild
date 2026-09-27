@@ -92,7 +92,7 @@
 2. Sheets / 사이트 폼으로 금주 데이터 수집
 3. `pnpm guild:sync` 또는 콘텐츠별 `pnpm guild:sync <mode>`로 JSON 반영
 4. `pnpm guild:sync-portraits`로 길드원 초상화 갱신
-5. 로컬에서 대시보드·비교 확인
+5. 로컬에서 길드 대시보드 확인
 6. JSON·PNG 커밋 또는 배포 파이프라인에 반영 후 Vercel 배포
 
 ## 관련 문서
