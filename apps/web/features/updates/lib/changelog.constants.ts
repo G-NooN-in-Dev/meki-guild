@@ -6,6 +6,24 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.6.1',
+		date: '2026-09-27',
+		sections: [
+			{
+				title: '길드 정보',
+				items: [{ text: '길드원 1 vs 1 비교 페이지 제거' }]
+			},
+			{
+				title: '정보/팁',
+				items: [
+					{ text: '캐릭터 1 vs 1 비교 페이지 추가' },
+					{ text: '직업 출시 순서표 - 메키 출시일 추가' },
+					{ text: '[모바일] 메뉴 - 하위 카테고리 추가' }
+				]
+			}
+		]
+	},
+	{
 		version: '1.6.0',
 		date: '2026-09-20',
 		sections: [
