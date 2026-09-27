@@ -4,38 +4,8 @@ import { load } from 'cheerio'
 import type { MgfGuildInfoResponse, MgfGuildMemberDto } from '@/features/tips/types/guild-rank-predict.type'
 import { formatKoreanNumber } from '@/utils/format-korean-number'
 
-import { getMgfGuildInfoHtml, MGF_ORIGIN } from './mgf-guild-info.service.server'
-
-class MgfGuildInfoError extends Error {
-	readonly status: number
-
-	constructor(message: string, status: number) {
-		super(message)
-		this.name = 'MgfGuildInfoError'
-		this.status = status
-	}
-}
-
-function toAbsoluteMgfUrl(src: string | undefined): string | null {
-	if (!src) {
-		return null
-	}
-
-	try {
-		return new URL(src, MGF_ORIGIN).href
-	} catch {
-		return null
-	}
-}
-
-function parseMemberLevel(subText: string): number {
-	const match = subText.match(/Lv\.?\s*(\d+)/i)
-	if (!match) {
-		return 0
-	}
-
-	return Number.parseInt(match[1] ?? '0', 10)
-}
+import { MgfRequestError, parseMgfLevel, toMgfPortraitProxyUrl } from './mgf.client.server'
+import { getMgfGuildInfoHtml } from './mgf-guild-info.service.server'
 
 function parseMemberJob(jobFromAlt: string | undefined, subText: string): string {
 	const trimmedAlt = jobFromAlt?.trim()
@@ -75,15 +45,15 @@ function parseMembersFromHtml($: CheerioAPI): MgfGuildMemberDto[] {
 			formatKoreanNumber(combatPower)
 
 		const subText = $row.find('.member-sub').text()
-		const portraitSrc = $row.find('.char-img').attr('src')
 
 		members.push({
 			name,
 			job: parseMemberJob($row.find('.job-icon-sm').attr('alt'), subText),
-			level: parseMemberLevel(subText),
+			level: parseMgfLevel(subText),
 			combatPower: combatPower.toString(),
 			combatPowerLabel,
-			portraitUrl: toAbsoluteMgfUrl(portraitSrc)
+			// mgf 직접 URL은 Referer 핫링크 차단 → same-origin 프록시
+			portraitUrl: toMgfPortraitProxyUrl(name)
 		})
 	})
 
@@ -92,20 +62,20 @@ function parseMembersFromHtml($: CheerioAPI): MgfGuildMemberDto[] {
 
 /**
  * 길드명으로 mgf 길드 정보를 조회·파싱합니다.
- * 길드가 없거나 멤버를 못 찾으면 MgfGuildInfoError를 던집니다.
+ * 길드가 없거나 멤버를 못 찾으면 MgfRequestError를 던집니다.
  */
 async function loadMgfGuildInfo(guildName: string): Promise<MgfGuildInfoResponse> {
 	const trimmed = guildName.trim()
 
 	if (!trimmed) {
-		throw new MgfGuildInfoError('길드명을 입력해 주세요.', 400)
+		throw new MgfRequestError('길드명을 입력해 주세요.', 400)
 	}
 
 	const html = await getMgfGuildInfoHtml(trimmed)
 	const $ = load(html)
 
 	if (html.includes('길드를 찾을 수 없습니다')) {
-		throw new MgfGuildInfoError(`「${trimmed}」 길드를 찾을 수 없습니다.`, 404)
+		throw new MgfRequestError(`「${trimmed}」 길드를 찾을 수 없습니다.`, 404)
 	}
 
 	const resolvedGuildName = $('.guild-name').first().text().replace(/\s+/g, ' ').trim() || trimmed
@@ -113,7 +83,7 @@ async function loadMgfGuildInfo(guildName: string): Promise<MgfGuildInfoResponse
 	const members = parseMembersFromHtml($)
 
 	if (members.length === 0) {
-		throw new MgfGuildInfoError(`「${resolvedGuildName}」 길드원 정보를 파싱하지 못했습니다.`, 502)
+		throw new MgfRequestError(`「${resolvedGuildName}」 길드원 정보를 파싱하지 못했습니다.`, 502)
 	}
 
 	return {
@@ -123,4 +93,4 @@ async function loadMgfGuildInfo(guildName: string): Promise<MgfGuildInfoResponse
 	}
 }
 
-export { loadMgfGuildInfo, MgfGuildInfoError }
+export { loadMgfGuildInfo }
