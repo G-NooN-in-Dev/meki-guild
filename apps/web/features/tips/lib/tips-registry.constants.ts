@@ -7,7 +7,7 @@ import type { TipCategory, TipCategoryGroup, TipEntry } from '@/features/tips/ty
 export const TIP_CATEGORIES = [
 	{ id: 'growth-adventure', label: '성장·모험 컨텐츠' },
 	{ id: 'guild-contents', label: '길드 컨텐츠' },
-	{ id: 'predict-calculator', label: '예측·계산기' },
+	{ id: 'predict-calculator', label: '예측·비교·계산기' },
 	{ id: 'info', label: '정보' }
 ] as const satisfies readonly TipCategory[]
 
@@ -82,6 +82,14 @@ export const TIP_ENTRIES = [
 		category: 'predict-calculator',
 		tags: ['수련장'],
 		href: '/tips/guild-training-rank-predict'
+	},
+	{
+		slug: 'character-compare',
+		title: '캐릭터 1 vs 1 비교',
+		description: '원하는 상대방과 1 vs 1 비교',
+		category: 'predict-calculator',
+		tags: ['비교'],
+		href: '/tips/character-compare'
 	},
 	// 각종 정보
 	{

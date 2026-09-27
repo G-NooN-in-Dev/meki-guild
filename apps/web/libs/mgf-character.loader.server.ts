@@ -157,34 +157,26 @@ function parseBossBox($box: CheerioSelection): MgfCharacterBossDto | null {
 	}
 
 	const badge = $box.find('.boss-rank-badge').first().text().replace(/\s+/g, ' ').trim()
-	const { serverLabel, rank } = parseBossRankBadge(badge)
 
 	return {
 		score: score.toString(),
 		scoreLabel: scoreLabel || formatKoreanNumber(score),
-		serverLabel,
-		rank
+		rank: parseBossRank(badge)
 	}
 }
 
-/** 예: `Scania 1 · 1,338위` */
-function parseBossRankBadge(badge: string): { serverLabel: string | null; rank: number | null } {
+/** 예: `Scania 1 · 1,338위` — 프로필 serverLabel과 중복되므로 등수만 사용 */
+function parseBossRank(badge: string): number | null {
 	if (!badge) {
-		return { serverLabel: null, rank: null }
+		return null
 	}
 
 	const parts = badge.split('·').map((part) => part.trim())
 	if (parts.length >= 2) {
-		return {
-			serverLabel: parts[0] || null,
-			rank: parseRankLabel(parts.slice(1).join('·'))
-		}
+		return parseRankLabel(parts.slice(1).join('·'))
 	}
 
-	return {
-		serverLabel: null,
-		rank: parseRankLabel(badge)
-	}
+	return parseRankLabel(badge)
 }
 
 function parseRankLabel(text: string): number | null {
