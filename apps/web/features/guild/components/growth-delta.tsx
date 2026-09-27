@@ -2,7 +2,6 @@
 
 import { Badge } from '@shared/ui/badge'
 import { cn } from '@shared/ui/utils'
-import type { ReactNode } from 'react'
 
 import { GUILD_ZERO_DELTA_LABEL } from '@/features/guild/types/guild-snapshot.type'
 
@@ -90,8 +89,8 @@ function MemberStatusBadge({ status }: MemberStatusBadgeProps) {
 	} as const
 
 	const variantMap = {
-		new: 'secondary',
-		left: 'outline'
+		new: 'success',
+		left: 'destructive'
 	} as const
 
 	return (
@@ -101,19 +100,5 @@ function MemberStatusBadge({ status }: MemberStatusBadgeProps) {
 	)
 }
 
-type ChangedBadgeProps = {
-	changed: boolean
-	children: ReactNode
-}
-
-function ChangedBadge({ changed, children }: ChangedBadgeProps) {
-	return (
-		<span className={cn(changed && 'text-info-700 font-medium')}>
-			{children}
-			{changed ? <span className="text-info-500 ml-1 text-xs">변동</span> : null}
-		</span>
-	)
-}
-
 export default GrowthDelta
-export { ChangedBadge, MemberStatusBadge }
+export { MemberStatusBadge }
