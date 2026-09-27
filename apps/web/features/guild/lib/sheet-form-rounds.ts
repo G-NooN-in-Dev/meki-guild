@@ -81,5 +81,4 @@ function isAllowedGuildSheetCollectedAt(
 	return getGuildSheetRoundOptions(tab, nowInput).some((round) => round.collectedAt === collectedAt)
 }
 
-export { getGuildSheetRoundOptions, getLatestWeekdayOnOrBefore, isAllowedGuildSheetCollectedAt }
-export type { GuildSheetRoundOption }
+export { getGuildSheetRoundOptions, isAllowedGuildSheetCollectedAt }

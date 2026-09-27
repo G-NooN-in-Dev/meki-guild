@@ -1,10 +1,4 @@
 import {
-	CONTENT_TIER_BAND_META,
-	type ContentTierBand,
-	getContentGradeTextClass,
-	getContentTierBand
-} from '@/libs/content-tier-band.constants'
-import {
 	getGradeDiffFromRanks,
 	getGradeFromPlacementScore,
 	getGradeRankFromList,
@@ -48,10 +42,6 @@ export const EXPEDITION_GUILD_TIERS = [
 
 const EXPEDITION_GRADE_RANKS = EXPEDITION_GUILD_TIERS.map((tier) => tier.rank)
 
-function getExpeditionGuildTier(position: number): ExpeditionGuildTier | null {
-	return EXPEDITION_GUILD_TIERS[position - 1] ?? null
-}
-
 /** 등수·점수 → 토벌전 등급명 */
 function getExpeditionGradeFromStats(placement: number | null, score: bigint): string | null {
 	return getGradeFromPlacementScore(EXPEDITION_GUILD_TIERS, placement, score)
@@ -85,44 +75,5 @@ function sumExpeditionGradePoints(grades: readonly string[]): number {
 	return grades.reduce((sum, grade) => sum + getExpeditionGradePoints(grade), 0)
 }
 
-type ExpeditionScoreEntry = {
-	score: bigint
-	name: string
-}
-
-/**
- * 토벌전 점수 순위에 따라 길드원별 등급 포인트를 합산합니다.
- * 동점일 때는 이름(가나다) 순으로 순위를 정합니다.
- */
-function calculateExpeditionGuildPoints(entries: ExpeditionScoreEntry[]): number {
-	const sorted = [...entries].sort((left, right) => {
-		if (left.score === right.score) {
-			return left.name.localeCompare(right.name, 'ko')
-		}
-
-		return left.score > right.score ? -1 : 1
-	})
-
-	return sorted.reduce((sum, _entry, index) => {
-		const tier = getExpeditionGuildTier(index + 1)
-
-		return sum + (tier?.points ?? 0)
-	}, 0)
-}
-
-export {
-	calculateExpeditionGuildPoints,
-	/** @deprecated `CONTENT_TIER_BAND_META` 사용 */
-	CONTENT_TIER_BAND_META as EXPEDITION_TIER_BAND_META,
-	getExpeditionGradeDiff,
-	getExpeditionGradeFromStats,
-	getExpeditionGradePoints,
-	getExpeditionGradeRank,
-	/** @deprecated `getContentGradeTextClass` 사용 */
-	getContentGradeTextClass as getExpeditionGradeTextClass,
-	getExpeditionGuildTier,
-	/** @deprecated `getContentTierBand` 사용 */
-	getContentTierBand as getExpeditionTierBand,
-	sumExpeditionGradePoints
-}
-export type { ExpeditionGuildTier, ContentTierBand as ExpeditionTierBand }
+export { getExpeditionGradeDiff, getExpeditionGradeFromStats, getExpeditionGradeRank, sumExpeditionGradePoints }
+export type { ExpeditionGuildTier }

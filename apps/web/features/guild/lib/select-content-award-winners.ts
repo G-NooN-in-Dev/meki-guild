@@ -209,5 +209,5 @@ function hasAnyContentAwardWinner(slots: ContentAwardSlot[]): boolean {
 	return slots.some((slot) => slot.status === 'ready')
 }
 
-export { CONTENT_AWARD_METRIC_LABELS, CONTENT_AWARD_METRIC_ORDER, hasAnyContentAwardWinner, selectContentAwardSlots }
-export type { ContentAwardMetricKey, ContentAwardSlot, ContentAwardWinner }
+export { hasAnyContentAwardWinner, selectContentAwardSlots }
+export type { ContentAwardSlot }

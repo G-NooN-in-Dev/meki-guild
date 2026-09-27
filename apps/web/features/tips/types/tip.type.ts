@@ -29,4 +29,4 @@ type TipCategoryGroup = {
 	tips: readonly TipEntry[]
 }
 
-export type { TipCategory, TipCategoryGroup, TipCategoryId, TipEntry }
+export type { TipCategory, TipCategoryGroup, TipEntry }

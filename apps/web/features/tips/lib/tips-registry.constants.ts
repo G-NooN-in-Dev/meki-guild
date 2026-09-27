@@ -4,7 +4,7 @@ import type { TipCategory, TipCategoryGroup, TipEntry } from '@/features/tips/ty
  * 허브 카테고리 정의 (표시 순서).
  * 항목이 없는 카테고리는 `getTipsGroupedByCategory`에서 제외됩니다.
  */
-export const TIP_CATEGORIES = [
+const TIP_CATEGORIES = [
 	{ id: 'growth-adventure', label: '성장·모험 컨텐츠' },
 	{ id: 'guild-contents', label: '길드 컨텐츠' },
 	{ id: 'predict-calculator', label: '예측·비교·계산기' },
@@ -15,7 +15,7 @@ export const TIP_CATEGORIES = [
  * 정보/팁 허브에 노출할 팁 목록.
  * 새 팁 추가 시 여기에 항목을 넣고 `/app/tips/[slug]/page.tsx` 라우트를 만듭니다.
  */
-export const TIP_ENTRIES = [
+const TIP_ENTRIES = [
 	// 성장·모험 컨텐츠
 	{
 		slug: 'growth-dungeon',
@@ -177,5 +177,4 @@ function getTipsGroupedByCategory(): TipCategoryGroup[] {
 	})
 }
 
-export { getTipBadgeLabelsBySlug, getTipBySlug, getTipsGroupedByCategory, getTipTitleBySlug }
-export type { TipSlug }
+export { getTipBadgeLabelsBySlug, getTipsGroupedByCategory, getTipTitleBySlug }

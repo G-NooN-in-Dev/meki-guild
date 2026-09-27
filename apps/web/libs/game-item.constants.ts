@@ -44,5 +44,5 @@ function getGameItemMeta(itemId: GameItemId) {
 	return GAME_ITEM_META[itemId]
 }
 
-export { GAME_ITEM_META, getGameItemMeta }
-export type { GameItemId, GameItemMeta }
+export { getGameItemMeta }
+export type { GameItemId }

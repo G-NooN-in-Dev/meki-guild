@@ -67,4 +67,4 @@ function getPredictGuildRowClass(guildIndex: number, guildCount: number): string
 	return palette[guildIndex]!
 }
 
-export { getPredictGuildRowClass, RANK_PREDICT_GUILD_ROW_CLASS_BY_COUNT, RANK_PREDICT_MIN_GUILDS }
+export { getPredictGuildRowClass, RANK_PREDICT_MIN_GUILDS }

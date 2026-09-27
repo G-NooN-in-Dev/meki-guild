@@ -6,7 +6,7 @@ import { getJobClassLine } from '@/libs/job-class.constants'
  * 날짜는 원작 업데이트 기준이며, 메이플키우기 실제 출시일과는 다를 수 있습니다.
  * 같은 날짜는 전직 계열(전사→해적) 순으로 나열합니다.
  */
-export const JOB_RELEASE_ENTRIES = [
+const JOB_RELEASE_ENTRIES = [
 	{ releasedAt: '2003-04-29', classLines: ['전사'], job: '히어로' },
 	{ releasedAt: '2003-04-29', classLines: ['전사'], job: '팔라딘' },
 	{ releasedAt: '2003-04-29', classLines: ['전사'], job: '다크나이트' },
@@ -181,4 +181,4 @@ const UPCOMING_ENTRIES = JOB_RELEASE_ENTRIES.filter((entry) => !isMapleIdleRelea
 export const JOB_RELEASED_TABLE_ROWS = buildJobReleaseTableRows(RELEASED_ENTRIES)
 export const JOB_UPCOMING_TABLE_ROWS = buildJobReleaseTableRows(UPCOMING_ENTRIES)
 
-export { buildJobReleaseTableRows, getJobReleaseDisplayName, getJobReleaseStats, isMapleIdleReleasedJob }
+export { getJobReleaseDisplayName }

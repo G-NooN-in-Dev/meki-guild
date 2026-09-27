@@ -169,4 +169,4 @@ function sortGuildMembers(
 }
 
 export { sortGuildMembers }
-export type { GuildMemberSortDirection, GuildMemberSortKey, GuildMemberSortState }
+export type { GuildMemberSortDirection, GuildMemberSortKey }

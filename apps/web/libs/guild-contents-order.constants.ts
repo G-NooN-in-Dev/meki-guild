@@ -17,10 +17,5 @@ function getGuildContentsOrder(): readonly GuildContentsOrderItem[] {
 	return GUILD_CONTENTS_ORDER
 }
 
-/** 표시 순서대로 길드 컨텐츠 키 */
-function getGuildContentsOrderKeys(): readonly GuildContentsOrderKey[] {
-	return GUILD_CONTENTS_ORDER.map((content) => content.key)
-}
-
-export { getGuildContentsOrder, getGuildContentsOrderKeys, GUILD_CONTENTS_ORDER }
-export type { GuildContentsOrderItem, GuildContentsOrderKey }
+export { getGuildContentsOrder }
+export type { GuildContentsOrderKey }

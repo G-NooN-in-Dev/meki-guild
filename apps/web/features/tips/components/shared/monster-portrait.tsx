@@ -58,4 +58,4 @@ function MonsterPortrait({ src, alt = '', size = 'md', className }: MonsterPortr
 }
 
 export default MonsterPortrait
-export type { MonsterPortraitProps, MonsterPortraitSize }
+export type { MonsterPortraitSize }

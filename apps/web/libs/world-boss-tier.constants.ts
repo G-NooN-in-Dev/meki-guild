@@ -17,7 +17,7 @@ type WorldBossTier = PlacementScoreTier
  * - maxPlacement: 이 등수 이내 + minScore 이상이어야 해당 등급
  * - maxPlacement null: 점수만으로 자격
  */
-export const WORLD_BOSS_TIERS = [
+const WORLD_BOSS_TIERS = [
 	{ rank: '챔피언1', maxPlacement: 1, minScore: 100_000_000 },
 	{ rank: '챔피언2', maxPlacement: 2, minScore: 100_000_000 },
 	{ rank: '챔피언3', maxPlacement: 3, minScore: 100_000_000 },
@@ -63,5 +63,4 @@ function getWorldBossGradeDiff(previous: string, current: string): number | null
 	return getGradeDiffFromRanks(getWorldBossGradeRank, previous, current)
 }
 
-export { getWorldBossGradeDiff, getWorldBossGradeFromStats, getWorldBossGradeRank }
-export type { WorldBossTier }
+export { getWorldBossGradeDiff, getWorldBossGradeFromStats }

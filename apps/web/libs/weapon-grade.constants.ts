@@ -17,7 +17,6 @@ const WEAPON_GRADE_BANDS = ['에인션트', '미스틱', '레전드리', '유니
 const WEAPON_GRADE_LEVELS = ['최상급', '상급', '중급', '하급'] as const
 
 type WeaponGradeBand = (typeof WEAPON_GRADE_BANDS)[number]
-type WeaponGradeLevel = (typeof WEAPON_GRADE_LEVELS)[number]
 
 /** 정규 표기: `에인션트 최상급` … `노말 하급` (상위부터) */
 const WEAPON_GRADES = WEAPON_GRADE_BANDS.flatMap((band) =>
@@ -30,7 +29,7 @@ const WEAPON_GRADE_BAND_PREFIXES = WEAPON_GRADE_BANDS.map((band) => ({ prefix: b
  * 밴드별 UI 톤.
  * 헤더·등급명 텍스트색에 사용합니다.
  */
-export const WEAPON_GRADE_BAND_META = {
+const WEAPON_GRADE_BAND_META = {
 	에인션트: {
 		label: '에인션트',
 		headerClassName: 'bg-pastel-navy-50 text-pastel-navy-800',
@@ -139,14 +138,4 @@ function getWeaponGradeDiff(previous: string, current: string): number | null {
 	return getGradeDiffFromRanks(getWeaponGradeRank, previous, current)
 }
 
-export {
-	getWeaponGradeBand,
-	getWeaponGradeDiff,
-	getWeaponGradeRank,
-	getWeaponGradeTextClass,
-	parseWeaponGrade,
-	WEAPON_GRADE_BANDS,
-	WEAPON_GRADE_LEVELS,
-	WEAPON_GRADES
-}
-export type { WeaponGradeBand, WeaponGradeLevel }
+export { getWeaponGradeDiff, getWeaponGradeTextClass, parseWeaponGrade }

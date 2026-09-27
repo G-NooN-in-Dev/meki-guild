@@ -105,4 +105,4 @@ function resolveRelicPossessionLines(relicId: string, stage: number): readonly s
 	return stats.map(({ label, unit, values }) => `${label} ${formatRelicPossessionValue(values[safeStage], unit)}`)
 }
 
-export { formatRelicPossessionValue, getRelicPossessionStats, resolveRelicPossessionLines }
+export { resolveRelicPossessionLines }

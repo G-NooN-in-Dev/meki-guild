@@ -71,6 +71,5 @@ export type {
 	CompanionGrade,
 	CompanionLoadout,
 	CompanionSetupSlot,
-	CompanionSlotLoadout,
-	CompanionSlotRole
+	CompanionSlotLoadout
 }

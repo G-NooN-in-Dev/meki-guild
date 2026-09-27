@@ -107,10 +107,5 @@ function formatRankDiffLabel(currentMap: RankingMap, previousMap: RankingMap, me
 	return formatRankArrowDelta(current - previous)
 }
 
-/** 순위에 참여한 전체 인원 수 */
-function getRankingTotal(rankingMap: RankingMap): number {
-	return Object.keys(rankingMap).length
-}
-
-export { computeMemberRankings, formatRankDiffLabel, formatRankLabel, getRankingTotal }
-export type { MemberRankings, RankingMap }
+export { computeMemberRankings, formatRankDiffLabel, formatRankLabel }
+export type { MemberRankings }

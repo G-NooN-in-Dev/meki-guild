@@ -49,7 +49,7 @@ export const RELIC_POTENTIAL_GRADE_TAB_CLASS = {
  * 유물 등급별 잠재옵션 최대 칸 수.
  * 레전드리 3칸 / 유니크·에픽 2칸
  */
-export const RELIC_POTENTIAL_SLOT_LIMIT = {
+const RELIC_POTENTIAL_SLOT_LIMIT = {
 	legendary: 3,
 	unique: 2,
 	epic: 2
@@ -153,7 +153,7 @@ function buildPotentialOptionsForGrade(grade: RelicPotentialGrade): RelicPotenti
 }
 
 /** 전체 잠재옵션 카탈로그 (등급 높은 순 → 스탯별 · 수치 높은 순) */
-export const RELIC_POTENTIAL_OPTIONS: readonly RelicPotentialOption[] =
+const RELIC_POTENTIAL_OPTIONS: readonly RelicPotentialOption[] =
 	RELIC_POTENTIAL_GRADE_ORDER.flatMap(buildPotentialOptionsForGrade)
 
 function getRelicPotentialOptionById(id: string): RelicPotentialOption | undefined {

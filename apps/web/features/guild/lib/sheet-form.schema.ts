@@ -95,7 +95,6 @@ export {
 	GUILD_SHEET_KOREAN_NUMBER_FIELDS,
 	GUILD_SHEET_KOREAN_NUMBER_PLACEHOLDERS,
 	GUILD_SHEET_MEMBER_TABS,
-	GUILD_SHEET_SEASONAL_TABS,
 	GUILD_SHEET_TAB_HEADERS,
 	GUILD_SHEET_TAB_INPUT_FIELDS,
 	GUILD_SHEET_TAB_LABELS,
@@ -104,4 +103,4 @@ export {
 	isGuildSheetMemberTab,
 	isGuildSheetSeasonalTab
 }
-export type { GuildSheetKoreanNumberField, GuildSheetMemberTab, GuildSheetSeasonalTab }
+export type { GuildSheetMemberTab }

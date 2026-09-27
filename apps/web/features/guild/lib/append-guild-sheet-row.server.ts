@@ -246,5 +246,4 @@ async function upsertGuildSheetRow({ tab, values }: UpsertGuildSheetRowInput): P
 	return { mode: 'created' }
 }
 
-export { appendGuildSheetRow, findGuildSheetRowFields, getGuildSheetId, upsertGuildSheetRow }
-export type { UpsertGuildSheetRowResult }
+export { findGuildSheetRowFields, upsertGuildSheetRow }

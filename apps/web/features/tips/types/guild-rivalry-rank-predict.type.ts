@@ -1,10 +1,4 @@
-import type {
-	MgfGuildInfoResponse,
-	MgfGuildMemberDto,
-	RankPredictGuildRowBase,
-	RankPredictMember,
-	RankPredictMemberRow
-} from './guild-rank-predict.type'
+import type { RankPredictGuildRowBase, RankPredictMember, RankPredictMemberRow } from './guild-rank-predict.type'
 
 type RivalryPredictMember = RankPredictMember
 
@@ -23,11 +17,4 @@ type RivalryPredictResult = {
 	guilds: RivalryPredictGuildRow[]
 }
 
-export type {
-	MgfGuildInfoResponse,
-	MgfGuildMemberDto,
-	RivalryPredictGuildRow,
-	RivalryPredictMember,
-	RivalryPredictMemberRow,
-	RivalryPredictResult
-}
+export type { RivalryPredictGuildRow, RivalryPredictMember, RivalryPredictMemberRow, RivalryPredictResult }

@@ -85,11 +85,9 @@ export type {
 	BossRaidEntry,
 	BossRaidEquipmentReward,
 	BossRaidMaterialReward,
-	BossRaidMedalReward,
 	BossRaidMilestone,
 	BossRaidReward,
 	BossRaidRewardGrade,
 	BossRaidRewardTier,
-	BossRaidScrollReward,
 	BossRaidSelection
 }
