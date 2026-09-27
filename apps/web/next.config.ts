@@ -11,15 +11,6 @@ const nextConfig: NextConfig = {
 				pathname: '/ranking/**'
 			}
 		]
-	},
-	async redirects() {
-		return [
-			{
-				source: '/compare',
-				destination: '/guild/compare',
-				permanent: true
-			}
-		]
 	}
 }
 
