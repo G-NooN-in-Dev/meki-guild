@@ -6,11 +6,7 @@ import GuildRivalryRankPredictSection from '@/features/tips/sections/guild-rival
 
 export const metadata: Metadata = {
 	title: getTipTitleBySlug('guild-rivalry-rank-predict'),
-	description: '매칭된 길드들의 길드원 전투력으로 길드 대항전 순위를 예측해 보세요.',
-	openGraph: {
-		title: getTipTitleBySlug('guild-rivalry-rank-predict'),
-		description: '매칭된 길드들의 길드원 전투력으로 길드 대항전 순위를 예측해 보세요.'
-	}
+	description: '매칭된 길드들의 길드원 전투력으로 길드 대항전 순위를 예측해 보세요.'
 }
 
 function GuildRivalryRankPredictPage() {

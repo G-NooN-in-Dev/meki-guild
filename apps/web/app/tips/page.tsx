@@ -5,11 +5,7 @@ import TipsHubSection from '@/features/tips/sections/tips-hub.section'
 
 export const metadata: Metadata = {
 	title: '정보 / 팁',
-	description: '성장·콘텐츠에 도움이 되는 정보와 팁을 모아둔 공간입니다.',
-	openGraph: {
-		title: '정보 / 팁',
-		description: '성장·콘텐츠에 도움이 되는 정보와 팁을 모아둔 공간입니다.'
-	}
+	description: '성장·콘텐츠에 도움이 되는 정보와 팁을 모아둔 공간입니다.'
 }
 
 function TipsPage() {

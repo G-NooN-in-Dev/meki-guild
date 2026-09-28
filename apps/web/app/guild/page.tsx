@@ -6,11 +6,7 @@ import { loadGuildDashboardData } from '@/libs/guild-snapshot.loader'
 
 export const metadata: Metadata = {
 	title: '길드 정보',
-	description: '메이플키우기 1서버 게임즈 길드 대시보드입니다. 주간 길드 현황을 확인해보세요.',
-	openGraph: {
-		title: '길드 정보',
-		description: '메이플키우기 1서버 게임즈 길드 대시보드입니다. 주간 길드 현황을 확인해보세요.'
-	}
+	description: '메이플키우기 1서버 게임즈 길드 대시보드입니다. 주간 길드 현황을 확인해보세요.'
 }
 
 function GuildPage() {

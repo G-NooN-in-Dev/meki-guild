@@ -6,11 +6,7 @@ import ContentStageCutSection from '@/features/tips/sections/content-stage-cut.s
 
 export const metadata: Metadata = {
 	title: getTipTitleBySlug('content-stage-cut'),
-	description: '파티퀘스트·보스레이드 난이도별 스테이지컷을 확인해보세요.',
-	openGraph: {
-		title: getTipTitleBySlug('content-stage-cut'),
-		description: '파티퀘스트·보스레이드 난이도별 스테이지컷을 확인해보세요.'
-	}
+	description: '파티퀘스트·보스레이드 난이도별 스테이지컷을 확인해보세요.'
 }
 
 function ContentStageCutPage() {

@@ -26,9 +26,8 @@ export const metadata: Metadata = {
 		icon: '/games.png',
 		apple: '/games.png'
 	},
+	// title/description은 각 page의 metadata를 쓰고, 여기선 공통 OG만 둡니다.
 	openGraph: {
-		title: '메이플키우기 게임즈 길드',
-		description: '메이플키우기 1서버 게임즈 길드입니다',
 		url: SITE_URL,
 		siteName: '메이플키우기 게임즈 길드',
 		images: [

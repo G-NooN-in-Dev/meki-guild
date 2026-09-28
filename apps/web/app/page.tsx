@@ -8,11 +8,7 @@ export const metadata: Metadata = {
 	title: {
 		absolute: '메이플키우기 게임즈 길드'
 	},
-	description: '메이플키우기 1서버 게임즈 길드입니다.',
-	openGraph: {
-		title: '메이플키우기 게임즈 길드',
-		description: '메이플키우기 1서버 게임즈 길드입니다.'
-	}
+	description: '메이플키우기 1서버 게임즈 길드입니다.'
 }
 
 function Homepage() {

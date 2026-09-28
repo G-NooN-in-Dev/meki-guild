@@ -6,11 +6,7 @@ import GuildTrainingRankPredictSection from '@/features/tips/sections/guild-trai
 
 export const metadata: Metadata = {
 	title: getTipTitleBySlug('guild-training-rank-predict'),
-	description: '매칭된 길드들의 길드원 전투력으로 길드 수련장 순위를 예측해 보세요.',
-	openGraph: {
-		title: getTipTitleBySlug('guild-training-rank-predict'),
-		description: '매칭된 길드들의 길드원 전투력으로 길드 수련장 순위를 예측해 보세요.'
-	}
+	description: '매칭된 길드들의 길드원 전투력으로 길드 수련장 순위를 예측해 보세요.'
 }
 
 function GuildTrainingRankPredictPage() {

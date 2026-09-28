@@ -5,11 +5,7 @@ import ChangelogSection from '@/features/updates/sections/changelog.section'
 
 export const metadata: Metadata = {
 	title: '사이트 업데이트 일지',
-	description: '사이트 업데이트 내역입니다.',
-	openGraph: {
-		title: '사이트 업데이트 일지',
-		description: '사이트 업데이트 내역입니다.'
-	}
+	description: '사이트 업데이트 내역입니다.'
 }
 
 function UpdatesPage() {

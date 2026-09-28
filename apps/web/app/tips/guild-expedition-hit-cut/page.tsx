@@ -6,11 +6,7 @@ import GuildExpeditionHitCutSection from '@/features/tips/sections/guild-expedit
 
 export const metadata: Metadata = {
 	title: getTipTitleBySlug('guild-expedition-hit-cut'),
-	description: '길드 토벌전 단계별 필요 명중과 제한시간을 확인해보세요.',
-	openGraph: {
-		title: getTipTitleBySlug('guild-expedition-hit-cut'),
-		description: '길드 토벌전 단계별 필요 명중과 제한시간을 확인해보세요.'
-	}
+	description: '길드 토벌전 단계별 필요 명중과 제한시간을 확인해보세요.'
 }
 
 function GuildExpeditionHitCutPage() {
