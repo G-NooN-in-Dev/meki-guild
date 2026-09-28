@@ -44,7 +44,7 @@ const GUILD_SHEET_FIELD_LABELS = {
 
 /**
  * 전투력·점수 입력 규칙.
- * - `koreanUnit`: 경/조/억/만 단위 문자열로 저장
+ * - `koreanUnit`: 해/경/조/억/만 단위 문자열로 저장
  * - `trainingScore`: 1,000만 미만 숫자 / 이상은 단위 문자열 (게임 표기와 동일)
  */
 const GUILD_SHEET_KOREAN_NUMBER_FIELDS = {

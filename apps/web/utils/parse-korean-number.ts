@@ -1,20 +1,18 @@
-/** 수련장: 이 값 이상이면 게임·Sheet 모두 단위 표기 */
-const TRAINING_KOREAN_FORMAT_THRESHOLD = 10_000_000n
+import { formatKoreanNumberPlain } from '@/utils/format-korean-number'
+import {
+	KOREAN_UNIT_ALT,
+	KOREAN_UNIT_CHARS,
+	KOREAN_UNIT_MULTIPLIERS,
+	type KoreanUnit,
+	TRAINING_KOREAN_FORMAT_THRESHOLD
+} from '@/utils/korean-number.constants'
 
-const KOREAN_UNIT_MULTIPLIERS = {
-	해: 1_000_000_000_000_000_000n,
-	경: 10_000_000_000_000_000n,
-	조: 1_000_000_000_000n,
-	억: 100_000_000n,
-	만: 10_000n
-} as const
-
-type KoreanUnit = keyof typeof KOREAN_UNIT_MULTIPLIERS
-
-const KOREAN_NUMBER_PATTERN = /(\d+(?:\.\d+)?)(해|경|조|억|만)?/g
+const KOREAN_NUMBER_PATTERN = new RegExp(`(\\d+(?:\\.\\d+)?)(${KOREAN_UNIT_ALT})?`, 'g')
 /** 단위 숫자 전체 형식. 공백 유무 모두 허용. 예: `1경 200억`, `2023만4234` */
-const KOREAN_UNIT_NUMBER_FULL_PATTERN = /^(?:\d+(?:\.\d+)?(?:해|경|조|억|만)?)(?:\s*\d+(?:\.\d+)?(?:해|경|조|억|만)?)*$/
-const KOREAN_UNIT_CHAR_PATTERN = /[해경조억만]/
+const KOREAN_UNIT_NUMBER_FULL_PATTERN = new RegExp(
+	`^(?:\\d+(?:\\.\\d+)?(?:${KOREAN_UNIT_ALT})?)(?:\\s*\\d+(?:\\.\\d+)?(?:${KOREAN_UNIT_ALT})?)*$`
+)
+const KOREAN_UNIT_CHAR_PATTERN = new RegExp(`[${KOREAN_UNIT_CHARS}]`)
 
 function parsePlainNumber(value: string): bigint | null {
 	if (!/^\d+(?:\.\d+)?$/.test(value)) {
@@ -34,10 +32,11 @@ function hasKoreanNumberUnits(value: string): boolean {
 }
 
 /**
- * 한국어 단위(경/조/억/만) 또는 일반 숫자 문자열을 bigint로 변환합니다.
+ * 한국어 단위(해/경/조/억/만) 또는 일반 숫자 문자열을 bigint로 변환합니다.
  *
  * @example
  * parseKoreanNumber('1739조 115억') // 1739115000000000n
+ * parseKoreanNumber('1해 2345경')   // 123450000000000000000n
  * parseKoreanNumber('15,246,720')   // 15246720n
  */
 function parseKoreanNumber(input: string | number): bigint {
@@ -81,7 +80,7 @@ function parseKoreanNumber(input: string | number): bigint {
 }
 
 /**
- * 전투력·점수 등 Sheet 저장용. 경/조/억/만 단위가 반드시 있어야 합니다.
+ * 전투력·점수 등 Sheet 저장용. 해/경/조/억/만 단위가 반드시 있어야 합니다.
  *
  * @example
  * normalizeKoreanUnitNumber('1경 200억') // '1경 200억'
@@ -95,7 +94,7 @@ function normalizeKoreanUnitNumber(input: string): string {
 	}
 
 	if (!hasKoreanNumberUnits(normalized)) {
-		throw new Error('경/조/억/만 단위를 포함해 입력하세요. 예: 3021조 238억')
+		throw new Error('해/경/조/억/만 단위를 포함해 입력하세요. 예: 3021조 238억')
 	}
 
 	if (!KOREAN_UNIT_NUMBER_FULL_PATTERN.test(normalized)) {
@@ -117,29 +116,7 @@ function formatTrainingScoreForSheet(value: bigint): string {
 		return value.toString()
 	}
 
-	const unitOrder = [
-		['경', KOREAN_UNIT_MULTIPLIERS.경],
-		['조', KOREAN_UNIT_MULTIPLIERS.조],
-		['억', KOREAN_UNIT_MULTIPLIERS.억],
-		['만', KOREAN_UNIT_MULTIPLIERS.만]
-	] as const
-
-	const parts: string[] = []
-	let remaining = value
-
-	for (const [unitName, unitValue] of unitOrder) {
-		if (remaining >= unitValue) {
-			const count = remaining / unitValue
-			remaining %= unitValue
-			parts.push(`${count}${unitName}`)
-		}
-	}
-
-	if (remaining > 0n) {
-		parts.push(remaining.toString())
-	}
-
-	return parts.join(' ')
+	return formatKoreanNumberPlain(value)
 }
 
 /**

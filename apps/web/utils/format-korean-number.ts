@@ -1,12 +1,5 @@
 import { GUILD_EMPTY_VALUE_LABEL, GUILD_ZERO_DELTA_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { TRAINING_KOREAN_FORMAT_THRESHOLD } from '@/utils/parse-korean-number'
-
-const KOREAN_UNITS = [
-	['경', 10_000_000_000_000_000n],
-	['조', 1_000_000_000_000n],
-	['억', 100_000_000n],
-	['만', 10_000n]
-] as const
+import { KOREAN_UNITS, TRAINING_KOREAN_FORMAT_THRESHOLD } from '@/utils/korean-number.constants'
 
 /**
  * 숫자를 한국어 locale 천 단위 구분 문자열로 변환합니다.
@@ -20,19 +13,10 @@ function formatLocaleNumber(value: number | bigint): string {
 }
 
 /**
- * bigint 값을 경/조/억/만 단위 문자열로 변환합니다.
- *
- * @example
- * formatKoreanNumber(50_000_000n) // '5000만'
- * formatKoreanNumber(1_739_115_000_000_000n) // '1739조 115억'
+ * 절대값을 해/경/조/억/만 조각으로 나눕니다.
+ * `formatRemainder`로 만 미만 나머지 표기만 바꿉니다.
  */
-function formatKoreanNumber(value: bigint): string {
-	if (value === 0n) {
-		return '0'
-	}
-
-	const isNegative = value < 0n
-	const absoluteValue = isNegative ? -value : value
+function toKoreanUnitParts(absoluteValue: bigint, formatRemainder: (n: bigint) => string): string[] {
 	const parts: string[] = []
 	let remaining = absoluteValue
 
@@ -45,12 +29,46 @@ function formatKoreanNumber(value: bigint): string {
 	}
 
 	if (remaining > 0n) {
-		parts.push(formatLocaleNumber(remaining))
+		parts.push(formatRemainder(remaining))
 	}
 
+	return parts
+}
+
+function joinKoreanUnitParts(value: bigint, formatRemainder: (n: bigint) => string): string {
+	const isNegative = value < 0n
+	const parts = toKoreanUnitParts(isNegative ? -value : value, formatRemainder)
 	const formatted = parts.join(' ')
 
 	return isNegative ? `-${formatted}` : formatted
+}
+
+/**
+ * bigint 값을 해/경/조/억/만 단위 문자열로 변환합니다.
+ * 만 미만 나머지는 locale 천 단위 구분입니다.
+ *
+ * @example
+ * formatKoreanNumber(50_000_000n) // '5000만'
+ * formatKoreanNumber(1_739_115_000_000_000n) // '1739조 115억'
+ * formatKoreanNumber(123_450_000_000_000_000_000n) // '1해 2345경'
+ */
+function formatKoreanNumber(value: bigint): string {
+	if (value === 0n) {
+		return '0'
+	}
+
+	return joinKoreanUnitParts(value, formatLocaleNumber)
+}
+
+/**
+ * 단위 포맷. 만 미만 나머지는 콤마 없이 붙입니다. (Sheet·수련장 표시 공통)
+ */
+function formatKoreanNumberPlain(value: bigint): string {
+	if (value === 0n) {
+		return '0'
+	}
+
+	return joinKoreanUnitParts(value, (n) => n.toString())
 }
 
 /**
@@ -68,7 +86,7 @@ function formatKoreanDelta(diff: bigint): string {
 
 /**
  * 수련장 점수 표시용 포맷.
- * 1,000만 미만은 localeString, 1,000만 이상은 경/조/억/만 단위를 사용합니다.
+ * 1,000만 미만은 localeString, 1,000만 이상은 해/경/조/억/만 단위를 사용합니다.
  *
  * @example
  * formatTrainingScore(8158329n)   // '8,158,329'
@@ -79,31 +97,13 @@ function formatTrainingScore(value: bigint): string {
 		return GUILD_EMPTY_VALUE_LABEL
 	}
 
-	const isNegative = value < 0n
-	const absoluteValue = isNegative ? -value : value
+	const absoluteValue = value < 0n ? -value : value
 
 	if (absoluteValue < TRAINING_KOREAN_FORMAT_THRESHOLD) {
 		return formatLocaleNumber(value)
 	}
 
-	const parts: string[] = []
-	let remaining = absoluteValue
-
-	for (const [unitName, unitValue] of KOREAN_UNITS) {
-		if (remaining >= unitValue) {
-			const count = remaining / unitValue
-			remaining %= unitValue
-			parts.push(`${count}${unitName}`)
-		}
-	}
-
-	if (remaining > 0n) {
-		parts.push(remaining.toString())
-	}
-
-	const formatted = parts.join(' ')
-
-	return isNegative ? `-${formatted}` : formatted
+	return formatKoreanNumberPlain(value)
 }
 
 /**
@@ -159,6 +159,7 @@ export {
 	formatDeltaPercent,
 	formatKoreanDelta,
 	formatKoreanNumber,
+	formatKoreanNumberPlain,
 	formatLocaleNumber,
 	formatPlacementRank,
 	formatTrainingDelta,
