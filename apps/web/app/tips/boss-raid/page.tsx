@@ -6,7 +6,11 @@ import BossRaidSection from '@/features/tips/sections/boss-raid.section'
 
 export const metadata: Metadata = {
 	title: getTipTitleBySlug('boss-raid'),
-	description: '보스레이드 명중컷 및 보상을 확인해보세요.'
+	description: '보스레이드 명중컷 및 보상을 확인해보세요.',
+	openGraph: {
+		title: getTipTitleBySlug('boss-raid'),
+		description: '보스레이드 명중컷 및 보상을 확인해보세요.'
+	}
 }
 
 function BossRaidPage() {

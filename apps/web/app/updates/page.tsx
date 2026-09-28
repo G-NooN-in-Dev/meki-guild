@@ -4,8 +4,12 @@ import PageShell from '@/components/page-shell'
 import ChangelogSection from '@/features/updates/sections/changelog.section'
 
 export const metadata: Metadata = {
-	title: '업데이트 일지',
-	description: '메이플키우기 게임즈 길드 사이트의 버전별 변경 사항입니다.'
+	title: '사이트 업데이트 일지',
+	description: '사이트 업데이트 내역입니다.',
+	openGraph: {
+		title: '사이트 업데이트 일지',
+		description: '사이트 업데이트 내역입니다.'
+	}
 }
 
 function UpdatesPage() {

@@ -6,7 +6,11 @@ import CharacterCompareSection from '@/features/tips/sections/character-compare.
 
 export const metadata: Metadata = {
 	title: getTipTitleBySlug('character-compare'),
-	description: '원하는 상대방과 1 vs 1 비교를 해보세요.'
+	description: '원하는 상대방과 1 vs 1 비교를 해보세요.',
+	openGraph: {
+		title: getTipTitleBySlug('character-compare'),
+		description: '원하는 상대방과 1 vs 1 비교를 해보세요.'
+	}
 }
 
 function CharacterComparePage() {

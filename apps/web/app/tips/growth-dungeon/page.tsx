@@ -6,7 +6,11 @@ import GrowthDungeonSection from '@/features/tips/sections/growth-dungeon.sectio
 
 export const metadata: Metadata = {
 	title: getTipTitleBySlug('growth-dungeon'),
-	description: '성장 던전 정보를 확인해보세요.'
+	description: '성장 던전 정보를 확인해보세요.',
+	openGraph: {
+		title: getTipTitleBySlug('growth-dungeon'),
+		description: '성장 던전 정보를 확인해보세요.'
+	}
 }
 
 function GrowthDungeonPage() {
