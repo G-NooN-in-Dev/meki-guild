@@ -10,6 +10,9 @@ const currentWeekPath = join(webAppDirectory, 'data/current-week.json')
 const membersDirectory = join(webAppDirectory, 'public/members')
 
 const MGF_PORTRAIT_BASE = 'https://mgf.gg/ranking/ranking_image.php'
+/** mgf ranking_image.php는 비브라우저 UA를 차단하고 플레이스홀더 PNG를 내려줍니다. */
+const MGF_USER_AGENT =
+	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 const CONCURRENCY = 5
 const REQUEST_GAP_MS = 80
 
@@ -70,12 +73,21 @@ function readRosterNames() {
  */
 async function fetchPortraitBuffer(name) {
 	const response = await fetch(portraitUrl(name), {
-		headers: { Accept: 'image/*' },
+		headers: {
+			Accept: 'image/*',
+			'User-Agent': MGF_USER_AGENT
+		},
 		redirect: 'follow'
 	})
 
 	if (!response.ok) {
 		throw new Error(`HTTP ${response.status}`)
+	}
+
+	// 차단 시에도 image/png + 200이므로 헤더로 구분합니다.
+	const blocked = response.headers.get('x-mgf-blocked')
+	if (blocked) {
+		throw new Error(`mgf 차단 (${blocked})`)
 	}
 
 	const contentType = response.headers.get('content-type') ?? ''

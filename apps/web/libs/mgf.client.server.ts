@@ -1,6 +1,8 @@
 const MGF_ORIGIN = 'https://mgf.gg'
 const MGF_FETCH_TIMEOUT_MS = 20_000
-const MGF_USER_AGENT = 'meki-guild/1.0 (+https://github.com; mgf proxy)'
+/** ranking_image.php 등은 비브라우저 UA를 차단하므로 Chrome UA를 씁니다. */
+const MGF_USER_AGENT =
+	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 
 /** mgf 프록시·파서 공통 에러. status는 API 응답 코드로 그대로 씁니다. */
 class MgfRequestError extends Error {
@@ -38,7 +40,7 @@ async function fetchMgfText(url: URL, options: FetchMgfOptions = {}): Promise<st
 
 /**
  * mgf.gg 바이너리 조회 (초상화 등).
- * Referer를 붙이지 않아 핫링크 차단을 피합니다.
+ * 브라우저 UA로 요청합니다 (비브라우저 UA는 플레이스홀더 PNG로 차단됨).
  */
 async function fetchMgfBinary(url: URL, options: FetchMgfOptions = {}): Promise<FetchMgfBinaryResult> {
 	const response = await fetchMgfResponse(url, options)
