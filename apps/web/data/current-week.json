@@ -409,6 +409,19 @@
 			"rivalry": "528억 5217만",
 			"training": "5952603",
 			"guildBoss": "238억 2149만"
+		},
+		{
+			"name": "콩얄",
+			"level": 113,
+			"job": "비숍",
+			"combatPower": "2385조 8116억",
+			"expedition": {
+				"grade": "마스터1",
+				"placement": 660,
+				"score": "2962억 4792만"
+			},
+			"rivalry": "",
+			"training": ""
 		}
 	]
 }
