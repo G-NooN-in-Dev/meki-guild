@@ -83,7 +83,7 @@ const CONTENT_STAGE_CUTS = [
 		name: '핑크빈',
 		rewards: ['포켓', '눈장식'],
 		kind: 'boss-raid',
-		stageCuts: { easy: '32-10', normal: '37-15', hard: '42-20', chaos: null }
+		stageCuts: { easy: '32-15', normal: '37-15', hard: '42-20', chaos: null }
 	}
 ] as const satisfies readonly ContentStageCutEntry[]
 
