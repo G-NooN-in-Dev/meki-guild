@@ -174,20 +174,6 @@
 			"guildBoss": "572억 3731만"
 		},
 		{
-			"name": "미꽁치와와",
-			"level": 112,
-			"job": "섀도어",
-			"combatPower": "1960조 106억",
-			"expedition": {
-				"grade": "마스터1",
-				"placement": 754,
-				"score": "2563억 7758만"
-			},
-			"rivalry": "1255억 2258만",
-			"training": "1218만 5820",
-			"guildBoss": "622억 6835만"
-		},
-		{
 			"name": "살점",
 			"level": 113,
 			"job": "섀도어",
@@ -419,6 +405,19 @@
 				"grade": "마스터1",
 				"placement": 660,
 				"score": "2962억 4792만"
+			},
+			"rivalry": "",
+			"training": ""
+		},
+		{
+			"name": "진서아",
+			"level": 114,
+			"job": "섀도어",
+			"combatPower": "2105조 5926억",
+			"expedition": {
+				"grade": "마스터1",
+				"placement": 601,
+				"score": "3247억 7400만"
 			},
 			"rivalry": "",
 			"training": ""
