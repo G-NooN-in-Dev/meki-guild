@@ -6,6 +6,21 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.6.2',
+		date: '2026-10-19',
+		hotfix: true,
+		sections: [
+			{
+				title: '공통',
+				items: [
+					{ text: '캐릭터 비교 페이지 제거' },
+					{ text: '길드 비교 페이지 제거' },
+					{ text: '메뉴 구조 개편 및 BGM 제거' }
+				]
+			}
+		]
+	},
+	{
 		version: '1.6.1',
 		date: '2026-09-27',
 		sections: [
