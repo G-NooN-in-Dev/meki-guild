@@ -71,7 +71,7 @@ function isGuildSheetKoreanNumberField(field: string): field is GuildSheetKorean
 
 /** dayjs `.day()` — 0=일 … 6=토 */
 const GUILD_SHEET_TAB_WEEKDAY = {
-	combatPower: 1,
+	combatPower: 2,
 	expedition: 0,
 	rivalry: 1,
 	training: 3,
