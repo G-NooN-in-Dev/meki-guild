@@ -37,7 +37,7 @@ pnpm build
 ```text
 features/
   guild/     # 대시보드 · 시트 입력 · 접근 게이트
-  tips/      # 팁 허브 · 개별 콘텐츠 (캐릭터 비교 포함)
+  tips/      # 팁 허브 · 개별 콘텐츠
   home/      # 사이트 허브
   updates/   # 변경 로그
 ```
@@ -58,9 +58,4 @@ features/
 | `data/previous-week.json`       | 직전 스냅샷          |
 | `data/guild-content-dates.json` | 콘텐츠별 수집일 메타 |
 
-`libs/guild-snapshot.loader.ts`가 길드 대시보드 진입점입니다.  
-캐릭터 1 vs 1 비교(`/tips/character-compare`)는 tips feature + `/api/tips/character-*` 프록시를 사용합니다.
-
-## 예약 자산
-
-`public/members/*.png` — 멤버 초상화 등용 예약 이미지 (현재 필수 참조 아님).
+`libs/guild-snapshot.loader.ts`가 길드 대시보드 진입점입니다.
