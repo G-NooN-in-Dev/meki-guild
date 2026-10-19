@@ -14,17 +14,6 @@ body {
 	overflow-x: clip;
 }
 
-/* BGM 재생 중 이퀄라이저 막대 */
-@keyframes bgm-bar {
-	0%,
-	100% {
-		transform: scaleY(0.35);
-	}
-	50% {
-		transform: scaleY(1);
-	}
-}
-
 /* 헤더 공지 마키 — JS로 측정한 --marquee-distance(px)만 이동해 루프 지점을 픽셀 단위로 맞춥니다 */
 @keyframes marquee-distance {
 	from {
@@ -36,6 +25,5 @@ body {
 }
 
 @theme inline {
-	--animate-bgm-bar: bgm-bar 0.85s ease-in-out infinite;
 	--animate-marquee: marquee-distance linear infinite;
 }

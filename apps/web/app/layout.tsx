@@ -7,7 +7,6 @@ import type { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
 import AnnouncementBanner from '@/components/announcement-banner'
-import { BgmProvider } from '@/components/bgm.context'
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import { ANNOUNCEMENT_BANNER_BODY_PADDING_CLASS, hasAnnouncementBanner } from '@/libs/announcement-banner.constants'
@@ -58,14 +57,11 @@ function RootLayout({ children }: PropsWithChildren) {
 					style={{ backgroundImage: "url('/games.png')" }}
 				/>
 				<div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-white/78 backdrop-blur-[2px]" />
-				{/* 헤더·모바일 Sheet에서 같은 BGM 재생 상태를 공유 */}
-				<BgmProvider>
-					<Header />
-					<AnnouncementBanner />
-					{children}
-					<Footer />
-					<Toaster richColors position="top-center" />
-				</BgmProvider>
+				<Header />
+				<AnnouncementBanner />
+				{children}
+				<Footer />
+				<Toaster richColors position="top-center" />
 				<Analytics />
 			</body>
 		</html>

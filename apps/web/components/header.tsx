@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import BgmToggle from '@/components/bgm-toggle'
 import { MobileNav, Nav } from '@/components/nav'
 import { formatAppVersionLabel } from '@/libs/app-version.constants'
 
@@ -25,8 +24,6 @@ function Header() {
 					>
 						{formatAppVersionLabel()}
 					</Link>
-					{/* 허브에서는 모바일 메뉴가 없어 헤더에서 항상 BGM을 노출합니다 */}
-					<BgmToggle />
 				</div>
 			</div>
 		</header>

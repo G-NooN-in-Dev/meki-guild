@@ -34,8 +34,8 @@ const JOB_TO_CLASS_LINE = Object.fromEntries(
 ) as Record<KnownJob, JobClassLine>
 
 /**
- * MGF·공식 전체 표기 → UI/집계용 짧은 직업명.
- * 길드 시트·필터는 썬콜/불독을 쓰고, mgf 캐릭터 API는 아크메이지(…)를 줍니다.
+ * 긴 공식 직업명 → UI/집계용 짧은 직업명.
+ * 길드 시트·필터는 썬콜/불독을 씁니다.
  */
 const JOB_NAME_ALIASES = {
 	'아크메이지(불,독)': '불독',
