@@ -11,7 +11,7 @@ import {
 	GUILD_RIVALRY_SPAWN_HIT_DECAY_INTERVAL_SEC,
 	GUILD_RIVALRY_TIME_LIMIT_REFILL_SEC,
 	GUILD_RIVALRY_TIME_LIMIT_SEC
-} from '@/features/tips/lib/guild-rivalry-hit-cut.constants'
+} from '@/features/tips/lib/guild-rivalry.constants'
 
 function SummaryRulesList() {
 	return (
@@ -57,7 +57,7 @@ function SummaryRulesList() {
 }
 
 /** 대항전 명중·스택 규칙 요약 카드. 표에 안 나오는 배경 규칙만 모읍니다. */
-function GuildRivalryHitCutSummary() {
+function GuildRivalrySummary() {
 	return (
 		<HitCutSummaryCard>
 			<SummaryRulesList />
@@ -65,4 +65,4 @@ function GuildRivalryHitCutSummary() {
 	)
 }
 
-export default GuildRivalryHitCutSummary
+export default GuildRivalrySummary

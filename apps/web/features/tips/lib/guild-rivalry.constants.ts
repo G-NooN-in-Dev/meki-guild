@@ -1,4 +1,4 @@
-import type { GuildRivalryHitCutEntry } from '@/features/tips/types/guild-rivalry-hit-cut.type'
+import type { GuildRivalryEntry } from '@/features/tips/types/guild-rivalry.type'
 
 type GuildRivalryHitTier = {
 	/** 이 구간이 시작되는 단계 */
@@ -17,7 +17,7 @@ export const RIVALRY_BOSS_PORTRAITS = [
 ] as const
 
 /** 표에 표시할 최대 단계 */
-const GUILD_RIVALRY_HIT_CUT_MAX_STAGE = 80
+const GUILD_RIVALRY_MAX_STAGE = 80
 
 /**
  * 단계별 보스/일반몹 기본 명중컷 구간.
@@ -94,7 +94,7 @@ function getGuildRivalryRequiredHit(stage: number) {
 }
 
 /** 1~maxStage 단계 표 데이터 */
-function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_MAX_STAGE): GuildRivalryHitCutEntry[] {
+function buildGuildRivalryEntries(maxStage = GUILD_RIVALRY_MAX_STAGE): GuildRivalryEntry[] {
 	return Array.from({ length: maxStage }, (_, index) => {
 		const stage = index + 1
 
@@ -107,4 +107,4 @@ function buildGuildRivalryHitCutEntries(maxStage = GUILD_RIVALRY_HIT_CUT_MAX_STA
 }
 
 /** 페이지 표에 바로 쓰는 단계별 데이터 */
-export const GUILD_RIVALRY_HIT_CUT_ENTRIES = buildGuildRivalryHitCutEntries()
+export const GUILD_RIVALRY_ENTRIES = buildGuildRivalryEntries()

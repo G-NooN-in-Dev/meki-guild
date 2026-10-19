@@ -43,53 +43,28 @@ const TIP_ENTRIES = [
 	},
 	// 길드 컨텐츠
 	{
-		slug: 'guild-expedition-hit-cut',
+		slug: 'guild-expedition',
 		title: '토벌전 정보',
 		description: '단계별 명중컷 · 제한시간',
 		category: 'guild-contents',
 		tags: ['토벌전'],
-		href: '/tips/guild-expedition-hit-cut'
+		href: '/tips/guild-expedition'
 	},
 	{
-		slug: 'guild-rivalry-hit-cut',
+		slug: 'guild-rivalry',
 		title: '대항전 정보',
 		description: '단계별 명중컷 · 보스 데미지 스택',
 		category: 'guild-contents',
 		tags: ['대항전'],
-		href: '/tips/guild-rivalry-hit-cut'
+		href: '/tips/guild-rivalry'
 	},
 	{
-		slug: 'guild-training-info',
+		slug: 'guild-training',
 		title: '수련장 정보',
 		description: '단계별 명중컷 · 처치 점수',
 		category: 'guild-contents',
 		tags: ['수련장'],
-		href: '/tips/guild-training-info'
-	},
-	// 예측·계산기
-	{
-		slug: 'guild-rivalry-rank-predict',
-		title: '길드 대항전 순위 예측',
-		description: '길드원 전투력 기준 대항전 예상 순위',
-		category: 'predict-calculator',
-		tags: ['대항전'],
-		href: '/tips/guild-rivalry-rank-predict'
-	},
-	{
-		slug: 'guild-training-rank-predict',
-		title: '길드 수련장 순위 예측',
-		description: '길드원 전투력 기준 수련장 예상 순위',
-		category: 'predict-calculator',
-		tags: ['수련장'],
-		href: '/tips/guild-training-rank-predict'
-	},
-	{
-		slug: 'character-compare',
-		title: '캐릭터 1 vs 1 비교',
-		description: '원하는 상대방과 1 vs 1 비교',
-		category: 'predict-calculator',
-		tags: ['비교'],
-		href: '/tips/character-compare'
+		href: '/tips/guild-training'
 	},
 	// 각종 정보
 	{

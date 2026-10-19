@@ -9,7 +9,7 @@ type TipCategory = {
 
 /** 정보/팁 허브에 노출되는 개별 팁 메타데이터 */
 type TipEntry = {
-	/** URL 경로 세그먼트 (예: guild-rivalry-hit-cut) */
+	/** URL 경로 세그먼트 (예: guild-rivalry) */
 	slug: string
 	/** 허브 카드·페이지 제목 */
 	title: string

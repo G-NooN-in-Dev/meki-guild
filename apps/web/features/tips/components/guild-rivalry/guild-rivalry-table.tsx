@@ -2,14 +2,14 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/
 import { cn } from '@shared/ui/utils'
 
 import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
-import { GUILD_RIVALRY_HIT_CUT_ENTRIES } from '@/features/tips/lib/guild-rivalry-hit-cut.constants'
+import { GUILD_RIVALRY_ENTRIES } from '@/features/tips/lib/guild-rivalry.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 /**
  * 길드 대항전 단계별 명중컷·보스 데미지 증가 스택 표.
  * table-fixed로 열 비율을 고정하고, 모바일에서는 촘촘한 패딩을 씁니다.
  */
-function GuildRivalryHitCutTable() {
+function GuildRivalryTable() {
 	return (
 		<HitCutTableShell>
 			<TableHeader sticky>
@@ -38,7 +38,7 @@ function GuildRivalryHitCutTable() {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{GUILD_RIVALRY_HIT_CUT_ENTRIES.map(({ stage, buffStack, requiredHit }) => (
+				{GUILD_RIVALRY_ENTRIES.map(({ stage, buffStack, requiredHit }) => (
 					<TableRow key={stage} className="border-grayscale-200 hover:bg-transparent">
 						<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-grayscale-50 text-grayscale-800')}>
 							{stage}
@@ -56,4 +56,4 @@ function GuildRivalryHitCutTable() {
 	)
 }
 
-export default GuildRivalryHitCutTable
+export default GuildRivalryTable

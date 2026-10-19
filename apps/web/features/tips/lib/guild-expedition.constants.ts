@@ -1,10 +1,10 @@
-import type { GuildExpeditionHitCutEntry } from '@/features/tips/types/guild-expedition-hit-cut.type'
+import type { GuildExpeditionEntry } from '@/features/tips/types/guild-expedition.type'
 
 /** 토벌전 보스 이미지 */
 export const GUILD_EXPEDITION_BOSS_PORTRAIT = '/monsters/arcanus.gif'
 
 /** 표에 표시할 최대 단계 */
-const GUILD_EXPEDITION_HIT_CUT_MAX_STAGE = 50
+const GUILD_EXPEDITION_MAX_STAGE = 50
 
 /** 11단계부터 적용되는 후반 구간 시작 단계 */
 export const GUILD_EXPEDITION_LATE_TIER_START_STAGE = 11
@@ -58,9 +58,7 @@ function getGuildExpeditionTimeLimitSec(stage: number) {
 }
 
 /** 1~maxStage 단계 표 데이터 */
-function buildGuildExpeditionHitCutEntries(
-	maxStage = GUILD_EXPEDITION_HIT_CUT_MAX_STAGE
-): GuildExpeditionHitCutEntry[] {
+function buildGuildExpeditionEntries(maxStage = GUILD_EXPEDITION_MAX_STAGE): GuildExpeditionEntry[] {
 	return Array.from({ length: maxStage }, (_, index) => {
 		const stage = index + 1
 
@@ -73,4 +71,4 @@ function buildGuildExpeditionHitCutEntries(
 }
 
 /** 페이지 표에 바로 쓰는 단계별 데이터 */
-export const GUILD_EXPEDITION_HIT_CUT_ENTRIES = buildGuildExpeditionHitCutEntries()
+export const GUILD_EXPEDITION_ENTRIES = buildGuildExpeditionEntries()

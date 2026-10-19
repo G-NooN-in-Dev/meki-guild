@@ -4,7 +4,7 @@ import {
 	GUILD_EXPEDITION_LATE_TIER_START_STAGE,
 	GUILD_EXPEDITION_TIME_LIMIT_REFILL_SEC,
 	GUILD_EXPEDITION_TIME_LIMIT_SEC
-} from '@/features/tips/lib/guild-expedition-hit-cut.constants'
+} from '@/features/tips/lib/guild-expedition.constants'
 
 function SummaryRulesList() {
 	return (
@@ -23,7 +23,7 @@ function SummaryRulesList() {
 }
 
 /** 토벌전 명중·제한시간 규칙 요약 카드. 표에 안 나오는 배경 규칙만 모읍니다. */
-function GuildExpeditionHitCutSummary() {
+function GuildExpeditionSummary() {
 	return (
 		<HitCutSummaryCard>
 			<SummaryRulesList />
@@ -31,4 +31,4 @@ function GuildExpeditionHitCutSummary() {
 	)
 }
 
-export default GuildExpeditionHitCutSummary
+export default GuildExpeditionSummary

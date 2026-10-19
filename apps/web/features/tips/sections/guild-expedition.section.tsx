@@ -1,16 +1,16 @@
 import { Badge } from '@shared/ui/badge'
 
-import GuildRivalryHitCutSummary from '@/features/tips/components/guild-rivalry/guild-rivalry-hit-cut-summary'
-import GuildRivalryHitCutTable from '@/features/tips/components/guild-rivalry/guild-rivalry-hit-cut-table'
+import GuildExpeditionSummary from '@/features/tips/components/guild-expedition/guild-expedition-summary'
+import GuildExpeditionTable from '@/features/tips/components/guild-expedition/guild-expedition-table'
 import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
-import MonsterPortraitStack from '@/features/tips/components/shared/monster-portrait-stack'
+import MonsterPortrait from '@/features/tips/components/shared/monster-portrait'
 import { getTipBadgeLabelsBySlug, getTipTitleBySlug } from '@/features/tips/lib/tips-registry.constants'
 
-import { RIVALRY_BOSS_PORTRAITS } from '../lib/guild-rivalry-hit-cut.constants'
+import { GUILD_EXPEDITION_BOSS_PORTRAIT } from '../lib/guild-expedition.constants'
 
-function GuildRivalryHitCutSection() {
-	const title = getTipTitleBySlug('guild-rivalry-hit-cut')
-	const badges = getTipBadgeLabelsBySlug('guild-rivalry-hit-cut')
+function GuildExpeditionSection() {
+	const title = getTipTitleBySlug('guild-expedition')
+	const badges = getTipBadgeLabelsBySlug('guild-expedition')
 
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-6 md:gap-8">
@@ -28,23 +28,23 @@ function GuildRivalryHitCutSection() {
 						</div>
 						<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 						<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
-							길드 대항전 단계별 필요 명중과, 잡몹 처치로 쌓이는 보스 데미지 증가 스택을 확인해보세요.
+							길드 토벌전 단계별 필요 명중과 제한시간을 확인해보세요.
 						</p>
 					</div>
 
-					<MonsterPortraitStack
-						items={RIVALRY_BOSS_PORTRAITS}
-						label="대항전 보스"
+					<MonsterPortrait
+						src={GUILD_EXPEDITION_BOSS_PORTRAIT}
+						alt="아르카누스"
 						size="lg"
-						className="h-20 w-28 md:h-24 md:w-44"
+						className="size-20 md:size-24"
 					/>
 				</header>
 			</div>
 
-			<GuildRivalryHitCutSummary />
-			<GuildRivalryHitCutTable />
+			<GuildExpeditionSummary />
+			<GuildExpeditionTable />
 		</section>
 	)
 }
 
-export default GuildRivalryHitCutSection
+export default GuildExpeditionSection

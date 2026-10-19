@@ -8,15 +8,10 @@ import { cn } from '@shared/ui/utils'
 import { ChevronDownIcon, MenuIcon, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useState } from 'react'
 
 import LinkPendingHint from '@/components/link-pending-hint'
 import { getTipsGroupedByCategory } from '@/features/tips/lib/tips-registry.constants'
-
-type NavSection = 'guild' | 'tips'
-
-/** 길드·팁 양쪽에 같이 노출하는 메뉴 */
-type NavItemSection = NavSection | 'shared'
 
 type NavChildLink = {
 	href: string
@@ -33,8 +28,6 @@ type NavLinkItem = {
 	type: 'link'
 	href: string
 	label: string
-	/** 어느 구역 헤더에 노출할지. shared는 길드·팁 모두 */
-	section: NavItemSection
 	/**
 	 * 있으면 모바일 Sheet에서만 하위 링크로 표시.
 	 * 카테고리 라벨·구분선으로 묶여 한 번 펼치면 전체를 스캔할 수 있습니다.
@@ -45,7 +38,6 @@ type NavLinkItem = {
 type NavComingSoonItem = {
 	type: 'coming-soon'
 	label: string
-	section: NavSection
 }
 
 type NavItem = NavLinkItem | NavComingSoonItem
@@ -68,126 +60,15 @@ function buildTipsNavChildGroups(): readonly NavChildGroup[] {
 
 /** 메뉴 추가 시 여기만 확장하면 인라인·모바일 Sheet에 함께 반영됩니다 */
 const NAV_ITEMS: NavItem[] = [
-	{ type: 'link', href: '/guild', label: '메인', section: 'guild' },
+	{ type: 'link', href: '/guild', label: '길드 정보' },
 	{
 		type: 'link',
 		href: '/tips',
 		label: '정보/팁',
-		section: 'tips',
 		// 팁 허브 레지스트리와 동기화 — 새 팁 추가 시 모바일 하위 메뉴도 함께 갱신됩니다
 		children: buildTipsNavChildGroups()
-	},
-	{ type: 'link', href: '/updates', label: '업데이트 일지', section: 'shared' }
+	}
 ]
-
-const LAST_NAV_SECTION_STORAGE_KEY = 'meki-guild-last-nav-section'
-
-const lastNavSectionListeners = new Set<() => void>()
-
-function emitLastNavSectionChange() {
-	for (const listener of lastNavSectionListeners) {
-		listener()
-	}
-}
-
-function subscribeLastNavSection(listener: () => void) {
-	lastNavSectionListeners.add(listener)
-
-	return () => {
-		lastNavSectionListeners.delete(listener)
-	}
-}
-
-function parseNavSection(value: string | null): NavSection | null {
-	if (value === 'guild' || value === 'tips') {
-		return value
-	}
-
-	return null
-}
-
-function getLastNavSectionSnapshot(): NavSection | null {
-	try {
-		return parseNavSection(sessionStorage.getItem(LAST_NAV_SECTION_STORAGE_KEY))
-	} catch {
-		return null
-	}
-}
-
-function getLastNavSectionServerSnapshot(): NavSection | null {
-	return null
-}
-
-function writeLastNavSection(section: NavSection) {
-	try {
-		if (sessionStorage.getItem(LAST_NAV_SECTION_STORAGE_KEY) === section) {
-			return
-		}
-
-		sessionStorage.setItem(LAST_NAV_SECTION_STORAGE_KEY, section)
-	} catch {
-		// private mode 등에서 실패해도 메뉴 노출은 경로 기준으로 유지
-	}
-
-	emitLastNavSectionChange()
-}
-
-function isUpdatesPath(pathname: string) {
-	return pathname === '/updates' || pathname.startsWith('/updates/')
-}
-
-function matchesNavSection(item: NavItem, section: NavSection) {
-	return item.section === section || item.section === 'shared'
-}
-
-function getNavSection(pathname: string): NavSection | null {
-	if (pathname === '/guild' || pathname.startsWith('/guild/')) {
-		return 'guild'
-	}
-
-	if (pathname === '/tips' || pathname.startsWith('/tips/')) {
-		return 'tips'
-	}
-
-	return null
-}
-
-function getVisibleNavItems(pathname: string, lastSection: NavSection | null): NavItem[] {
-	const routeSection = getNavSection(pathname)
-
-	if (routeSection) {
-		return NAV_ITEMS.filter((item) => matchesNavSection(item, routeSection))
-	}
-
-	if (isUpdatesPath(pathname)) {
-		if (lastSection) {
-			return NAV_ITEMS.filter((item) => matchesNavSection(item, lastSection))
-		}
-
-		return NAV_ITEMS
-	}
-
-	return []
-}
-
-/** 길드·팁 경로에서는 구역을 기억하고, /updates에서는 그 구역 메뉴를 유지합니다. */
-function useVisibleNavItems() {
-	const pathname = usePathname()
-	const lastSection = useSyncExternalStore(
-		subscribeLastNavSection,
-		getLastNavSectionSnapshot,
-		getLastNavSectionServerSnapshot
-	)
-	const routeSection = getNavSection(pathname)
-
-	useEffect(() => {
-		if (routeSection) {
-			writeLastNavSection(routeSection)
-		}
-	}, [routeSection])
-
-	return getVisibleNavItems(pathname, lastSection)
-}
 
 function isNavActive(pathname: string, href: string) {
 	if (href === '/guild') {
@@ -366,27 +247,16 @@ function NavItems({ items, orientation, onNavigate }: NavItemsProps) {
 
 /** 데스크탑 헤더용 가로 메뉴 (lg 이상 — 브랜드·유틸과 한 줄 충돌 방지) */
 function Nav() {
-	const items = useVisibleNavItems()
-
-	if (items.length === 0) {
-		return null
-	}
-
 	return (
 		<nav className="text-grayscale-500 hidden items-center gap-6 text-base font-medium lg:flex lg:text-lg">
-			<NavItems items={items} orientation="horizontal" />
+			<NavItems items={NAV_ITEMS} orientation="horizontal" />
 		</nav>
 	)
 }
 
 /** 햄버거 → 왼쪽 Sheet 메뉴 (lg 미만: 모바일·태블릿·좁은 창) */
 function MobileNav() {
-	const items = useVisibleNavItems()
 	const [open, setOpen] = useState(false)
-
-	if (items.length === 0) {
-		return null
-	}
 
 	return (
 		<>
@@ -410,7 +280,7 @@ function MobileNav() {
 						<SheetDescription hidden />
 					</SheetHeader>
 					<nav className="text-grayscale-600 flex flex-1 flex-col gap-1 overflow-y-auto p-3 text-base font-medium">
-						<NavItems items={items} orientation="vertical" onNavigate={() => setOpen(false)} />
+						<NavItems items={NAV_ITEMS} orientation="vertical" onNavigate={() => setOpen(false)} />
 					</nav>
 				</SheetContent>
 			</Sheet>

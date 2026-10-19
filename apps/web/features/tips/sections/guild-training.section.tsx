@@ -1,16 +1,16 @@
 import { Badge } from '@shared/ui/badge'
 
-import GuildTrainingInfoSummary from '@/features/tips/components/guild-training/guild-training-info-summary'
-import GuildTrainingInfoTable from '@/features/tips/components/guild-training/guild-training-info-table'
+import GuildTrainingSummary from '@/features/tips/components/guild-training/guild-training-summary'
+import GuildTrainingTable from '@/features/tips/components/guild-training/guild-training-table'
 import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import { getTipBadgeLabelsBySlug, getTipTitleBySlug } from '@/features/tips/lib/tips-registry.constants'
 
 import MonsterPortrait from '../components/shared/monster-portrait'
-import { GUILD_TRAINING_BOT_PORTRAIT } from '../lib/guild-training-info.constants'
+import { GUILD_TRAINING_BOT_PORTRAIT } from '../lib/guild-training.constants'
 
-function GuildTrainingInfoSection() {
-	const title = getTipTitleBySlug('guild-training-info')
-	const badges = getTipBadgeLabelsBySlug('guild-training-info')
+function GuildTrainingSection() {
+	const title = getTipTitleBySlug('guild-training')
+	const badges = getTipBadgeLabelsBySlug('guild-training')
 
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-6 md:gap-8">
@@ -36,10 +36,10 @@ function GuildTrainingInfoSection() {
 				</header>
 			</div>
 
-			<GuildTrainingInfoSummary />
-			<GuildTrainingInfoTable />
+			<GuildTrainingSummary />
+			<GuildTrainingTable />
 		</section>
 	)
 }
 
-export default GuildTrainingInfoSection
+export default GuildTrainingSection

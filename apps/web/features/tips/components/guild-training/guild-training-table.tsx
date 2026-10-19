@@ -2,7 +2,7 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/
 import { cn } from '@shared/ui/utils'
 
 import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
-import { GUILD_TRAINING_STAGE_ENTRIES } from '@/features/tips/lib/guild-training-info.constants'
+import { GUILD_TRAINING_STAGE_ENTRIES } from '@/features/tips/lib/guild-training.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 const HEAD_BASE_CLASS_NAME =
@@ -57,7 +57,7 @@ function DualColumnHead({ title, className }: DualColumnHeadProps) {
  * 길드 수련장 단계별 점수·명중컷·타수 표.
  * 일반/특수 값을 한 열에 모으고, 처치 점수만 모바일에서 세로 스택합니다.
  */
-function GuildTrainingInfoTable() {
+function GuildTrainingTable() {
 	return (
 		<HitCutTableShell>
 			<TableHeader sticky>
@@ -108,4 +108,4 @@ function GuildTrainingInfoTable() {
 	)
 }
 
-export default GuildTrainingInfoTable
+export default GuildTrainingTable

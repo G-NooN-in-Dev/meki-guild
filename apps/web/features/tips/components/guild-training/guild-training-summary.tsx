@@ -11,7 +11,7 @@ import {
 	GUILD_TRAINING_TIME_BONUS_KILL_INTERVAL,
 	GUILD_TRAINING_TIME_BONUS_SEC,
 	GUILD_TRAINING_TIME_LIMIT_SEC
-} from '../../lib/guild-training-info.constants'
+} from '../../lib/guild-training.constants'
 
 /**
  * 길드 수련장 규칙 요약.
@@ -61,7 +61,7 @@ function SummaryRulesList() {
 }
 
 /** 길드 수련장 규칙 요약 카드. 표에 안 나오는 배경 규칙만 모읍니다. */
-function GuildTrainingInfoSummary() {
+function GuildTrainingSummary() {
 	return (
 		<HitCutSummaryCard>
 			<SummaryRulesList />
@@ -69,4 +69,4 @@ function GuildTrainingInfoSummary() {
 	)
 }
 
-export default GuildTrainingInfoSummary
+export default GuildTrainingSummary

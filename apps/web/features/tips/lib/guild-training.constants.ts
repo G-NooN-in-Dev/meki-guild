@@ -1,4 +1,4 @@
-import type { GuildTrainingHitTier, GuildTrainingStageEntry } from '@/features/tips/types/guild-training-info.type'
+import type { GuildTrainingHitTier, GuildTrainingStageEntry } from '@/features/tips/types/guild-training.type'
 
 /** 길드 수련장 보스 이미지 */
 export const GUILD_TRAINING_BOT_PORTRAIT = '/monsters/guild-training-bot.png'
