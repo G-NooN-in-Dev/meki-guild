@@ -9,6 +9,7 @@ import {
 	PopoverTitle,
 	PopoverTrigger
 } from '@shared/ui/popover'
+import { cn } from '@shared/ui/utils'
 import { TrophyIcon } from 'lucide-react'
 
 import JobBadge from '@/features/guild/components/job-badge'
@@ -20,6 +21,15 @@ import {
 } from '@/features/guild/lib/select-content-award-winners'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { formatDate } from '@/utils/dayjs'
+
+/** 부문별 배경색 — pastel-50으로 슬롯을 구분 */
+const AWARD_SLOT_BG_CLASS_NAME = {
+	combatPower: 'bg-pastel-orange-50',
+	expeditionScore: 'bg-pastel-green-50',
+	rivalry: 'bg-pastel-navy-50',
+	guildBoss: 'bg-pastel-purple-50',
+	training: 'bg-pastel-blue-50'
+} as const satisfies Record<ContentAwardSlot['key'], string>
 
 type ContentAwardsProps = {
 	comparisons: GuildMemberComparison[]
@@ -46,13 +56,17 @@ function AwardSlotLabel({ label, criteriaDate }: AwardSlotLabelProps) {
 	)
 }
 
+const awardSlotItemClassName =
+	'flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 border border-grayscale-100 shadow-sm hover:scale-[1.05] transition-transform'
+
 /** 시상 한 행: 부문 | 이름·직업 | 성장률 */
 function AwardSlot({ slot }: AwardSlotProps) {
-	const { label, criteriaDate } = slot
+	const { key, label, criteriaDate } = slot
+	const className = cn(awardSlotItemClassName, AWARD_SLOT_BG_CLASS_NAME[key])
 
 	if (slot.status === 'pending') {
 		return (
-			<li className="flex min-w-0 items-center gap-3 py-2.5">
+			<li className={className}>
 				<AwardSlotLabel label={label} criteriaDate={criteriaDate} />
 				<p className="text-grayscale-400 min-w-0 flex-1 truncate text-xs">{slot.pendingReason}</p>
 			</li>
@@ -62,7 +76,7 @@ function AwardSlot({ slot }: AwardSlotProps) {
 	const { name, job, percentLabel } = slot.winner
 
 	return (
-		<li className="flex min-w-0 items-center gap-3 py-2.5">
+		<li className={className}>
 			<AwardSlotLabel label={label} criteriaDate={criteriaDate} />
 			<div className="flex min-w-0 flex-1 items-center gap-1.5">
 				<p className="text-grayscale-900 truncate text-sm font-semibold">
@@ -104,7 +118,7 @@ function ContentAwards({ comparisons }: ContentAwardsProps) {
 						아직 시상할 컨텐츠가 없습니다. 주간 업데이트가 끝나면 선정됩니다.
 					</p>
 				) : (
-					<ul className="divide-grayscale-100 divide-y" aria-label="주간 성장왕">
+					<ul className="flex flex-col gap-1.5" aria-label="주간 성장왕">
 						{slots.map((slot) => (
 							<AwardSlot key={slot.key} slot={slot} />
 						))}
