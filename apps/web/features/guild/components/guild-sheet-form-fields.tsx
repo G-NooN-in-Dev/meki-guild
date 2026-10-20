@@ -109,6 +109,7 @@ function GuildSheetTabFieldInputs({ tab, fields, patchField, isLoadingDefaults }
 							onChange={(event) => patchField(field, event.target.value)}
 							required
 							disabled={isLoadingDefaults}
+							autoComplete="off"
 						/>
 						{isKoreanNumberField ? (
 							<p className="text-grayscale-500 text-xs">
