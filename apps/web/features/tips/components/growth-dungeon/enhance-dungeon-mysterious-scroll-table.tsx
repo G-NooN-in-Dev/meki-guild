@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@shared/ui/card'
+import { Card } from '@shared/ui/card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@shared/ui/collapsible'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
@@ -183,19 +183,16 @@ function MysteriousScrollTableBody() {
 
 /**
  * 강화 던전 — 의문의 주문서 세부 종류 실제 획득 확률 표.
- * 드롭률(10%)까지 반영한 클리어당 확률입니다. 모바일은 접고, md 이상은 펼칩니다.
+ * 드롭률(10%)까지 반영한 클리어당 확률입니다. 모바일·데스크톱 모두 접고 펼칩니다.
  */
 function EnhanceDungeonMysteriousScrollTable() {
 	return (
-		<Card
-			size="sm"
-			className="border-grayscale-200 shadow-soft data-[size=sm]:gap-0 data-[size=sm]:py-0 md:data-[size=sm]:gap-4 md:data-[size=sm]:py-4"
-		>
-			<Collapsible className="flex flex-col md:hidden">
+		<Card size="sm" className="border-grayscale-200 shadow-soft data-[size=sm]:gap-0 data-[size=sm]:py-0">
+			<Collapsible className="flex flex-col">
 				<CollapsibleTrigger
 					className={cn(
-						'group flex w-full cursor-pointer items-center justify-between bg-transparent px-4 py-3 text-left',
-						'text-grayscale-900 text-base font-semibold',
+						'group flex w-full cursor-pointer items-center justify-between bg-transparent px-4 py-3 text-left md:py-4',
+						'text-grayscale-900 text-base font-semibold md:text-lg',
 						'focus-visible:ring-grayscale-900 rounded-md focus-visible:ring-2 focus-visible:outline-none'
 					)}
 				>
@@ -206,20 +203,11 @@ function EnhanceDungeonMysteriousScrollTable() {
 					/>
 				</CollapsibleTrigger>
 				<CollapsibleContent>
-					<div className="border-grayscale-200 border-t px-4 py-3">
+					<div className="border-grayscale-200 border-t px-4 py-3 md:py-4">
 						<MysteriousScrollTableBody />
 					</div>
 				</CollapsibleContent>
 			</Collapsible>
-
-			<div className="hidden md:contents">
-				<CardHeader>
-					<CardTitle className="text-grayscale-900 text-lg font-semibold">{headerText}</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<MysteriousScrollTableBody />
-				</CardContent>
-			</div>
 		</Card>
 	)
 }

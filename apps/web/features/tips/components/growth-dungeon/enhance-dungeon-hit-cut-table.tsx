@@ -6,30 +6,26 @@ import { ENHANCE_DUNGEON_HIT_CUT_ENTRIES } from '@/features/tips/lib/growth-dung
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 /**
- * 강화 던전 단계별 명중컷·주문의 흔적 표.
+ * 강화 던전 단계별 방어력·명중컷 표.
  */
 function EnhanceDungeonHitCutTable() {
 	return (
 		<HitCutTableShell>
 			<TableHeader sticky>
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
-					<TableHead
-						className={cn(
-							'bg-grayscale-100 text-grayscale-600 xs:w-[16%] w-[18%] text-center text-xs md:w-[14%] md:text-sm'
-						)}
-					>
+					<TableHead className={cn('bg-grayscale-100 text-grayscale-600 w-1/5 text-center text-xs md:text-sm')}>
 						단계
 					</TableHead>
 					<TableHead
 						className={cn(
-							'bg-pastel-green-100 text-pastel-green-900 xs:px-2 w-[30%] px-1.5 text-center text-xs leading-tight md:w-[30%] md:px-3 md:text-sm'
+							'bg-pastel-orange-100 text-pastel-orange-900 xs:px-2 w-2/5 px-1.5 text-center text-xs leading-tight md:px-3 md:text-sm'
 						)}
 					>
-						주문의 흔적 보상 (개수)
+						방어력
 					</TableHead>
 					<TableHead
 						className={cn(
-							'bg-pastel-blue-100 text-pastel-blue-900 xs:px-2 w-[52%] px-1.5 text-center text-xs leading-tight md:w-[56%] md:px-3 md:text-sm'
+							'bg-pastel-blue-100 text-pastel-blue-900 xs:px-2 w-2/5 px-1.5 text-center text-xs leading-tight md:px-3 md:text-sm'
 						)}
 					>
 						필요 명중
@@ -37,7 +33,7 @@ function EnhanceDungeonHitCutTable() {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{ENHANCE_DUNGEON_HIT_CUT_ENTRIES.map(({ stage, requiredHit, spellTraceCount, isHardStage }) => (
+				{ENHANCE_DUNGEON_HIT_CUT_ENTRIES.map(({ stage, defense, requiredHit, isHardStage }) => (
 					<TableRow key={stage} className="border-grayscale-200 hover:bg-transparent">
 						<TableCell
 							className={cn(
@@ -50,10 +46,10 @@ function EnhanceDungeonHitCutTable() {
 						<TableCell
 							className={cn(
 								HIT_CUT_CELL_BASE_CLASS_NAME,
-								isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-green-50 text-grayscale-900'
+								isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-orange-50 text-grayscale-900'
 							)}
 						>
-							{formatLocaleNumber(spellTraceCount)}
+							{formatLocaleNumber(defense)}
 						</TableCell>
 						<TableCell
 							className={cn(
