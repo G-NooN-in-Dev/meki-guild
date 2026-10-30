@@ -13,7 +13,6 @@ import { InfoIcon, LockIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
-import MonsterPortrait from '@/features/tips/components/shared/monster-portrait'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {
@@ -175,14 +174,12 @@ function PartyQuestEquipmentItemCell({ equipment }: { equipment: PartyQuestEquip
 
 function PartyQuestRewardTableHeader({
 	questName,
-	questImageSrc,
 	difficultyLabel,
 	requiredHit,
 	burningOn,
 	onBurningChange
 }: {
 	questName: string
-	questImageSrc: string
 	difficultyLabel: string
 	requiredHit: number
 	burningOn: boolean
@@ -191,16 +188,13 @@ function PartyQuestRewardTableHeader({
 	return (
 		<CardHeader className="gap-2">
 			<div className="flex items-start justify-between gap-2">
-				<div className="flex min-w-0 items-start gap-2">
-					<MonsterPortrait src={questImageSrc} alt={questName} size="sm" />
-					<div className="flex min-w-0 flex-col gap-1">
-						<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
-							{questName} · {difficultyLabel}
-						</CardTitle>
-						<Badge variant="secondary" className="w-fit tabular-nums">
-							필요 명중 : {formatLocaleNumber(requiredHit)}
-						</Badge>
-					</div>
+				<div className="flex min-w-0 flex-col gap-1">
+					<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
+						{questName} · {difficultyLabel}
+					</CardTitle>
+					<Badge variant="secondary" className="w-fit tabular-nums">
+						필요 명중 : {formatLocaleNumber(requiredHit)}
+					</Badge>
 				</div>
 
 				<Label
@@ -295,7 +289,7 @@ function PartyQuestLockedDifficultyEmpty({
 function PartyQuestRewardTable({ selectedQuest }: PartyQuestRewardTableProps) {
 	const [burningOn, setBurningOn] = useState(false)
 	const { quest, difficulty } = selectedQuest
-	const { label: questName, imageSrc: questImageSrc } = PARTY_QUEST_META[quest]
+	const { label: questName } = PARTY_QUEST_META[quest]
 	const difficultyLabel = getPartyQuestDifficultyLabel(difficulty)
 	const entry = getPartyQuestEntry(quest, difficulty)
 
@@ -321,7 +315,6 @@ function PartyQuestRewardTable({ selectedQuest }: PartyQuestRewardTableProps) {
 			<Card className="border-grayscale-200 shadow-soft">
 				<PartyQuestRewardTableHeader
 					questName={questName}
-					questImageSrc={questImageSrc}
 					difficultyLabel={difficultyLabel}
 					requiredHit={entry.requiredHit}
 					burningOn={burningOn}
