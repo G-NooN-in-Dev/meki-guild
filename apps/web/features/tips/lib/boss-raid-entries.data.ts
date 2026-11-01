@@ -28,11 +28,12 @@ const BOSS_RAID_SCROLL_TIER_IMAGE_SRC = {
 	mid: '/items/scroll-brown.png'
 } as const satisfies Partial<Record<BossRaidRewardTier, `/items/${string}.png`>>
 
-/** 훈장 이미지 — `public/items/` */
+/** 훈장 이미지 — `public/medals/` */
 const BOSS_RAID_MEDAL_IMAGE_SRC = {
 	'팀플레이어 훈장': '/medals/team-player-medal.jpg',
-	'혼테일 원정대 훈장': '/medals/horntail-expedition-medal.jpg'
-} as const satisfies Record<string, `/medals/${string}.jpg`>
+	'혼테일 원정대 훈장': '/medals/horntail-expedition-medal.jpg',
+	'핑크빈 슬레이어': '/medals/pink-bean-slayer.png'
+} as const satisfies Record<string, `/medals/${string}.jpg` | `/medals/${string}.png`>
 
 /** 대부분 난이도에 공통으로 나오는 재화·재료 */
 const COMMON_BOSS_RAID_MATERIALS = [
@@ -717,6 +718,96 @@ const BOSS_RAID_ENTRIES = [
 				ratePercent: 3
 			},
 			...COMMON_BOSS_RAID_MATERIALS
+		]
+	},
+	{
+		boss: 'pinkBean',
+		difficulty: 'guild',
+		requiredHit: 460,
+		rewardMode: 'milestone',
+		milestones: [
+			{
+				hpPercent: 10,
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 20,
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'low',
+				maxLevel: 120,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배']
+			},
+			{
+				hpPercent: 30,
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'low',
+				maxLevel: 120,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배']
+			},
+			{
+				hpPercent: 40,
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 50,
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'mid',
+				quantity: 2,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid
+			},
+			{
+				hpPercent: 60,
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'mid',
+				maxLevel: 130,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배']
+			},
+			{
+				hpPercent: 70,
+				kind: 'equipment',
+				grade: 'legendaryPlus',
+				tier: 'mid',
+				maxLevel: 130,
+				name: '핑크빛 성배',
+				imageSrc: BOSS_RAID_EQUIPMENT_IMAGE_SRC['핑크빛 성배']
+			},
+			{
+				hpPercent: 80,
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'low',
+				quantity: 3,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.low
+			},
+			{
+				hpPercent: 90,
+				kind: 'scroll',
+				scrollName: '핑크빈의 주문서',
+				tier: 'mid',
+				quantity: 2,
+				imageSrc: BOSS_RAID_SCROLL_TIER_IMAGE_SRC.mid
+			},
+			{
+				hpPercent: 100,
+				kind: 'medal',
+				name: '핑크빈 슬레이어',
+				imageSrc: BOSS_RAID_MEDAL_IMAGE_SRC['핑크빈 슬레이어']
+			}
 		]
 	}
 ] as const satisfies readonly BossRaidEntry[]
