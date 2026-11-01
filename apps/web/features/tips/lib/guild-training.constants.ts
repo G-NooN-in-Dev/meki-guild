@@ -1,8 +1,5 @@
 import type { GuildTrainingHitTier, GuildTrainingStageEntry } from '@/features/tips/types/guild-training.type'
 
-/** 길드 수련장 보스 이미지 */
-export const GUILD_TRAINING_BOT_PORTRAIT = '/monsters/guild-training-bot.png'
-
 /** 표에 표시할 최대 단계 */
 const GUILD_TRAINING_MAX_STAGE = 50
 

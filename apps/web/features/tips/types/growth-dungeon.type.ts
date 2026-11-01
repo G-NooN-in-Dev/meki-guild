@@ -8,27 +8,50 @@ type GrowthDungeonHitCutEntry = {
 	isHardStage: boolean
 }
 
+/** 무기 던전 단계별 표 한 줄 */
+type WeaponDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
+	/** 해당 단계 방어력 (1단계 50, 이후 +50) */
+	defense: number
+}
+
 /** 경험치 던전 단계별 표 한 줄 */
 type ExperienceDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
+	/** 해당 단계 방어력 (1단계 300, 이후 +50) */
+	defense: number
 	/** 해당 단계 처치해야 하는 몬스터 수 */
 	requiredKillCount: number
+	/** 주니어 부기 필요 명중 (일반 몬스터보다 보너스만큼 높음) */
+	juniorBoogieRequiredHit: number
 }
 
 /** 장비 던전 단계별 표 한 줄 */
 type EquipmentDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
+	/** 해당 단계 방어력 (1단계 300, 이후 +50) */
+	defense: number
 	/** 해당 단계 제한시간(초) */
 	timeLimitSec: number
 	/** 해당 단계 처치해야 하는 몬스터 수 */
 	requiredKillCount: number
+	/** 포이즌 푸퍼 필요 명중 (일반 몬스터보다 보너스만큼 높음) */
+	poisonPufferRequiredHit: number
 }
 
 /** 용사의 수련장 단계별 표 한 줄 */
-type AbilityDungeonHitCutEntry = GrowthDungeonHitCutEntry & {}
+type AbilityDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
+	/** 일반 몬스터 방어력 (1단계 200, 이후 +50) */
+	defense: number
+	/** 버프 몬스터(샐리온·라이오너) 방어력 (1단계 500, 이후 +50) */
+	buffDefense: number
+	/** 보스(엘리쟈) 방어력 (1단계 700, 이후 +50) */
+	bossDefense: number
+	/** 버프·보스 필요 명중. 일반 몬스터보다 보너스만큼 낮고 둘은 같음 */
+	buffRequiredHit: number
+}
 
 /** 강화 던전 단계별 표 한 줄 */
 type EnhanceDungeonHitCutEntry = GrowthDungeonHitCutEntry & {
-	/** 해당 단계 주문의 흔적 획득 개수 */
-	spellTraceCount: number
+	/** 해당 단계 방어력 (1단계 1000, 이후 +50) */
+	defense: number
 }
 
 /** 의문의 주문서 — 게임 표기 티어(노말/레어/에픽) 비율(%) */
@@ -77,5 +100,6 @@ export type {
 	EnhanceDungeonMysteriousScrollTier,
 	EquipmentDungeonHitCutEntry,
 	ExperienceDungeonHitCutEntry,
-	GrowthDungeonHitCutEntry
+	GrowthDungeonHitCutEntry,
+	WeaponDungeonHitCutEntry
 }

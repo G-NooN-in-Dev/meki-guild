@@ -1,8 +1,5 @@
 import type { GuildExpeditionEntry } from '@/features/tips/types/guild-expedition.type'
 
-/** 토벌전 보스 이미지 */
-export const GUILD_EXPEDITION_BOSS_PORTRAIT = '/monsters/arcanus.gif'
-
 /** 표에 표시할 최대 단계 */
 const GUILD_EXPEDITION_MAX_STAGE = 50
 

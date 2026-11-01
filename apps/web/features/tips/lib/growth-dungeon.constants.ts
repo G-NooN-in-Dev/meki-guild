@@ -6,27 +6,19 @@ import type {
 	EnhanceDungeonMysteriousScrollTier,
 	EquipmentDungeonHitCutEntry,
 	ExperienceDungeonHitCutEntry,
-	GrowthDungeonHitCutEntry
+	WeaponDungeonHitCutEntry
 } from '@/features/tips/types/growth-dungeon.type'
 
+/** label은 md 이상, shortLabel은 그보다 좁은 화면에서 탭에 씁니다. */
 export const GROWTH_DUNGEON_TABS = [
-	{ label: '무기 던전', value: 'weapon' },
-	{ label: '경험치 던전', value: 'experience' },
-	{ label: '장비 던전', value: 'equipment' },
-	{ label: '용사의 수련장', value: 'ability' },
-	{ label: '강화 던전', value: 'enhance' }
+	{ label: '무기 던전', shortLabel: '무기', value: 'weapon' },
+	{ label: '경험치 던전', shortLabel: '경험치', value: 'experience' },
+	{ label: '장비 던전', shortLabel: '장비', value: 'equipment' },
+	{ label: '용사의 수련장', shortLabel: '용힘', value: 'ability' },
+	{ label: '강화 던전', shortLabel: '강화', value: 'enhance' }
 ] as const
 
 type GrowthDungeonTabValue = (typeof GROWTH_DUNGEON_TABS)[number]['value']
-
-/** 탭별 대표 몬스터 — `public/monsters/` (원본 GIF/PNG/WebP, MonsterPortrait용) */
-export const GROWTH_DUNGEON_MONSTER_SRC = {
-	weapon: '/monsters/mush-mom.webp',
-	experience: '/monsters/zombie-mush-mom.png',
-	equipment: '/monsters/poison-poopa.gif',
-	ability: '/monsters/eliza.gif',
-	enhance: '/monsters/crimson-barlog.gif'
-} as const satisfies Record<GrowthDungeonTabValue, string>
 
 function isGrowthDungeonTabValue(value: string): value is GrowthDungeonTabValue {
 	return GROWTH_DUNGEON_TABS.some((tab) => tab.value === value)
@@ -78,18 +70,30 @@ export const WEAPON_DUNGEON_TIME_LIMIT_SEC = 22
 /** 무기 던전 1단계 기준 필요 명중 */
 const WEAPON_DUNGEON_BASE_HIT_CUT = 7
 
+/** 무기 던전 1단계 방어력 */
+const WEAPON_DUNGEON_BASE_DEFENSE = 50
+
+/** 무기 던전 단계마다 증가하는 방어력 */
+const WEAPON_DUNGEON_DEFENSE_INCREMENT = 50
+
 /** 무기 던전 단계 → 필요 명중 (1단계 7, 이후 공통 구간 증가) */
 function getWeaponDungeonRequiredHitCut(stage: number) {
 	return getGrowthDungeonRequiredHitCut(stage, WEAPON_DUNGEON_BASE_HIT_CUT)
 }
 
+/** 무기 던전 단계 → 방어력 (1단계 50, 이후 +50) */
+function getWeaponDungeonDefense(stage: number) {
+	return WEAPON_DUNGEON_BASE_DEFENSE + (stage - 1) * WEAPON_DUNGEON_DEFENSE_INCREMENT
+}
+
 /** 무기 던전 1~maxStage 단계 표 데이터 */
-function buildWeaponDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): GrowthDungeonHitCutEntry[] {
+function buildWeaponDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): WeaponDungeonHitCutEntry[] {
 	return Array.from({ length: maxStage }, (_, index) => {
 		const stage = index + 1
 
 		return {
 			stage,
+			defense: getWeaponDungeonDefense(stage),
 			requiredHit: getWeaponDungeonRequiredHitCut(stage),
 			isHardStage: isGrowthDungeonHardStage(stage)
 		}
@@ -105,15 +109,29 @@ export const EXPERIENCE_DUNGEON_TIME_LIMIT_SEC = 22
 /** 주니어 부기 처치 시 충전되는 시간(초) */
 export const EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_TIME_BONUS_SEC = 4
 
+/** 주니어 부기 처치 시 이동속도·공격속도가 증가하는 시간(초) */
+export const EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_SPEED_BUFF_SEC = 10
+
 /** 주니어 부기 명중컷이 일반 몬스터보다 높은 수치 */
 export const EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_HIT_CUT_BONUS = 2
 
 /** 경험치 던전 1단계 기준 필요 명중 */
 const EXPERIENCE_DUNGEON_BASE_HIT_CUT = 8
 
+/** 경험치 던전 1단계 방어력 */
+const EXPERIENCE_DUNGEON_BASE_DEFENSE = 300
+
+/** 경험치 던전 단계마다 증가하는 방어력 */
+const EXPERIENCE_DUNGEON_DEFENSE_INCREMENT = 50
+
 /** 경험치 던전 단계 → 필요 명중 (1단계 8, 이후 공통 구간 증가) */
 function getExperienceDungeonRequiredHitCut(stage: number) {
 	return getGrowthDungeonRequiredHitCut(stage, EXPERIENCE_DUNGEON_BASE_HIT_CUT)
+}
+
+/** 경험치 던전 단계 → 방어력 (1단계 300, 이후 +50) */
+function getExperienceDungeonDefense(stage: number) {
+	return EXPERIENCE_DUNGEON_BASE_DEFENSE + (stage - 1) * EXPERIENCE_DUNGEON_DEFENSE_INCREMENT
 }
 
 /**
@@ -138,6 +156,7 @@ function buildExperienceDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE
 
 		return {
 			stage,
+			defense: getExperienceDungeonDefense(stage),
 			requiredHit,
 			requiredKillCount: getExperienceDungeonRequiredKillCount(stage),
 			juniorBoogieRequiredHit: requiredHit + EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_HIT_CUT_BONUS,
@@ -149,15 +168,35 @@ function buildExperienceDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE
 /** 경험치 던전 표에 바로 쓰는 단계별 데이터 */
 export const EXPERIENCE_DUNGEON_HIT_CUT_ENTRIES = buildExperienceDungeonHitCutEntries()
 
+/** 마스크 피쉬 처치 시 이동속도가 증가하는 시간(초) */
+export const EQUIPMENT_DUNGEON_MASK_FISH_SPEED_BUFF_SEC = 5
+
+/** 포이즌 푸퍼 처치 후 광역 폭발까지 지연(초) */
+export const EQUIPMENT_DUNGEON_POISON_PUFFER_EXPLOSION_DELAY_SEC = 0.3
+
+/** 포이즌 푸퍼 광역 폭발 범위 */
+export const EQUIPMENT_DUNGEON_POISON_PUFFER_EXPLOSION_RANGE = 3300
+
 /** 포이즌 푸퍼 명중컷이 일반 몬스터보다 높은 수치 */
 export const EQUIPMENT_DUNGEON_POISON_PUFFER_HIT_CUT_BONUS = 3
 
 /** 장비 던전 1단계 기준 필요 명중 */
 const EQUIPMENT_DUNGEON_BASE_HIT_CUT = 12
 
+/** 장비 던전 1단계 방어력 */
+const EQUIPMENT_DUNGEON_BASE_DEFENSE = 300
+
+/** 장비 던전 단계마다 증가하는 방어력 */
+const EQUIPMENT_DUNGEON_DEFENSE_INCREMENT = 50
+
 /** 장비 던전 단계 → 필요 명중 (1단계 12, 이후 공통 구간 증가) */
 function getEquipmentDungeonRequiredHitCut(stage: number) {
 	return getGrowthDungeonRequiredHitCut(stage, EQUIPMENT_DUNGEON_BASE_HIT_CUT)
+}
+
+/** 장비 던전 단계 → 방어력 (1단계 300, 이후 +50) */
+function getEquipmentDungeonDefense(stage: number) {
+	return EQUIPMENT_DUNGEON_BASE_DEFENSE + (stage - 1) * EQUIPMENT_DUNGEON_DEFENSE_INCREMENT
 }
 
 /**
@@ -194,9 +233,11 @@ function buildEquipmentDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE)
 
 		return {
 			stage,
+			defense: getEquipmentDungeonDefense(stage),
 			requiredHit,
 			timeLimitSec: getEquipmentDungeonTimeLimitSec(stage),
 			requiredKillCount: getEquipmentDungeonRequiredKillCount(stage),
+			poisonPufferRequiredHit: requiredHit + EQUIPMENT_DUNGEON_POISON_PUFFER_HIT_CUT_BONUS,
 			isHardStage: isGrowthDungeonHardStage(stage)
 		}
 	})
@@ -205,27 +246,68 @@ function buildEquipmentDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE)
 /** 장비 던전 표에 바로 쓰는 단계별 데이터 */
 export const EQUIPMENT_DUNGEON_HIT_CUT_ENTRIES = buildEquipmentDungeonHitCutEntries()
 
-/** 용사의 수련장 — 일반 몬스터 사냥 제한시간(초). 전 단계 동일 */
+/** 용사의 수련장 — 일반·버프 몬스터 사냥 제한시간(초). 전 단계 동일 */
 export const ABILITY_DUNGEON_NORMAL_TIME_LIMIT_SEC = 30
 
-/** 용사의 수련장 — 보스 처치 제한시간(초). 전 단계 동일 */
+/** 용사의 수련장 — 엘리쟈 처치 제한시간(초). 전 단계 동일 */
 export const ABILITY_DUNGEON_BOSS_TIME_LIMIT_SEC = 20
 
-/** 일반 몬스터 1마리 처치 시 공격력 증가 버프(%) */
-export const ABILITY_DUNGEON_ATTACK_BUFF_PERCENT_PER_KILL = 2
+/** 처치 버프 지속 시간(초). 일반·버프 몬스터 공통 */
+export const ABILITY_DUNGEON_BUFF_DURATION_SEC = 60
 
-/** 공격력 증가 버프 최대 스택 */
-export const ABILITY_DUNGEON_ATTACK_BUFF_MAX_STACKS = 100
+/** 일반 몬스터 처치 시 공격력 증가(%) */
+export const ABILITY_DUNGEON_NORMAL_ATTACK_BUFF_PERCENT = 2
 
-/** 일반 몬스터 명중컷이 보스 몬스터보다 높은 수치 */
+/** 일반 몬스터 처치 시 이동속도 증가(%) */
+export const ABILITY_DUNGEON_NORMAL_MOVE_SPEED_BUFF_PERCENT = 1
+
+/** 라이오너 처치 시 공격력 증가(%) */
+export const ABILITY_DUNGEON_LIONER_ATTACK_BUFF_PERCENT = 10
+
+/** 라이오너 처치 시 공격속도 증가(%) */
+export const ABILITY_DUNGEON_LIONER_ATTACK_SPEED_BUFF_PERCENT = 5
+
+/** 샐리온 처치 시 공격력 증가(%) */
+export const ABILITY_DUNGEON_CELLION_ATTACK_BUFF_PERCENT = 10
+
+/** 샐리온 처치 시 이동속도 증가(%) */
+export const ABILITY_DUNGEON_CELLION_MOVE_SPEED_BUFF_PERCENT = 5
+
+/** 버프 최대 스택 */
+export const ABILITY_DUNGEON_BUFF_MAX_STACKS = 100
+
+/** 최대 스택일 때 공격력 증가 상한(%) */
+export const ABILITY_DUNGEON_BUFF_MAX_ATTACK_PERCENT = 200
+
+/** 최대 스택일 때 이동속도 증가 상한(%) */
+export const ABILITY_DUNGEON_BUFF_MAX_MOVE_SPEED_PERCENT = 100
+
+/** 일반 몬스터 필요 명중이 버프·보스보다 높은 수치 */
 export const ABILITY_DUNGEON_NORMAL_HIT_CUT_BONUS = 2
 
-/** 용사의 수련장 1단계 기준 필요 명중 (일반 몬스터). 보스는 이보다 NORMAL_HIT_CUT_BONUS만큼 낮음 */
-const ABILITY_DUNGEON_BASE_HIT_CUT = 18
+/** 용사의 수련장 1단계 기준 필요 명중 (일반 몬스터). 버프·보스는 이보다 보너스만큼 낮음 */
+const ABILITY_DUNGEON_NORMAL_BASE_HIT_CUT = 20
 
-/** 용사의 수련장 단계 → 일반 몬스터 필요 명중 (1단계 18, 이후 공통 구간 증가) */
+/** 일반 몬스터 1단계 방어력 */
+const ABILITY_DUNGEON_NORMAL_BASE_DEFENSE = 200
+
+/** 버프 몬스터(샐리온·라이오너) 1단계 방어력 */
+const ABILITY_DUNGEON_BUFF_BASE_DEFENSE = 500
+
+/** 보스(엘리쟈) 1단계 방어력 */
+const ABILITY_DUNGEON_BOSS_BASE_DEFENSE = 700
+
+/** 용사의 수련장 단계마다 증가하는 방어력. 일반·버프·보스 공통 */
+const ABILITY_DUNGEON_DEFENSE_INCREMENT = 50
+
+/** 용사의 수련장 단계 → 일반 몬스터 필요 명중 (1단계 20, 이후 공통 구간 증가) */
 function getAbilityDungeonRequiredHitCut(stage: number) {
-	return getGrowthDungeonRequiredHitCut(stage, ABILITY_DUNGEON_BASE_HIT_CUT)
+	return getGrowthDungeonRequiredHitCut(stage, ABILITY_DUNGEON_NORMAL_BASE_HIT_CUT)
+}
+
+/** 용사의 수련장 단계 → 방어력 (기준값 + 단계마다 +50) */
+function getAbilityDungeonDefense(stage: number, baseDefense: number) {
+	return baseDefense + (stage - 1) * ABILITY_DUNGEON_DEFENSE_INCREMENT
 }
 
 /** 용사의 수련장 1~maxStage 단계 표 데이터 */
@@ -236,7 +318,11 @@ function buildAbilityDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): 
 
 		return {
 			stage,
+			defense: getAbilityDungeonDefense(stage, ABILITY_DUNGEON_NORMAL_BASE_DEFENSE),
+			buffDefense: getAbilityDungeonDefense(stage, ABILITY_DUNGEON_BUFF_BASE_DEFENSE),
+			bossDefense: getAbilityDungeonDefense(stage, ABILITY_DUNGEON_BOSS_BASE_DEFENSE),
 			requiredHit,
+			buffRequiredHit: requiredHit - ABILITY_DUNGEON_NORMAL_HIT_CUT_BONUS,
 			isHardStage: isGrowthDungeonHardStage(stage)
 		}
 	})
@@ -268,7 +354,8 @@ const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_TIER_BANDS = [
 	{ stageFrom: 110, stageTo: 119, normal: 10, rare: 60, epic: 30 },
 	{ stageFrom: 120, stageTo: 129, normal: 10, rare: 57.5, epic: 32.5 },
 	{ stageFrom: 130, stageTo: 139, normal: 10, rare: 55, epic: 35 },
-	{ stageFrom: 140, stageTo: 150, normal: 10, rare: 52.5, epic: 37.5 }
+	{ stageFrom: 140, stageTo: 149, normal: 10, rare: 52.5, epic: 37.5 },
+	{ stageFrom: 150, stageTo: 150, normal: 10, rare: 50, epic: 40 }
 ] as const satisfies ReadonlyArray<{ stageFrom: number; stageTo: number } & EnhanceDungeonMysteriousScrollTier>
 
 /**
@@ -307,20 +394,20 @@ export const ENHANCE_DUNGEON_MYSTERIOUS_SCROLL_BAND_ENTRIES: EnhanceDungeonMyste
 /** 강화 던전 1단계 기준 필요 명중 */
 const ENHANCE_DUNGEON_BASE_HIT_CUT = 34
 
-/** 강화 던전 1단계 주문의 흔적 획득 개수 */
-const ENHANCE_DUNGEON_BASE_SPELL_TRACE_COUNT = 155
+/** 강화 던전 1단계 방어력 */
+const ENHANCE_DUNGEON_BASE_DEFENSE = 1000
 
-/** 강화 던전 단계마다 증가하는 주문의 흔적 개수 */
-const ENHANCE_DUNGEON_SPELL_TRACE_INCREMENT = 5
+/** 강화 던전 단계마다 증가하는 방어력 */
+const ENHANCE_DUNGEON_DEFENSE_INCREMENT = 50
 
 /** 강화 던전 단계 → 필요 명중 (1단계 34, 이후 공통 구간 증가) */
 function getEnhanceDungeonRequiredHitCut(stage: number) {
 	return getGrowthDungeonRequiredHitCut(stage, ENHANCE_DUNGEON_BASE_HIT_CUT)
 }
 
-/** 강화 던전 단계 → 주문의 흔적 획득 개수 (1단계 155, 이후 +5) */
-function getEnhanceDungeonSpellTraceCount(stage: number) {
-	return ENHANCE_DUNGEON_BASE_SPELL_TRACE_COUNT + (stage - 1) * ENHANCE_DUNGEON_SPELL_TRACE_INCREMENT
+/** 강화 던전 단계 → 방어력 (1단계 1000, 이후 +50) */
+function getEnhanceDungeonDefense(stage: number) {
+	return ENHANCE_DUNGEON_BASE_DEFENSE + (stage - 1) * ENHANCE_DUNGEON_DEFENSE_INCREMENT
 }
 
 /** 강화 던전 1~maxStage 단계 표 데이터 */
@@ -330,8 +417,8 @@ function buildEnhanceDungeonHitCutEntries(maxStage = GROWTH_DUNGEON_MAX_STAGE): 
 
 		return {
 			stage,
+			defense: getEnhanceDungeonDefense(stage),
 			requiredHit: getEnhanceDungeonRequiredHitCut(stage),
-			spellTraceCount: getEnhanceDungeonSpellTraceCount(stage),
 			isHardStage: isGrowthDungeonHardStage(stage)
 		}
 	})
