@@ -53,7 +53,7 @@ const TIP_ENTRIES = [
 	{
 		slug: 'guild-expedition',
 		title: '토벌전 정보',
-		description: '단계별 명중컷 · 제한시간',
+		description: '단계별 방어력 · 명중컷 · 제한시간',
 		category: 'guild-contents',
 		tags: ['토벌전'],
 		href: '/tips/guild-expedition'

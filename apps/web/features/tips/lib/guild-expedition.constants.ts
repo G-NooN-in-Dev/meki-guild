@@ -33,6 +33,12 @@ const GUILD_EXPEDITION_EARLY_TIME_LIMIT_INCREMENT_SEC = 5
 /** 11단계 이상 고정 제한시간(초) */
 const GUILD_EXPEDITION_LATE_TIME_LIMIT_SEC = 100
 
+/** 1단계 방어력 */
+const GUILD_EXPEDITION_DEFENSE_BASE = 100000
+
+/** 단계마다 증가하는 방어력 */
+const GUILD_EXPEDITION_DEFENSE_INCREMENT = 10000
+
 /** 단계 → 필요 명중 */
 function getGuildExpeditionRequiredHit(stage: number) {
 	if (stage < GUILD_EXPEDITION_LATE_TIER_START_STAGE) {
@@ -43,6 +49,11 @@ function getGuildExpeditionRequiredHit(stage: number) {
 		GUILD_EXPEDITION_LATE_HIT_BASE +
 		(stage - GUILD_EXPEDITION_LATE_TIER_START_STAGE) * GUILD_EXPEDITION_LATE_HIT_INCREMENT
 	)
+}
+
+/** 단계 → 방어력 (1단계 100000, 이후 +10000) */
+function getGuildExpeditionDefense(stage: number) {
+	return GUILD_EXPEDITION_DEFENSE_BASE + (stage - 1) * GUILD_EXPEDITION_DEFENSE_INCREMENT
 }
 
 /** 단계 → 제한시간(초) */
@@ -61,6 +72,7 @@ function buildGuildExpeditionEntries(maxStage = GUILD_EXPEDITION_MAX_STAGE): Gui
 
 		return {
 			stage,
+			defense: getGuildExpeditionDefense(stage),
 			requiredHit: getGuildExpeditionRequiredHit(stage),
 			timeLimitSec: getGuildExpeditionTimeLimitSec(stage)
 		}
