@@ -34,6 +34,14 @@ const TIP_ENTRIES = [
 		href: '/tips/boss-raid'
 	},
 	{
+		slug: 'world-boss',
+		title: '월드보스 정보',
+		description: '단계별 방어력 · 필요 명중',
+		category: 'growth-adventure',
+		tags: ['월드보스'],
+		href: '/tips/world-boss'
+	},
+	{
 		slug: 'party-quest',
 		title: '파티퀘스트 정보',
 		description: '퀘스트·난이도별 명중컷 · 클리어 보상',
