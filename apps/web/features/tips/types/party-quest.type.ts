@@ -28,10 +28,18 @@ type PartyQuestMaterialReward = {
 	ratePercent: number
 }
 
+/**
+ * 몬스터별 원본 수치.
+ * 2칸은 일반·보스, 3칸은 일반·중간보스·최종보스 순서입니다.
+ * 화면에는 이 중 최댓값만 안내합니다.
+ */
+type PartyQuestMonsterValues = readonly [number, number] | readonly [number, number, number]
+
 type PartyQuestEntry = {
 	quest: PartyQuestId
 	difficulty: PartyQuestDifficulty
-	requiredHit: number
+	requiredHit: PartyQuestMonsterValues
+	defense: PartyQuestMonsterValues
 	equipment: PartyQuestEquipmentReward
 	materials: readonly PartyQuestMaterialReward[]
 }
@@ -48,6 +56,7 @@ export type {
 	PartyQuestEquipmentReward,
 	PartyQuestId,
 	PartyQuestMaterialReward,
+	PartyQuestMonsterValues,
 	PartyQuestRewardGrade,
 	PartyQuestRewardTier,
 	PartyQuestSelection

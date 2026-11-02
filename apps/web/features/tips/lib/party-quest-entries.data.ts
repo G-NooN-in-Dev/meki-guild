@@ -93,7 +93,9 @@ function equipment(
 }
 
 /**
- * 파티퀘스트 명중컷·보상 원본 데이터.
+ * 파티퀘스트 명중·방어력·보상 원본 데이터.
+ * 명중·방어력은 [일반, 보스] 또는 [일반, 중간보스, 최종보스] 순서입니다.
+ * 화면에는 배열 중 최댓값만 안내합니다.
  * 장비 획득 확률은 난이도 공통(`party-quest.constants`)에서 조회한다.
  */
 const PARTY_QUEST_ENTRIES = [
@@ -101,7 +103,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring',
 		difficulty: 'easy',
-		requiredHit: 65,
+		requiredHit: [70, 60, 65],
+		defense: [1160, 2200, 2250],
 		equipment: equipment('물컹물컹한 반지', 'epic', 'high', 50),
 		materials: materials('easy', {
 			ticket: 2,
@@ -114,7 +117,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring',
 		difficulty: 'normal',
-		requiredHit: 110,
+		requiredHit: [94, 101, 110],
+		defense: [1880, 2400, 2450],
 		equipment: equipment('물컹물컹한 반지', 'unique', 'high', 75),
 		materials: materials('normal', {
 			ticket: 2,
@@ -127,7 +131,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring',
 		difficulty: 'hard',
-		requiredHit: 173,
+		requiredHit: [177, 164, 173],
+		defense: [2220, 2750, 2800],
 		equipment: equipment('물컹물컹한 반지', 'legendary', 'low', 90),
 		materials: materials('hard', {
 			ticket: 2,
@@ -140,7 +145,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring',
 		difficulty: 'chaos',
-		requiredHit: 240,
+		requiredHit: [224, 231, 240],
+		defense: [2600, 3150, 3200],
 		equipment: equipment('물컹물컹한 반지', 'legendary', 'mid', 105),
 		materials: materials('chaos', {
 			ticket: 2,
@@ -155,7 +161,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'necklace',
 		difficulty: 'easy',
-		requiredHit: 146,
+		requiredHit: [143, 137, 146],
+		defense: [2860, 2600, 2650],
 		equipment: equipment('금이 간 목걸이', 'unique', 'high', 80),
 		materials: materials('easy', {
 			ticket: 2,
@@ -168,7 +175,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'necklace',
 		difficulty: 'normal',
-		requiredHit: 182,
+		requiredHit: [164, 173, 182],
+		defense: [3280, 2800, 2850],
 		equipment: equipment('금이 간 목걸이', 'unique', 'top', 95),
 		materials: materials('normal', {
 			ticket: 2,
@@ -181,7 +189,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'necklace',
 		difficulty: 'hard',
-		requiredHit: 227,
+		requiredHit: [209, 218, 227],
+		defense: [4180, 3050, 3100],
 		equipment: equipment('금이 간 목걸이', 'legendary', 'low', 105),
 		materials: materials('hard', {
 			ticket: 2,
@@ -194,7 +203,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'necklace',
 		difficulty: 'chaos',
-		requiredHit: 272,
+		requiredHit: [254, 263, 272],
+		defense: [4860, 4900, 4950],
 		equipment: equipment('금이 간 목걸이', 'legendary', 'mid', 115),
 		materials: materials('chaos', {
 			ticket: 2,
@@ -209,7 +219,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'faceAccessory',
 		difficulty: 'easy',
-		requiredHit: 156,
+		requiredHit: [161, 156],
+		defense: [1000, 8000],
 		equipment: equipment('응축된 힘의 결정석', 'unique', 'top', 85),
 		materials: materials('easy', {
 			ticket: 2,
@@ -222,7 +233,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'faceAccessory',
 		difficulty: 'normal',
-		requiredHit: 206,
+		requiredHit: [211, 206],
+		defense: [6500, 19000],
 		equipment: equipment('응축된 힘의 결정석', 'legendary', 'low', 100),
 		materials: materials('normal', {
 			ticket: 2,
@@ -235,7 +247,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'faceAccessory',
 		difficulty: 'hard',
-		requiredHit: 266,
+		requiredHit: [271, 266],
+		defense: [34000, 74000],
 		equipment: equipment('응축된 힘의 결정석', 'legendary', 'mid', 110),
 		materials: materials('hard', {
 			ticket: 2,
@@ -248,7 +261,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'faceAccessory',
 		difficulty: 'chaos',
-		requiredHit: 316,
+		requiredHit: [316, 316],
+		defense: [40000, 85000],
 		equipment: equipment('응축된 힘의 결정석', 'legendary', 'high', 120),
 		materials: materials('chaos', {
 			ticket: 2,
@@ -263,7 +277,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring2',
 		difficulty: 'easy',
-		requiredHit: 205,
+		requiredHit: [200, 205],
+		defense: [6000, 15000],
 		equipment: equipment('연금술사의 반지', 'legendary', 'low', 100),
 		materials: materials('easy', {
 			ticket: 2,
@@ -276,7 +291,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring2',
 		difficulty: 'normal',
-		requiredHit: 266,
+		requiredHit: [261, 266],
+		defense: [30000, 70000],
 		equipment: equipment('연금술사의 반지', 'legendary', 'mid', 110),
 		materials: materials('normal', {
 			ticket: 2,
@@ -289,7 +305,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring2',
 		difficulty: 'hard',
-		requiredHit: 316,
+		requiredHit: [311, 316],
+		defense: [40000, 80000],
 		equipment: equipment('연금술사의 반지', 'legendary', 'high', 120),
 		materials: materials('hard', {
 			ticket: 2,
@@ -302,7 +319,8 @@ const PARTY_QUEST_ENTRIES = [
 	{
 		quest: 'ring2',
 		difficulty: 'chaos',
-		requiredHit: 366,
+		requiredHit: [361, 366],
+		defense: [45000, 85000],
 		equipment: equipment('연금술사의 반지', 'legendary', 'top', 130),
 		materials: materials('chaos', {
 			ticket: 2,

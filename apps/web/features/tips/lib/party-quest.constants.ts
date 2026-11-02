@@ -8,6 +8,7 @@ import type {
 	PartyQuestEquipmentReward,
 	PartyQuestId,
 	PartyQuestMaterialReward,
+	PartyQuestMonsterValues,
 	PartyQuestRewardGrade,
 	PartyQuestRewardTier
 } from '@/features/tips/types/party-quest.type'
@@ -74,8 +75,21 @@ function getPartyQuestEntry(quest: PartyQuestId, difficulty: PartyQuestDifficult
 	return PARTY_QUEST_ENTRIES.find((entry) => entry.quest === quest && entry.difficulty === difficulty)
 }
 
-function getPartyQuestRequiredHit(quest: PartyQuestId, difficulty: PartyQuestDifficulty): number | undefined {
-	return getPartyQuestEntry(quest, difficulty)?.requiredHit
+/** 일반·중간보스·최종보스 중 가장 높은 수치 */
+function getPartyQuestMaxValue(values: PartyQuestMonsterValues) {
+	return Math.max(...values)
+}
+
+function getPartyQuestRequiredHit(quest: PartyQuestId, difficulty: PartyQuestDifficulty) {
+	const requiredHit = getPartyQuestEntry(quest, difficulty)?.requiredHit
+
+	return requiredHit ? getPartyQuestMaxValue(requiredHit) : undefined
+}
+
+function getPartyQuestDefense(quest: PartyQuestId, difficulty: PartyQuestDifficulty) {
+	const defense = getPartyQuestEntry(quest, difficulty)?.defense
+
+	return defense ? getPartyQuestMaxValue(defense) : undefined
 }
 
 function getPartyQuestEquipmentRatePercent(difficulty: PartyQuestDifficulty, burningOn: boolean) {
@@ -134,10 +148,12 @@ function getPartyQuestDifficultyLabel(difficulty: PartyQuestDifficulty): string 
 export {
 	applyPartyQuestBurningRates,
 	formatPartyQuestRatePercent,
+	getPartyQuestDefense,
 	getPartyQuestDifficultyLabel,
 	getPartyQuestEntry,
 	getPartyQuestEquipmentMaxLevel,
 	getPartyQuestMaterialQuantity,
+	getPartyQuestMaxValue,
 	getPartyQuestRequiredHit,
 	sortPartyQuestMaterials
 }
