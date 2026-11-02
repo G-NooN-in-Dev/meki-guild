@@ -267,6 +267,7 @@ function BossRaidRewardTableHeader({
 	imageWidth,
 	imageHeight,
 	difficultyLabel,
+	defense,
 	requiredHit,
 	showBurningToggle,
 	burningOn,
@@ -277,6 +278,7 @@ function BossRaidRewardTableHeader({
 	imageWidth: number
 	imageHeight: number
 	difficultyLabel: string
+	defense: number
 	requiredHit: number
 	showBurningToggle: boolean
 	burningOn: boolean
@@ -286,13 +288,18 @@ function BossRaidRewardTableHeader({
 		<CardHeader className="gap-2 px-4 md:px-6">
 			<div className="flex items-center gap-2 md:gap-3">
 				<BossRaidBossImage src={imageSrc} width={imageWidth} height={imageHeight} />
-				<div className="flex shrink-0 flex-col gap-1">
+				<div className="flex min-w-0 flex-col gap-1">
 					<CardTitle className="text-grayscale-900 text-sm font-semibold whitespace-nowrap md:text-lg">
 						{bossName} · {difficultyLabel}
 					</CardTitle>
-					<Badge variant="secondary" className="w-fit whitespace-nowrap tabular-nums">
-						필요 명중 : {formatLocaleNumber(requiredHit)}
-					</Badge>
+					<div className="flex flex-wrap gap-1">
+						<Badge className="bg-pastel-blue-200 text-pastel-blue-900 tabular-nums">
+							필요 명중 : {formatLocaleNumber(requiredHit)}
+						</Badge>
+						<Badge className="bg-pastel-orange-200 text-pastel-orange-900 tabular-nums">
+							방어력 : {formatLocaleNumber(defense)}
+						</Badge>
+					</div>
 				</div>
 
 				{showBurningToggle ? (
@@ -441,7 +448,7 @@ function BossRaidLockedDifficultyEmpty({
 function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 	const [burningOn, setBurningOn] = useState(false)
 	const { boss, difficulty } = selectedBoss
-	const { label: bossName, imageSrc, imageWidth, imageHeight } = BOSS_RAID_BOSS_META[boss]
+	const { label: bossName, defense, imageSrc, imageWidth, imageHeight } = BOSS_RAID_BOSS_META[boss]
 	const difficultyLabel = getBossRaidDifficultyLabel(difficulty)
 
 	const bossRaidEntry = getBossRaidEntry(boss, difficulty)
@@ -485,6 +492,7 @@ function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 					imageWidth={imageWidth}
 					imageHeight={imageHeight}
 					difficultyLabel={difficultyLabel}
+					defense={defense}
 					requiredHit={requiredHit}
 					showBurningToggle={!isMilestone}
 					burningOn={burningOn}

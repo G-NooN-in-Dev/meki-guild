@@ -25,11 +25,14 @@ function BossRaidHitCutTable({ selectedBoss, setSelectedBoss }: BossRaidHitCutTa
 				<p className="text-grayscale-600 text-sm">명중 수치를 누르면 아래에 보상 정보가 표시됩니다.</p>
 			</div>
 
-			<HitCutTableShell scrollable={false} tableClassName="min-w-96">
+			<HitCutTableShell scrollable={false} tableClassName="min-w-112">
 				<TableHeader sticky>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
-						<TableHead className="bg-grayscale-100 text-grayscale-600 xs:text-xs h-auto w-[22%] min-w-0 overflow-hidden px-1 py-2 text-center text-[10px] leading-tight break-keep whitespace-normal md:w-[18%] md:px-2 md:text-sm">
-							보스 / 난이도
+						<TableHead className="bg-grayscale-100 text-grayscale-600 xs:text-xs h-auto w-[16%] min-w-0 overflow-hidden px-1 py-2 text-center text-[10px] leading-tight break-keep whitespace-normal md:w-[14%] md:px-2 md:text-sm">
+							보스
+						</TableHead>
+						<TableHead className="bg-pastel-orange-100 text-pastel-orange-900 xs:text-xs h-auto w-[18%] min-w-0 overflow-hidden px-1 py-2 text-center text-[10px] leading-tight break-keep whitespace-normal md:w-[16%] md:px-2 md:text-sm">
+							방어력
 						</TableHead>
 						{BOSS_RAID_DIFFICULTIES.map(({ key, label, chipClassName }) => (
 							<TableHead
@@ -45,33 +48,45 @@ function BossRaidHitCutTable({ selectedBoss, setSelectedBoss }: BossRaidHitCutTa
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{BOSS_RAID_BOSS_ORDER.map((boss) => (
-						<TableRow key={boss} className="border-grayscale-200 hover:bg-transparent">
-							<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-grayscale-50 text-grayscale-800')}>
-								{BOSS_RAID_BOSS_META[boss].label}
-							</TableCell>
-							{BOSS_RAID_DIFFICULTIES.map(({ key: difficulty }) => {
-								const requiredHit = getBossRaidRequiredHit(boss, difficulty)
-								const isSelected = selectedBoss.boss === boss && selectedBoss.difficulty === difficulty
+					{BOSS_RAID_BOSS_ORDER.map((boss) => {
+						const { label, defense } = BOSS_RAID_BOSS_META[boss]
 
-								return (
-									<TableCell key={difficulty} className="p-0">
-										<button
-											type="button"
-											onClick={() => setSelectedBoss({ boss, difficulty })}
-											className={cn(
-												HIT_CUT_CELL_BASE_CLASS_NAME,
-												'text-grayscale-900 hover:bg-grayscale-100/80 size-full cursor-pointer transition-colors',
-												isSelected && 'ring-grayscale-900 bg-pastel-blue-50 ring-2 ring-inset'
-											)}
-										>
-											{requiredHit !== undefined ? formatLocaleNumber(requiredHit) : '—'}
-										</button>
-									</TableCell>
-								)
-							})}
-						</TableRow>
-					))}
+						return (
+							<TableRow key={boss} className="border-grayscale-200 hover:bg-transparent">
+								<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-grayscale-50 text-grayscale-800')}>
+									{label}
+								</TableCell>
+								<TableCell
+									className={cn(
+										HIT_CUT_CELL_BASE_CLASS_NAME,
+										'bg-pastel-orange-50 text-grayscale-900 whitespace-nowrap'
+									)}
+								>
+									{formatLocaleNumber(defense)}
+								</TableCell>
+								{BOSS_RAID_DIFFICULTIES.map(({ key: difficulty }) => {
+									const requiredHit = getBossRaidRequiredHit(boss, difficulty)
+									const isSelected = selectedBoss.boss === boss && selectedBoss.difficulty === difficulty
+
+									return (
+										<TableCell key={difficulty} className="p-0">
+											<button
+												type="button"
+												onClick={() => setSelectedBoss({ boss, difficulty })}
+												className={cn(
+													HIT_CUT_CELL_BASE_CLASS_NAME,
+													'text-grayscale-900 hover:bg-grayscale-100/80 size-full cursor-pointer transition-colors',
+													isSelected && 'ring-grayscale-900 bg-pastel-blue-50 ring-2 ring-inset'
+												)}
+											>
+												{requiredHit !== undefined ? formatLocaleNumber(requiredHit) : '—'}
+											</button>
+										</TableCell>
+									)
+								})}
+							</TableRow>
+						)
+					})}
 				</TableBody>
 			</HitCutTableShell>
 		</div>
