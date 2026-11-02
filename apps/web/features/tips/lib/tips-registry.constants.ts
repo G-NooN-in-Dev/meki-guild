@@ -28,10 +28,18 @@ const TIP_ENTRIES = [
 	{
 		slug: 'boss-raid',
 		title: '보스레이드 정보',
-		description: '보스·난이도별 명중컷 · 클리어 보상',
+		description: '보스별 방어력 · 난이도별 명중컷 · 클리어 보상',
 		category: 'growth-adventure',
 		tags: ['보스레이드'],
 		href: '/tips/boss-raid'
+	},
+	{
+		slug: 'world-boss',
+		title: '월드보스 정보',
+		description: '단계별 방어력 · 필요 명중',
+		category: 'growth-adventure',
+		tags: ['월드보스'],
+		href: '/tips/world-boss'
 	},
 	{
 		slug: 'party-quest',
