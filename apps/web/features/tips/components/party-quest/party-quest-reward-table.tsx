@@ -22,6 +22,7 @@ import {
 	getPartyQuestEntry,
 	getPartyQuestEquipmentMaxLevel,
 	getPartyQuestMaterialQuantity,
+	getPartyQuestMaxValue,
 	PARTY_QUEST_BONUS_OPTION_COUNT_RATES,
 	PARTY_QUEST_META,
 	PARTY_QUEST_REWARD_GRADE_META,
@@ -176,12 +177,14 @@ function PartyQuestRewardTableHeader({
 	questName,
 	difficultyLabel,
 	requiredHit,
+	defense,
 	burningOn,
 	onBurningChange
 }: {
 	questName: string
 	difficultyLabel: string
 	requiredHit: number
+	defense: number
 	burningOn: boolean
 	onBurningChange: (checked: boolean) => void
 }) {
@@ -192,9 +195,14 @@ function PartyQuestRewardTableHeader({
 					<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
 						{questName} · {difficultyLabel}
 					</CardTitle>
-					<Badge variant="secondary" className="w-fit tabular-nums">
-						필요 명중 : {formatLocaleNumber(requiredHit)}
-					</Badge>
+					<div className="flex flex-wrap gap-1">
+						<Badge className="bg-pastel-blue-200 text-pastel-blue-900 tabular-nums">
+							필요 명중 : {formatLocaleNumber(requiredHit)}
+						</Badge>
+						<Badge className="bg-pastel-orange-200 text-pastel-orange-900 tabular-nums">
+							방어력 : {formatLocaleNumber(defense)}
+						</Badge>
+					</div>
 				</div>
 
 				<Label
@@ -316,7 +324,8 @@ function PartyQuestRewardTable({ selectedQuest }: PartyQuestRewardTableProps) {
 				<PartyQuestRewardTableHeader
 					questName={questName}
 					difficultyLabel={difficultyLabel}
-					requiredHit={entry.requiredHit}
+					requiredHit={getPartyQuestMaxValue(entry.requiredHit)}
+					defense={getPartyQuestMaxValue(entry.defense)}
 					burningOn={burningOn}
 					onBurningChange={setBurningOn}
 				/>

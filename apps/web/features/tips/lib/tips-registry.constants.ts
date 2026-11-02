@@ -44,7 +44,7 @@ const TIP_ENTRIES = [
 	{
 		slug: 'party-quest',
 		title: '파티퀘스트 정보',
-		description: '퀘스트·난이도별 명중컷 · 클리어 보상',
+		description: '퀘스트·난이도별 명중컷 · 방어력 · 클리어 보상',
 		category: 'growth-adventure',
 		tags: ['파티퀘스트'],
 		href: '/tips/party-quest'
