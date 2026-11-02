@@ -52,6 +52,36 @@ const itemCellClassName =
 const tableHeadClassName =
 	'bg-grayscale-100 text-grayscale-600 min-w-0 overflow-hidden text-center text-xs leading-tight break-keep whitespace-normal md:text-sm border-r-grayscale-200 border-r'
 
+type BossRaidBossImageProps = {
+	src: string
+	width: number
+	height: number
+	className?: string
+}
+
+/**
+ * 선택한 보스 스프라이트.
+ * 이름이 바로 옆에 있으므로 장식(alt 없음)으로 두고, GIF 프레임이 깨지지 않게 최적화를 끕니다.
+ * 모바일에서는 가로 폭을 맞춘 뒤, 자리가 부족하면 이름 대신 이미지가 먼저 줄어든다.
+ */
+function BossRaidBossImage({ src, width, height, className }: BossRaidBossImageProps) {
+	return (
+		<Image
+			key={src}
+			src={src}
+			alt=""
+			width={width}
+			height={height}
+			unoptimized
+			draggable={false}
+			className={cn(
+				'h-auto max-h-16 w-auto max-w-24 min-w-6 shrink rounded-lg object-contain md:max-h-24 md:max-w-40 md:min-w-0 md:shrink-0',
+				className
+			)}
+		/>
+	)
+}
+
 function BossRaidRewardGradeBadge({ reward }: { reward: BossRaidReward | BossRaidMilestone }) {
 	if (reward.kind !== 'equipment') {
 		return null
@@ -233,6 +263,9 @@ function BossRaidMilestoneRewardItemCell({ milestone }: { milestone: BossRaidMil
 
 function BossRaidRewardTableHeader({
 	bossName,
+	imageSrc,
+	imageWidth,
+	imageHeight,
 	difficultyLabel,
 	requiredHit,
 	showBurningToggle,
@@ -240,6 +273,9 @@ function BossRaidRewardTableHeader({
 	onBurningChange
 }: {
 	bossName: string
+	imageSrc: string
+	imageWidth: number
+	imageHeight: number
 	difficultyLabel: string
 	requiredHit: number
 	showBurningToggle: boolean
@@ -247,13 +283,14 @@ function BossRaidRewardTableHeader({
 	onBurningChange: (checked: boolean) => void
 }) {
 	return (
-		<CardHeader className="gap-2">
-			<div className="flex items-start justify-between gap-2">
-				<div className="flex min-w-0 flex-col gap-1">
-					<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">
+		<CardHeader className="gap-2 px-4 md:px-6">
+			<div className="flex items-center gap-2 md:gap-3">
+				<BossRaidBossImage src={imageSrc} width={imageWidth} height={imageHeight} />
+				<div className="flex shrink-0 flex-col gap-1">
+					<CardTitle className="text-grayscale-900 text-sm font-semibold whitespace-nowrap md:text-lg">
 						{bossName} · {difficultyLabel}
 					</CardTitle>
-					<Badge variant="secondary" className="w-fit tabular-nums">
+					<Badge variant="secondary" className="w-fit whitespace-nowrap tabular-nums">
 						필요 명중 : {formatLocaleNumber(requiredHit)}
 					</Badge>
 				</div>
@@ -262,7 +299,7 @@ function BossRaidRewardTableHeader({
 					<Label
 						htmlFor="boss-raid-burning"
 						className={cn(
-							'shrink-0 gap-2 rounded-md border px-3 py-1.5 font-medium shadow-xs transition-colors',
+							'ml-auto shrink-0 gap-2 rounded-md border px-2.5 py-1 font-medium shadow-xs transition-colors md:px-3 md:py-1.5',
 							burningOn
 								? 'border-warning-500/40 bg-warning-50 text-warning-700'
 								: 'border-grayscale-200 bg-card text-grayscale-600'
@@ -367,10 +404,28 @@ function BossRaidMilestoneRewardTable({ milestones }: { milestones: readonly Bos
 }
 
 /** 아직 해금되지 않은 난이도 — 보상 표 대신 안내 */
-function BossRaidLockedDifficultyEmpty({ bossName, difficultyLabel }: { bossName: string; difficultyLabel: string }) {
+function BossRaidLockedDifficultyEmpty({
+	bossName,
+	difficultyLabel,
+	imageSrc,
+	imageWidth,
+	imageHeight
+}: {
+	bossName: string
+	difficultyLabel: string
+	imageSrc: string
+	imageWidth: number
+	imageHeight: number
+}) {
 	return (
 		<Empty className="border-grayscale-200 bg-card/50 shadow-soft border border-dashed py-10 md:py-12">
 			<EmptyHeader>
+				<BossRaidBossImage
+					src={imageSrc}
+					width={imageWidth}
+					height={imageHeight}
+					className="w-auto max-w-28 min-w-0 shrink-0"
+				/>
 				<EmptyMedia variant="icon">
 					<LockIcon />
 				</EmptyMedia>
@@ -386,7 +441,7 @@ function BossRaidLockedDifficultyEmpty({ bossName, difficultyLabel }: { bossName
 function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 	const [burningOn, setBurningOn] = useState(false)
 	const { boss, difficulty } = selectedBoss
-	const { label: bossName } = BOSS_RAID_BOSS_META[boss]
+	const { label: bossName, imageSrc, imageWidth, imageHeight } = BOSS_RAID_BOSS_META[boss]
 	const difficultyLabel = getBossRaidDifficultyLabel(difficulty)
 
 	const bossRaidEntry = getBossRaidEntry(boss, difficulty)
@@ -398,7 +453,13 @@ function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 					<h2 className="text-grayscale-900 text-base font-semibold md:text-lg">보상 상세</h2>
 					<p className="text-grayscale-600 text-sm">선택한 보스·난이도의 보상 정보를 확인할 수 있습니다.</p>
 				</div>
-				<BossRaidLockedDifficultyEmpty bossName={bossName} difficultyLabel={difficultyLabel} />
+				<BossRaidLockedDifficultyEmpty
+					bossName={bossName}
+					difficultyLabel={difficultyLabel}
+					imageSrc={imageSrc}
+					imageWidth={imageWidth}
+					imageHeight={imageHeight}
+				/>
 			</div>
 		)
 	}
@@ -420,6 +481,9 @@ function BossRaidRewardTable({ selectedBoss }: BossRaidRewardTableProps) {
 			<Card className="border-grayscale-200 shadow-soft">
 				<BossRaidRewardTableHeader
 					bossName={bossName}
+					imageSrc={imageSrc}
+					imageWidth={imageWidth}
+					imageHeight={imageHeight}
 					difficultyLabel={difficultyLabel}
 					requiredHit={requiredHit}
 					showBurningToggle={!isMilestone}

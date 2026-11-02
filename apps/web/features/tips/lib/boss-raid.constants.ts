@@ -26,11 +26,15 @@ export const BOSS_RAID_DIFFICULTIES = [
 /** 보스 표시 메타 */
 export const BOSS_RAID_BOSS_ORDER = ['zakum', 'horntail', 'pinkBean'] as const satisfies readonly BossRaidBoss[]
 
+/**
+ * 보스 표시 메타.
+ * imageWidth/Height는 원본 GIF 픽셀이며, 화면 크기는 보상 카드에서 CSS로 맞춥니다.
+ */
 export const BOSS_RAID_BOSS_META = {
-	zakum: { label: '자쿰' },
-	horntail: { label: '혼테일' },
-	pinkBean: { label: '핑크빈' }
-} as const satisfies Record<BossRaidBoss, { label: string }>
+	zakum: { label: '자쿰', imageSrc: '/monsters/zakum.gif', imageWidth: 400, imageHeight: 249 },
+	horntail: { label: '혼테일', imageSrc: '/monsters/horntail.gif', imageWidth: 400, imageHeight: 354 },
+	pinkBean: { label: '핑크빈', imageSrc: '/monsters/pink-bean.gif', imageWidth: 400, imageHeight: 319 }
+} as const satisfies Record<BossRaidBoss, { label: string; imageSrc: string; imageWidth: number; imageHeight: number }>
 
 /** 장비 등급 Badge */
 export const BOSS_RAID_REWARD_GRADE_META = {
