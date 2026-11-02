@@ -33,6 +33,17 @@ const GUILD_EXPEDITION_EARLY_TIME_LIMIT_INCREMENT_SEC = 5
 /** 11단계 이상 고정 제한시간(초) */
 const GUILD_EXPEDITION_LATE_TIME_LIMIT_SEC = 100
 
+/**
+ * 토벌전 보스 표시 메타.
+ * imageWidth/Height는 원본 GIF 픽셀이며, 화면 크기는 CSS로 맞춥니다.
+ */
+export const GUILD_EXPEDITION_BOSS = {
+	label: '아르카누스',
+	imageSrc: '/monsters/arcanus.gif',
+	imageWidth: 400,
+	imageHeight: 347
+} as const
+
 /** 1단계 방어력 */
 const GUILD_EXPEDITION_DEFENSE_BASE = 100000
 
