@@ -259,7 +259,7 @@ const PARTY_QUEST_ENTRIES = [
 		})
 	},
 
-	// 로미오와 줄리엣 (카오스 없음)
+	// 로미오와 줄리엣
 	{
 		quest: 'ring2',
 		difficulty: 'easy',
@@ -297,6 +297,19 @@ const PARTY_QUEST_ENTRIES = [
 			weaponStone: 1850,
 			elitePoint: 55,
 			meso: 5300
+		})
+	},
+	{
+		quest: 'ring2',
+		difficulty: 'chaos',
+		requiredHit: 366,
+		equipment: equipment('연금술사의 반지', 'legendary', 'top', 130),
+		materials: materials('chaos', {
+			ticket: 2,
+			spellTrace: 80,
+			weaponStone: 2050,
+			elitePoint: 60,
+			meso: 5800
 		})
 	}
 ] as const satisfies readonly PartyQuestEntry[]

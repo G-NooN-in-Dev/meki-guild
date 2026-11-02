@@ -71,7 +71,7 @@ const CONTENT_STAGE_CUTS = [
 		name: '로미오와 줄리엣',
 		rewards: ['반지2'],
 		kind: 'party-quest',
-		stageCuts: { easy: '22-10', normal: '27-10', hard: '32-15', chaos: null }
+		stageCuts: { easy: '22-10', normal: '27-10', hard: '32-15', chaos: '37-15' }
 	},
 	{
 		name: '혼테일',
