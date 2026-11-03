@@ -2,7 +2,7 @@
 	"guild": {
 		"expeditionRank": 17,
 		"rivalryRank": 1,
-		"rivalryPoints": 5744900,
+		"rivalryPoints": 5875800,
 		"trainingRank": 1
 	},
 	"members": [
@@ -10,13 +10,13 @@
 			"name": "크르릉캉캉",
 			"level": 120,
 			"job": "팔라딘",
-			"combatPower": "6경 7390조",
+			"combatPower": "6경 8942조",
 			"expedition": {
 				"grade": "그랜드마스터1",
-				"placement": 116,
-				"score": "1조 8746억"
+				"placement": 124,
+				"score": "1조 9062억"
 			},
-			"rivalry": "1조 114억",
+			"rivalry": "1조 160억",
 			"training": "2584만 8606",
 			"guildBoss": "1916억 8626만"
 		},
@@ -24,27 +24,27 @@
 			"name": "왈왈멍멍",
 			"level": 119,
 			"job": "캡틴",
-			"combatPower": "3경 641조",
+			"combatPower": "3경 4180조",
 			"expedition": {
 				"grade": "그랜드마스터1",
-				"placement": 138,
-				"score": "1조 6178억"
+				"placement": 147,
+				"score": "1조 6400억"
 			},
-			"rivalry": "7787억 7683만",
+			"rivalry": "8015억 1259만",
 			"training": "2600만 9583",
 			"guildBoss": "1797억 4671만"
 		},
 		{
 			"name": "교토",
-			"level": 116,
+			"level": 117,
 			"job": "다크나이트",
-			"combatPower": "1경 8280조",
+			"combatPower": "2경 974조",
 			"expedition": {
 				"grade": "그랜드마스터4",
-				"placement": 299,
-				"score": "1조 2억"
+				"placement": 294,
+				"score": "1조 595억"
 			},
-			"rivalry": "3752억 9754만",
+			"rivalry": "3696억 470만",
 			"training": "2220만 9030",
 			"guildBoss": "583억 6113만"
 		},
@@ -52,55 +52,55 @@
 			"name": "쫀쿤",
 			"level": 116,
 			"job": "팔라딘",
-			"combatPower": "9047조 1061억",
+			"combatPower": "1경 720조",
 			"expedition": {
 				"grade": "그랜드마스터4",
-				"placement": 288,
-				"score": "1조 124억"
+				"placement": 293,
+				"score": "1조 595억"
 			},
-			"rivalry": "3180억 9464만",
+			"rivalry": "3774억 8180만",
 			"training": "1917만 1104",
 			"guildBoss": "1068억 4634만"
-		},
-		{
-			"name": "휘언",
-			"level": 117,
-			"job": "비숍",
-			"combatPower": "7672조 6949억",
-			"expedition": {
-				"grade": "그랜드마스터5",
-				"placement": 421,
-				"score": "6705억 4132만"
-			},
-			"rivalry": "2558억 2214만",
-			"training": "2442만 1173",
-			"guildBoss": "989억 4574만"
 		},
 		{
 			"name": "살짝",
 			"level": 117,
 			"job": "캡틴",
-			"combatPower": "7210조 6983억",
+			"combatPower": "1경 78조",
 			"expedition": {
 				"grade": "그랜드마스터3",
-				"placement": 234,
-				"score": "1조 891억"
+				"placement": 216,
+				"score": "1조 2064억"
 			},
-			"rivalry": "3581억 2119만",
+			"rivalry": "3879억 4507만",
 			"training": "2478만 8886",
 			"guildBoss": "1160억 5544만"
+		},
+		{
+			"name": "휘언",
+			"level": 117,
+			"job": "비숍",
+			"combatPower": "7926조 1183억",
+			"expedition": {
+				"grade": "그랜드마스터5",
+				"placement": 445,
+				"score": "6921억 8061만"
+			},
+			"rivalry": "2935억 7369만",
+			"training": "2442만 1173",
+			"guildBoss": "989억 4574만"
 		},
 		{
 			"name": "현뚜니",
 			"level": 115,
 			"job": "히어로",
-			"combatPower": "6879조 8730억",
+			"combatPower": "6972조 3297억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 567,
-				"score": "4566억 5582만"
+				"placement": 598,
+				"score": "4776억 2710만"
 			},
-			"rivalry": "2366억 9076만",
+			"rivalry": "2335억 2638만",
 			"training": "1898만 4891",
 			"guildBoss": "856억 1050만"
 		},
@@ -108,53 +108,67 @@
 			"name": "누들면",
 			"level": 115,
 			"job": "섀도어",
-			"combatPower": "5224조 7095억",
+			"combatPower": "5926조 6257억",
 			"expedition": {
-				"grade": "마스터1",
-				"placement": 501,
-				"score": "5397억 9553만"
+				"grade": "그랜드마스터5",
+				"placement": 493,
+				"score": "6060억 5915만"
 			},
-			"rivalry": "2067억 8805만",
+			"rivalry": "2434억 4709만",
 			"training": ""
 		},
 		{
 			"name": "콩얄",
-			"level": 114,
+			"level": 115,
 			"job": "비숍",
-			"combatPower": "5024조 7534억",
+			"combatPower": "5845조 5892억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 564,
-				"score": "4622억 2015만"
+				"placement": 574,
+				"score": "5066억 3706만"
 			},
-			"rivalry": "2140억 7057만",
+			"rivalry": "2361억 9613만",
 			"training": ""
 		},
 		{
 			"name": "아이뿌",
 			"level": 114,
 			"job": "비숍",
-			"combatPower": "4145조 4874억",
+			"combatPower": "4638조 9685억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 650,
-				"score": "3850억 4030만"
+				"placement": 625,
+				"score": "4469억 43만"
 			},
-			"rivalry": "1975억 7303만",
+			"rivalry": "1946억 7321만",
 			"training": "1021만 9296",
 			"guildBoss": "572억 3731만"
 		},
 		{
-			"name": "랴이토",
-			"level": 114,
-			"job": "섀도어",
-			"combatPower": "4133조 7405억",
+			"name": "위험장소경고",
+			"level": 115,
+			"job": "나이트로드",
+			"combatPower": "4228조 3983억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 544,
-				"score": "4840억 1426만"
+				"placement": 690,
+				"score": "3956억 8709만"
 			},
-			"rivalry": "2021억 2697만",
+			"rivalry": "2009억 6396만",
+			"training": "1176만 7335",
+			"guildBoss": "548억 3583만"
+		},
+		{
+			"name": "랴이토",
+			"level": 115,
+			"job": "섀도어",
+			"combatPower": "4183조 7762억",
+			"expedition": {
+				"grade": "마스터1",
+				"placement": 563,
+				"score": "5167억 6169만"
+			},
+			"rivalry": "2055억 8343만",
 			"training": "1745만 7468",
 			"guildBoss": "852억 3547만"
 		},
@@ -162,138 +176,110 @@
 			"name": "부귀창귀",
 			"level": 114,
 			"job": "나이트로드",
-			"combatPower": "3665조 4712억",
+			"combatPower": "3759조 2934억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 780,
-				"score": "3156억 6673만"
+				"placement": 810,
+				"score": "3303억 3677만"
 			},
-			"rivalry": "1477억 4502만",
+			"rivalry": "1616억 6991만",
 			"training": "7131528",
 			"guildBoss": "600억 9249만"
-		},
-		{
-			"name": "위험장소경고",
-			"level": 114,
-			"job": "나이트로드",
-			"combatPower": "3417조 661억",
-			"expedition": {
-				"grade": "마스터1",
-				"placement": 613,
-				"score": "4166억 981만"
-			},
-			"rivalry": "1781억 6923만",
-			"training": "1176만 7335",
-			"guildBoss": "548억 3583만"
 		},
 		{
 			"name": "누텔라토스트",
 			"level": 114,
 			"job": "히어로",
-			"combatPower": "3172조 1237억",
+			"combatPower": "3505조 2149억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 621,
-				"score": "4092억 9949만"
+				"placement": 647,
+				"score": "4268억 3266만"
 			},
-			"rivalry": "1734억 7890만",
+			"rivalry": "1617억 8355만",
 			"training": "1792만 5540",
 			"guildBoss": "513억 8061만"
 		},
 		{
 			"name": "민무늬오징어",
-			"level": 114,
+			"level": 115,
 			"job": "히어로",
-			"combatPower": "3040조 624억",
+			"combatPower": "3355조 4666억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 569,
-				"score": "4562억 3786만"
+				"placement": 586,
+				"score": "4892억 3135만"
 			},
-			"rivalry": "1944억 7837만",
+			"rivalry": "2094억 4311만",
 			"training": "1419만 657",
 			"guildBoss": "691억 9967만"
-		},
-		{
-			"name": "무병창귀",
-			"level": 113,
-			"job": "바이퍼",
-			"combatPower": "2752조 1178억",
-			"expedition": {
-				"grade": "마스터1",
-				"placement": 839,
-				"score": "2951억 4847만"
-			},
-			"rivalry": "1392억 5574만",
-			"training": "7638981",
-			"guildBoss": "511억 8735만"
-		},
-		{
-			"name": "살점",
-			"level": 114,
-			"job": "섀도어",
-			"combatPower": "2579조 9711억",
-			"expedition": {
-				"grade": "마스터1",
-				"placement": 858,
-				"score": "2862억 9818만"
-			},
-			"rivalry": "1461억 2355만",
-			"training": "1119만 5676",
-			"guildBoss": "431억 5927만"
 		},
 		{
 			"name": "진서아",
 			"level": 115,
 			"job": "섀도어",
-			"combatPower": "2579조 9063억",
+			"combatPower": "3236조 3794억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 699,
-				"score": "3543억 1695만"
+				"placement": 660,
+				"score": "4149억 3713만"
 			},
-			"rivalry": "1648억 9848만",
+			"rivalry": "1770억 2042만",
 			"training": ""
+		},
+		{
+			"name": "아로미0",
+			"level": 114,
+			"job": "불독",
+			"combatPower": "3050조 8610억",
+			"expedition": {
+				"grade": "마스터1",
+				"placement": 692,
+				"score": "3948억 923만"
+			},
+			"rivalry": "1706억 4480만",
+			"training": "1063만 6365",
+			"guildBoss": "481억 7488만"
 		},
 		{
 			"name": "원더08",
 			"level": 114,
 			"job": "비숍",
-			"combatPower": "2487조 6704억",
+			"combatPower": "2832조 5244억",
 			"expedition": {
-				"grade": "마스터2",
-				"placement": 1158,
-				"score": "2096억 1286만"
+				"grade": "마스터1",
+				"placement": 987,
+				"score": "2641억 4735만"
 			},
-			"rivalry": "1391억 5929만",
+			"rivalry": "1434억 2455만",
 			"training": "1214만 8917",
 			"guildBoss": "363억 5675만"
 		},
 		{
-			"name": "아로미0",
-			"level": 113,
-			"job": "불독",
-			"combatPower": "2360조 2340억",
+			"name": "살점",
+			"level": 114,
+			"job": "섀도어",
+			"combatPower": "2823조 8781억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 726,
-				"score": "3417억 1568만"
+				"placement": 856,
+				"score": "3064억 1167만"
 			},
-			"rivalry": "1659억 9259만",
-			"training": "1063만 6365",
-			"guildBoss": "481억 7488만"
+			"rivalry": "1655억 7120만",
+			"training": "1119만 5676",
+			"guildBoss": "431억 5927만"
 		},
 		{
 			"name": "창귀창귀",
 			"level": 113,
 			"job": "비숍",
-			"combatPower": "2244조 3414억",
+			"combatPower": "2656조 4713억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1174,
-				"score": "2067억 7726만"
+				"placement": 1192,
+				"score": "2177억 8068만"
 			},
-			"rivalry": "1434억 5900만",
+			"rivalry": "1472억 7903만",
 			"training": "1242만 5037",
 			"guildBoss": "372억 9819만"
 		},
@@ -301,40 +287,54 @@
 			"name": "telescope",
 			"level": 113,
 			"job": "비숍",
-			"combatPower": "2179조 3481억",
+			"combatPower": "2331조 157억",
 			"expedition": {
 				"grade": "마스터1",
-				"placement": 830,
-				"score": "2973억 216만"
+				"placement": 879,
+				"score": "2955억 9679만"
 			},
-			"rivalry": "1429억 4518만",
+			"rivalry": "1461억 4870만",
 			"training": ""
 		},
 		{
 			"name": "코넛",
-			"level": 113,
+			"level": 114,
 			"job": "비숍",
-			"combatPower": "1774조 6574억",
+			"combatPower": "1796조 2055억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1149,
-				"score": "2108억 883만"
+				"placement": 1175,
+				"score": "2211억 9375만"
 			},
-			"rivalry": "1120억 2464만",
+			"rivalry": "1335억 4100만",
 			"training": "1279만 3293",
 			"guildBoss": "370억 8039만"
+		},
+		{
+			"name": "양촌삭",
+			"level": 113,
+			"job": "바이퍼",
+			"combatPower": "1723조 5814억",
+			"expedition": {
+				"grade": "마스터2",
+				"placement": 1126,
+				"score": "2321억 1405만"
+			},
+			"rivalry": "1258억 4264만",
+			"training": "8785992",
+			"guildBoss": "237억 5003만"
 		},
 		{
 			"name": "믐슷믐",
 			"level": 112,
 			"job": "섀도어",
-			"combatPower": "1512조 6666억",
+			"combatPower": "1590조 3777억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1128,
-				"score": "2135억 6679만"
+				"placement": 1164,
+				"score": "2227억 658만"
 			},
-			"rivalry": "1168억 4669만",
+			"rivalry": "1174억 420만",
 			"training": "1016만 1636",
 			"guildBoss": "352억 8649만"
 		},
@@ -342,13 +342,13 @@
 			"name": "김촌삭",
 			"level": 112,
 			"job": "불독",
-			"combatPower": "1479조 6459억",
+			"combatPower": "1524조 9328억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1639,
-				"score": "1479억 3816만"
+				"placement": 1512,
+				"score": "1699억 3873만"
 			},
-			"rivalry": "1077억 595만",
+			"rivalry": "1094억 5311만",
 			"training": "9748740",
 			"guildBoss": "240억 4571만"
 		},
@@ -356,69 +356,55 @@
 			"name": "lGNooNl",
 			"level": 111,
 			"job": "썬콜",
-			"combatPower": "1311조 9151억",
+			"combatPower": "1332조 5416억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1469,
-				"score": "1640억 9739만"
+				"placement": 1426,
+				"score": "1796억 9752만"
 			},
-			"rivalry": "844억 6054만",
+			"rivalry": "839억 5424만",
 			"training": "7496604",
 			"guildBoss": "250억 8245만"
 		},
 		{
-			"name": "양촌삭",
-			"level": 112,
-			"job": "바이퍼",
-			"combatPower": "1280조 458억",
-			"expedition": {
-				"grade": "마스터2",
-				"placement": 1079,
-				"score": "2239억 9587만"
-			},
-			"rivalry": "1082억 6762만",
-			"training": "8785992",
-			"guildBoss": "237억 5003만"
-		},
-		{
 			"name": "장수창귀",
-			"level": 111,
+			"level": 112,
 			"job": "팔라딘",
-			"combatPower": "1034조 1384억",
+			"combatPower": "1056조 7022억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1590,
-				"score": "1511억 6040만"
+				"placement": 1544,
+				"score": "1655억 5074만"
 			},
-			"rivalry": "1018억 5088만",
+			"rivalry": "888억 1094만",
 			"training": "1868787",
 			"guildBoss": "366억 160만"
 		},
 		{
 			"name": "조막",
-			"level": 111,
+			"level": 112,
 			"job": "히어로",
-			"combatPower": "942조 7175억",
+			"combatPower": "1023조 2280억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1086,
-				"score": "2228억 4243만"
+				"placement": 1102,
+				"score": "2360억 2551만"
 			},
-			"rivalry": "1245억 2285만",
+			"rivalry": "1251억 10만",
 			"training": "1011만 690",
 			"guildBoss": "308억 123만"
 		},
 		{
 			"name": "딸기몽구",
-			"level": 110,
+			"level": 111,
 			"job": "비숍",
-			"combatPower": "786조 4284억",
+			"combatPower": "972조 8421억",
 			"expedition": {
 				"grade": "마스터2",
-				"placement": 1603,
-				"score": "1503억 433만"
+				"placement": 1510,
+				"score": "1702억 298만"
 			},
-			"rivalry": "800억 5568만",
+			"rivalry": "874억 8957만",
 			"training": "5952603",
 			"guildBoss": "238억 2149만"
 		}
