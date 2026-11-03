@@ -407,6 +407,19 @@
 			"rivalry": "874억 8957만",
 			"training": "5952603",
 			"guildBoss": "238억 2149만"
+		},
+		{
+			"name": "행복하루",
+			"level": 114,
+			"job": "비숍",
+			"combatPower": "3435조 854억",
+			"expedition": {
+				"grade": "마스터1",
+				"placement": 578,
+				"score": "5024억 7203만"
+			},
+			"rivalry": "",
+			"training": ""
 		}
 	]
 }
