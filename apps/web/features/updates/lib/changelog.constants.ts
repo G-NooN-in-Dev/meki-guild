@@ -6,6 +6,30 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.6.3',
+		date: '2026-11-03',
+		sections: [
+			{
+				title: '정보/팁',
+				items: [
+					{
+						text: '성장 던전',
+						children: [{ text: '방어력 데이터 추가' }, { text: '명중 표기 방식 변경' }, { text: '규칙 내용 수정' }]
+					},
+					{
+						text: '보스 레이드',
+						children: [{ text: '핑크빈 - 길드레이드 정보 추가' }, { text: '방어력 데이터 추가' }]
+					},
+					{
+						text: '파티퀘스트',
+						children: [{ text: '로미오와 줄리엣 - 카오스 난이도 추가' }, { text: '방어력 데이터 추가' }]
+					},
+					{ text: '월드보스 정보 페이지 추가 (명중컷, 방어력)' }
+				]
+			}
+		]
+	},
+	{
 		version: '1.6.2',
 		date: '2026-10-19',
 		hotfix: true,
