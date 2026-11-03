@@ -19,12 +19,21 @@ const ANNOUNCEMENT_BANNER_ITEMS = [
 	// NOTE - 배너 내용
 	{
 		kind: 'text',
-		label: '개인 사정으로 업데이트가 지연되고 있습니다. 느리지만 확실하게 업데이트 예정이니 양해 부탁드립니다.'
+		label: '당분간 업데이트가 천천히 진행됩니다. 양해 부탁드립니다.'
 	},
 	{
 		kind: 'link',
 		label: '10월 15일 (목) 패치노트',
 		href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3563013&board=6698'
+	},
+	{
+		kind: 'text',
+		label: '당분간 업데이트가 천천히 진행됩니다. 양해 부탁드립니다.'
+	},
+	{
+		kind: 'link',
+		label: '11월 5일 (목) 업데이트 미리보기',
+		href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3572656&board=6633'
 	}
 ] satisfies AnnouncementBannerItem[]
 
