@@ -13,6 +13,7 @@ import { InfoIcon, LockIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
+import { TIPS_REWARD_DETAIL_ID } from '@/features/tips/lib/scroll-to-reward-detail'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {
@@ -303,7 +304,7 @@ function PartyQuestRewardTable({ selectedQuest }: PartyQuestRewardTableProps) {
 
 	if (!entry) {
 		return (
-			<div className="flex flex-col gap-2 md:gap-4">
+			<div id={TIPS_REWARD_DETAIL_ID} className="flex scroll-mt-14 flex-col gap-2 md:gap-4">
 				<div className="flex flex-col gap-2">
 					<h2 className="text-grayscale-900 text-base font-semibold md:text-lg">보상 상세</h2>
 					<p className="text-grayscale-600 text-sm">선택한 파티퀘스트·난이도의 보상 정보를 확인할 수 있습니다.</p>
@@ -314,7 +315,7 @@ function PartyQuestRewardTable({ selectedQuest }: PartyQuestRewardTableProps) {
 	}
 
 	return (
-		<div className="flex flex-col gap-2 md:gap-4">
+		<div id={TIPS_REWARD_DETAIL_ID} className="flex scroll-mt-14 flex-col gap-2 md:gap-4">
 			<div className="flex flex-col gap-2">
 				<h2 className="text-grayscale-900 text-base font-semibold md:text-lg">보상 상세</h2>
 				<p className="text-grayscale-600 text-sm">장비를 제외한 재화·재료는 확률 높은 순으로 정렬했습니다.</p>

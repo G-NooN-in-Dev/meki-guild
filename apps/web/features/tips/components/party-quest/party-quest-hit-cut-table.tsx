@@ -2,6 +2,7 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/
 import { cn } from '@shared/ui/utils'
 
 import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import { scrollToRewardDetailIfNarrow } from '@/features/tips/lib/scroll-to-reward-detail'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {
@@ -146,7 +147,10 @@ function PartyQuestHitCutTable({ selectedQuest, setSelectedQuest }: PartyQuestHi
 										requiredHit={getPartyQuestRequiredHit(quest, difficulty)}
 										defense={getPartyQuestDefense(quest, difficulty)}
 										isSelected={selectedQuest.quest === quest && selectedQuest.difficulty === difficulty}
-										onSelect={() => setSelectedQuest({ quest, difficulty })}
+										onSelect={() => {
+											setSelectedQuest({ quest, difficulty })
+											scrollToRewardDetailIfNarrow()
+										}}
 									/>
 								))}
 							</TableRow>
