@@ -9,8 +9,11 @@ import TipCard from '@/features/tips/components/hub/tip-card'
 import type { TipCategory, TipCategoryGroup, TipEntry } from '@/features/tips/types/tip.type'
 import useMediaQuery from '@/hooks/use-media-query'
 
-/** 카테고리 그리드가 시작되는 구간과 맞춤 */
-const DESKTOP_MEDIA_QUERY = '(min-width: 768px)'
+/**
+ * hover 열기는 실제 마우스/트랙패드에만 적용.
+ * 태블릿은 min-width 768px여도 터치라, 첫 탭 mouseenter→click이 열림/닫힘을 상쇄함.
+ */
+const HOVER_INTERACTION_QUERY = '(hover: hover) and (pointer: fine)'
 
 const triggerClassName = cn(
 	'group border-grayscale-300 shadow-soft flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border-2 bg-white p-3 text-left',
@@ -25,7 +28,7 @@ type TipsCategoryCollapsibleProps = {
 type TipCategoryCollapsibleItemProps = {
 	category: TipCategory
 	tips: readonly TipEntry[]
-	isDesktop: boolean
+	useHoverOpen: boolean
 }
 
 function TipCardList({ tips }: { tips: readonly TipEntry[] }) {
@@ -40,8 +43,8 @@ function TipCardList({ tips }: { tips: readonly TipEntry[] }) {
 	)
 }
 
-/** 모바일: 클릭 토글·기본 펼침 (hover 로직 없음) */
-function MobileTipCategoryCollapsible({ category, tips }: Omit<TipCategoryCollapsibleItemProps, 'isDesktop'>) {
+/** 터치·좁은 포인터: 클릭 토글·기본 펼침 (hover 로직 없음) */
+function MobileTipCategoryCollapsible({ category, tips }: Omit<TipCategoryCollapsibleItemProps, 'useHoverOpen'>) {
 	const { label } = category
 
 	return (
@@ -60,8 +63,8 @@ function MobileTipCategoryCollapsible({ category, tips }: Omit<TipCategoryCollap
 	)
 }
 
-/** 데스크탑: 트리거 hover/focus로 열고, 영역 leave/blur로 닫음 */
-function DesktopTipCategoryCollapsible({ category, tips }: Omit<TipCategoryCollapsibleItemProps, 'isDesktop'>) {
+/** 마우스/트랙패드: 트리거 hover/focus로 열고, 영역 leave/blur로 닫음 */
+function DesktopTipCategoryCollapsible({ category, tips }: Omit<TipCategoryCollapsibleItemProps, 'useHoverOpen'>) {
 	const { label } = category
 	const [open, setOpen] = useState(false)
 
@@ -108,8 +111,8 @@ function DesktopTipCategoryCollapsible({ category, tips }: Omit<TipCategoryColla
 	)
 }
 
-function TipCategoryCollapsibleItem({ category, tips, isDesktop }: TipCategoryCollapsibleItemProps) {
-	if (isDesktop) {
+function TipCategoryCollapsibleItem({ category, tips, useHoverOpen }: TipCategoryCollapsibleItemProps) {
+	if (useHoverOpen) {
 		return <DesktopTipCategoryCollapsible category={category} tips={tips} />
 	}
 
@@ -118,15 +121,16 @@ function TipCategoryCollapsibleItem({ category, tips, isDesktop }: TipCategoryCo
 
 /**
  * 카테고리별 독립 Collapsible.
- * 모바일: 카테고리 flex-col · tipCard 2열 / md+: 카테고리 2·3열 · tipCard 세로 나열.
+ * 레이아웃: 모바일 flex-col · tipCard 2열 / md+: 카테고리 2·3열 · tipCard 세로 나열.
+ * 상호작용: hover+fine pointer면 hover 열기, 그 외(태블릿 터치 포함)는 클릭 토글.
  */
 function TipsCategoryCollapsible({ groups }: TipsCategoryCollapsibleProps) {
-	const isDesktop = useMediaQuery(DESKTOP_MEDIA_QUERY)
+	const useHoverOpen = useMediaQuery(HOVER_INTERACTION_QUERY)
 
 	return (
 		<div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:items-start md:gap-4 lg:grid-cols-3 lg:gap-6">
 			{groups.map(({ category, tips }) => (
-				<TipCategoryCollapsibleItem key={category.id} category={category} tips={tips} isDesktop={isDesktop} />
+				<TipCategoryCollapsibleItem key={category.id} category={category} tips={tips} useHoverOpen={useHoverOpen} />
 			))}
 		</div>
 	)
