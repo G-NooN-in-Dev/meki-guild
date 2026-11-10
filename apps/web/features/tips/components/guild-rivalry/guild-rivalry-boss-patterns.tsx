@@ -4,10 +4,10 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@shared/ui/
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 import { ChevronDownIcon } from 'lucide-react'
-import Image from 'next/image'
 
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import {
 	GUILD_RIVALRY_ATTACK_EFFECT_META,
 	GUILD_RIVALRY_ATTACK_RANGE_LABEL,
@@ -127,15 +127,7 @@ function BossPatternCard({ boss, order }: BossPatternCardProps) {
 	return (
 		<Card size="sm" className="border-grayscale-200 shadow-soft data-[size=sm]:gap-0 data-[size=sm]:py-0">
 			<CardHeader className="flex flex-row items-center gap-3 px-4 py-3 md:gap-4 md:px-5 md:py-4">
-				<Image
-					src={imageSrc}
-					alt={label}
-					width={imageWidth}
-					height={imageHeight}
-					unoptimized
-					draggable={false}
-					className="h-14 w-auto shrink-0 object-contain mix-blend-darken md:h-16"
-				/>
+				<MonsterLabel src={imageSrc} alt={label} width={imageWidth} height={imageHeight} unoptimized size="card" />
 				<div className="flex min-w-0 flex-col gap-0.5">
 					<p className="text-grayscale-500 text-xs md:text-sm">{order}번째 보스</p>
 					<CardTitle className="text-grayscale-900 text-base font-semibold md:text-lg">{label}</CardTitle>

@@ -1,6 +1,6 @@
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
-import MonsterNameLabel, { type MonsterNameLabelProps } from '@/features/tips/components/shared/monster-name-label'
+import MonsterLabel, { type MonsterLabelProps } from '@/features/tips/components/shared/monster-label'
 import {
 	EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_HIT_CUT_BONUS,
 	EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_SPEED_BUFF_SEC,
@@ -15,7 +15,7 @@ const JUNIOR_BOOGIE_LABEL = {
 	width: 56,
 	height: 36,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 function SummaryRulesList() {
 	return (
@@ -25,13 +25,13 @@ function SummaryRulesList() {
 				처치하세요.
 			</li>
 			<li>
-				<MonsterNameLabel {...JUNIOR_BOOGIE_LABEL} />를 처치하면 제한시간이{' '}
+				<MonsterLabel {...JUNIOR_BOOGIE_LABEL} />를 처치하면 제한시간이{' '}
 				<EmphasizedText>{EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_TIME_BONUS_SEC}초</EmphasizedText> 충전되고,{' '}
 				<EmphasizedText>{EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_SPEED_BUFF_SEC}초</EmphasizedText> 간 이동속도와 공격속도가
 				증가합니다.
 			</li>
 			<li>
-				<MonsterNameLabel {...JUNIOR_BOOGIE_LABEL} />의 필요 명중은 일반 몬스터보다{' '}
+				<MonsterLabel {...JUNIOR_BOOGIE_LABEL} />의 필요 명중은 일반 몬스터보다{' '}
 				<EmphasizedText>{EXPERIENCE_DUNGEON_JUNIOR_BOOGIE_HIT_CUT_BONUS}</EmphasizedText> 높습니다.
 			</li>
 		</ul>

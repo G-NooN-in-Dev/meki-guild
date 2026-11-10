@@ -1,8 +1,8 @@
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
-import Image from 'next/image'
 
 import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import {
 	getGuildRivalryBossByStage,
 	GUILD_RIVALRY_BOSS_DEFENSE,
@@ -82,17 +82,7 @@ function RivalryStageCell({ stage }: RivalryStageCellProps) {
 		<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-grayscale-50 text-grayscale-800 px-1')}>
 			<span className="inline-flex items-center justify-center gap-1 md:gap-1.5">
 				<span>{stage}</span>
-				<Image
-					src={imageSrc}
-					alt={label}
-					width={imageWidth}
-					height={imageHeight}
-					unoptimized
-					loading="lazy"
-					decoding="async"
-					draggable={false}
-					className="h-6 w-auto shrink-0 object-contain mix-blend-darken md:h-7"
-				/>
+				<MonsterLabel src={imageSrc} alt={label} width={imageWidth} height={imageHeight} unoptimized size="table" />
 			</span>
 		</TableCell>
 	)

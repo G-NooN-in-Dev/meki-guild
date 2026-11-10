@@ -1,6 +1,6 @@
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
-import MonsterNameLabel, { type MonsterNameLabelProps } from '@/features/tips/components/shared/monster-name-label'
+import MonsterLabel, { type MonsterLabelProps } from '@/features/tips/components/shared/monster-label'
 import {
 	GUILD_EXPEDITION_BOSS,
 	GUILD_EXPEDITION_LATE_TIER_START_STAGE,
@@ -15,7 +15,7 @@ const ARCANUS_LABEL = {
 	width: GUILD_EXPEDITION_BOSS.imageWidth,
 	height: GUILD_EXPEDITION_BOSS.imageHeight,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 function SummaryRulesList() {
 	return (
@@ -24,12 +24,12 @@ function SummaryRulesList() {
 				기본 제한시간 <EmphasizedText>{GUILD_EXPEDITION_TIME_LIMIT_SEC}초</EmphasizedText>가 주어집니다.
 			</li>
 			<li>
-				제한시간 내에 <MonsterNameLabel {...ARCANUS_LABEL} />를 처치하면 남은 시간에{' '}
+				제한시간 내에 <MonsterLabel {...ARCANUS_LABEL} />를 처치하면 남은 시간에{' '}
 				<EmphasizedText>{GUILD_EXPEDITION_TIME_LIMIT_REFILL_SEC}초</EmphasizedText>가 충전됩니다.
 			</li>
 			<li>
 				<EmphasizedText>{GUILD_EXPEDITION_LATE_TIER_START_STAGE}단계</EmphasizedText>부터는{' '}
-				<MonsterNameLabel {...ARCANUS_LABEL} />를 처치해도 제한시간이 충전되지 않습니다.
+				<MonsterLabel {...ARCANUS_LABEL} />를 처치해도 제한시간이 충전되지 않습니다.
 			</li>
 		</ul>
 	)
