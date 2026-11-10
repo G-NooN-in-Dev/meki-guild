@@ -74,6 +74,14 @@ const TIP_ENTRIES = [
 		tags: ['수련장'],
 		href: '/tips/guild-training'
 	},
+	{
+		slug: 'guild-boss',
+		title: '보스대전 정보',
+		description: '제한시간 · 명중컷 · 방어력 · 공격 패턴',
+		category: 'guild-contents',
+		tags: ['보스대전'],
+		href: '/tips/guild-boss'
+	},
 	// 각종 정보
 	{
 		slug: 'companion-setup',
