@@ -13,6 +13,7 @@ import type {
 	CompanionSetupSlot,
 	CompanionSlotLoadout
 } from '@/features/tips/types/companion.type'
+import { getJobPortraitSrc } from '@/libs/job-portrait.constants'
 
 /** UI·정렬용 등급 순서 — 공통 ITEM_GRADE_ORDER 재사용 */
 export const COMPANION_GRADE_ORDER = ITEM_GRADE_ORDER
@@ -111,7 +112,7 @@ export const COMPANION_JOBS = COMPANION_JOB_ORDER.filter((job) => !UNRELEASED_CO
 
 /**
  * 직업별 장착 효과 — 레전더리 1레벨 기준.
- * 아이콘이 아직 없는 직업은 COMPANION_JOB_ICON_FILE에 넣지 않으면 플레이스홀더로 표시됩니다.
+ * 아이콘이 아직 없는 직업은 getJobPortraitSrc 매핑에 없으면 플레이스홀더로 표시됩니다.
  */
 export const COMPANION_EQUIP_EFFECT_BASE_BY_JOB = {
 	다크나이트: { label: '명중', legendaryLevel1Value: 24, unit: 'flat' },
@@ -217,33 +218,9 @@ function aggregateEquipEffects(effects: readonly CompanionEquipEffect[]): readon
 	})
 }
 
-/**
- * 직업 → public/companions 파일명.
- * 등급별 이미지는 없고 직업당 1장입니다. (png · webp)
- */
-const COMPANION_JOB_ICON_FILE = {
-	히어로: 'hero.png',
-	팔라딘: 'paladin.png',
-	다크나이트: 'darkknight.png',
-	소울마스터: 'soulMaster.webp',
-	썬콜: 'mage_sc.png',
-	불독: 'mage_fd.png',
-	비숍: 'bishop.png',
-	플레임위자드: 'flameWizard.webp',
-	보우마스터: 'bowmaster.png',
-	신궁: 'marksman.png',
-	나이트로드: 'nightlord.png',
-	섀도어: 'shadower.png',
-	바이퍼: 'viper.png',
-	캡틴: 'captain.png',
-	나이트워커: 'nightwalker.png',
-	윈드브레이커: 'windbreaker.png'
-} as const satisfies Record<string, string>
-
-/** 직업 초상화 public 경로. 매핑이 없으면 빈 문자열. */
+/** 동료 UI용 직업 초상화 — 길드와 동일한 경로를 씁니다. */
 function getCompanionImageSrc(job: string) {
-	const fileName = COMPANION_JOB_ICON_FILE[job as keyof typeof COMPANION_JOB_ICON_FILE]
-	return fileName ? `/companions/${fileName}` : ''
+	return getJobPortraitSrc(job)
 }
 
 /** 직업 × 등급 조합으로 동료 카탈로그를 만듭니다. */

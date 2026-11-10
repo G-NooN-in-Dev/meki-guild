@@ -3,6 +3,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
+import Image from 'next/image'
 
 import GrowthDelta, { MemberStatusBadge } from '@/features/guild/components/growth-delta'
 import JobBadge from '@/features/guild/components/job-badge'
@@ -16,6 +17,7 @@ import {
 	type GuildContentDateRange
 } from '@/libs/guild-content-dates.constants'
 import { getGuildContentsOrder, type GuildContentsOrderKey } from '@/libs/guild-contents-order.constants'
+import { getJobPortraitSrc } from '@/libs/job-portrait.constants'
 import { formatPlacementRank } from '@/utils/format-korean-number'
 
 type MemberDetailDialogProps = {
@@ -208,6 +210,30 @@ function PeriodValueCell({ value, updatedAt, emphasize = false, rankLabel, value
 	)
 }
 
+function MemberJobPortrait({ job }: { job: string }) {
+	const src = getJobPortraitSrc(job)
+
+	if (!src) {
+		return (
+			<span
+				aria-hidden
+				className="bg-grayscale-100 border-grayscale-200 inline-block size-11 shrink-0 rounded-lg border"
+			/>
+		)
+	}
+
+	return (
+		<Image
+			src={src}
+			alt={`${job} 초상화`}
+			width={112}
+			height={112}
+			draggable={false}
+			className="bg-grayscale-50 border-grayscale-200 size-11 shrink-0 rounded-lg border object-contain"
+		/>
+	)
+}
+
 function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDetailDialogProps) {
 	const rows = buildDetailRows(comparison, rankings, previousRankings)
 	const displayName = useMemberDisplayName(comparison.name)
@@ -229,9 +255,10 @@ function MemberDetailDialog({ comparison, rankings, previousRankings }: MemberDe
 			{/* 모바일: 좌우 여백 최소화하여 넓게, 데스크탑: 테이블 4컬럼 + 순위·날짜 정보가 여유롭게 들어갈 폭 */}
 			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-2 overflow-hidden p-4 sm:max-w-2xl sm:gap-3 sm:p-6">
 				<DialogHeader>
-					{/* 이름·상태·직업을 한 줄로 나란히 표시 */}
-					<DialogTitle className="flex flex-wrap items-center gap-2">
-						<span className="inline-flex flex-wrap items-center gap-1.5">
+					{/* 직업 초상화 + 이름·상태·직업을 한 줄로 나란히 표시 */}
+					<DialogTitle className="flex items-center gap-3">
+						<MemberJobPortrait job={comparison.job} />
+						<span className="inline-flex min-w-0 flex-wrap items-center gap-1.5">
 							<MemberDisplayName name={comparison.name} />
 							<MemberStatusBadge status={comparison.status} />
 							{comparison.jobChanged && comparison.previousJob ? (
