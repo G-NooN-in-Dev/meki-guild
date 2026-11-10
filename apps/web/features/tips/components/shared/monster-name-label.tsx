@@ -32,6 +32,8 @@ function MonsterNameLabel({ src, name, width, height, unoptimized = false }: Mon
 				height={height}
 				unoptimized={unoptimized}
 				draggable={false}
+				loading="lazy"
+				decoding="async"
 				className="my-[calc((1lh-1.75rem)/2)] h-7 w-auto shrink-0 self-center"
 			/>
 			<EmphasizedText>{name}</EmphasizedText>
