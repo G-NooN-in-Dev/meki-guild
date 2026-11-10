@@ -7,25 +7,25 @@ import { cn } from '@shared/ui/utils'
 import { CircleHelpIcon } from 'lucide-react'
 
 import {
-	getRivalryRankPointTextClass,
-	getRivalryRankPointTone,
-	RIVALRY_RANK_POINT_DISPLAY_BANDS,
-	RIVALRY_RANK_POINT_ENTRIES,
-	RIVALRY_RANK_POINT_TONE_META,
-	type RivalryRankPointDisplayBand,
-	type RivalryRankPointEntry
-} from '@/libs/rivalry-rank-points.constants'
+	getGuildRivalryRankPointTextClass,
+	getGuildRivalryRankPointTone,
+	GUILD_RIVALRY_RANK_POINT_DISPLAY_BANDS,
+	GUILD_RIVALRY_RANK_POINT_ENTRIES,
+	GUILD_RIVALRY_RANK_POINT_TONE_META,
+	type GuildRivalryRankPointDisplayBand,
+	type GuildRivalryRankPointEntry
+} from '@/features/guild/lib/guild-rivalry-rank-points.constants'
 import { formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
-type RivalryRankPointRow =
-	{ type: 'band'; band: RivalryRankPointDisplayBand } | { type: 'rank'; entry: RivalryRankPointEntry }
+type GuildRivalryRankPointRow =
+	{ type: 'band'; band: GuildRivalryRankPointDisplayBand } | { type: 'rank'; entry: GuildRivalryRankPointEntry }
 
 /** 표시용 구간 헤더를 끼워 표가 한 덩어리로 보이지 않게 합니다. */
-function buildRivalryRankPointRows(
-	bands: readonly RivalryRankPointDisplayBand[],
-	entries: readonly RivalryRankPointEntry[]
-): RivalryRankPointRow[] {
-	const rows: RivalryRankPointRow[] = []
+function buildGuildRivalryRankPointRows(
+	bands: readonly GuildRivalryRankPointDisplayBand[],
+	entries: readonly GuildRivalryRankPointEntry[]
+): GuildRivalryRankPointRow[] {
+	const rows: GuildRivalryRankPointRow[] = []
 
 	for (const band of bands) {
 		rows.push({ type: 'band', band })
@@ -40,7 +40,7 @@ function buildRivalryRankPointRows(
 	return rows
 }
 
-function formatRivalryRankPointBandLabel(fromRank: number, toRank: number): string {
+function formatGuildRivalryRankPointBandLabel(fromRank: number, toRank: number): string {
 	if (fromRank === toRank) {
 		return `${fromRank}위`
 	}
@@ -48,13 +48,13 @@ function formatRivalryRankPointBandLabel(fromRank: number, toRank: number): stri
 	return `${fromRank}~${toRank}위`
 }
 
-type RivalryRankPointsGuideProps = {
+type GuildRivalryRankPointsGuideProps = {
 	/** true면 lg 미만에서 '대항'으로 줄임. 툴바 기본값, 예측 페이지는 false */
 	compactMobileLabel?: boolean
 }
 
-function RivalryRankPointsGuide({ compactMobileLabel = true }: RivalryRankPointsGuideProps) {
-	const rows = buildRivalryRankPointRows(RIVALRY_RANK_POINT_DISPLAY_BANDS, RIVALRY_RANK_POINT_ENTRIES)
+function GuildRivalryRankPointsGuide({ compactMobileLabel = true }: GuildRivalryRankPointsGuideProps) {
+	const rows = buildGuildRivalryRankPointRows(GUILD_RIVALRY_RANK_POINT_DISPLAY_BANDS, GUILD_RIVALRY_RANK_POINT_ENTRIES)
 
 	return (
 		<Dialog>
@@ -102,7 +102,7 @@ function RivalryRankPointsGuide({ compactMobileLabel = true }: RivalryRankPoints
 							{rows.map((row) => {
 								if (row.type === 'band') {
 									const { fromRank, toRank } = row.band
-									const { headerClassName } = RIVALRY_RANK_POINT_TONE_META[getRivalryRankPointTone(fromRank)]
+									const { headerClassName } = GUILD_RIVALRY_RANK_POINT_TONE_META[getGuildRivalryRankPointTone(fromRank)]
 
 									return (
 										<TableRow key={`band-${fromRank}-${toRank}`} className="hover:bg-transparent">
@@ -113,7 +113,7 @@ function RivalryRankPointsGuide({ compactMobileLabel = true }: RivalryRankPoints
 													headerClassName
 												)}
 											>
-												{formatRivalryRankPointBandLabel(fromRank, toRank)}
+												{formatGuildRivalryRankPointBandLabel(fromRank, toRank)}
 											</TableCell>
 										</TableRow>
 									)
@@ -123,7 +123,7 @@ function RivalryRankPointsGuide({ compactMobileLabel = true }: RivalryRankPoints
 
 								return (
 									<TableRow key={rank} className="border-grayscale-100 hover:bg-grayscale-50/80">
-										<TableCell className={cn('px-3 py-2.5 tabular-nums', getRivalryRankPointTextClass(rank))}>
+										<TableCell className={cn('px-3 py-2.5 tabular-nums', getGuildRivalryRankPointTextClass(rank))}>
 											{formatPlacementRank(rank)}
 										</TableCell>
 										<TableCell className="text-grayscale-900 px-3 py-2.5 font-semibold tabular-nums">
@@ -140,4 +140,5 @@ function RivalryRankPointsGuide({ compactMobileLabel = true }: RivalryRankPoints
 	)
 }
 
-export default RivalryRankPointsGuide
+export default GuildRivalryRankPointsGuide
+export type { GuildRivalryRankPointsGuideProps }

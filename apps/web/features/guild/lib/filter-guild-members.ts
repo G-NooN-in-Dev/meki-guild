@@ -1,5 +1,5 @@
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { getExpeditionGradeRank } from '@/libs/expedition-guild-tier.constants'
+import { getGuildExpeditionGradeRank } from '@/features/guild/lib/guild-expedition-tier.constants'
 import { getJobClassLine, type JobClassLine } from '@/libs/job-class.constants'
 
 /** 숫자 range. null이면 해당 쪽 제한 없음 */
@@ -19,7 +19,7 @@ type GuildMemberFilterState = {
 	jobs: string[]
 	level: NumberRange
 	combatPower: NumberRange
-	/** 토벌 등급: getExpeditionGradeRank 기준 (1=챔피언1 … 브론즈1) */
+	/** 토벌 등급: getGuildExpeditionGradeRank 기준 (1=챔피언1 … 브론즈1) */
 	expeditionGradeRank: NumberRange
 	expeditionScore: NumberRange
 	rivalry: NumberRange
@@ -194,7 +194,7 @@ function filterGuildMembers(
 		}
 
 		// 등급은 문자열 비교 대신 순위(1~15)로 range 매칭
-		const gradeRank = expeditionGrade.hasValue ? getExpeditionGradeRank(expeditionGrade.current) : null
+		const gradeRank = expeditionGrade.hasValue ? getGuildExpeditionGradeRank(expeditionGrade.current) : null
 
 		if (!matchesNumberRange(gradeRank !== null, gradeRank ?? 0, filter.expeditionGradeRank)) {
 			return false

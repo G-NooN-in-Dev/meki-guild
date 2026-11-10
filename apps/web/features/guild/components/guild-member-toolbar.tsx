@@ -3,14 +3,14 @@
 import { Label } from '@shared/ui/label'
 import { Switch } from '@shared/ui/switch'
 
-import BountyStagePointsGuide from '@/features/guild/components/bounty-stage-points-guide'
 import ContentAwards from '@/features/guild/components/content-awards'
 import ContentUpdatedAtGuide from '@/features/guild/components/content-updated-at-guide'
-import ExpeditionTierGuide from '@/features/guild/components/expedition-tier-guide'
+import GuildBountyStagePointsGuide from '@/features/guild/components/guild-bounty-stage-points-guide'
 import GuildContentSeasonsGuide from '@/features/guild/components/guild-content-seasons-guide'
+import GuildExpeditionTierGuide from '@/features/guild/components/guild-expedition-tier-guide'
 import GuildMemberFilters from '@/features/guild/components/guild-member-filters'
+import GuildRivalryRankPointsGuide from '@/features/guild/components/guild-rivalry-rank-points-guide'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
-import RivalryRankPointsGuide from '@/features/guild/components/rivalry-rank-points-guide'
 import type { GuildMemberFilterState } from '@/features/guild/lib/filter-guild-members'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import useDragScroll from '@/hooks/use-drag-scroll'
@@ -80,9 +80,9 @@ function GuildMemberToolbar({
 				<ContentUpdatedAtGuide />
 				<JobDistributionGuide comparisons={comparisons} />
 				<GuildContentSeasonsGuide />
-				<ExpeditionTierGuide />
-				<RivalryRankPointsGuide />
-				<BountyStagePointsGuide />
+				<GuildExpeditionTierGuide />
+				<GuildRivalryRankPointsGuide />
+				<GuildBountyStagePointsGuide />
 			</div>
 		</div>
 	)

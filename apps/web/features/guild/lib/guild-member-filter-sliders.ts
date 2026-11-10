@@ -1,6 +1,6 @@
 import type { GuildMemberFilterState, NumberRange } from '@/features/guild/lib/filter-guild-members'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
+import { GUILD_EXPEDITION_TIERS } from '@/features/guild/lib/guild-expedition-tier.constants'
 import { getGuildContentsOrder } from '@/libs/guild-contents-order.constants'
 import { formatKoreanNumber, formatTrainingScore } from '@/utils/format-korean-number'
 
@@ -24,7 +24,7 @@ const SLIDER_FIELDS: ReadonlyArray<{ key: SliderFieldKey; label: string }> = [
 /** 토벌 등급 슬라이더 전체 구간 (1=챔피언1 … N=브론즈1) */
 const EXPEDITION_GRADE_BOUNDS = {
 	min: 1,
-	max: EXPEDITION_GUILD_TIERS.length
+	max: GUILD_EXPEDITION_TIERS.length
 } as const satisfies RangeBounds
 
 function getSliderFieldValue(member: GuildMemberComparison, key: SliderFieldKey): number | null {
@@ -128,7 +128,7 @@ function rangeToSliderValues(range: NumberRange, bounds: RangeBounds): [number, 
 
 /** 등급 순위(1~N) → 챔피언1 등 표시명 */
 function formatGradeRank(rank: number): string {
-	return EXPEDITION_GUILD_TIERS[Math.round(rank) - 1]?.rank ?? String(Math.round(rank))
+	return GUILD_EXPEDITION_TIERS[Math.round(rank) - 1]?.rank ?? String(Math.round(rank))
 }
 
 /** 직업군을 n개씩 묶어 그리드 행으로 씁니다. (예: 3 → 전사·마법사·궁수 / 도적·해적) */

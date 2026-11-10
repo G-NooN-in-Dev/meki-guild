@@ -1,4 +1,4 @@
-type RivalryRankPointBand = {
+type GuildRivalryRankPointBand = {
 	fromRank: number
 	toRank: number
 	/** 이 구간에 들어올 때(2위부터) 한 단계당 빠지는 포인트 */
@@ -6,24 +6,24 @@ type RivalryRankPointBand = {
 }
 
 /** 표 UI 구간 헤더용. 계산용 step 구간과 분리해 한 자리 구간(6~6위)이 보이지 않게 합니다. */
-type RivalryRankPointDisplayBand = {
+type GuildRivalryRankPointDisplayBand = {
 	fromRank: number
 	toRank: number
 }
 
-type RivalryRankPointEntry = {
+type GuildRivalryRankPointEntry = {
 	rank: number
 	points: number
 }
 
 /** 표 UI용 색 구간. 상위일수록 따뜻한 톤입니다. */
-type RivalryRankPointTone = 'top' | 'high' | 'mid' | 'low' | 'bottom'
+type GuildRivalryRankPointTone = 'top' | 'high' | 'mid' | 'low' | 'bottom'
 
 /**
  * 구간별 UI 톤.
  * 헤더는 배경+라벨색, 순위는 텍스트색 + 한 단계 올린 두께를 씁니다.
  */
-const RIVALRY_RANK_POINT_TONE_META = {
+const GUILD_RIVALRY_RANK_POINT_TONE_META = {
 	top: {
 		headerClassName: 'bg-pastel-red-50 text-pastel-red-800',
 		textClassName: 'font-semibold text-pastel-red-800'
@@ -44,9 +44,9 @@ const RIVALRY_RANK_POINT_TONE_META = {
 		headerClassName: 'bg-pastel-purple-100 text-pastel-purple-600',
 		textClassName: 'font-semibold text-pastel-purple-700'
 	}
-} as const satisfies Record<RivalryRankPointTone, { headerClassName: string; textClassName: string }>
+} as const satisfies Record<GuildRivalryRankPointTone, { headerClassName: string; textClassName: string }>
 
-function getRivalryRankPointTone(rank: number): RivalryRankPointTone {
+function getGuildRivalryRankPointTone(rank: number): GuildRivalryRankPointTone {
 	if (rank <= 10) {
 		return 'top'
 	}
@@ -66,18 +66,18 @@ function getRivalryRankPointTone(rank: number): RivalryRankPointTone {
 	return 'bottom'
 }
 
-function getRivalryRankPointTextClass(rank: number): string {
-	return RIVALRY_RANK_POINT_TONE_META[getRivalryRankPointTone(rank)].textClassName
+function getGuildRivalryRankPointTextClass(rank: number): string {
+	return GUILD_RIVALRY_RANK_POINT_TONE_META[getGuildRivalryRankPointTone(rank)].textClassName
 }
 
 /** 1위 포인트. 이후 순위는 구간 step만큼 줄어듭니다. */
-const RIVALRY_RANK_POINT_START = 1_500_000
+const GUILD_RIVALRY_RANK_POINT_START = 1_500_000
 
 /**
  * 대항전 개인 순위 → 길드 포인트 규칙.
  * 구간이 바뀌면 감소폭(step)만 달라지고, 값은 직전 순위에서 이어집니다.
  */
-const RIVALRY_RANK_POINT_BANDS = [
+const GUILD_RIVALRY_RANK_POINT_BANDS = [
 	{ fromRank: 1, toRank: 2, step: 300_000 },
 	{ fromRank: 3, toRank: 3, step: 250_000 },
 	{ fromRank: 4, toRank: 4, step: 100_000 },
@@ -91,13 +91,13 @@ const RIVALRY_RANK_POINT_BANDS = [
 	{ fromRank: 41, toRank: 50, step: 2_000 },
 	{ fromRank: 51, toRank: 99, step: 1_000 },
 	{ fromRank: 100, toRank: 150, step: 700 }
-] as const satisfies readonly RivalryRankPointBand[]
+] as const satisfies readonly GuildRivalryRankPointBand[]
 
 /**
  * 가이드 표 구간 헤더.
  * 상위권은 step이 잦아도 읽기 쉬운 묶음으로 보여 줍니다.
  */
-const RIVALRY_RANK_POINT_DISPLAY_BANDS = [
+const GUILD_RIVALRY_RANK_POINT_DISPLAY_BANDS = [
 	{ fromRank: 1, toRank: 10 },
 	{ fromRank: 11, toRank: 20 },
 	{ fromRank: 21, toRank: 30 },
@@ -105,14 +105,14 @@ const RIVALRY_RANK_POINT_DISPLAY_BANDS = [
 	{ fromRank: 41, toRank: 50 },
 	{ fromRank: 51, toRank: 99 },
 	{ fromRank: 100, toRank: 150 }
-] as const satisfies readonly RivalryRankPointDisplayBand[]
+] as const satisfies readonly GuildRivalryRankPointDisplayBand[]
 
-function buildRivalryRankPointEntries(
-	bands: readonly RivalryRankPointBand[] = RIVALRY_RANK_POINT_BANDS
-): RivalryRankPointEntry[] {
-	let points = RIVALRY_RANK_POINT_START
+function buildGuildRivalryRankPointEntries(
+	bands: readonly GuildRivalryRankPointBand[] = GUILD_RIVALRY_RANK_POINT_BANDS
+): GuildRivalryRankPointEntry[] {
+	let points = GUILD_RIVALRY_RANK_POINT_START
 	let expectedRank = 1
-	const entries: RivalryRankPointEntry[] = []
+	const entries: GuildRivalryRankPointEntry[] = []
 
 	for (const { fromRank, toRank, step } of bands) {
 		if (fromRank !== expectedRank || toRank < fromRank || step <= 0) {
@@ -133,24 +133,24 @@ function buildRivalryRankPointEntries(
 	return entries
 }
 
-const RIVALRY_RANK_POINT_ENTRIES = buildRivalryRankPointEntries()
+const GUILD_RIVALRY_RANK_POINT_ENTRIES = buildGuildRivalryRankPointEntries()
 
-function getRivalryRankPoints(rank: number): number | null {
+function getGuildRivalryRankPoints(rank: number): number | null {
 	if (!Number.isInteger(rank) || rank < 1) {
 		return null
 	}
 
-	const entry = RIVALRY_RANK_POINT_ENTRIES[rank - 1]
+	const entry = GUILD_RIVALRY_RANK_POINT_ENTRIES[rank - 1]
 
 	return entry?.rank === rank ? entry.points : null
 }
 
 export {
-	getRivalryRankPoints,
-	getRivalryRankPointTextClass,
-	getRivalryRankPointTone,
-	RIVALRY_RANK_POINT_DISPLAY_BANDS,
-	RIVALRY_RANK_POINT_ENTRIES,
-	RIVALRY_RANK_POINT_TONE_META
+	getGuildRivalryRankPoints,
+	getGuildRivalryRankPointTextClass,
+	getGuildRivalryRankPointTone,
+	GUILD_RIVALRY_RANK_POINT_DISPLAY_BANDS,
+	GUILD_RIVALRY_RANK_POINT_ENTRIES,
+	GUILD_RIVALRY_RANK_POINT_TONE_META
 }
-export type { RivalryRankPointDisplayBand, RivalryRankPointEntry }
+export type { GuildRivalryRankPointDisplayBand, GuildRivalryRankPointEntry }

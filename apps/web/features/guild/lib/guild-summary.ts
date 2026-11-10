@@ -1,5 +1,5 @@
+import { sumGuildExpeditionGradePoints } from '@/features/guild/lib/guild-expedition-tier.constants'
 import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
-import { sumExpeditionGradePoints } from '@/libs/expedition-guild-tier.constants'
 import { formatArrowDelta, formatRankArrowDelta } from '@/utils/format-delta-label'
 import {
 	formatDeltaPercent,
@@ -227,7 +227,7 @@ function calculateExpeditionGradePointsTotal(comparisons: GuildMemberComparison[
 		return GUILD_EMPTY_VALUE_LABEL
 	}
 
-	return formatLocaleNumber(sumExpeditionGradePoints(grades))
+	return formatLocaleNumber(sumGuildExpeditionGradePoints(grades))
 }
 
 /** 길드원 개인 토벌전 등급 포인트 합계의 주간 변화량 */
@@ -239,8 +239,8 @@ function calculateExpeditionGradePointsChange(comparisons: GuildMemberComparison
 		return null
 	}
 
-	const currentPoints = sumExpeditionGradePoints(currentGrades)
-	const previousPoints = sumExpeditionGradePoints(previousGrades)
+	const currentPoints = sumGuildExpeditionGradePoints(currentGrades)
+	const previousPoints = sumGuildExpeditionGradePoints(previousGrades)
 
 	return formatPointsDelta(currentPoints - previousPoints)
 }

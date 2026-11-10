@@ -1,3 +1,4 @@
+import { getGuildExpeditionGradeDiff } from '@/features/guild/lib/guild-expedition-tier.constants'
 import type {
 	GuildMemberComparison,
 	LevelDelta,
@@ -6,7 +7,6 @@ import type {
 	ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { getExpeditionGradeDiff } from '@/libs/expedition-guild-tier.constants'
 import { formatArrowDelta, formatRankArrowDelta } from '@/utils/format-delta-label'
 import { formatDeltaPercent, formatKoreanDelta, formatTrainingDelta } from '@/utils/format-korean-number'
 
@@ -101,7 +101,7 @@ function createExpeditionGradeDelta(
 		}
 	}
 
-	const diff = getExpeditionGradeDiff(previousGrade, current.expedition.grade)
+	const diff = getGuildExpeditionGradeDiff(previousGrade, current.expedition.grade)
 
 	return {
 		current: current.expedition.grade,

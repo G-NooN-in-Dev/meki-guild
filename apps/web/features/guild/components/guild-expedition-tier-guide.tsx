@@ -6,18 +6,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { cn } from '@shared/ui/utils'
 import { CircleHelpIcon } from 'lucide-react'
 
+import { GUILD_EXPEDITION_TIERS, type GuildExpeditionTier } from '@/features/guild/lib/guild-expedition-tier.constants'
 import {
 	CONTENT_TIER_BAND_META,
 	type ContentTierBand,
 	getContentGradeTextClass,
 	getContentTierBand
 } from '@/libs/content-tier-band.constants'
-import { EXPEDITION_GUILD_TIERS, type ExpeditionGuildTier } from '@/libs/expedition-guild-tier.constants'
 import { formatKoreanNumber, formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
 /** 등급 구간 헤더를 끼워 넣어 한 덩어리로 보이지 않게 합니다. */
-function buildTierRows(tiers: readonly ExpeditionGuildTier[]) {
-	const rows: Array<{ type: 'band'; band: ContentTierBand } | { type: 'tier'; tier: ExpeditionGuildTier }> = []
+function buildTierRows(tiers: readonly GuildExpeditionTier[]) {
+	const rows: Array<{ type: 'band'; band: ContentTierBand } | { type: 'tier'; tier: GuildExpeditionTier }> = []
 	let previousBand: ContentTierBand | null = null
 
 	for (const tier of tiers) {
@@ -38,15 +38,15 @@ function buildTierRows(tiers: readonly ExpeditionGuildTier[]) {
 	return rows
 }
 
-type ExpeditionTierGuideProps = {
+type GuildExpeditionTierGuideProps = {
 	/** true면 lg 미만에서 '토벌'으로 줄임. 툴바 기본값, 캐릭터 비교 등은 false */
 	compactMobileLabel?: boolean
 	/** false면 포인트 열을 숨기고 '토벌전 등급 정보'로 표시. 캐릭터 비교용 */
 	showPoints?: boolean
 }
 
-function ExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: ExpeditionTierGuideProps) {
-	const rows = buildTierRows(EXPEDITION_GUILD_TIERS)
+function GuildExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: GuildExpeditionTierGuideProps) {
+	const rows = buildTierRows(GUILD_EXPEDITION_TIERS)
 	const triggerLabel = showPoints ? '토벌전 등급별 포인트' : '토벌전 등급 정보'
 	const columnCount = showPoints ? 4 : 3
 
@@ -157,4 +157,5 @@ function ExpeditionTierGuide({ compactMobileLabel = true, showPoints = true }: E
 	)
 }
 
-export default ExpeditionTierGuide
+export default GuildExpeditionTierGuide
+export type { GuildExpeditionTierGuideProps }

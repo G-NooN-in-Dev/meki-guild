@@ -4,6 +4,7 @@ import { Input } from '@shared/ui/input'
 import { Label } from '@shared/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/select'
 
+import { GUILD_EXPEDITION_TIERS } from '@/features/guild/lib/guild-expedition-tier.constants'
 import {
 	GUILD_SHEET_FIELD_LABELS,
 	GUILD_SHEET_KOREAN_NUMBER_PLACEHOLDERS,
@@ -11,9 +12,8 @@ import {
 	type GuildSheetMemberTab,
 	isGuildSheetKoreanNumberField
 } from '@/features/guild/lib/sheet-form.schema'
-import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
 
-const EXPEDITION_GRADE_OPTIONS = EXPEDITION_GUILD_TIERS.map((tier) => tier.rank)
+const EXPEDITION_GRADE_OPTIONS = GUILD_EXPEDITION_TIERS.map((tier) => tier.rank)
 
 type GuildSheetTabFieldInputsProps = {
 	tab: GuildSheetMemberTab
