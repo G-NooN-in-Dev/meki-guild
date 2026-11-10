@@ -82,6 +82,14 @@ const TIP_ENTRIES = [
 		tags: ['보스대전'],
 		href: '/tips/guild-boss'
 	},
+	{
+		slug: 'guild-bounty',
+		title: '현상수배 정보',
+		description: '제한시간 · 명중컷 · 방어력 · 동료·버프 구슬 · 공격 패턴',
+		category: 'guild-contents',
+		tags: ['현상수배'],
+		href: '/tips/guild-bounty'
+	},
 	// 각종 정보
 	{
 		slug: 'companion-setup',
