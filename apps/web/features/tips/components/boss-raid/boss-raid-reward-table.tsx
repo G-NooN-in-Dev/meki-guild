@@ -14,7 +14,7 @@ import Image from 'next/image'
 import { type ReactNode, useState } from 'react'
 
 import MonsterLabel from '@/features/tips/components/shared/monster-label'
-import { TIPS_REWARD_DETAIL_ID } from '@/features/tips/lib/scroll-to-reward-detail'
+import { TIPS_REWARD_DETAIL_ID } from '@/features/tips/utils/scroll-to-reward-detail'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {

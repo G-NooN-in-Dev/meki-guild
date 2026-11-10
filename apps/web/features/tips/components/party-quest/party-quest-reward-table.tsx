@@ -13,7 +13,7 @@ import { InfoIcon, LockIcon } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 
-import { TIPS_REWARD_DETAIL_ID } from '@/features/tips/lib/scroll-to-reward-detail'
+import { TIPS_REWARD_DETAIL_ID } from '@/features/tips/utils/scroll-to-reward-detail'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {
