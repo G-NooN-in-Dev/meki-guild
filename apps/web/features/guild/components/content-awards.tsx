@@ -27,6 +27,7 @@ const AWARD_SLOT_BG_CLASS_NAME = {
 	combatPower: 'bg-pastel-orange-50',
 	expeditionScore: 'bg-pastel-green-50',
 	rivalry: 'bg-pastel-navy-50',
+	bounty: 'bg-pastel-red-50',
 	guildBoss: 'bg-pastel-purple-50',
 	training: 'bg-pastel-blue-50'
 } as const satisfies Record<ContentAwardSlot['key'], string>
@@ -59,7 +60,7 @@ function AwardSlotLabel({ label, criteriaDate }: AwardSlotLabelProps) {
 const awardSlotItemClassName =
 	'flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 border border-grayscale-100 shadow-sm hover:scale-[1.05] transition-transform'
 
-/** 시상 한 행: 부문 | 이름·직업 | 성장률 */
+/** 시상 한 행: 부문 | 이름·직업 | 성장 점수(% 또는 단계) */
 function AwardSlot({ slot }: AwardSlotProps) {
 	const { key, label, criteriaDate } = slot
 	const className = cn(awardSlotItemClassName, AWARD_SLOT_BG_CLASS_NAME[key])
@@ -73,7 +74,7 @@ function AwardSlot({ slot }: AwardSlotProps) {
 		)
 	}
 
-	const { name, job, percentLabel } = slot.winner
+	const { name, job, scoreLabel } = slot.winner
 
 	return (
 		<li className={className}>
@@ -84,14 +85,14 @@ function AwardSlot({ slot }: AwardSlotProps) {
 				</p>
 				<JobBadge job={job} className="max-w-24 shrink-0 truncate text-[10px]" />
 			</div>
-			<p className="text-success-700 shrink-0 text-sm font-semibold tabular-nums">{percentLabel}</p>
+			<p className="text-success-700 shrink-0 text-sm font-semibold tabular-nums">{scoreLabel}</p>
 		</li>
 	)
 }
 
 /**
  * 주간 성장왕 Popover.
- * 전투력·토벌전·대항전·길드보스·수련장 각각 성장률 1등을 한꺼번에 보여 줍니다.
+ * 대부분 부문은 성장률(%), 현상수배는 증가한 단계 수 1등을 보여 줍니다.
  */
 function ContentAwards({ comparisons }: ContentAwardsProps) {
 	const slots = selectContentAwardSlots(comparisons)

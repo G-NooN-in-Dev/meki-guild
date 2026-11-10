@@ -6,13 +6,14 @@ import {
 } from '@/libs/guild-content-dates.constants'
 
 /** 컨텐츠별 시상 부문 키 (표시 순서와 동일) */
-type ContentAwardMetricKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'guildBoss' | 'training'
+type ContentAwardMetricKey = 'combatPower' | 'expeditionScore' | 'rivalry' | 'bounty' | 'guildBoss' | 'training'
 
 /** 부문 키 ↔ 수집일 키 */
 const METRIC_TO_DATE_KEY = {
 	combatPower: 'combatPower',
 	expeditionScore: 'expedition',
 	rivalry: 'rivalry',
+	bounty: 'bounty',
 	guildBoss: 'guildBoss',
 	training: 'training'
 } as const satisfies Record<ContentAwardMetricKey, keyof GuildContentDates>
@@ -22,6 +23,7 @@ const CONTENT_AWARD_METRIC_LABELS = {
 	combatPower: '전투력',
 	expeditionScore: '토벌전',
 	rivalry: '대항전',
+	bounty: '현상수배',
 	guildBoss: '길드보스',
 	training: '수련장'
 } as const satisfies Record<ContentAwardMetricKey, string>
@@ -31,6 +33,7 @@ const CONTENT_AWARD_METRIC_ORDER = [
 	'combatPower',
 	'expeditionScore',
 	'rivalry',
+	'bounty',
 	'guildBoss',
 	'training'
 ] as const satisfies readonly ContentAwardMetricKey[]
@@ -38,10 +41,10 @@ const CONTENT_AWARD_METRIC_ORDER = [
 type ContentAwardWinner = {
 	name: string
 	job: string
-	/** 정렬·비교용 원시 성장률 (%) */
-	percent: number
-	/** 표시용 성장률 (예: +12.3%) */
-	percentLabel: string
+	/** 정렬·비교용 원시 점수 (성장률 % 또는 단계 증가량) */
+	score: number
+	/** 표시용 라벨 (예: +12.3% / +3단계) */
+	scoreLabel: string
 }
 
 type ContentAwardSlotBase = {
@@ -92,7 +95,25 @@ function formatGrowthPercentLabel(percent: number): string {
 	return `${sign}${abs.toFixed(1)}%`
 }
 
-function getMetricDelta(comparison: GuildMemberComparison, key: ContentAwardMetricKey): NumericDelta {
+/** 현상수배 단계 증가량. 비교 불가·증가 없으면 null */
+function getBountyStageIncrease(comparison: GuildMemberComparison): number | null {
+	const { hasValue, diff } = comparison.bounty
+
+	if (!hasValue || diff === null || diff <= 0) {
+		return null
+	}
+
+	return diff
+}
+
+function formatBountyStageIncreaseLabel(increase: number): string {
+	return `+${increase}단계`
+}
+
+function getMetricDelta(
+	comparison: GuildMemberComparison,
+	key: Exclude<ContentAwardMetricKey, 'bounty'>
+): NumericDelta {
 	switch (key) {
 		case 'combatPower':
 			return comparison.combatPower
@@ -108,8 +129,10 @@ function getMetricDelta(comparison: GuildMemberComparison, key: ContentAwardMetr
 }
 
 /**
- * 한 부문의 성장률 1등을 고릅니다.
- * active 멤버만, 유효 성장률이 있는 사람만. 동점이면 이름 가나다순.
+ * 한 부문의 1등을 고릅니다.
+ * active 멤버만, 유효 점수가 있는 사람만. 동점이면 이름 가나다순.
+ * - bounty: 증가한 단계 수
+ * - 그 외: 성장률(%)
  */
 function selectMetricWinner(
 	comparisons: GuildMemberComparison[],
@@ -122,17 +145,34 @@ function selectMetricWinner(
 			continue
 		}
 
-		const percent = getGrowthPercent(getMetricDelta(comparison, key))
+		let candidate: ContentAwardWinner | null = null
 
-		if (percent === null) {
-			continue
-		}
+		if (key === 'bounty') {
+			const increase = getBountyStageIncrease(comparison)
 
-		const candidate: ContentAwardWinner = {
-			name: comparison.name,
-			job: comparison.job,
-			percent,
-			percentLabel: formatGrowthPercentLabel(percent)
+			if (increase === null) {
+				continue
+			}
+
+			candidate = {
+				name: comparison.name,
+				job: comparison.job,
+				score: increase,
+				scoreLabel: formatBountyStageIncreaseLabel(increase)
+			}
+		} else {
+			const percent = getGrowthPercent(getMetricDelta(comparison, key))
+
+			if (percent === null) {
+				continue
+			}
+
+			candidate = {
+				name: comparison.name,
+				job: comparison.job,
+				score: percent,
+				scoreLabel: formatGrowthPercentLabel(percent)
+			}
 		}
 
 		if (!best) {
@@ -140,8 +180,8 @@ function selectMetricWinner(
 			continue
 		}
 
-		if (candidate.percent !== best.percent) {
-			if (candidate.percent > best.percent) {
+		if (candidate.score !== best.score) {
+			if (candidate.score > best.score) {
 				best = candidate
 			}
 			continue
@@ -156,7 +196,7 @@ function selectMetricWinner(
 }
 
 /**
- * 5개 시상 부문 슬롯을 만듭니다.
+ * 시상 부문 슬롯을 만듭니다.
  * - 이번 주 갱신된 컨텐츠만 1등 선정
  * - 미갱신이거나 후보가 없으면 pending
  */

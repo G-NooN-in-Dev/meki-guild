@@ -24,6 +24,7 @@ const CONTENT_UPDATED_AT_ROWS: { label: string; dates: GuildContentDateRange }[]
 	{ label: '전투력 · 레벨', dates: GUILD_CONTENT_UPDATED_AT.combatPower },
 	{ label: '토벌전', dates: GUILD_CONTENT_UPDATED_AT.expedition },
 	{ label: '대항전', dates: GUILD_CONTENT_UPDATED_AT.rivalry },
+	{ label: '현상수배', dates: GUILD_CONTENT_UPDATED_AT.bounty },
 	...getGuildContentsOrder().map(({ key, label }) => ({
 		label,
 		dates: GUILD_CONTENT_UPDATED_AT[key]

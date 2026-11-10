@@ -26,6 +26,14 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 		trainingRank: {
 			current: data.currentWeek.guild?.trainingRank,
 			previous: data.previousWeek.guild?.trainingRank
+		},
+		bountyRank: {
+			current: data.currentWeek.guild?.bountyRank,
+			previous: data.previousWeek.guild?.bountyRank
+		},
+		allBountyRank: {
+			current: data.currentWeek.guild?.allBountyRank,
+			previous: data.previousWeek.guild?.allBountyRank
 		}
 	})
 

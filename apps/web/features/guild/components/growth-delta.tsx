@@ -64,7 +64,8 @@ const toneClassNames = {
 } as const
 
 function GrowthDelta({ value, percentLabel, className, hideValue = false }: GrowthDeltaProps) {
-	const tone = getDeltaTone(value)
+	// hideValue면 총합 등 절대값이 value로 올 수 있어, 색은 percentLabel(+12.3%) 기준으로 잡습니다.
+	const tone = getDeltaTone(hideValue && percentLabel ? percentLabel : value)
 
 	return (
 		<span className={cn('text-xs font-medium', toneClassNames[tone], className)}>

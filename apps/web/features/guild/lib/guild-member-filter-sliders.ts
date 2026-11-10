@@ -11,12 +11,13 @@ type RangeBounds = {
 	max: number
 }
 
-/** 필터 슬라이더 필드. 표시 순서 컨텐츠는 상수 순서 */
+/** 필터 슬라이더 필드. 표시 순서 컨텐츠는 상수 순서, 현상수배는 고정 추가 */
 const SLIDER_FIELDS: ReadonlyArray<{ key: SliderFieldKey; label: string }> = [
 	{ key: 'level', label: '레벨' },
 	{ key: 'combatPower', label: '전투력' },
 	{ key: 'expeditionScore', label: '토벌전 (점수)' },
 	{ key: 'rivalry', label: '대항전' },
+	{ key: 'bounty', label: '현상수배' },
 	...getGuildContentsOrder().map(({ key, label }) => ({ key, label }))
 ]
 
@@ -40,6 +41,8 @@ function getSliderFieldValue(member: GuildMemberComparison, key: SliderFieldKey)
 			return member.training.hasValue ? Number(member.training.current) : null
 		case 'guildBoss':
 			return member.guildBoss.hasValue ? Number(member.guildBoss.current) : null
+		case 'bounty':
+			return member.bounty.hasValue ? member.bounty.current : null
 	}
 }
 
@@ -96,6 +99,8 @@ function formatSliderBound(key: SliderFieldKey, value: number): string {
 	switch (key) {
 		case 'level':
 			return `Lv.${rounded}`
+		case 'bounty':
+			return `${rounded}단계`
 		case 'training':
 			return formatTrainingScore(BigInt(rounded))
 		case 'combatPower':
