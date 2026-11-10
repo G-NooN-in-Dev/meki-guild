@@ -30,15 +30,11 @@ import { submitGuildSheetForm } from '@/features/guild/lib/submit-guild-sheet-fo
 import { INITIAL_SUBMIT_GUILD_SHEET_FORM_STATE } from '@/features/guild/lib/submit-guild-sheet-form.state'
 import type { GuildMemberInput } from '@/features/guild/types/guild-snapshot.type'
 
-type CombatPowerDefaults = {
-	job: string
-	level: string
-	combatPower: string
-}
+const DEFAULT_TAB = GUILD_SHEET_MEMBER_TABS[0]
 
 type GuildSheetFormDialogProps = {
 	members: MemberSelectOption[]
-	/** 전투력 탭 프리필용 직전 주 원본 멤버 */
+	/** 현상수배 클리어 단계 프리필용 직전 기록 멤버 */
 	previousMembers: GuildMemberInput[]
 }
 
@@ -46,25 +42,20 @@ function emptyFieldsForTab(tab: GuildSheetMemberTab): Record<string, string> {
 	return Object.fromEntries(GUILD_SHEET_TAB_INPUT_FIELDS[tab].map((field) => [field, '']))
 }
 
-function getCombatPowerDefaults(
-	name: string | null,
-	previousByName: Map<string, GuildMemberInput>
-): CombatPowerDefaults {
+/** 기존 행이 없을 때 현상수배 클리어 단계 초기값 = 직전 기록 */
+function getBountyDefault(name: string | null, previousByName: Map<string, GuildMemberInput>): string {
 	if (!name) {
-		return { job: '', level: '', combatPower: '' }
+		return ''
 	}
 
 	const previous = previousByName.get(name)
+	const bounty = previous?.bounty
 
-	if (!previous) {
-		return { job: '', level: '', combatPower: '' }
+	if (bounty === undefined || bounty === null || !Number.isFinite(bounty) || bounty <= 0) {
+		return ''
 	}
 
-	return {
-		job: previous.job ?? '',
-		level: previous.level > 0 ? String(previous.level) : '',
-		combatPower: previous.combatPower === undefined || previous.combatPower === null ? '' : String(previous.combatPower)
-	}
+	return String(bounty)
 }
 
 type GuildSheetFormFieldsProps = {
@@ -75,10 +66,10 @@ type GuildSheetFormFieldsProps = {
 
 /** 제출 성공 시 부모에서 remount 해 action state 를 초기화합니다. */
 function GuildSheetFormFields({ members, previousMembers, onSuccess }: GuildSheetFormFieldsProps) {
-	const [tab, setTab] = useState<GuildSheetMemberTab>('combatPower')
-	const [collectedAt, setCollectedAt] = useState(() => getGuildSheetRoundOptions('combatPower')[0]?.collectedAt ?? '')
+	const [tab, setTab] = useState<GuildSheetMemberTab>(DEFAULT_TAB)
+	const [collectedAt, setCollectedAt] = useState(() => getGuildSheetRoundOptions(DEFAULT_TAB)[0]?.collectedAt ?? '')
 	const [name, setName] = useState<string | null>(null)
-	const [fields, setFields] = useState<Record<string, string>>(() => emptyFieldsForTab('combatPower'))
+	const [fields, setFields] = useState<Record<string, string>>(() => emptyFieldsForTab(DEFAULT_TAB))
 	const [hasExistingRow, setHasExistingRow] = useState(false)
 	const [isLoadingDefaults, setIsLoadingDefaults] = useState(false)
 	const [state, formAction, isPending] = useActionState(submitGuildSheetForm, INITIAL_SUBMIT_GUILD_SHEET_FORM_STATE)
@@ -104,7 +95,7 @@ function GuildSheetFormFields({ members, previousMembers, onSuccess }: GuildShee
 		toast.error(state.message)
 	}, [state.ok, state.message, onSuccess])
 
-	/** 회차·길드원 선택 시 Sheet 기존 행 → 없으면 전투력 탭만 직전 주 값 */
+	/** 회차·길드원 선택 시 Sheet 기존 행 → 없으면 현상수배 탭만 직전 기록 값 */
 	useEffect(() => {
 		if (!name || !collectedAt) {
 			return
@@ -131,13 +122,8 @@ function GuildSheetFormFields({ members, previousMembers, onSuccess }: GuildShee
 
 				setHasExistingRow(false)
 
-				if (tab === 'combatPower') {
-					const defaults = getCombatPowerDefaults(name, previousByName)
-					setFields({
-						job: defaults.job,
-						level: defaults.level,
-						combatPower: defaults.combatPower
-					})
+				if (tab === 'bounty') {
+					setFields({ bounty: getBountyDefault(name, previousByName) })
 					return
 				}
 
@@ -149,13 +135,8 @@ function GuildSheetFormFields({ members, previousMembers, onSuccess }: GuildShee
 
 				setHasExistingRow(false)
 
-				if (tab === 'combatPower') {
-					const defaults = getCombatPowerDefaults(name, previousByName)
-					setFields({
-						job: defaults.job,
-						level: defaults.level,
-						combatPower: defaults.combatPower
-					})
+				if (tab === 'bounty') {
+					setFields({ bounty: getBountyDefault(name, previousByName) })
 					return
 				}
 

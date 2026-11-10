@@ -58,19 +58,19 @@ function buildRowValues(tab: GuildSheetMemberTab, formData: FormData): string[] 
 		fieldValues[field] = normalizeSheetFieldValue(field, readRequiredString(formData, field))
 	}
 
-	if (tab === 'combatPower') {
-		const level = Number(fieldValues.level)
-
-		if (!Number.isFinite(level) || level <= 0) {
-			throw new Error('레벨은 1 이상의 숫자여야 합니다.')
-		}
-	}
-
 	if (tab === 'expedition') {
 		const placement = Number(fieldValues.placement)
 
 		if (!Number.isFinite(placement) || placement <= 0) {
 			throw new Error('순위는 1 이상의 숫자여야 합니다.')
+		}
+	}
+
+	if (tab === 'bounty') {
+		const bounty = Number(fieldValues.bounty)
+
+		if (!Number.isInteger(bounty) || bounty < 1 || bounty > 100) {
+			throw new Error('클리어 단계는 1~100 사이의 정수여야 합니다.')
 		}
 	}
 
