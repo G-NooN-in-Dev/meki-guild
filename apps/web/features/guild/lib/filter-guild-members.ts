@@ -1,5 +1,5 @@
-import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getGuildExpeditionGradeRank } from '@/features/guild/lib/guild-expedition-tier.constants'
+import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getJobClassLine, type JobClassLine } from '@/libs/job-class.constants'
 
 /** 숫자 range. null이면 해당 쪽 제한 없음 */

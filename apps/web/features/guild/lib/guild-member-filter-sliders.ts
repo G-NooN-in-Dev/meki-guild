@@ -1,6 +1,6 @@
 import type { GuildMemberFilterState, NumberRange } from '@/features/guild/lib/filter-guild-members'
-import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EXPEDITION_TIERS } from '@/features/guild/lib/guild-expedition-tier.constants'
+import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { getGuildContentsOrder } from '@/libs/guild-contents-order.constants'
 import { formatKoreanNumber, formatTrainingScore } from '@/utils/format-korean-number'
 
