@@ -2,7 +2,7 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/
 import { cn } from '@shared/ui/utils'
 
 import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
-import { GUILD_TRAINING_STAGE_ENTRIES } from '@/features/tips/lib/guild-training.constants'
+import { GUILD_TRAINING_DEFENSE, GUILD_TRAINING_STAGE_ENTRIES } from '@/features/tips/lib/guild-training.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 const HEAD_BASE_CLASS_NAME =
@@ -54,18 +54,21 @@ function DualColumnHead({ title, className }: DualColumnHeadProps) {
 }
 
 /**
- * 길드 수련장 단계별 점수·명중컷·타수 표.
- * 일반/특수 값을 한 열에 모으고, 처치 점수만 모바일에서 세로 스택합니다.
+ * 길드 수련장 단계별 방어력·점수·명중컷·타수 표.
+ * 방어력은 전 단계·일반/특수 동일 고정값이고, 처치 점수만 모바일에서 세로 스택합니다.
  */
 function GuildTrainingTable() {
 	return (
 		<HitCutTableShell>
 			<TableHeader sticky>
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
-					<TableHead className={cn(HEAD_BASE_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[12%]')}>
+					<TableHead className={cn(HEAD_BASE_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[10%]')}>
 						레벨
 					</TableHead>
-					<TableHead className={cn(HEAD_BASE_CLASS_NAME, 'bg-pastel-yellow-100 text-pastel-yellow-900 w-[18%]')}>
+					<TableHead className={cn(HEAD_BASE_CLASS_NAME, 'bg-pastel-orange-100 text-pastel-orange-900 w-[16%]')}>
+						방어력
+					</TableHead>
+					<TableHead className={cn(HEAD_BASE_CLASS_NAME, 'bg-pastel-yellow-100 text-pastel-yellow-900 w-[14%]')}>
 						{/* 모바일: 2줄 / sm+: 한 줄 */}
 						<span className="flex flex-col items-center gap-0.5 sm:hidden">
 							<span>특수몹</span>
@@ -73,8 +76,8 @@ function GuildTrainingTable() {
 						</span>
 						<span className="hidden sm:inline">특수몹 필요 타수</span>
 					</TableHead>
-					<DualColumnHead title="처치 점수" className="bg-pastel-green-100 text-pastel-green-900 w-[38%]" />
-					<DualColumnHead title="필요 명중" className="bg-pastel-blue-100 text-pastel-blue-900 w-[32%]" />
+					<DualColumnHead title="처치 점수" className="bg-pastel-green-100 text-pastel-green-900 w-[30%]" />
+					<DualColumnHead title="필요 명중" className="bg-pastel-blue-100 text-pastel-blue-900 w-[30%]" />
 				</TableRow>
 			</TableHeader>
 			<TableBody>
@@ -85,6 +88,9 @@ function GuildTrainingTable() {
 						<TableRow key={stage} className="border-grayscale-200 hover:bg-transparent">
 							<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-grayscale-50 text-grayscale-800')}>
 								{stage}
+							</TableCell>
+							<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-pastel-orange-50 text-grayscale-900')}>
+								{formatLocaleNumber(GUILD_TRAINING_DEFENSE)}
 							</TableCell>
 							<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-pastel-yellow-50 text-grayscale-900')}>
 								{formatLocaleNumber(specialRequiredHits)}

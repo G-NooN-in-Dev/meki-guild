@@ -69,7 +69,7 @@ const TIP_ENTRIES = [
 	{
 		slug: 'guild-training',
 		title: '수련장 정보',
-		description: '단계별 명중컷 · 처치 점수',
+		description: '단계별 방어력 · 명중컷 · 처치 점수',
 		category: 'guild-contents',
 		tags: ['수련장'],
 		href: '/tips/guild-training'

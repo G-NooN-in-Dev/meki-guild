@@ -24,6 +24,44 @@ export const GUILD_TRAINING_SPECIAL_MOB_COUNT = 3
 /** 특수몹 소환 쿨타임(초) */
 export const GUILD_TRAINING_SPECIAL_MOB_SPAWN_COOLDOWN_SEC = 20
 
+/** 일반몹·특수몹 방어력 (전 단계 고정, 둘 다 동일) */
+export const GUILD_TRAINING_DEFENSE = 15000
+
+/**
+ * 수련장 몬스터 표시 메타.
+ * imageWidth/Height는 원본 픽셀이며, 화면 크기는 CSS로 맞춥니다.
+ */
+export const GUILD_TRAINING_NORMAL_MOB = {
+	label: '수련용 짚인형',
+	imageSrc: '/monsters/straw-target-dummy.png',
+	imageWidth: 78,
+	imageHeight: 86
+} as const
+
+/** 5시 방향 특수몹 */
+export const GUILD_TRAINING_SPECIAL_MOB_5_OCLOCK = {
+	label: '판다 허수아비',
+	imageSrc: '/monsters/straw-panda-dummy.png',
+	imageWidth: 1237,
+	imageHeight: 1271
+} as const
+
+/** 7시 방향 특수몹 */
+export const GUILD_TRAINING_SPECIAL_MOB_7_OCLOCK = {
+	label: '훈련용 허수아비',
+	imageSrc: '/monsters/training-dummy.gif',
+	imageWidth: 72,
+	imageHeight: 100
+} as const
+
+/** 11시 방향 특수몹 */
+export const GUILD_TRAINING_SPECIAL_MOB_11_OCLOCK = {
+	label: '훈련용 나무인형',
+	imageSrc: '/monsters/wooden-target-dummy.png',
+	imageWidth: 81,
+	imageHeight: 85
+} as const
+
 /** 1단계 특수몹 필요 타수 */
 const GUILD_TRAINING_SPECIAL_HITS_BASE = 20
 
