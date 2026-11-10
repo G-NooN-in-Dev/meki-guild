@@ -6,6 +6,67 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.7.0',
+		date: '2026-11-11',
+		sections: [
+			{
+				title: '길드 정보',
+				items: [
+					{ text: '길드 현상수배 정보 추가 및 연동' },
+					{ text: '길드 보스대전 시즌 정보 추가' },
+					{ text: '멤버 상세 다이얼로그 - 직업 이미지 추가' },
+					{ text: '데이터 등록 시스템 개선' },
+					{ text: '툴바 - 모바일 환경 UI 개선' }
+				]
+			},
+			{
+				title: '정보/팁',
+				items: [
+					{ text: '신규 직업 정보 추가 — 플레임위자드, 소울마스터' },
+					{ text: '허브 페이지 - UI 변경' },
+					{
+						text: '길드 컨텐츠',
+						children: [
+							{ text: '토벌전', children: [{ text: '방어력 데이터 추가' }] },
+							{
+								text: '대항전',
+								children: [
+									{ text: '몬스터 이미지 변경' },
+									{ text: '방어력 데이터 추가' },
+									{ text: '보스 공격 패턴 추가' }
+								]
+							},
+							{
+								text: '수련장',
+								children: [
+									{ text: '몬스터 이미지 추가' },
+									{ text: '방어력 데이터 추가' },
+									{ text: '특수몹 처치효과 UI 개선' }
+								]
+							},
+							{
+								text: '보스대전',
+								children: [
+									{ text: '몬스터 이미지 추가' },
+									{ text: '규칙·진행 순서, 필요 명중, 방어력 데이터 추가' },
+									{ text: '보스 공격 패턴 추가' }
+								]
+							},
+							{
+								text: '현상수배',
+								children: [
+									{ text: '몬스터 이미지 추가' },
+									{ text: '규칙, 필요 명중, 방어력 데이터 추가' },
+									{ text: '동료·버프 구슬 정보, 보스 공격 패턴 추가' }
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	{
 		version: '1.6.3',
 		date: '2026-11-03',
 		sections: [
