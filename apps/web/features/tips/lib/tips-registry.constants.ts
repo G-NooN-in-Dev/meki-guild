@@ -61,7 +61,7 @@ const TIP_ENTRIES = [
 	{
 		slug: 'guild-rivalry',
 		title: '대항전 정보',
-		description: '단계별 명중컷 · 보스 데미지 스택',
+		description: '단계별 방어력 · 명중컷 · 보스 데미지 스택',
 		category: 'guild-contents',
 		tags: ['대항전'],
 		href: '/tips/guild-rivalry'
