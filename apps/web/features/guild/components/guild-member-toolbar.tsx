@@ -3,6 +3,7 @@
 import { Label } from '@shared/ui/label'
 import { Switch } from '@shared/ui/switch'
 
+import BountyStagePointsGuide from '@/features/guild/components/bounty-stage-points-guide'
 import ContentAwards from '@/features/guild/components/content-awards'
 import ContentUpdatedAtGuide from '@/features/guild/components/content-updated-at-guide'
 import ExpeditionTierGuide from '@/features/guild/components/expedition-tier-guide'
@@ -75,6 +76,7 @@ function GuildMemberToolbar({
 				<GuildContentSeasonsGuide />
 				<ExpeditionTierGuide />
 				<RivalryRankPointsGuide />
+				<BountyStagePointsGuide />
 			</div>
 		</div>
 	)
