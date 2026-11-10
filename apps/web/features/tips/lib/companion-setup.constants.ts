@@ -13,6 +13,7 @@ import type {
 	CompanionSetupSlot,
 	CompanionSlotLoadout
 } from '@/features/tips/types/companion.type'
+import { getJobPortraitSrc } from '@/libs/job-portrait.constants'
 
 /** UI·정렬용 등급 순서 — 공통 ITEM_GRADE_ORDER 재사용 */
 export const COMPANION_GRADE_ORDER = ITEM_GRADE_ORDER
@@ -83,9 +84,11 @@ const COMPANION_JOB_ORDER = [
 	'히어로',
 	'팔라딘',
 	'다크나이트',
+	'소울마스터',
 	'썬콜',
 	'불독',
 	'비숍',
+	'플레임위자드',
 	'보우마스터',
 	'신궁',
 	'나이트로드',
@@ -109,23 +112,25 @@ export const COMPANION_JOBS = COMPANION_JOB_ORDER.filter((job) => !UNRELEASED_CO
 
 /**
  * 직업별 장착 효과 — 레전더리 1레벨 기준.
- * 아이콘이 아직 없는 직업은 COMPANION_JOB_ICON_KEY에 넣지 않으면 플레이스홀더로 표시됩니다.
+ * 아이콘이 아직 없는 직업은 getJobPortraitSrc 매핑에 없으면 플레이스홀더로 표시됩니다.
  */
 export const COMPANION_EQUIP_EFFECT_BASE_BY_JOB = {
-	히어로: { label: '최대 데미지 배율', legendaryLevel1Value: 20, unit: 'percent' },
-	팔라딘: { label: '기본 공격 데미지', legendaryLevel1Value: 8, unit: 'percent' },
 	다크나이트: { label: '명중', legendaryLevel1Value: 24, unit: 'flat' },
-	썬콜: { label: '일반 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },
+	팔라딘: { label: '기본 공격 데미지', legendaryLevel1Value: 8, unit: 'percent' },
+	히어로: { label: '최대 데미지 배율', legendaryLevel1Value: 20, unit: 'percent' },
 	불독: { label: '크리티컬 확률', legendaryLevel1Value: 12, unit: 'percent' },
 	비숍: { label: '스킬 데미지', legendaryLevel1Value: 8, unit: 'percent' },
+	썬콜: { label: '일반 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },
 	보우마스터: { label: '공격 속도', legendaryLevel1Value: 20, unit: 'percent' },
 	신궁: { label: '상태이상 데미지', legendaryLevel1Value: 32, unit: 'percent' },
-	윈드브레이커: { label: '보스 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },
 	나이트로드: { label: '보스 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },
 	섀도어: { label: '최소 데미지 배율', legendaryLevel1Value: 20, unit: 'percent' },
-	나이트워커: { label: '명중', legendaryLevel1Value: 24, unit: 'flat' },
 	바이퍼: { label: '주 스탯', legendaryLevel1Value: 12, unit: 'percent' },
-	캡틴: { label: '크리티컬 데미지', legendaryLevel1Value: 12, unit: 'percent' }
+	캡틴: { label: '크리티컬 데미지', legendaryLevel1Value: 12, unit: 'percent' },
+	소울마스터: { label: '기본 공격 데미지', legendaryLevel1Value: 8, unit: 'percent' },
+	플레임위자드: { label: '스킬 데미지', legendaryLevel1Value: 8, unit: 'percent' },
+	윈드브레이커: { label: '보스 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },
+	나이트워커: { label: '명중', legendaryLevel1Value: 24, unit: 'flat' }
 } as const satisfies Record<string, CompanionEquipEffectBase>
 
 /** 게임 표시와 맞추기: %는 소수 1자리, 절대값은 정수 */
@@ -213,31 +218,9 @@ function aggregateEquipEffects(effects: readonly CompanionEquipEffect[]): readon
 	})
 }
 
-/**
- * 직업 → public/companions 파일명 키.
- * 등급별 이미지는 없고 직업당 PNG 1장입니다.
- */
-const COMPANION_JOB_ICON_KEY = {
-	히어로: 'hero',
-	팔라딘: 'paladin',
-	다크나이트: 'darkknight',
-	썬콜: 'mage_sc',
-	불독: 'mage_fd',
-	비숍: 'bishop',
-	보우마스터: 'bowmaster',
-	신궁: 'marksman',
-	나이트로드: 'nightlord',
-	섀도어: 'shadower',
-	바이퍼: 'viper',
-	캡틴: 'captain',
-	나이트워커: 'nightwalker',
-	윈드브레이커: 'windbreaker'
-} as const satisfies Record<string, string>
-
-/** 직업 초상화 public 경로. 매핑이 없으면 빈 문자열. */
+/** 동료 UI용 직업 초상화 — 길드와 동일한 경로를 씁니다. */
 function getCompanionImageSrc(job: string) {
-	const iconKey = COMPANION_JOB_ICON_KEY[job as keyof typeof COMPANION_JOB_ICON_KEY]
-	return iconKey ? `/companions/${iconKey}.png` : ''
+	return getJobPortraitSrc(job)
 }
 
 /** 직업 × 등급 조합으로 동료 카탈로그를 만듭니다. */
