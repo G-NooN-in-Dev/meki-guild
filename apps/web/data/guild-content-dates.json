@@ -18,5 +18,9 @@
 	"guildBoss": {
 		"previous": "2026-08-26",
 		"current": "2026-09-02"
+	},
+	"bounty": {
+		"previous": null,
+		"current": "2026-11-07"
 	}
 }

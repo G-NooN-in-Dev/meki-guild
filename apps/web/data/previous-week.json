@@ -3,7 +3,9 @@
 		"expeditionRank": 17,
 		"rivalryRank": 1,
 		"rivalryPoints": 5875800,
-		"trainingRank": 1
+		"trainingRank": 1,
+		"bountyRank": null,
+		"allBountyRank": null
 	},
 	"members": [
 		{
