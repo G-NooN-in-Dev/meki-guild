@@ -16,6 +16,8 @@ type MemberRankings = {
 	rivalry: RankingMap
 	training: RankingMap
 	guildBoss: RankingMap
+	/** 현상수배 클리어 단계(높을수록 상위) */
+	bounty: RankingMap
 }
 
 /**
@@ -30,7 +32,8 @@ function computeMemberRankings(members: ParsedGuildMember[]): MemberRankings {
 		expeditionScore: computeRank(members, (m) => (m.expedition.hasScore ? m.expedition.score : null)),
 		rivalry: computeRank(members, (m) => (m.hasRivalry ? m.rivalry : null)),
 		training: computeRank(members, (m) => (m.hasTraining ? m.training : null)),
-		guildBoss: computeRank(members, (m) => (m.hasGuildBoss ? m.guildBoss : null))
+		guildBoss: computeRank(members, (m) => (m.hasGuildBoss ? m.guildBoss : null)),
+		bounty: computeRankNumberDesc(members, (m) => (m.hasBounty ? m.bounty : null))
 	}
 }
 
@@ -49,6 +52,35 @@ function computeRank(members: ParsedGuildMember[], getValue: (m: ParsedGuildMemb
 	for (const entry of entries) {
 		if (prevValue !== null && entry.value === prevValue) {
 			// 동점 처리: 직전과 같은 등수
+			map[entry.name] = prevRank
+		} else {
+			map[entry.name] = rank
+			prevRank = rank
+		}
+		prevValue = entry.value
+		rank++
+	}
+
+	return map
+}
+
+/** 숫자(number)가 큰 순서로 등수를 매깁니다. 현상수배 단계처럼 bigint가 아닌 항목에 사용합니다. */
+function computeRankNumberDesc(
+	members: ParsedGuildMember[],
+	getValue: (m: ParsedGuildMember) => number | null
+): RankingMap {
+	const entries = members
+		.map((m) => ({ name: m.name, value: getValue(m) }))
+		.filter((e): e is { name: string; value: number } => e.value !== null)
+		.sort((a, b) => b.value - a.value)
+
+	const map: RankingMap = {}
+	let rank = 1
+	let prevRank = 1
+	let prevValue: number | null = null
+
+	for (const entry of entries) {
+		if (prevValue !== null && entry.value === prevValue) {
 			map[entry.name] = prevRank
 		} else {
 			map[entry.name] = rank

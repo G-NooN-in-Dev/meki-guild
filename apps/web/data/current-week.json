@@ -3,7 +3,9 @@
 		"expeditionRank": 16,
 		"rivalryRank": 1,
 		"rivalryPoints": 5766100,
-		"trainingRank": 1
+		"trainingRank": 1,
+		"bountyRank": 14,
+		"allBountyRank": 173
 	},
 	"members": [
 		{
@@ -18,7 +20,8 @@
 			},
 			"rivalry": "1조 1315억",
 			"training": "2584만 8606",
-			"guildBoss": "1916억 8626만"
+			"guildBoss": "1916억 8626만",
+			"bounty": 34
 		},
 		{
 			"name": "왈왈멍멍",
@@ -32,7 +35,8 @@
 			},
 			"rivalry": "1조 461억",
 			"training": "2600만 9583",
-			"guildBoss": "1797억 4671만"
+			"guildBoss": "1797억 4671만",
+			"bounty": 33
 		},
 		{
 			"name": "교토",
@@ -46,7 +50,8 @@
 			},
 			"rivalry": "3779억 9309만",
 			"training": "2220만 9030",
-			"guildBoss": "583억 6113만"
+			"guildBoss": "583억 6113만",
+			"bounty": 29
 		},
 		{
 			"name": "휘언",
@@ -60,7 +65,8 @@
 			},
 			"rivalry": "3818억 2635만",
 			"training": "2442만 1173",
-			"guildBoss": "989억 4574만"
+			"guildBoss": "989억 4574만",
+			"bounty": 29
 		},
 		{
 			"name": "쫀쿤",
@@ -74,7 +80,8 @@
 			},
 			"rivalry": "4085억 8038만",
 			"training": "1917만 1104",
-			"guildBoss": "1068억 4634만"
+			"guildBoss": "1068억 4634만",
+			"bounty": 30
 		},
 		{
 			"name": "살짝",
@@ -88,7 +95,8 @@
 			},
 			"rivalry": "4848억 9909만",
 			"training": "2478만 8886",
-			"guildBoss": "1160억 5544만"
+			"guildBoss": "1160억 5544만",
+			"bounty": 30
 		},
 		{
 			"name": "콩얄",
@@ -101,7 +109,8 @@
 				"score": "6224억 9799만"
 			},
 			"rivalry": "2639억 3152만",
-			"training": ""
+			"training": "",
+			"bounty": 29
 		},
 		{
 			"name": "현뚜니",
@@ -115,7 +124,8 @@
 			},
 			"rivalry": "2879억 8849만",
 			"training": "1898만 4891",
-			"guildBoss": "856억 1050만"
+			"guildBoss": "856억 1050만",
+			"bounty": 29
 		},
 		{
 			"name": "누들면",
@@ -128,7 +138,8 @@
 				"score": "6987억 6163만"
 			},
 			"rivalry": "2618억 6077만",
-			"training": ""
+			"training": "",
+			"bounty": 28
 		},
 		{
 			"name": "아이뿌",
@@ -142,7 +153,8 @@
 			},
 			"rivalry": "2441억 3790만",
 			"training": "1021만 9296",
-			"guildBoss": "572억 3731만"
+			"guildBoss": "572억 3731만",
+			"bounty": 26
 		},
 		{
 			"name": "진서아",
@@ -155,7 +167,8 @@
 				"score": "5202억 3617만"
 			},
 			"rivalry": "2052억 1758만",
-			"training": ""
+			"training": "",
+			"bounty": 26
 		},
 		{
 			"name": "누텔라토스트",
@@ -169,7 +182,8 @@
 			},
 			"rivalry": "2519억 6825만",
 			"training": "1792만 5540",
-			"guildBoss": "513억 8061만"
+			"guildBoss": "513억 8061만",
+			"bounty": 28
 		},
 		{
 			"name": "행복하루",
@@ -182,7 +196,8 @@
 				"score": "5763억 4545만"
 			},
 			"rivalry": "2733억 2307만",
-			"training": ""
+			"training": "",
+			"bounty": 28
 		},
 		{
 			"name": "위험장소경고",
@@ -196,7 +211,8 @@
 			},
 			"rivalry": "2157억 7278만",
 			"training": "1176만 7335",
-			"guildBoss": "548억 3583만"
+			"guildBoss": "548억 3583만",
+			"bounty": 28
 		},
 		{
 			"name": "랴이토",
@@ -210,7 +226,8 @@
 			},
 			"rivalry": "2547억 787만",
 			"training": "1745만 7468",
-			"guildBoss": "852억 3547만"
+			"guildBoss": "852억 3547만",
+			"bounty": 28
 		},
 		{
 			"name": "민무늬오징어",
@@ -224,7 +241,8 @@
 			},
 			"rivalry": "2426억 7848만",
 			"training": "1419만 657",
-			"guildBoss": "691억 9967만"
+			"guildBoss": "691억 9967만",
+			"bounty": 29
 		},
 		{
 			"name": "telescope",
@@ -237,7 +255,8 @@
 				"score": "4216억 1529만"
 			},
 			"rivalry": "1981억 3256만",
-			"training": ""
+			"training": "",
+			"bounty": 27
 		},
 		{
 			"name": "살점",
@@ -251,7 +270,8 @@
 			},
 			"rivalry": "1727억 2162만",
 			"training": "1119만 5676",
-			"guildBoss": "431억 5927만"
+			"guildBoss": "431억 5927만",
+			"bounty": 26
 		},
 		{
 			"name": "아로미0",
@@ -265,7 +285,8 @@
 			},
 			"rivalry": "2275억 6018만",
 			"training": "1063만 6365",
-			"guildBoss": "481억 7488만"
+			"guildBoss": "481억 7488만",
+			"bounty": 27
 		},
 		{
 			"name": "푸히",
@@ -278,7 +299,8 @@
 				"score": "3394억 2652만"
 			},
 			"rivalry": "",
-			"training": ""
+			"training": "",
+			"bounty": 26
 		},
 		{
 			"name": "원더08",
@@ -292,7 +314,8 @@
 			},
 			"rivalry": "1589억 2372만",
 			"training": "1214만 8917",
-			"guildBoss": "363억 5675만"
+			"guildBoss": "363억 5675만",
+			"bounty": 25
 		},
 		{
 			"name": "창귀창귀",
@@ -306,7 +329,8 @@
 			},
 			"rivalry": "1740억 3014만",
 			"training": "1242만 5037",
-			"guildBoss": "372억 9819만"
+			"guildBoss": "372억 9819만",
+			"bounty": 25
 		},
 		{
 			"name": "믐슷믐",
@@ -320,7 +344,8 @@
 			},
 			"rivalry": "1428억 2668만",
 			"training": "1016만 1636",
-			"guildBoss": "352억 8649만"
+			"guildBoss": "352억 8649만",
+			"bounty": 24
 		},
 		{
 			"name": "코넛",
@@ -334,7 +359,8 @@
 			},
 			"rivalry": "1412억 5201만",
 			"training": "1279만 3293",
-			"guildBoss": "370억 8039만"
+			"guildBoss": "370억 8039만",
+			"bounty": 27
 		},
 		{
 			"name": "양촌삭",
@@ -348,7 +374,8 @@
 			},
 			"rivalry": "1413억 3049만",
 			"training": "8785992",
-			"guildBoss": "237억 5003만"
+			"guildBoss": "237억 5003만",
+			"bounty": 25
 		},
 		{
 			"name": "김촌삭",
@@ -362,7 +389,8 @@
 			},
 			"rivalry": "1189억 4764만",
 			"training": "9748740",
-			"guildBoss": "240억 4571만"
+			"guildBoss": "240억 4571만",
+			"bounty": 24
 		},
 		{
 			"name": "lGNooNl",
@@ -376,7 +404,8 @@
 			},
 			"rivalry": "1063억 7751만",
 			"training": "7496604",
-			"guildBoss": "250억 8245만"
+			"guildBoss": "250억 8245만",
+			"bounty": 24
 		},
 		{
 			"name": "조막",
@@ -390,7 +419,8 @@
 			},
 			"rivalry": "1369억 7734만",
 			"training": "1011만 690",
-			"guildBoss": "308억 123만"
+			"guildBoss": "308억 123만",
+			"bounty": 24
 		},
 		{
 			"name": "딸기몽구",
@@ -404,7 +434,8 @@
 			},
 			"rivalry": "1028억 1557만",
 			"training": "5952603",
-			"guildBoss": "238억 2149만"
+			"guildBoss": "238억 2149만",
+			"bounty": 24
 		},
 		{
 			"name": "장수창귀",
@@ -418,7 +449,8 @@
 			},
 			"rivalry": "819억 1034만",
 			"training": "1868787",
-			"guildBoss": "366억 160만"
+			"guildBoss": "366억 160만",
+			"bounty": 24
 		}
 	]
 }

@@ -13,9 +13,11 @@ type GuildMemberInput = {
 	training: string | number
 	/** 대항전과 동일한 한국어 숫자 형식. 아직 수집 전이면 생략 가능 */
 	guildBoss?: string | number
+	/** 현상수배(불꽃늑대) 클리어 단계. 아직 수집 전이면 생략 가능 */
+	bounty?: number | null
 }
 
-/** 길드 단위 집계 메타(토벌전·대항전·수련장 순위 등). 멤버 스냅샷과 별도로 주간 수집합니다. */
+/** 길드 단위 집계 메타(토벌전·대항전·수련장·현상수배 순위 등). 멤버 스냅샷과 별도로 주간 수집합니다. */
 type GuildWeekMeta = {
 	/** 길드 토벌전 순위(1이 최상위). 미입력이면 null/생략 */
 	expeditionRank?: number | null
@@ -28,6 +30,10 @@ type GuildWeekMeta = {
 	rivalryPoints?: number | string | null
 	/** 길드 수련장 순위(1이 최상위). 미입력이면 null/생략 */
 	trainingRank?: number | null
+	/** 현상수배 서버 내 순위(1이 최상위). 미입력이면 null/생략 */
+	bountyRank?: number | null
+	/** 현상수배 전체 서버 내 순위(1이 최상위). 미입력이면 null/생략 */
+	allBountyRank?: number | null
 }
 
 /** 한 시점의 길드원 스냅샷. 수집일은 guild-content-dates.json 에서 분야별로 관리합니다. */
@@ -71,6 +77,13 @@ type ParsedGuildMember = {
 	guildBoss: bigint
 	guildBossLabel: string
 	hasGuildBoss: boolean
+	/** 현상수배 클리어 단계 */
+	bounty: number
+	bountyLabel: string
+	hasBounty: boolean
+	/** 1~클리어 단계 누적 점수(사냥 실적) */
+	huntingScore: bigint
+	huntingScoreLabel: string
 }
 
 type NumericDelta = {
@@ -129,6 +142,10 @@ type GuildMemberComparison = {
 	rivalry: NumericDelta
 	training: NumericDelta
 	guildBoss: NumericDelta
+	/** 현상수배 클리어 단계 */
+	bounty: LevelDelta
+	/** 현상수배 사냥 실적(누적 점수) */
+	huntingScore: NumericDelta
 }
 
 type GuildDashboardData = {

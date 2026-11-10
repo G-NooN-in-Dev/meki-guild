@@ -23,12 +23,13 @@ loadWebAppEnv()
 
 /** CLI 인자로 받는 동기화 대상 (rotate 와 동일) */
 const SYNC_MODES = {
-	all: ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss'],
+	all: ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss', 'bounty'],
 	character: ['combatPower'],
 	expedition: ['expedition'],
 	rivalry: ['rivalry'],
 	training: ['training'],
-	'guild-boss': ['guildBoss']
+	'guild-boss': ['guildBoss'],
+	bounty: ['bounty']
 }
 
 const MODE_LABELS = {
@@ -37,7 +38,8 @@ const MODE_LABELS = {
 	expedition: '토벌전(등급·등수·점수)',
 	rivalry: '대항전',
 	training: '수련장',
-	'guild-boss': '길드보스'
+	'guild-boss': '길드보스',
+	bounty: '현상수배'
 }
 
 const FIELD_LABELS = {
@@ -45,24 +47,36 @@ const FIELD_LABELS = {
 	expedition: '토벌전',
 	rivalry: '대항전',
 	training: '수련장',
-	guildBoss: '길드보스'
+	guildBoss: '길드보스',
+	bounty: '현상수배'
 }
 
 /** 멤버 탭 sync 시 함께 갱신할 guild 메타 필드 */
 const GUILD_META_BY_FIELD = {
 	expedition: ['expeditionRank'],
 	rivalry: ['rivalryRank', 'rivalryPoints'],
-	training: ['trainingRank']
+	training: ['trainingRank'],
+	bounty: ['bountyRank', 'allBountyRank']
 }
 
-const MEMBER_SHEETS = ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss']
+const MEMBER_SHEETS = ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss', 'bounty']
 const REQUIRED_HEADERS = {
 	combatPower: ['collectedAt', 'name', 'level', 'job', 'combatPower'],
 	expedition: ['collectedAt', 'name', 'grade', 'placement', 'score'],
 	rivalry: ['collectedAt', 'name', 'rivalry'],
 	training: ['collectedAt', 'name', 'training'],
 	guildBoss: ['collectedAt', 'name', 'guildBoss'],
-	guild: ['collectedAt', 'content', 'expeditionRank', 'rivalryRank', 'rivalryPoints', 'trainingRank']
+	bounty: ['collectedAt', 'name', 'bounty'],
+	guild: [
+		'collectedAt',
+		'content',
+		'expeditionRank',
+		'rivalryRank',
+		'rivalryPoints',
+		'trainingRank',
+		'bountyRank',
+		'allBountyRank'
+	]
 }
 
 function sheetCsvUrl(sheetId, sheetName) {
@@ -250,16 +264,19 @@ function toLevel(value) {
 	return toNumberOrNull(value) ?? 0
 }
 
-function buildGuildMeta(guildRows, expeditionDate, rivalryDate, trainingDate) {
+function buildGuildMeta(guildRows, expeditionDate, rivalryDate, trainingDate, bountyDate) {
 	const expeditionRow = guildRows.find((row) => row.content === 'expedition' && row.collectedAt === expeditionDate)
 	const rivalryRow = guildRows.find((row) => row.content === 'rivalry' && row.collectedAt === rivalryDate)
 	const trainingRow = guildRows.find((row) => row.content === 'training' && row.collectedAt === trainingDate)
+	const bountyRow = guildRows.find((row) => row.content === 'bounty' && row.collectedAt === bountyDate)
 
 	return {
 		expeditionRank: toNumberOrNull(expeditionRow?.expeditionRank),
 		rivalryRank: toNumberOrNull(rivalryRow?.rivalryRank),
 		rivalryPoints: toNumberOrNull(rivalryRow?.rivalryPoints),
-		trainingRank: toNumberOrNull(trainingRow?.trainingRank)
+		trainingRank: toNumberOrNull(trainingRow?.trainingRank),
+		bountyRank: toNumberOrNull(bountyRow?.bountyRank),
+		allBountyRank: toNumberOrNull(bountyRow?.allBountyRank)
 	}
 }
 
@@ -269,6 +286,7 @@ function buildMember(name, lookups) {
 	const rivalry = lookups.rivalry.get(name)
 	const training = lookups.training.get(name)
 	const guildBoss = lookups.guildBoss.get(name)
+	const bounty = lookups.bounty.get(name)
 	const member = {
 		name,
 		level: toLevel(combat?.level),
@@ -285,6 +303,10 @@ function buildMember(name, lookups) {
 
 	if (guildBoss?.guildBoss) {
 		member.guildBoss = guildBoss.guildBoss
+	}
+
+	if (bounty?.bounty) {
+		member.bounty = toNumberOrNull(bounty.bounty)
 	}
 
 	return member
@@ -347,6 +369,13 @@ function applyFieldFromRow(member, field, row) {
 				delete member.guildBoss
 			}
 			break
+		case 'bounty':
+			if (row?.bounty) {
+				member.bounty = toNumberOrNull(row.bounty)
+			} else {
+				delete member.bounty
+			}
+			break
 		default:
 			throw new Error(`알 수 없는 동기화 필드: ${field}`)
 	}
@@ -374,16 +403,18 @@ function logFieldDates(field, dates) {
 }
 
 async function syncAllSheets(sheetId) {
-	const [combatPowerRows, expeditionRows, rivalryRows, trainingRows, guildBossRows, guildRows] = await Promise.all([
-		...MEMBER_SHEETS.map((sheetName) => fetchSheetRows(sheetId, sheetName)),
-		fetchSheetRows(sheetId, 'guild')
-	])
+	const [combatPowerRows, expeditionRows, rivalryRows, trainingRows, guildBossRows, bountyRows, guildRows] =
+		await Promise.all([
+			...MEMBER_SHEETS.map((sheetName) => fetchSheetRows(sheetId, sheetName)),
+			fetchSheetRows(sheetId, 'guild')
+		])
 
 	assertMemberSheetKeys(combatPowerRows, 'combatPower')
 	assertMemberSheetKeys(expeditionRows, 'expedition')
 	assertMemberSheetKeys(rivalryRows, 'rivalry')
 	assertMemberSheetKeys(trainingRows, 'training')
 	assertMemberSheetKeys(guildBossRows, 'guildBoss')
+	assertMemberSheetKeys(bountyRows, 'bounty')
 	assertUniqueKeys(guildRows, 'guild', (row) =>
 		row.collectedAt && row.content ? `${row.collectedAt} / ${row.content}` : ''
 	)
@@ -393,7 +424,8 @@ async function syncAllSheets(sheetId) {
 		expedition: latestTwoDates(expeditionRows),
 		rivalry: latestTwoDates(rivalryRows),
 		training: latestTwoDates(trainingRows),
-		guildBoss: latestTwoDates(guildBossRows)
+		guildBoss: latestTwoDates(guildBossRows),
+		bounty: latestTwoDates(bountyRows)
 	}
 
 	if (!dates.combatPower.current) {
@@ -405,25 +437,39 @@ async function syncAllSheets(sheetId) {
 		expedition: mapByName(expeditionRows, dates.expedition.current),
 		rivalry: mapByName(rivalryRows, dates.rivalry.current),
 		training: mapByName(trainingRows, dates.training.current),
-		guildBoss: mapByName(guildBossRows, dates.guildBoss.current)
+		guildBoss: mapByName(guildBossRows, dates.guildBoss.current),
+		bounty: mapByName(bountyRows, dates.bounty.current)
 	}
 	const previousLookups = {
 		combat: mapByName(combatPowerRows, dates.combatPower.previous),
 		expedition: mapByName(expeditionRows, dates.expedition.previous),
 		rivalry: mapByName(rivalryRows, dates.rivalry.previous),
 		training: mapByName(trainingRows, dates.training.previous),
-		guildBoss: mapByName(guildBossRows, dates.guildBoss.previous)
+		guildBoss: mapByName(guildBossRows, dates.guildBoss.previous),
+		bounty: mapByName(bountyRows, dates.bounty.previous)
 	}
 
 	const currentWeek = buildSnapshot(
 		rowsOnDate(combatPowerRows, dates.combatPower.current),
 		currentLookups,
-		buildGuildMeta(guildRows, dates.expedition.current, dates.rivalry.current, dates.training.current)
+		buildGuildMeta(
+			guildRows,
+			dates.expedition.current,
+			dates.rivalry.current,
+			dates.training.current,
+			dates.bounty.current
+		)
 	)
 	const previousWeek = buildSnapshot(
 		rowsOnDate(combatPowerRows, dates.combatPower.previous),
 		previousLookups,
-		buildGuildMeta(guildRows, dates.expedition.previous, dates.rivalry.previous, dates.training.previous)
+		buildGuildMeta(
+			guildRows,
+			dates.expedition.previous,
+			dates.rivalry.previous,
+			dates.training.previous,
+			dates.bounty.previous
+		)
 	)
 
 	writeJson(currentWeekPath, currentWeek)

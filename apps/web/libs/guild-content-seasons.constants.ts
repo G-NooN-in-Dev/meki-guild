@@ -66,10 +66,7 @@ const GUILD_CONTENT_SEASON_STATUS_LABEL = {
 	ended: '종료'
 } as const satisfies Record<GuildContentSeasonStatus, string>
 
-/**
- * 시즌 일정.
- * 길드보스는 시즌 종료 상태라 목록이 비어 있습니다. 재개 시 여기에 추가하면 됩니다.
- */
+/** 시즌 일정. 시간은 한국(KST) 기준입니다. */
 const GUILD_CONTENT_SEASONS = [
 	// 대항전
 	{ content: 'rivalry', label: '41시즌', startsAt: '2026-09-03T12:00:00+09:00', endsAt: '2026-09-07T21:59:59+09:00' },
@@ -87,7 +84,11 @@ const GUILD_CONTENT_SEASONS = [
 	// 수련장
 	{ content: 'training', label: '1회차', startsAt: '2026-09-04T12:00:00+09:00', endsAt: '2026-09-09T21:59:59+09:00' },
 	{ content: 'training', label: '2회차', startsAt: '2026-09-11T12:00:00+09:00', endsAt: '2026-09-16T21:59:59+09:00' },
-	{ content: 'training', label: '3회차', startsAt: '2026-09-18T12:00:00+09:00', endsAt: '2026-09-23T21:59:59+09:00' }
+	{ content: 'training', label: '3회차', startsAt: '2026-09-18T12:00:00+09:00', endsAt: '2026-09-23T21:59:59+09:00' },
+	// 길드보스
+	{ content: 'guildBoss', label: '1회차', startsAt: '2026-11-06T12:00:00+09:00', endsAt: '2026-11-11T21:59:59+09:00' },
+	{ content: 'guildBoss', label: '2회차', startsAt: '2026-11-13T12:00:00+09:00', endsAt: '2026-11-18T21:59:59+09:00' },
+	{ content: 'guildBoss', label: '3회차', startsAt: '2026-11-20T12:00:00+09:00', endsAt: '2026-11-25T21:59:59+09:00' }
 ] as const satisfies readonly GuildContentSeason[]
 
 /** 시즌 기간 표기. 예: 09.03 12:00 ~ 09.07 21:59 */

@@ -28,10 +28,21 @@ type SummaryMetaRow = {
 type SummaryCard = {
 	label: string
 	value: string
+	/**
+	 * 메인 값 옆 절대 증감량 (예: 사냥실적 +1,234).
+	 * 있으면 GrowthDelta에 value로 넘겨 색·부호를 맞춥니다.
+	 */
+	changeLabel?: string | null
 	/** 직전 대비 증감율. undefined면 증감율 UI 미표시 */
 	percentLabel?: string | null
 	/** 메인 값 소제목. metaRows와 함께 있으면 좌우 분할 레이아웃 */
 	valueLabel?: string
+	/**
+	 * 좌측(메인) 영역에 함께 쌓는 보조 지표.
+	 * 예: 현상수배 — 평균 클리어 단계를 총 사냥실적 아래에 둠
+	 */
+	secondaryRows?: SummaryMetaRow[]
+	/** 우측 메타 지표 (순위·포인트 등) */
 	metaRows?: SummaryMetaRow[]
 	/** 데스크탑 그리드 열 수. 정보가 많은 카드에 사용 */
 	columnSpan?: 2
@@ -45,24 +56,35 @@ type SplitSummaryCard = SummaryCard & {
 const isSplitSummaryCard = (card: SummaryCard): card is SplitSummaryCard =>
 	Boolean(card.valueLabel && card.metaRows && card.metaRows.length > 0)
 
-/** 요약 카드 본문: 값은 크게, 증감율만 GrowthDelta로 옆에 표시 */
+/**
+ * 요약 카드 본문: 값은 크게, 옆에 증감(절대량·증감율)을 GrowthDelta로 표시.
+ * - changeLabel 있음: +1,234 (+2.3%) 형태
+ * - percent만 있음: (+2.3%) 만 표시 (전투력 총합 등)
+ */
 function SummaryCardValue({
 	value,
+	changeLabel,
 	percentLabel,
 	className = 'mt-2'
 }: {
 	value: string
+	changeLabel?: string | null
 	percentLabel?: string | null
 	className?: string
 }) {
-	if (percentLabel === undefined) {
+	const showChange = changeLabel !== undefined
+	const showPercentOnly = !showChange && percentLabel !== undefined
+
+	if (!showChange && !showPercentOnly) {
 		return <p className={cn('text-grayscale-900 text-2xl font-semibold', className)}>{value}</p>
 	}
 
 	return (
 		<p className={cn('flex flex-wrap items-baseline gap-x-2', className)}>
 			<span className="text-grayscale-900 text-2xl font-semibold">{value}</span>
-			{percentLabel ? (
+			{showChange ? (
+				<GrowthDelta value={changeLabel ?? null} percentLabel={percentLabel} className="text-sm" />
+			) : percentLabel ? (
 				<GrowthDelta
 					value={value === GUILD_ZERO_DELTA_LABEL ? null : value}
 					percentLabel={percentLabel}
@@ -100,16 +122,18 @@ function SummaryMetaItem({ row }: { row: SummaryMetaRow }) {
 function PrimaryMetricBlock({
 	valueLabel,
 	value,
+	changeLabel,
 	percentLabel
 }: {
 	valueLabel: string
 	value: string
+	changeLabel?: string | null
 	percentLabel?: string | null
 }) {
 	return (
 		<div>
 			<p className="text-grayscale-500 text-sm font-semibold">{valueLabel}</p>
-			<SummaryCardValue value={value} percentLabel={percentLabel} className="mt-1" />
+			<SummaryCardValue value={value} changeLabel={changeLabel} percentLabel={percentLabel} className="mt-1" />
 		</div>
 	)
 }
@@ -117,26 +141,87 @@ function PrimaryMetricBlock({
 /**
  * 좌우 분할 요약 카드 본문.
  * - 기본: 4열(메인 2 + 메타 1·1). 모바일은 메인 아래 메타 2열
+ * - secondaryRows가 있으면 좌측(메인+보조) | 우측(메타) 2열
  * - sharesRowAtXl: xl 반폭일 때 메인 | 메타(세로)
  */
 function SplitSummaryCardBody({
 	valueLabel,
 	value,
+	changeLabel,
 	percentLabel,
+	secondaryRows = [],
 	metaRows,
 	sharesRowAtXl
 }: {
 	valueLabel: string
 	value: string
+	changeLabel?: string | null
 	percentLabel?: string | null
+	secondaryRows?: SummaryMetaRow[]
 	metaRows: SummaryMetaRow[]
 	sharesRowAtXl: boolean
 }) {
+	const leftBlock = (
+		<div className="space-y-3">
+			<PrimaryMetricBlock valueLabel={valueLabel} value={value} changeLabel={changeLabel} percentLabel={percentLabel} />
+			{secondaryRows.map((row) => (
+				<SummaryMetaItem key={row.label} row={row} />
+			))}
+		</div>
+	)
+
+	if (secondaryRows.length > 0) {
+		return (
+			<div className="mt-2">
+				<div className="grid grid-cols-2 gap-3 sm:hidden">
+					<PrimaryMetricBlock
+						valueLabel={valueLabel}
+						value={value}
+						changeLabel={changeLabel}
+						percentLabel={percentLabel}
+					/>
+					{secondaryRows.map((row) => (
+						<SummaryMetaItem key={row.label} row={row} />
+					))}
+					{metaRows.map((row) => (
+						<SummaryMetaItem key={row.label} row={row} />
+					))}
+				</div>
+
+				{/* sm~xl: 좌(메인+평균) | 우(순위) */}
+				<div className={cn('hidden grid-cols-2 gap-3 sm:grid', sharesRowAtXl && 'xl:hidden')}>
+					{leftBlock}
+					<div className="space-y-3">
+						{metaRows.map((row) => (
+							<SummaryMetaItem key={row.label} row={row} />
+						))}
+					</div>
+				</div>
+
+				{sharesRowAtXl ? (
+					<div className="hidden xl:grid xl:grid-cols-2 xl:gap-0">
+						<div className="border-grayscale-100 border-r pr-3">{leftBlock}</div>
+						<div className="space-y-2 pl-3">
+							{metaRows.map((row) => (
+								<SummaryMetaItem key={row.label} row={row} />
+							))}
+						</div>
+					</div>
+				) : null}
+			</div>
+		)
+	}
+
 	return (
 		<div className="mt-2">
 			<div className={cn('grid grid-cols-2 gap-3 md:grid-cols-4', sharesRowAtXl && 'xl:hidden')}>
 				<div className="col-span-2">
-					<PrimaryMetricBlock valueLabel={valueLabel} value={value} percentLabel={percentLabel} />
+					<PrimaryMetricBlock
+						valueLabel={valueLabel}
+						value={value}
+						changeLabel={changeLabel}
+						percentLabel={percentLabel}
+					/>
 				</div>
 				{metaRows.map((row) => (
 					<SummaryMetaItem key={row.label} row={row} />
@@ -146,7 +231,12 @@ function SplitSummaryCardBody({
 			{sharesRowAtXl ? (
 				<div className="hidden xl:grid xl:grid-cols-2 xl:gap-0">
 					<div className="border-grayscale-100 border-r pr-3">
-						<PrimaryMetricBlock valueLabel={valueLabel} value={value} percentLabel={percentLabel} />
+						<PrimaryMetricBlock
+							valueLabel={valueLabel}
+							value={value}
+							changeLabel={changeLabel}
+							percentLabel={percentLabel}
+						/>
 					</div>
 					<div className="space-y-2 pl-3">
 						{metaRows.map((row) => (
@@ -165,7 +255,9 @@ function SummaryCardBody({ card, sharesRowAtXl = false }: { card: SummaryCard; s
 			<SplitSummaryCardBody
 				valueLabel={card.valueLabel}
 				value={card.value}
+				changeLabel={card.changeLabel}
 				percentLabel={card.percentLabel}
+				secondaryRows={card.secondaryRows}
 				metaRows={card.metaRows}
 				sharesRowAtXl={sharesRowAtXl}
 			/>
@@ -183,7 +275,7 @@ function SummaryCardBody({ card, sharesRowAtXl = false }: { card: SummaryCard; s
 		)
 	}
 
-	return <SummaryCardValue value={card.value} percentLabel={card.percentLabel} />
+	return <SummaryCardValue value={card.value} changeLabel={card.changeLabel} percentLabel={card.percentLabel} />
 }
 
 function SummaryCardView({ card, sharesRowAtXl = false }: { card: SummaryCard; sharesRowAtXl?: boolean }) {
@@ -219,29 +311,53 @@ function GuildSummaryAccordion({ cards }: { cards: SummaryCard[] }) {
 }
 
 function buildSummaryCards(metrics: GuildSummaryMetrics): {
-	top: SummaryCard
-	bottom: SummaryCard[]
+	/** columnSpan 2 카드 — 전투력·현상수배·토벌전·대항전 */
+	wide: SummaryCard[]
+	/** 수련장·길드보스 등 표시 순서 컨텐츠 */
+	rest: SummaryCard[]
 } {
-	const top: SummaryCard = {
-		label: '전투력 · 레벨',
-		valueLabel: '길드 총 전투력',
-		value: metrics.combatPowerTotal,
-		metaRows: [
-			{
-				label: '변화량',
-				value: metrics.combatPowerChange,
-				percentLabel: metrics.combatPowerChangePercent
-			},
-			{
-				label: '평균 레벨',
-				value: `Lv. ${metrics.averageLevel}`,
-				delta: metrics.averageLevelChange
-			}
-		]
-	}
-
-	// 표시 순서 컨텐츠(수련장·길드보스 등)는 상수 순서대로 뒤에 붙음
-	const bottom: SummaryCard[] = [
+	const wide: SummaryCard[] = [
+		{
+			label: '전투력 · 레벨',
+			valueLabel: '길드 총 전투력',
+			value: metrics.combatPowerTotal,
+			percentLabel: metrics.combatPowerChangePercent,
+			columnSpan: 2,
+			metaRows: [
+				{
+					label: '평균 레벨',
+					value: `Lv. ${metrics.averageLevel}`,
+					delta: metrics.averageLevelChange
+				}
+			]
+		},
+		{
+			label: '현상수배 변화',
+			valueLabel: '길드 총 사냥실적',
+			value: metrics.huntingScoreTotal,
+			changeLabel: metrics.huntingScoreChange,
+			percentLabel: metrics.huntingScoreChangePercent,
+			columnSpan: 2,
+			secondaryRows: [
+				{
+					label: '평균 클리어 단계',
+					value: metrics.averageBountyStage,
+					delta: metrics.averageBountyStageChange
+				}
+			],
+			metaRows: [
+				{
+					label: '서버 내 순위',
+					value: metrics.guildBountyRankLabel,
+					delta: metrics.guildBountyRankChange
+				},
+				{
+					label: '전체 서버 내 순위',
+					value: metrics.guildAllBountyRankLabel,
+					delta: metrics.guildAllBountyRankChange
+				}
+			]
+		},
 		{
 			label: '토벌전 변화',
 			valueLabel: '토벌전 점수 총합',
@@ -279,13 +395,14 @@ function buildSummaryCards(metrics: GuildSummaryMetrics): {
 					delta: metrics.guildRivalryRankChange
 				}
 			]
-		},
-		...(getGuildContentsOrder().map(({ key, label }) =>
-			createOrderedSummaryCard(key, label, metrics)
-		) satisfies SummaryCard[])
+		}
 	]
 
-	return { top, bottom }
+	const rest = getGuildContentsOrder().map(({ key, label }) =>
+		createOrderedSummaryCard(key, label, metrics)
+	) satisfies SummaryCard[]
+
+	return { wide, rest }
 }
 
 /** 표시 순서 컨텐츠 요약 카드 — 키별 메트릭 매핑 */
@@ -323,23 +440,19 @@ function createOrderedSummaryCard(
 
 /** 길드 요약 카드. 모바일은 아코디언, md 이상은 카드 그리드 */
 function GuildSummaryCards({ metrics }: GuildSummaryCardsProps) {
-	const { top: topSummaryCard, bottom: bottomSummaryCards } = buildSummaryCards(metrics)
-	const splitSummaryCards = bottomSummaryCards.filter((card) => card.columnSpan === 2)
-	const restSummaryCards = bottomSummaryCards.filter((card) => card.columnSpan !== 2)
-	const summaryCards = [topSummaryCard, ...splitSummaryCards, ...restSummaryCards]
-	// 토벌전·대항전처럼 2열 카드가 둘 이상이면 xl에서 한 줄을 나눠 씁니다
-	const sharesRowAtXl = splitSummaryCards.length >= 2
+	const { wide: wideSummaryCards, rest: restSummaryCards } = buildSummaryCards(metrics)
+	const summaryCards = [...wideSummaryCards, ...restSummaryCards]
+	// 2열 카드가 둘 이상이면 xl에서 한 줄을 나눠 씁니다 (전투력|현상수배 / 토벌전|대항전)
+	const sharesRowAtXl = wideSummaryCards.length >= 2
 
 	return (
 		<>
 			<GuildSummaryAccordion cards={summaryCards} />
 
 			<div className="hidden flex-col gap-4 md:flex">
-				<SummaryCardView card={topSummaryCard} />
-
-				{splitSummaryCards.length > 0 ? (
+				{wideSummaryCards.length > 0 ? (
 					<div className={sharesRowAtXl ? 'grid gap-4 md:grid-cols-2 xl:grid-cols-4' : 'grid gap-4 md:grid-cols-2'}>
-						{splitSummaryCards.map((card) => (
+						{wideSummaryCards.map((card) => (
 							<SummaryCardView key={card.label} card={card} sharesRowAtXl={sharesRowAtXl} />
 						))}
 					</div>

@@ -1,7 +1,7 @@
 import type { GuildMemberComparison, LevelDelta, NumericDelta } from '@/features/guild/types/guild-snapshot.type'
 
 type GuildMemberSortKey =
-	'combatPower' | 'expeditionScore' | 'expeditionPlacement' | 'rivalry' | 'training' | 'guildBoss' | 'level'
+	'combatPower' | 'expeditionScore' | 'expeditionPlacement' | 'rivalry' | 'training' | 'guildBoss' | 'bounty' | 'level'
 type GuildMemberSortDirection = 'asc' | 'desc'
 
 type GuildMemberSortState = {
@@ -75,6 +75,8 @@ function getSortValue(
 				return getNumericPercentSortValue(comparison.training)
 			case 'guildBoss':
 				return getNumericPercentSortValue(comparison.guildBoss)
+			case 'bounty':
+				return getLevelChangeSortValue(comparison.bounty)
 			case 'level':
 				return getLevelChangeSortValue(comparison.level)
 		}
@@ -96,6 +98,8 @@ function getSortValue(
 			return comparison.training.hasValue ? comparison.training.current : -1n
 		case 'guildBoss':
 			return comparison.guildBoss.hasValue ? comparison.guildBoss.current : -1n
+		case 'bounty':
+			return comparison.bounty.hasValue ? comparison.bounty.current : -1
 		case 'level':
 			return comparison.level.hasValue ? comparison.level.current : -1
 	}

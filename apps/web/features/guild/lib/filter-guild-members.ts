@@ -25,6 +25,7 @@ type GuildMemberFilterState = {
 	rivalry: NumberRange
 	training: NumberRange
 	guildBoss: NumberRange
+	bounty: NumberRange
 }
 
 /** 필터 초기값(매 호출마다 새 객체 — 상태 공유 방지) */
@@ -38,7 +39,8 @@ function createEmptyGuildMemberFilter(): GuildMemberFilterState {
 		expeditionScore: { min: null, max: null },
 		rivalry: { min: null, max: null },
 		training: { min: null, max: null },
-		guildBoss: { min: null, max: null }
+		guildBoss: { min: null, max: null },
+		bounty: { min: null, max: null }
 	}
 }
 
@@ -65,7 +67,8 @@ function isGuildMemberFilterActive(filter: GuildMemberFilterState): boolean {
 		isNumberRangeActive(filter.expeditionScore) ||
 		isNumberRangeActive(filter.rivalry) ||
 		isNumberRangeActive(filter.training) ||
-		isNumberRangeActive(filter.guildBoss)
+		isNumberRangeActive(filter.guildBoss) ||
+		isNumberRangeActive(filter.bounty)
 	)
 }
 
@@ -87,7 +90,8 @@ function countActiveGuildMemberFilters(filter: GuildMemberFilterState): number {
 		filter.expeditionScore,
 		filter.rivalry,
 		filter.training,
-		filter.guildBoss
+		filter.guildBoss,
+		filter.bounty
 	] as const
 
 	for (const range of ranges) {
@@ -175,7 +179,7 @@ function filterGuildMembers(
 	filter: GuildMemberFilterState
 ): GuildMemberComparison[] {
 	return comparisons.filter((member) => {
-		const { job, level, combatPower, expeditionGrade, expeditionScore, rivalry, training, guildBoss } = member
+		const { job, level, combatPower, expeditionGrade, expeditionScore, rivalry, training, guildBoss, bounty } = member
 
 		if (!matchesJobTaxonomyFilter(job, filter)) {
 			return false
@@ -209,6 +213,10 @@ function filterGuildMembers(
 		}
 
 		if (!matchesNumberRange(guildBoss.hasValue, guildBoss.current, filter.guildBoss)) {
+			return false
+		}
+
+		if (!matchesNumberRange(bounty.hasValue, bounty.current, filter.bounty)) {
 			return false
 		}
 

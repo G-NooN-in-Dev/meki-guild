@@ -25,8 +25,8 @@ import { GUILD_EMPTY_VALUE_LABEL, type GuildMemberComparison } from '@/features/
 import { getContentGradeTextClass } from '@/libs/content-tier-band.constants'
 import { getGuildContentsOrder } from '@/libs/guild-contents-order.constants'
 
-/** 고정 컬럼 9개 + 표시 순서 컨텐츠 컬럼 수 (빈 행 colSpan용) */
-const GUILD_MEMBER_TABLE_COLUMN_COUNT = 9 + getGuildContentsOrder().length
+/** 고정 컬럼 10개 + 표시 순서 컨텐츠 컬럼 수 (빈 행 colSpan용) */
+const GUILD_MEMBER_TABLE_COLUMN_COUNT = 10 + getGuildContentsOrder().length
 
 /**
  * 가로 스크롤 시 #·이름 열을 왼쪽에 고정합니다.
@@ -155,6 +155,13 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 								sortDirection={sortDirection}
 								onSort={handleSort}
 							/>
+							<SortableHead
+								label="현상수배"
+								sortKey="bounty"
+								activeSortKey={sortKey}
+								sortDirection={sortDirection}
+								onSort={handleSort}
+							/>
 							{getGuildContentsOrder().map(({ key, label }) => (
 								<SortableHead
 									key={key}
@@ -255,6 +262,19 @@ function GuildMemberTable({ comparisons, rankings, previousRankings }: GuildMemb
 													percentLabel={comparison.rivalry.diffPercentLabel}
 												/>
 											) : null}
+										</TableCell>
+										<TableCell>
+											<div className={getValueClassName(comparison.bounty.currentLabel)}>
+												{comparison.bounty.hasValue ? (
+													<>
+														{comparison.bounty.currentLabel}{' '}
+														<span className="text-grayscale-500 text-xs">({comparison.huntingScore.currentLabel})</span>
+													</>
+												) : (
+													comparison.bounty.currentLabel
+												)}
+											</div>
+											{showGrowthDelta ? <GrowthDelta value={comparison.bounty.diffLabel} /> : null}
 										</TableCell>
 										{getGuildContentsOrder().map(({ key }) => {
 											const metric = comparison[key]

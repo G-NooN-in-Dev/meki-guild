@@ -13,6 +13,7 @@ type GuildContentDates = {
 	rivalry: GuildContentDateRange
 	training: GuildContentDateRange
 	guildBoss: GuildContentDateRange
+	bounty: GuildContentDateRange
 }
 
 /** 길드 컨텐츠별 최근·직전 데이터 수집일 */

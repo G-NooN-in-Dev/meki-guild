@@ -12,9 +12,7 @@ import {
 	isGuildSheetKoreanNumberField
 } from '@/features/guild/lib/sheet-form.schema'
 import { EXPEDITION_GUILD_TIERS } from '@/libs/expedition-guild-tier.constants'
-import { JOB_CLASS_LINE_ORDER, JOBS_BY_CLASS_LINE } from '@/libs/job-class.constants'
 
-const JOB_OPTIONS = JOB_CLASS_LINE_ORDER.flatMap((classLine) => [...JOBS_BY_CLASS_LINE[classLine]])
 const EXPEDITION_GRADE_OPTIONS = EXPEDITION_GUILD_TIERS.map((tier) => tier.rank)
 
 type GuildSheetTabFieldInputsProps = {
@@ -24,7 +22,7 @@ type GuildSheetTabFieldInputsProps = {
 	isLoadingDefaults: boolean
 }
 
-/** 선택된 탭에 맞는 Sheet 입력 필드(job/grade Select, 숫자·한국어 숫자 Input) */
+/** 선택된 탭에 맞는 Sheet 입력 필드(grade Select, 숫자·한국어 숫자 Input) */
 function GuildSheetTabFieldInputs({ tab, fields, patchField, isLoadingDefaults }: GuildSheetTabFieldInputsProps) {
 	return (
 		<>
@@ -32,35 +30,6 @@ function GuildSheetTabFieldInputs({ tab, fields, patchField, isLoadingDefaults }
 				const fieldId = `guild-sheet-field-${field}`
 				const label = GUILD_SHEET_FIELD_LABELS[field as keyof typeof GUILD_SHEET_FIELD_LABELS]
 				const value = fields[field] ?? ''
-
-				if (field === 'job') {
-					return (
-						<div key={field} className="flex flex-col gap-2">
-							<Label htmlFor={fieldId}>{label}</Label>
-							<input type="hidden" name={field} value={value} />
-							<Select
-								value={value || null}
-								onValueChange={(next) => {
-									if (next) {
-										patchField(field, next)
-									}
-								}}
-								disabled={isLoadingDefaults}
-							>
-								<SelectTrigger id={fieldId} className="w-full">
-									<SelectValue placeholder="직업을 선택하세요" />
-								</SelectTrigger>
-								<SelectContent className="max-h-72">
-									{JOB_OPTIONS.map((job) => (
-										<SelectItem key={job} value={job}>
-											{job}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
-					)
-				}
 
 				if (field === 'grade') {
 					return (
@@ -91,9 +60,10 @@ function GuildSheetTabFieldInputs({ tab, fields, patchField, isLoadingDefaults }
 					)
 				}
 
-				const inputType = field === 'level' || field === 'placement' ? 'number' : 'text'
+				const inputType = field === 'placement' || field === 'bounty' ? 'number' : 'text'
 				const isKoreanNumberField = isGuildSheetKoreanNumberField(field)
-				const placeholder = isKoreanNumberField ? GUILD_SHEET_KOREAN_NUMBER_PLACEHOLDERS[field] : label
+				const placeholder =
+					field === 'bounty' ? '예: 35' : isKoreanNumberField ? GUILD_SHEET_KOREAN_NUMBER_PLACEHOLDERS[field] : label
 
 				return (
 					<div key={field} className="flex flex-col gap-2">
@@ -104,6 +74,7 @@ function GuildSheetTabFieldInputs({ tab, fields, patchField, isLoadingDefaults }
 							type={inputType}
 							inputMode={inputType === 'number' ? 'numeric' : undefined}
 							min={inputType === 'number' ? 1 : undefined}
+							max={field === 'bounty' ? 100 : undefined}
 							value={value}
 							placeholder={placeholder}
 							onChange={(event) => patchField(field, event.target.value)}

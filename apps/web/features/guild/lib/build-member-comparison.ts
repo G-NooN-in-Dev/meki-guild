@@ -149,6 +149,42 @@ function createLevelDelta(current: ParsedGuildMember, previous: ParsedGuildMembe
 	}
 }
 
+/** 현상수배 클리어 단계 비교. 레벨과 같이 절대 증감(▲N)으로 표시합니다. */
+function createBountyStageDelta(current: ParsedGuildMember, previous: ParsedGuildMember | null): LevelDelta {
+	if (!current.hasBounty) {
+		return {
+			current: current.bounty,
+			previous: null,
+			diff: null,
+			diffLabel: null,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
+			hasValue: false
+		}
+	}
+
+	if (!previous?.hasBounty) {
+		return {
+			current: current.bounty,
+			previous: null,
+			diff: null,
+			diffLabel: null,
+			currentLabel: current.bountyLabel,
+			hasValue: true
+		}
+	}
+
+	const diff = current.bounty - previous.bounty
+
+	return {
+		current: current.bounty,
+		previous: previous.bounty,
+		diff,
+		diffLabel: formatArrowDelta(diff),
+		currentLabel: current.bountyLabel,
+		hasValue: true
+	}
+}
+
 /** 최신이 미입력이어도 직전 등수는 남겨, 상세 Dialog에서 직전만 입력한 경우를 지원합니다. */
 function createExpeditionPlacementDelta(current: ParsedGuildMember, previous: ParsedGuildMember | null): LevelDelta {
 	const previousPlacement = previous?.expedition.hasPlacement ? previous.expedition.placement : null
@@ -249,6 +285,16 @@ function buildComparison(
 			(member) => member.guildBoss,
 			(member) => member.guildBossLabel,
 			(member) => member.hasGuildBoss
+		),
+		bounty: createBountyStageDelta(current, previous),
+		huntingScore: createNumericDelta(
+			current.huntingScore,
+			current.huntingScoreLabel,
+			current.hasBounty,
+			previous,
+			(member) => member.huntingScore,
+			(member) => member.huntingScoreLabel,
+			(member) => member.hasBounty
 		)
 	}
 }
@@ -337,6 +383,24 @@ function buildLeftMemberComparison(previous: ParsedGuildMember): GuildMemberComp
 			previousLabel: previous.hasGuildBoss ? previous.guildBossLabel : null,
 			diffLabel: previous.hasGuildBoss ? formatKoreanDelta(-previous.guildBoss) : null,
 			diffPercentLabel: previous.hasGuildBoss ? formatDeltaPercent(-previous.guildBoss, previous.guildBoss) : null,
+			hasValue: false
+		},
+		bounty: {
+			current: 0,
+			previous: previous.hasBounty ? previous.bounty : null,
+			diff: previous.hasBounty ? -previous.bounty : null,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
+			diffLabel: previous.hasBounty ? formatArrowDelta(-previous.bounty) : null,
+			hasValue: false
+		},
+		huntingScore: {
+			current: 0n,
+			previous: previous.hasBounty ? previous.huntingScore : null,
+			diff: previous.hasBounty ? -previous.huntingScore : null,
+			currentLabel: GUILD_EMPTY_VALUE_LABEL,
+			previousLabel: previous.hasBounty ? previous.huntingScoreLabel : null,
+			diffLabel: previous.hasBounty ? formatKoreanDelta(-previous.huntingScore) : null,
+			diffPercentLabel: previous.hasBounty ? formatDeltaPercent(-previous.huntingScore, previous.huntingScore) : null,
 			hasValue: false
 		}
 	}

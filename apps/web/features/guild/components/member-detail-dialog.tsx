@@ -121,6 +121,25 @@ function buildDetailRows(
 			previousRankLabel: formatRankLabel(previousRankings.rivalry, name),
 			rankDiffLabel: formatRankDiffLabel(rankings.rivalry, previousRankings.rivalry, name)
 		},
+		{
+			label: '현상수배 (단계)',
+			currentLabel: comparison.bounty.currentLabel,
+			previousLabel:
+				comparison.bounty.previous !== null ? `${comparison.bounty.previous}단계` : GUILD_EMPTY_VALUE_LABEL,
+			diffLabel: comparison.bounty.diffLabel,
+			contentDates: GUILD_CONTENT_UPDATED_AT.bounty,
+			rankLabel: comparison.bounty.hasValue ? formatRankLabel(rankings.bounty, name) : null,
+			previousRankLabel: formatRankLabel(previousRankings.bounty, name),
+			rankDiffLabel: formatRankDiffLabel(rankings.bounty, previousRankings.bounty, name)
+		},
+		{
+			label: '현상수배 (사냥 실적)',
+			currentLabel: comparison.huntingScore.currentLabel,
+			previousLabel: formatPreviousValue(comparison.huntingScore.previousLabel),
+			diffLabel: comparison.huntingScore.diffLabel,
+			diffPercentLabel: comparison.huntingScore.diffPercentLabel,
+			contentDates: GUILD_CONTENT_UPDATED_AT.bounty
+		},
 		...getGuildContentsOrder().map(({ key, label }) =>
 			createOrderedDetailRow(key, label, comparison, rankings, previousRankings)
 		)

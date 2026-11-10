@@ -1,5 +1,6 @@
 import type { GuildMemberInput, ParsedGuildMember } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { getGuildBountyHuntingScore, isValidGuildBountyStage } from '@/libs/guild-bounty-stage-scores.constants'
 import { formatLocaleNumber, formatPlacementRank, formatTrainingScore } from '@/utils/format-korean-number'
 import { parseKoreanNumber } from '@/utils/parse-korean-number'
 
@@ -36,6 +37,29 @@ function parsePlacementInput(value: number | null | undefined): { hasPlacement: 
 	return { hasPlacement: true, placement: Math.floor(value) }
 }
 
+/** 현상수배 클리어 단계 파싱. 유효 범위 밖·미입력은 hasBounty=false */
+function parseBountyStageInput(value: number | null | undefined): { hasBounty: boolean; bounty: number } {
+	if (value === null || value === undefined) {
+		return { hasBounty: false, bounty: 0 }
+	}
+
+	if (!Number.isFinite(value)) {
+		return { hasBounty: false, bounty: 0 }
+	}
+
+	const stage = Math.floor(value)
+
+	if (!isValidGuildBountyStage(stage)) {
+		return { hasBounty: false, bounty: 0 }
+	}
+
+	return { hasBounty: true, bounty: stage }
+}
+
+function formatBountyStageLabel(stage: number): string {
+	return `${stage}단계`
+}
+
 function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
 	const hasCombatPower = !isEmptyInput(member.combatPower)
 	const hasLevel = member.level > 0
@@ -45,6 +69,9 @@ function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
 	const hasRivalry = !isEmptyInput(member.rivalry)
 	const hasTraining = !isEmptyInput(member.training)
 	const hasGuildBoss = member.guildBoss !== undefined && !isEmptyInput(member.guildBoss)
+	const { hasBounty, bounty } = parseBountyStageInput(member.bounty)
+	const huntingScoreValue = hasBounty ? getGuildBountyHuntingScore(bounty) : null
+	const huntingScore = huntingScoreValue === null ? 0n : BigInt(huntingScoreValue)
 
 	const combatPower = hasCombatPower ? parseKoreanNumber(member.combatPower) : 0n
 	const expeditionScore = hasExpeditionScore ? parseKoreanNumber(member.expedition.score) : 0n
@@ -81,7 +108,12 @@ function parseGuildMember(member: GuildMemberInput): ParsedGuildMember {
 		guildBoss,
 		guildBossLabel:
 			hasGuildBoss && guildBossValue !== undefined ? toKoreanLabel(guildBossValue) : GUILD_EMPTY_VALUE_LABEL,
-		hasGuildBoss
+		hasGuildBoss,
+		bounty,
+		bountyLabel: hasBounty ? formatBountyStageLabel(bounty) : GUILD_EMPTY_VALUE_LABEL,
+		hasBounty,
+		huntingScore,
+		huntingScoreLabel: huntingScoreValue === null ? GUILD_EMPTY_VALUE_LABEL : formatLocaleNumber(huntingScoreValue)
 	}
 }
 

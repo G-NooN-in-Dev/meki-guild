@@ -26,6 +26,8 @@ type GuildSummaryMetaInput = {
 	rivalryRank?: GuildPlacementRankInput
 	rivalryPoints?: GuildMetaPointsInput
 	trainingRank?: GuildPlacementRankInput
+	bountyRank?: GuildPlacementRankInput
+	allBountyRank?: GuildPlacementRankInput
 }
 
 type NumericFieldSelector = (_comparison: GuildMemberComparison) => NumericDeltaLike
@@ -62,6 +64,30 @@ function calculateTotalNumericChange(
 		}
 
 		if (!field.hasValue || field.diff === null) {
+			return sum
+		}
+
+		return sum + field.diff
+	}, 0n)
+}
+
+/**
+ * 직전 값이 있어 비교 가능한 증감(diff)만 합산합니다.
+ * 컨텐츠 첫 주처럼 전원이 직전 값 없을 때, 신규 멤버 현재값을 변화량으로 쓰지 않습니다.
+ */
+function calculateComparableNumericChange(
+	comparisons: GuildMemberComparison[],
+	getField: NumericFieldSelector,
+	shouldInclude?: (_comparison: GuildMemberComparison) => boolean
+): bigint {
+	return comparisons.reduce((sum, comparison) => {
+		if (shouldInclude && !shouldInclude(comparison)) {
+			return sum
+		}
+
+		const field = getField(comparison)
+
+		if (field.diff === null) {
 			return sum
 		}
 
@@ -338,6 +364,59 @@ function hasGuildBossContribution(comparison: GuildMemberComparison): boolean {
 	return comparison.guildBoss.previous !== null
 }
 
+/** 현상수배 데이터가 있는 멤버만 합산 대상에 포함 */
+function hasBountyContribution(comparison: GuildMemberComparison): boolean {
+	if (comparison.status === 'new' || comparison.status === 'active') {
+		return comparison.bounty.hasValue
+	}
+
+	return comparison.bounty.previous !== null
+}
+
+/** 이번 주 기준 길드 총 사냥 실적(이탈·미입력 멤버 제외) */
+function calculateHuntingScoreTotal(comparisons: GuildMemberComparison[]): string {
+	const totals = comparisons.filter((comparison) => comparison.status !== 'left' && comparison.huntingScore.hasValue)
+
+	if (totals.length === 0) {
+		return GUILD_EMPTY_VALUE_LABEL
+	}
+
+	const sum = totals.reduce((acc, comparison) => acc + comparison.huntingScore.current, 0n)
+
+	return formatLocaleNumber(sum)
+}
+
+/** 이번 주 기준 평균 클리어 단계(이탈·미입력 멤버 제외) */
+function calculateAverageBountyStage(comparisons: GuildMemberComparison[]): string {
+	const average = averageRounded(
+		comparisons
+			.filter((comparison) => comparison.status !== 'left' && comparison.bounty.hasValue)
+			.map((comparison) => comparison.bounty.current)
+	)
+
+	return average === null ? GUILD_EMPTY_VALUE_LABEL : `${average}단계`
+}
+
+/** 직전 주 대비 평균 클리어 단계 증감 */
+function calculateAverageBountyStageChange(comparisons: GuildMemberComparison[]): string | null {
+	const currentAverage = averageRounded(
+		comparisons
+			.filter((comparison) => comparison.status !== 'left' && comparison.bounty.hasValue)
+			.map((comparison) => comparison.bounty.current)
+	)
+	const previousAverage = averageRounded(
+		comparisons
+			.filter((comparison) => comparison.status !== 'new' && comparison.bounty.previous !== null)
+			.map((comparison) => comparison.bounty.previous as number)
+	)
+
+	if (currentAverage === null || previousAverage === null) {
+		return null
+	}
+
+	return formatArrowDelta(currentAverage - previousAverage)
+}
+
 // --- 요약 지표 조합 (public API) ---
 
 function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guildMeta?: GuildSummaryMetaInput) {
@@ -346,12 +425,15 @@ function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guil
 	const rivalryField = (comparison: GuildMemberComparison) => comparison.rivalry
 	const trainingField = (comparison: GuildMemberComparison) => comparison.training
 	const guildBossField = (comparison: GuildMemberComparison) => comparison.guildBoss
+	const huntingScoreField = (comparison: GuildMemberComparison) => comparison.huntingScore
 	const emptyRank = { current: null, previous: null }
 	const emptyPoints = { current: null, previous: null }
 	const expeditionRank = calculateGuildPlacementRank(guildMeta?.expeditionRank ?? emptyRank)
 	const rivalryRank = calculateGuildPlacementRank(guildMeta?.rivalryRank ?? emptyRank)
 	const rivalryPoints = calculateGuildRivalryPoints(guildMeta?.rivalryPoints ?? emptyPoints)
 	const trainingRank = calculateGuildPlacementRank(guildMeta?.trainingRank ?? emptyRank)
+	const bountyRank = calculateGuildPlacementRank(guildMeta?.bountyRank ?? emptyRank)
+	const allBountyRank = calculateGuildPlacementRank(guildMeta?.allBountyRank ?? emptyRank)
 
 	return {
 		combatPowerTotal: calculateCombatPowerTotal(comparisons),
@@ -378,7 +460,22 @@ function calculateGuildSummaryMetrics(comparisons: GuildMemberComparison[], guil
 		guildBossChange: formatKoreanDelta(
 			calculateTotalNumericChange(comparisons, guildBossField, hasGuildBossContribution)
 		),
-		guildBossChangePercent: calculateTotalChangePercent(comparisons, guildBossField, hasGuildBossContribution)
+		guildBossChangePercent: calculateTotalChangePercent(comparisons, guildBossField, hasGuildBossContribution),
+		huntingScoreTotal: calculateHuntingScoreTotal(comparisons),
+		// 첫 수집 주에는 직전 사냥실적이 없어 diff가 없음 → 변화량/증감율은 '-' 처리
+		huntingScoreChange: formatKoreanDelta(
+			calculateComparableNumericChange(comparisons, huntingScoreField, hasBountyContribution)
+		),
+		huntingScoreChangePercent: formatDeltaPercent(
+			calculateComparableNumericChange(comparisons, huntingScoreField, hasBountyContribution),
+			calculateTotalPrevious(comparisons, huntingScoreField, hasBountyContribution)
+		),
+		averageBountyStage: calculateAverageBountyStage(comparisons),
+		averageBountyStageChange: calculateAverageBountyStageChange(comparisons),
+		guildBountyRankLabel: bountyRank.label,
+		guildBountyRankChange: bountyRank.changeLabel,
+		guildAllBountyRankLabel: allBountyRank.label,
+		guildAllBountyRankChange: allBountyRank.changeLabel
 	}
 }
 

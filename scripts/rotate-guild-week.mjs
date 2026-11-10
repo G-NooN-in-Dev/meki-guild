@@ -10,12 +10,13 @@ const contentDatesPath = join(dataDirectory, 'guild-content-dates.json')
 
 /** CLI 인자로 받는 이월 대상 */
 const ROTATION_MODES = {
-	all: ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss'],
+	all: ['combatPower', 'expedition', 'rivalry', 'training', 'guildBoss', 'bounty'],
 	character: ['combatPower'],
 	expedition: ['expedition'],
 	rivalry: ['rivalry'],
 	training: ['training'],
-	'guild-boss': ['guildBoss']
+	'guild-boss': ['guildBoss'],
+	bounty: ['bounty']
 }
 
 const CONTENT_DATE_KEYS = {
@@ -23,20 +24,23 @@ const CONTENT_DATE_KEYS = {
 	expedition: 'expedition',
 	rivalry: 'rivalry',
 	training: 'training',
-	guildBoss: 'guildBoss'
+	guildBoss: 'guildBoss',
+	bounty: 'bounty'
 }
 
 /** 멤버 필드 이월 시 함께 밀 길드 메타 (sync 의 GUILD_META_BY_FIELD 와 동일) */
 const GUILD_META_BY_FIELD = {
 	expedition: ['expeditionRank'],
 	rivalry: ['rivalryRank', 'rivalryPoints'],
-	training: ['trainingRank']
+	training: ['trainingRank'],
+	bounty: ['bountyRank', 'allBountyRank']
 }
 
 const GUILD_META_LOG_LABELS = {
 	expedition: '길드 토벌전 순위',
 	rivalry: '길드 대항전 순위·포인트',
-	training: '길드 수련장 순위'
+	training: '길드 수련장 순위',
+	bounty: '길드 현상수배 순위'
 }
 
 const MODE_LABELS = {
@@ -45,7 +49,8 @@ const MODE_LABELS = {
 	expedition: '토벌전(등급·등수·점수)',
 	rivalry: '대항전',
 	training: '수련장',
-	'guild-boss': '길드보스'
+	'guild-boss': '길드보스',
+	bounty: '현상수배'
 }
 
 /** previous 로 이월되는 항목 표시명 */
@@ -54,7 +59,8 @@ const CARRY_LABELS = {
 	expedition: '토벌전(등급·등수·점수)',
 	rivalry: '대항전',
 	training: '수련장',
-	guildBoss: '길드보스'
+	guildBoss: '길드보스',
+	bounty: '현상수배'
 }
 
 /** current 에서 초기화되는 항목 표시명 */
@@ -63,7 +69,8 @@ const CLEAR_LABELS = {
 	expedition: '토벌전(등급·등수·점수)',
 	rivalry: '대항전',
 	training: '수련장',
-	guildBoss: '길드보스'
+	guildBoss: '길드보스',
+	bounty: '현상수배'
 }
 
 function formatFieldLabels(fields, labels) {
@@ -124,6 +131,13 @@ function copyFieldsToPrevious(currentMember, previousMember, fields) {
 					delete previousMember.guildBoss
 				}
 				break
+			case 'bounty':
+				if (currentMember.bounty !== undefined && currentMember.bounty !== null) {
+					previousMember.bounty = currentMember.bounty
+				} else {
+					delete previousMember.bounty
+				}
+				break
 			default:
 				throw new Error(`알 수 없는 이월 필드: ${field}`)
 		}
@@ -151,6 +165,9 @@ function clearFieldsInCurrent(member, fields) {
 				break
 			case 'guildBoss':
 				nextMember.guildBoss = ''
+				break
+			case 'bounty':
+				nextMember.bounty = null
 				break
 			default:
 				throw new Error(`알 수 없는 이월 필드: ${field}`)
