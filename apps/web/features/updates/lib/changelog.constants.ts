@@ -15,8 +15,7 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 					{ text: '길드 현상수배 정보 추가 및 연동' },
 					{ text: '길드 보스대전 시즌 정보 추가' },
 					{ text: '멤버 상세 다이얼로그 - 직업 이미지 추가' },
-					{ text: '데이터 등록 시스템 개선' },
-					{ text: '툴바 - 모바일 환경 UI 개선' }
+					{ text: '데이터 등록 시스템 개선' }
 				]
 			},
 			{
@@ -63,7 +62,8 @@ export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 						]
 					}
 				]
-			}
+			},
+			{ title: '공통', items: [{ text: '모바일 환경 UI 개선' }] }
 		]
 	},
 	{

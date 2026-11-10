@@ -33,7 +33,7 @@ type TipCategoryCollapsibleItemProps = {
 
 function TipCardList({ tips }: { tips: readonly TipEntry[] }) {
 	return (
-		<ul className="grid grid-cols-2 gap-4 rounded-md bg-transparent p-3 md:flex md:flex-col">
+		<ul className="grid grid-cols-2 gap-4 rounded-md bg-transparent p-3 sm:flex sm:flex-col">
 			{tips.map((tip) => (
 				<li key={tip.slug} className="h-full">
 					<TipCard tip={tip} />
@@ -91,7 +91,7 @@ function DesktopTipCategoryCollapsible({ category, tips }: Omit<TipCategoryColla
 			onOpenChange={setOpen}
 			onMouseLeave={handleMouseLeave}
 			onBlur={handleBlur}
-			className="flex min-w-0 flex-col self-start"
+			className="flex w-full min-w-0 flex-col self-start"
 		>
 			<CollapsibleTrigger
 				onMouseEnter={handleTriggerMouseEnter}
@@ -121,14 +121,14 @@ function TipCategoryCollapsibleItem({ category, tips, useHoverOpen }: TipCategor
 
 /**
  * 카테고리별 독립 Collapsible.
- * 레이아웃: 모바일 flex-col · tipCard 2열 / md+: 카테고리 2·3열 · tipCard 세로 나열.
+ * 레이아웃: 모바일 flex-col · tipCard 2열 / sm+: 카테고리 2·3열 · tipCard 세로 나열.
  * 상호작용: hover+fine pointer면 hover 열기, 그 외(태블릿 터치 포함)는 클릭 토글.
  */
 function TipsCategoryCollapsible({ groups }: TipsCategoryCollapsibleProps) {
 	const useHoverOpen = useMediaQuery(HOVER_INTERACTION_QUERY)
 
 	return (
-		<div className="flex flex-col gap-4 md:grid md:grid-cols-2 md:items-start md:gap-4 lg:grid-cols-3 lg:gap-6">
+		<div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 sm:items-start sm:gap-4 lg:grid-cols-3 lg:gap-6">
 			{groups.map(({ category, tips }) => (
 				<TipCategoryCollapsibleItem key={category.id} category={category} tips={tips} useHoverOpen={useHoverOpen} />
 			))}
