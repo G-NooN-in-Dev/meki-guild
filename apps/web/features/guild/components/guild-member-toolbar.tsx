@@ -13,6 +13,7 @@ import JobDistributionGuide from '@/features/guild/components/job-distribution-g
 import RivalryRankPointsGuide from '@/features/guild/components/rivalry-rank-points-guide'
 import type { GuildMemberFilterState } from '@/features/guild/lib/filter-guild-members'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
+import useDragScroll from '@/hooks/use-drag-scroll'
 
 type GuildMemberToolbarProps = {
 	comparisons: GuildMemberComparison[]
@@ -38,6 +39,7 @@ function GuildMemberToolbar({
 	onFilterChange
 }: GuildMemberToolbarProps) {
 	const { length: totalCount } = comparisons
+	const { ref: guidesScrollRef, onClickCapture: onGuidesClickCapture } = useDragScroll()
 
 	return (
 		<div className="flex w-full min-w-0 flex-col gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-3">
@@ -47,14 +49,14 @@ function GuildMemberToolbar({
 			*/}
 			<div className="flex items-center justify-between gap-2 lg:contents">
 				{/* 필터 적용 시에만 인원 요약 표시 — lg:mr-auto로 조작·가이드를 오른쪽으로 밀어냄 */}
-				<p className="text-grayscale-500 text-sm tabular-nums lg:mr-auto">
+				<p className="text-grayscale-500 shrink-0 text-sm whitespace-nowrap tabular-nums lg:mr-auto">
 					{isFilterActive ? `${visibleCount} / ${totalCount}명` : `${totalCount}명`}
 				</p>
-				<div className="flex items-center gap-2 lg:gap-3">
+				<div className="flex shrink-0 items-center gap-2 lg:gap-3">
 					{/* OFF=절대값 정렬, ON=증감율(%) 정렬 — 필터 버튼과 같은 outline 톤으로 대비 */}
 					<Label
 						htmlFor="sort-by-percent"
-						className="border-grayscale-200 bg-card gap-1.5 rounded-md border px-2.5 py-1.5 font-normal text-black shadow-xs"
+						className="border-grayscale-200 bg-card gap-1.5 rounded-md border px-2.5 py-1.5 font-normal whitespace-nowrap text-black shadow-xs"
 					>
 						<span className="text-sm">증감율</span>
 						<Switch
@@ -68,8 +70,12 @@ function GuildMemberToolbar({
 					<GuildMemberFilters comparisons={comparisons} filter={filter} onFilterChange={onFilterChange} />
 				</div>
 			</div>
-			{/* min-w-0: flex 한 줄에서도 줄어들 수 있게. 좁으면 가로 스크롤 */}
-			<div className="flex min-w-0 scrollbar-none items-center gap-1.5 overflow-x-auto [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+			{/* min-w-0: flex 한 줄에서도 줄어들 수 있게. 좁으면 가로 스크롤(+마우스 드래그) */}
+			<div
+				ref={guidesScrollRef}
+				onClickCapture={onGuidesClickCapture}
+				className="flex min-w-0 cursor-grab scrollbar-none items-center gap-1.5 overflow-x-auto select-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+			>
 				<ContentAwards comparisons={comparisons} />
 				<ContentUpdatedAtGuide />
 				<JobDistributionGuide comparisons={comparisons} />
