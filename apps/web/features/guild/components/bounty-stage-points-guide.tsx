@@ -11,7 +11,7 @@ import {
 	GUILD_BOUNTY_STAGE_BANDS,
 	type GuildBountyStageBand,
 	type GuildBountyStageEntry
-} from '@/libs/guild-bounty-stage-scores.constants'
+} from '@/features/tips/lib/guild-bounty.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 type BountyStagePointRow =

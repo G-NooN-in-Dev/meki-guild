@@ -1,6 +1,6 @@
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
-import MonsterNameLabel, { type MonsterNameLabelProps } from '@/features/tips/components/shared/monster-name-label'
+import MonsterLabel, { type MonsterLabelProps } from '@/features/tips/components/shared/monster-label'
 import {
 	EQUIPMENT_DUNGEON_MASK_FISH_SPEED_BUFF_SEC,
 	EQUIPMENT_DUNGEON_POISON_PUFFER_EXPLOSION_DELAY_SEC,
@@ -16,7 +16,7 @@ const MASK_FISH_LABEL = {
 	width: 76,
 	height: 58,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 const POISON_POOPA_LABEL = {
 	src: '/monsters/poison-poopa.gif',
@@ -24,24 +24,24 @@ const POISON_POOPA_LABEL = {
 	width: 400,
 	height: 307,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 function SummaryRulesList() {
 	return (
 		<ul className="text-grayscale-600 list-disc space-y-1.5 pl-5 text-sm break-keep md:text-base">
 			<li>제한시간 안에 정해진 수의 몬스터를 처치하세요.</li>
 			<li>
-				<MonsterNameLabel {...MASK_FISH_LABEL} />를 처치하면{' '}
+				<MonsterLabel {...MASK_FISH_LABEL} />를 처치하면{' '}
 				<EmphasizedText>{EQUIPMENT_DUNGEON_MASK_FISH_SPEED_BUFF_SEC}초</EmphasizedText> 동안 이동속도가 증가합니다.
 			</li>
 			<li>
-				<MonsterNameLabel {...POISON_POOPA_LABEL} />를 처치하면{' '}
+				<MonsterLabel {...POISON_POOPA_LABEL} />를 처치하면{' '}
 				<EmphasizedText>{EQUIPMENT_DUNGEON_POISON_PUFFER_EXPLOSION_DELAY_SEC}초</EmphasizedText> 후 주변{' '}
 				<EmphasizedText>{formatLocaleNumber(EQUIPMENT_DUNGEON_POISON_PUFFER_EXPLOSION_RANGE)}</EmphasizedText> 만큼 광역
 				폭발이 발생합니다.
 			</li>
 			<li>
-				<MonsterNameLabel {...POISON_POOPA_LABEL} />의 필요 명중은 일반 몬스터보다{' '}
+				<MonsterLabel {...POISON_POOPA_LABEL} />의 필요 명중은 일반 몬스터보다{' '}
 				<EmphasizedText>{EQUIPMENT_DUNGEON_POISON_PUFFER_HIT_CUT_BONUS}</EmphasizedText> 높습니다.
 			</li>
 		</ul>

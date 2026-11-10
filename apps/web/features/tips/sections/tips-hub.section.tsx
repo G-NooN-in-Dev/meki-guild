@@ -1,4 +1,4 @@
-import TipsCategoryGrid from '@/features/tips/components/hub/tips-category-grid'
+import TipsCategoryCollapsible from '@/features/tips/components/hub/tips-category-collapsible'
 import { getTipsGroupedByCategory } from '@/features/tips/lib/tips-registry.constants'
 
 function TipsHubSection() {
@@ -14,7 +14,7 @@ function TipsHubSection() {
 				</p>
 			</header>
 
-			<TipsCategoryGrid groups={groups} />
+			<TipsCategoryCollapsible groups={groups} />
 		</section>
 	)
 }

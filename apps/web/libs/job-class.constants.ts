@@ -80,9 +80,9 @@ function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): strin
  * 캡틴은 총기·제복 톤에 맞춰 pastel-navy를 씁니다.
  */
 const JOB_BADGE_CLASS = {
+	히어로: 'border-transparent bg-pastel-orange-100 text-pastel-orange-700',
 	다크나이트: 'border-transparent bg-grayscale-100 text-grayscale-700',
 	팔라딘: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
-	히어로: 'border-transparent bg-pastel-orange-100 text-pastel-orange-700',
 	불독: 'border-transparent bg-pastel-red-100 text-pastel-red-700',
 	비숍: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-700',
 	썬콜: 'border-transparent bg-pastel-blue-100 text-pastel-blue-700',

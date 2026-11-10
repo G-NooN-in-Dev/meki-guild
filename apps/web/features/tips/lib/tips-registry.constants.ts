@@ -53,7 +53,7 @@ const TIP_ENTRIES = [
 	{
 		slug: 'guild-expedition',
 		title: '토벌전 정보',
-		description: '단계별 명중컷 · 제한시간',
+		description: '단계별 방어력 · 명중컷 · 제한시간',
 		category: 'guild-contents',
 		tags: ['토벌전'],
 		href: '/tips/guild-expedition'
@@ -61,7 +61,7 @@ const TIP_ENTRIES = [
 	{
 		slug: 'guild-rivalry',
 		title: '대항전 정보',
-		description: '단계별 명중컷 · 보스 데미지 스택',
+		description: '단계별 방어력 · 명중컷 · 보스 데미지 스택',
 		category: 'guild-contents',
 		tags: ['대항전'],
 		href: '/tips/guild-rivalry'
@@ -69,10 +69,26 @@ const TIP_ENTRIES = [
 	{
 		slug: 'guild-training',
 		title: '수련장 정보',
-		description: '단계별 명중컷 · 처치 점수',
+		description: '단계별 방어력 · 명중컷 · 처치 점수',
 		category: 'guild-contents',
 		tags: ['수련장'],
 		href: '/tips/guild-training'
+	},
+	{
+		slug: 'guild-boss',
+		title: '보스대전 정보',
+		description: '제한시간 · 명중컷 · 방어력 · 공격 패턴',
+		category: 'guild-contents',
+		tags: ['보스대전'],
+		href: '/tips/guild-boss'
+	},
+	{
+		slug: 'guild-bounty',
+		title: '현상수배 정보',
+		description: '제한시간 · 명중컷 · 방어력 · 동료·버프 구슬 · 공격 패턴',
+		category: 'guild-contents',
+		tags: ['현상수배'],
+		href: '/tips/guild-bounty'
 	},
 	// 각종 정보
 	{

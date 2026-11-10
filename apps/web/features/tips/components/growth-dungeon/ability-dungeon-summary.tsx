@@ -1,6 +1,6 @@
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
-import MonsterNameLabel, { type MonsterNameLabelProps } from '@/features/tips/components/shared/monster-name-label'
+import MonsterLabel, { type MonsterLabelProps } from '@/features/tips/components/shared/monster-label'
 import {
 	ABILITY_DUNGEON_BOSS_TIME_LIMIT_SEC,
 	ABILITY_DUNGEON_BUFF_DURATION_SEC,
@@ -24,7 +24,7 @@ const JUNIOR_GRUPIN_LABEL = {
 	width: 34,
 	height: 42,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 const JUNIOR_LUCIDA_LABEL = {
 	src: '/monsters/junior-lucida.gif',
@@ -32,7 +32,7 @@ const JUNIOR_LUCIDA_LABEL = {
 	width: 38,
 	height: 54,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 const STAR_PIXIE_LABEL = {
 	src: '/monsters/star-pixie.gif',
@@ -40,7 +40,7 @@ const STAR_PIXIE_LABEL = {
 	width: 56,
 	height: 58,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 const ELIZA_LABEL = {
 	src: '/monsters/eliza.gif',
@@ -48,7 +48,7 @@ const ELIZA_LABEL = {
 	width: 400,
 	height: 295,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 const LIONER_LABEL = {
 	src: '/monsters/lioner.gif',
@@ -56,7 +56,7 @@ const LIONER_LABEL = {
 	width: 54,
 	height: 56,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 const CELLION_LABEL = {
 	src: '/monsters/cellion.gif',
@@ -64,12 +64,12 @@ const CELLION_LABEL = {
 	width: 54,
 	height: 56,
 	unoptimized: true
-} as const satisfies MonsterNameLabelProps
+} as const satisfies MonsterLabelProps
 
 const NORMAL_MONSTER_LABELS = [JUNIOR_GRUPIN_LABEL, JUNIOR_LUCIDA_LABEL, STAR_PIXIE_LABEL] as const
 
 type MonsterNameListProps = {
-	labels: readonly MonsterNameLabelProps[]
+	labels: readonly MonsterLabelProps[]
 }
 
 /** 같은 역할의 몬스터를 이름·스프라이트와 함께 한 줄로 잇습니다. */
@@ -77,7 +77,7 @@ function MonsterNameList({ labels }: MonsterNameListProps) {
 	return labels.map((label, index) => (
 		<span key={label.src}>
 			{index > 0 ? <span className="text-grayscale-400"> · </span> : null}
-			<MonsterNameLabel {...label} />
+			<MonsterLabel {...label} />
 		</span>
 	))
 }
@@ -90,7 +90,7 @@ function SummaryRulesList() {
 			</li>
 			<li>
 				이후 제한시간 <EmphasizedText>{ABILITY_DUNGEON_BOSS_TIME_LIMIT_SEC}초</EmphasizedText> 안에{' '}
-				<MonsterNameLabel {...ELIZA_LABEL} />를 처치하세요.
+				<MonsterLabel {...ELIZA_LABEL} />를 처치하세요.
 			</li>
 			<li>
 				<MonsterNameList labels={NORMAL_MONSTER_LABELS} /> 처치 시,{' '}
@@ -99,13 +99,13 @@ function SummaryRulesList() {
 				<EmphasizedText>{ABILITY_DUNGEON_NORMAL_MOVE_SPEED_BUFF_PERCENT}%</EmphasizedText> 증가합니다.
 			</li>
 			<li>
-				<MonsterNameLabel {...LIONER_LABEL} /> 처치 시,{' '}
+				<MonsterLabel {...LIONER_LABEL} /> 처치 시,{' '}
 				<EmphasizedText>{ABILITY_DUNGEON_BUFF_DURATION_SEC}초</EmphasizedText>간 공격력이{' '}
 				<EmphasizedText>{ABILITY_DUNGEON_LIONER_ATTACK_BUFF_PERCENT}%</EmphasizedText>, 공격속도가{' '}
 				<EmphasizedText>{ABILITY_DUNGEON_LIONER_ATTACK_SPEED_BUFF_PERCENT}%</EmphasizedText> 증가합니다.
 			</li>
 			<li>
-				<MonsterNameLabel {...CELLION_LABEL} /> 처치 시,{' '}
+				<MonsterLabel {...CELLION_LABEL} /> 처치 시,{' '}
 				<EmphasizedText>{ABILITY_DUNGEON_BUFF_DURATION_SEC}초</EmphasizedText>간 공격력이{' '}
 				<EmphasizedText>{ABILITY_DUNGEON_CELLION_ATTACK_BUFF_PERCENT}%</EmphasizedText>, 이동속도가{' '}
 				<EmphasizedText>{ABILITY_DUNGEON_CELLION_MOVE_SPEED_BUFF_PERCENT}%</EmphasizedText> 증가합니다.

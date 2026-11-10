@@ -1,6 +1,6 @@
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
-import MonsterNameLabel from '@/features/tips/components/shared/monster-name-label'
+import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import { WEAPON_DUNGEON_TIME_LIMIT_SEC } from '@/features/tips/lib/growth-dungeon.constants'
 
 function SummaryRulesList() {
@@ -8,7 +8,7 @@ function SummaryRulesList() {
 		<ul className="text-grayscale-600 list-disc space-y-1.5 pl-5 text-sm md:text-base">
 			<li>
 				제한시간 <EmphasizedText>{WEAPON_DUNGEON_TIME_LIMIT_SEC}초</EmphasizedText> 안에{' '}
-				<MonsterNameLabel src="/monsters/mush-mom.webp" name="머쉬맘" width={119} height={110} />을 처치하세요.
+				<MonsterLabel src="/monsters/mush-mom.webp" name="머쉬맘" width={119} height={110} />을 처치하세요.
 			</li>
 		</ul>
 	)

@@ -13,6 +13,7 @@ import { InfoIcon, LockIcon } from 'lucide-react'
 import Image from 'next/image'
 import { type ReactNode, useState } from 'react'
 
+import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 import {
@@ -51,36 +52,6 @@ const itemCellClassName =
 
 const tableHeadClassName =
 	'bg-grayscale-100 text-grayscale-600 min-w-0 overflow-hidden text-center text-xs leading-tight break-keep whitespace-normal md:text-sm border-r-grayscale-200 border-r'
-
-type BossRaidBossImageProps = {
-	src: string
-	width: number
-	height: number
-	className?: string
-}
-
-/**
- * 선택한 보스 스프라이트.
- * 이름이 바로 옆에 있으므로 장식(alt 없음)으로 두고, GIF 프레임이 깨지지 않게 최적화를 끕니다.
- * 모바일에서는 가로 폭을 맞춘 뒤, 자리가 부족하면 이름 대신 이미지가 먼저 줄어든다.
- */
-function BossRaidBossImage({ src, width, height, className }: BossRaidBossImageProps) {
-	return (
-		<Image
-			key={src}
-			src={src}
-			alt=""
-			width={width}
-			height={height}
-			unoptimized
-			draggable={false}
-			className={cn(
-				'h-auto max-h-16 w-auto max-w-24 min-w-6 shrink rounded-lg object-contain md:max-h-24 md:max-w-40 md:min-w-0 md:shrink-0',
-				className
-			)}
-		/>
-	)
-}
 
 function BossRaidRewardGradeBadge({ reward }: { reward: BossRaidReward | BossRaidMilestone }) {
 	if (reward.kind !== 'equipment') {
@@ -287,7 +258,8 @@ function BossRaidRewardTableHeader({
 	return (
 		<CardHeader className="gap-2 px-4 md:px-6">
 			<div className="flex items-center gap-2 md:gap-3">
-				<BossRaidBossImage src={imageSrc} width={imageWidth} height={imageHeight} />
+				{/* src가 바뀌면 Image를 다시 마운트해 GIF 프레임이 이전 보스에 남지 않게 합니다. */}
+				<MonsterLabel key={imageSrc} src={imageSrc} width={imageWidth} height={imageHeight} unoptimized size="panel" />
 				<div className="flex min-w-0 flex-col gap-1">
 					<CardTitle className="text-grayscale-900 text-sm font-semibold whitespace-nowrap md:text-lg">
 						{bossName} · {difficultyLabel}
@@ -427,11 +399,14 @@ function BossRaidLockedDifficultyEmpty({
 	return (
 		<Empty className="border-grayscale-200 bg-card/50 shadow-soft border border-dashed py-10 md:py-12">
 			<EmptyHeader>
-				<BossRaidBossImage
+				<MonsterLabel
+					key={imageSrc}
 					src={imageSrc}
 					width={imageWidth}
 					height={imageHeight}
-					className="w-auto max-w-28 min-w-0 shrink-0"
+					unoptimized
+					size="panel"
+					imageClassName="w-auto max-w-28 min-w-0 shrink-0"
 				/>
 				<EmptyMedia variant="icon">
 					<LockIcon />

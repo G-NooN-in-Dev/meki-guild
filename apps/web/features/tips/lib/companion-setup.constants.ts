@@ -82,21 +82,21 @@ export const COMPANION_SETUP_SLOTS = [
  */
 const COMPANION_JOB_ORDER = [
 	'히어로',
-	'팔라딘',
 	'다크나이트',
-	'소울마스터',
+	'팔라딘',
 	'썬콜',
 	'불독',
 	'비숍',
-	'플레임위자드',
 	'보우마스터',
 	'신궁',
 	'나이트로드',
 	'섀도어',
 	'바이퍼',
 	'캡틴',
-	'나이트워커',
-	'윈드브레이커'
+	'소울마스터',
+	'플레임위자드',
+	'윈드브레이커',
+	'나이트워커'
 ] as const satisfies readonly string[]
 
 /**
@@ -115,9 +115,9 @@ export const COMPANION_JOBS = COMPANION_JOB_ORDER.filter((job) => !UNRELEASED_CO
  * 아이콘이 아직 없는 직업은 getJobPortraitSrc 매핑에 없으면 플레이스홀더로 표시됩니다.
  */
 export const COMPANION_EQUIP_EFFECT_BASE_BY_JOB = {
+	히어로: { label: '최대 데미지 배율', legendaryLevel1Value: 20, unit: 'percent' },
 	다크나이트: { label: '명중', legendaryLevel1Value: 24, unit: 'flat' },
 	팔라딘: { label: '기본 공격 데미지', legendaryLevel1Value: 8, unit: 'percent' },
-	히어로: { label: '최대 데미지 배율', legendaryLevel1Value: 20, unit: 'percent' },
 	불독: { label: '크리티컬 확률', legendaryLevel1Value: 12, unit: 'percent' },
 	비숍: { label: '스킬 데미지', legendaryLevel1Value: 8, unit: 'percent' },
 	썬콜: { label: '일반 몬스터 데미지', legendaryLevel1Value: 20, unit: 'percent' },

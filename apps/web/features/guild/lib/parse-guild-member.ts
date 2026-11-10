@@ -1,6 +1,6 @@
 import type { GuildMemberInput, ParsedGuildMember } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
-import { getGuildBountyHuntingScore, isValidGuildBountyStage } from '@/libs/guild-bounty-stage-scores.constants'
+import { getGuildBountyHuntingScore, isValidGuildBountyStage } from '@/features/tips/lib/guild-bounty.constants'
 import { formatLocaleNumber, formatPlacementRank, formatTrainingScore } from '@/utils/format-korean-number'
 import { parseKoreanNumber } from '@/utils/parse-korean-number'
 
