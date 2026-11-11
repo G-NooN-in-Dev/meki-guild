@@ -35,6 +35,11 @@ function SummaryRulesList() {
 					<EmphasizedText>받는 최종 피해</EmphasizedText>를{' '}
 					<EmphasizedText>{GUILD_BOSS_STUN_FINAL_DAMAGE_REDUCTION_PERCENT}%</EmphasizedText> 감소시킵니다.
 				</li>
+				<li>
+					<EmphasizedText>좌·우 불 내뿜기</EmphasizedText>를 맞으면 반대편에 <EmphasizedText>버프 구슬</EmphasizedText>
+					이 생성됩니다. 구슬을 먹으면 <EmphasizedText>보스 데미지 증가</EmphasizedText> 버프를{' '}
+					<EmphasizedText>+1</EmphasizedText> 스택 획득합니다.
+				</li>
 			</ul>
 
 			<GuildBossStatsTable />
@@ -42,7 +47,7 @@ function SummaryRulesList() {
 	)
 }
 
-/** 보스대전 제한시간·명중·방어력·피해 감소 규칙 요약 */
+/** 보스대전 제한시간·명중·방어력·피해 감소·버프 구슬 규칙 요약 */
 function GuildBossSummary() {
 	return (
 		<HitCutSummaryCard>
