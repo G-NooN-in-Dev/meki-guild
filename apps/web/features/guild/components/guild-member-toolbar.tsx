@@ -38,7 +38,8 @@ function GuildMemberToolbar({
 	filter,
 	onFilterChange
 }: GuildMemberToolbarProps) {
-	const { length: totalCount } = comparisons
+	// 인원 요약은 이번 주 잔류·신규만 (이탈 제외)
+	const totalCount = comparisons.filter((comparison) => comparison.status !== 'left').length
 	const { ref: guidesScrollRef, onClickCapture: onGuidesClickCapture } = useDragScroll()
 
 	return (
