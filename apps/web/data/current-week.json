@@ -20,7 +20,7 @@
 			},
 			"rivalry": "1조 1315억",
 			"training": "2584만 8606",
-			"guildBoss": "1916억 8626만",
+			"guildBoss": "6976억 1256만",
 			"bounty": 34
 		},
 		{
@@ -35,7 +35,7 @@
 			},
 			"rivalry": "1조 461억",
 			"training": "2600만 9583",
-			"guildBoss": "1797억 4671만",
+			"guildBoss": "7302억 4737만",
 			"bounty": 33
 		},
 		{
@@ -50,7 +50,7 @@
 			},
 			"rivalry": "3779억 9309만",
 			"training": "2220만 9030",
-			"guildBoss": "583억 6113만",
+			"guildBoss": "2185억 9180만",
 			"bounty": 29
 		},
 		{
@@ -65,7 +65,7 @@
 			},
 			"rivalry": "3818억 2635만",
 			"training": "2442만 1173",
-			"guildBoss": "989억 4574만",
+			"guildBoss": "2133억 6433만",
 			"bounty": 29
 		},
 		{
@@ -80,7 +80,7 @@
 			},
 			"rivalry": "4085억 8038만",
 			"training": "1917만 1104",
-			"guildBoss": "1068억 4634만",
+			"guildBoss": "2662억 8657만",
 			"bounty": 30
 		},
 		{
@@ -95,7 +95,7 @@
 			},
 			"rivalry": "4848억 9909만",
 			"training": "2478만 8886",
-			"guildBoss": "1160억 5544만",
+			"guildBoss": "2784억 563만",
 			"bounty": 30
 		},
 		{
@@ -110,6 +110,7 @@
 			},
 			"rivalry": "2639억 3152만",
 			"training": "",
+			"guildBoss": "1671억 2817만",
 			"bounty": 29
 		},
 		{
@@ -124,7 +125,7 @@
 			},
 			"rivalry": "2879억 8849만",
 			"training": "1898만 4891",
-			"guildBoss": "856억 1050만",
+			"guildBoss": "1385억 3410만",
 			"bounty": 29
 		},
 		{
@@ -139,6 +140,7 @@
 			},
 			"rivalry": "2618억 6077만",
 			"training": "",
+			"guildBoss": "1425억 7460만",
 			"bounty": 28
 		},
 		{
@@ -153,7 +155,7 @@
 			},
 			"rivalry": "2441억 3790만",
 			"training": "1021만 9296",
-			"guildBoss": "572억 3731만",
+			"guildBoss": "1256억 448만",
 			"bounty": 26
 		},
 		{
@@ -168,6 +170,7 @@
 			},
 			"rivalry": "2052억 1758만",
 			"training": "",
+			"guildBoss": "1300억 6만",
 			"bounty": 26
 		},
 		{
@@ -182,7 +185,7 @@
 			},
 			"rivalry": "2519억 6825만",
 			"training": "1792만 5540",
-			"guildBoss": "513억 8061만",
+			"guildBoss": "1351억 5372만",
 			"bounty": 28
 		},
 		{
@@ -197,6 +200,7 @@
 			},
 			"rivalry": "2733억 2307만",
 			"training": "",
+			"guildBoss": "1537억 3139만",
 			"bounty": 28
 		},
 		{
@@ -211,7 +215,7 @@
 			},
 			"rivalry": "2157억 7278만",
 			"training": "1176만 7335",
-			"guildBoss": "548억 3583만",
+			"guildBoss": "1540억 5515만",
 			"bounty": 28
 		},
 		{
@@ -226,7 +230,7 @@
 			},
 			"rivalry": "2547억 787만",
 			"training": "1745만 7468",
-			"guildBoss": "852억 3547만",
+			"guildBoss": "1604억 1401만",
 			"bounty": 28
 		},
 		{
@@ -241,7 +245,7 @@
 			},
 			"rivalry": "2426억 7848만",
 			"training": "1419만 657",
-			"guildBoss": "691억 9967만",
+			"guildBoss": "1531억 7994만",
 			"bounty": 29
 		},
 		{
@@ -256,7 +260,8 @@
 			},
 			"rivalry": "1981억 3256만",
 			"training": "",
-			"bounty": 27
+			"guildBoss": "1246억 8044만",
+			"bounty": 28
 		},
 		{
 			"name": "살점",
@@ -270,7 +275,7 @@
 			},
 			"rivalry": "1727억 2162만",
 			"training": "1119만 5676",
-			"guildBoss": "431억 5927만",
+			"guildBoss": "1152억 456만",
 			"bounty": 26
 		},
 		{
@@ -285,7 +290,7 @@
 			},
 			"rivalry": "2275억 6018만",
 			"training": "1063만 6365",
-			"guildBoss": "481억 7488만",
+			"guildBoss": "1322억 5502만",
 			"bounty": 27
 		},
 		{
@@ -314,7 +319,7 @@
 			},
 			"rivalry": "1589억 2372만",
 			"training": "1214만 8917",
-			"guildBoss": "363억 5675만",
+			"guildBoss": "1039억 8834만",
 			"bounty": 25
 		},
 		{
@@ -329,7 +334,7 @@
 			},
 			"rivalry": "1740억 3014만",
 			"training": "1242만 5037",
-			"guildBoss": "372억 9819만",
+			"guildBoss": "902억 3188만",
 			"bounty": 25
 		},
 		{
@@ -344,7 +349,7 @@
 			},
 			"rivalry": "1428억 2668만",
 			"training": "1016만 1636",
-			"guildBoss": "352억 8649만",
+			"guildBoss": "1049억 4160만",
 			"bounty": 24
 		},
 		{
@@ -359,7 +364,7 @@
 			},
 			"rivalry": "1412억 5201만",
 			"training": "1279만 3293",
-			"guildBoss": "370억 8039만",
+			"guildBoss": "1004억 5774만",
 			"bounty": 27
 		},
 		{
@@ -374,7 +379,7 @@
 			},
 			"rivalry": "1413억 3049만",
 			"training": "8785992",
-			"guildBoss": "237억 5003만",
+			"guildBoss": "784억 5963만",
 			"bounty": 25
 		},
 		{
@@ -389,7 +394,7 @@
 			},
 			"rivalry": "1189억 4764만",
 			"training": "9748740",
-			"guildBoss": "240억 4571만",
+			"guildBoss": "697억 7993만",
 			"bounty": 24
 		},
 		{
@@ -404,7 +409,7 @@
 			},
 			"rivalry": "1063억 7751만",
 			"training": "7496604",
-			"guildBoss": "250억 8245만",
+			"guildBoss": "629억 4961만",
 			"bounty": 24
 		},
 		{
@@ -419,7 +424,7 @@
 			},
 			"rivalry": "1369억 7734만",
 			"training": "1011만 690",
-			"guildBoss": "308억 123만",
+			"guildBoss": "964억 9326만",
 			"bounty": 24
 		},
 		{
@@ -434,22 +439,7 @@
 			},
 			"rivalry": "1028억 1557만",
 			"training": "5952603",
-			"guildBoss": "238억 2149만",
-			"bounty": 24
-		},
-		{
-			"name": "장수창귀",
-			"level": 112,
-			"job": "팔라딘",
-			"combatPower": "1201조 9019억",
-			"expedition": {
-				"grade": "마스터2",
-				"placement": 1696,
-				"score": "1648억 7070만"
-			},
-			"rivalry": "819억 1034만",
-			"training": "1868787",
-			"guildBoss": "366억 160만",
+			"guildBoss": "468억 8384만",
 			"bounty": 24
 		}
 	]
