@@ -1,10 +1,12 @@
 import guildContentDatesJson from '@/data/guild-content-dates.json'
 import { formatDate } from '@/utils/dayjs'
 
-/** 컨텐츠별 최근·직전 수집일 (YYYY-MM-DD). 아직 없으면 null */
+/** 컨텐츠별 최근 3주 수집일 (YYYY-MM-DD). 아직 없으면 null */
 type GuildContentDateRange = {
 	current: string | null
 	previous: string | null
+	/** 2주 전 수집일. sync/rotate 3주 파이프라인에서 채웁니다. */
+	older: string | null
 }
 
 type GuildContentDates = {
