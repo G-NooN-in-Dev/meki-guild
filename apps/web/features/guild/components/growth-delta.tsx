@@ -68,9 +68,15 @@ function GrowthDelta({ value, percentLabel, className, hideValue = false }: Grow
 	const tone = getDeltaTone(hideValue && percentLabel ? percentLabel : value)
 
 	return (
-		<span className={cn('text-xs font-medium', toneClassNames[tone], className)}>
-			{hideValue ? null : formatDeltaDisplayValue(value)}
-			{percentLabel ? <span className={cn(!hideValue && 'ml-1', 'opacity-80')}>({percentLabel})</span> : null}
+		<span
+			className={cn(
+				'inline-flex max-w-full flex-wrap items-baseline justify-end gap-x-1 text-xs font-medium',
+				toneClassNames[tone],
+				className
+			)}
+		>
+			{hideValue ? null : <span className="break-keep whitespace-nowrap">{formatDeltaDisplayValue(value)}</span>}
+			{percentLabel ? <span className="whitespace-nowrap opacity-80">({percentLabel})</span> : null}
 		</span>
 	)
 }

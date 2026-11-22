@@ -14,6 +14,7 @@ import { TrophyIcon } from 'lucide-react'
 
 import JobBadge from '@/features/guild/components/job-badge'
 import MemberDisplayName from '@/features/guild/components/member-display-name'
+import { AWARD_SLOT_BG_CLASS_NAME } from '@/features/guild/lib/content-award-styles'
 import {
 	type ContentAwardSlot,
 	hasAnyContentAwardWinner,
@@ -22,15 +23,12 @@ import {
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
 import { formatDate } from '@/utils/dayjs'
 
-/** 부문별 배경색 — pastel-50으로 슬롯을 구분 */
-const AWARD_SLOT_BG_CLASS_NAME = {
-	combatPower: 'bg-pastel-orange-50',
-	expeditionScore: 'bg-pastel-green-50',
-	rivalry: 'bg-pastel-navy-50',
-	bounty: 'bg-pastel-red-50',
-	guildBoss: 'bg-pastel-purple-50',
-	training: 'bg-pastel-blue-50'
-} as const satisfies Record<ContentAwardSlot['key'], string>
+/** 순위 숫자 색 — 1·2·3등 구분 */
+const AWARD_RANK_TEXT_CLASS_NAME = {
+	1: 'text-pastel-orange-700',
+	2: 'text-grayscale-500',
+	3: 'text-pastel-orange-800'
+} as const
 
 type ContentAwardsProps = {
 	comparisons: GuildMemberComparison[]
@@ -58,9 +56,9 @@ function AwardSlotLabel({ label, criteriaDate }: AwardSlotLabelProps) {
 }
 
 const awardSlotItemClassName =
-	'flex min-w-0 items-center gap-3 rounded-md px-2.5 py-2.5 border border-grayscale-100 shadow-sm hover:scale-[1.05] transition-transform'
+	'flex min-w-0 items-start gap-3 rounded-md px-2.5 py-2.5 border border-grayscale-100 shadow-sm hover:scale-[1.02] transition-transform'
 
-/** 시상 한 행: 부문 | 이름·직업 | 성장 점수(% 또는 단계) */
+/** 시상 한 행: 부문 | 1~3등 이름·직업·성장 점수 */
 function AwardSlot({ slot }: AwardSlotProps) {
 	const { key, label, criteriaDate } = slot
 	const className = cn(awardSlotItemClassName, AWARD_SLOT_BG_CLASS_NAME[key])
@@ -69,30 +67,43 @@ function AwardSlot({ slot }: AwardSlotProps) {
 		return (
 			<li className={className}>
 				<AwardSlotLabel label={label} criteriaDate={criteriaDate} />
-				<p className="text-grayscale-400 min-w-0 flex-1 truncate text-xs">{slot.pendingReason}</p>
+				<p className="text-grayscale-400 min-w-0 flex-1 self-center truncate text-xs">{slot.pendingReason}</p>
 			</li>
 		)
 	}
 
-	const { name, job, scoreLabel } = slot.winner
-
 	return (
 		<li className={className}>
 			<AwardSlotLabel label={label} criteriaDate={criteriaDate} />
-			<div className="flex min-w-0 flex-1 items-center gap-1.5">
-				<p className="text-grayscale-900 truncate text-sm font-semibold">
-					<MemberDisplayName name={name} />
-				</p>
-				<JobBadge job={job} className="max-w-24 shrink-0 truncate text-[10px]" />
-			</div>
-			<p className="text-success-700 shrink-0 text-sm font-semibold tabular-nums">{scoreLabel}</p>
+			<ul className="flex min-w-0 flex-1 flex-col gap-1.5">
+				{slot.winners.map((winner) => {
+					const { job, name, rank, scoreLabel } = winner
+					return (
+						<li key={`${slot.key}-${rank}-${name}`} className="flex min-w-0 items-center gap-1.5">
+							<span
+								className={cn(
+									'w-4 shrink-0 text-center text-xs font-bold tabular-nums',
+									AWARD_RANK_TEXT_CLASS_NAME[rank as 1 | 2 | 3] ?? 'text-grayscale-500'
+								)}
+							>
+								{rank}
+							</span>
+							<p className="text-grayscale-900 min-w-0 flex-1 truncate text-sm font-semibold">
+								<MemberDisplayName name={name} />
+							</p>
+							<JobBadge job={job} className="max-w-20 shrink-0 truncate text-[10px]" />
+							<p className="text-success-700 shrink-0 text-xs font-semibold tabular-nums sm:text-sm">{scoreLabel}</p>
+						</li>
+					)
+				})}
+			</ul>
 		</li>
 	)
 }
 
 /**
  * 주간 성장왕 Popover.
- * 대부분 부문은 성장률(%), 현상수배는 증가한 단계 수 1등을 보여 줍니다.
+ * 대부분 부문은 성장률(%) 상위 3명, 현상수배는 증가한 단계 수 상위 3명을 보여 줍니다.
  */
 function ContentAwards({ comparisons }: ContentAwardsProps) {
 	const slots = selectContentAwardSlots(comparisons)
@@ -111,7 +122,7 @@ function ContentAwards({ comparisons }: ContentAwardsProps) {
 			<PopoverContent align="end" className="w-96 max-w-[calc(100vw-2rem)] gap-3 p-4" collisionPadding={8}>
 				<PopoverHeader>
 					<PopoverTitle>주간 성장왕</PopoverTitle>
-					<PopoverDescription>각 부문에서 가장 높은 성장을 달성한 길드원입니다</PopoverDescription>
+					<PopoverDescription>각 부문에서 성장률 상위 3명을 선정합니다</PopoverDescription>
 				</PopoverHeader>
 
 				{!hasWinner ? (
