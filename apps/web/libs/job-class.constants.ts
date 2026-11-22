@@ -80,22 +80,22 @@ function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): strin
  * 캡틴은 총기·제복 톤에 맞춰 pastel-navy를 씁니다.
  */
 const JOB_BADGE_CLASS = {
-	히어로: 'border-transparent bg-pastel-orange-100 text-pastel-orange-700',
-	다크나이트: 'border-transparent bg-grayscale-100 text-grayscale-700',
-	팔라딘: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
-	불독: 'border-transparent bg-pastel-red-100 text-pastel-red-700',
-	비숍: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-700',
-	썬콜: 'border-transparent bg-pastel-blue-100 text-pastel-blue-700',
-	보우마스터: 'border-transparent bg-pastel-green-100 text-pastel-green-700',
-	신궁: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
-	나이트로드: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800',
-	섀도어: 'border-transparent bg-pastel-purple-100 text-pastel-purple-700',
-	바이퍼: 'border-transparent bg-pastel-red-100 text-pastel-red-800',
+	히어로: 'border-transparent bg-orange-100 text-orange-700',
+	다크나이트: 'border-transparent bg-grayscale-200 text-grayscale-700',
+	팔라딘: 'border-transparent bg-pastel-yellow-200 text-yellow-800',
+	불독: 'border-transparent bg-red-100 text-red-700',
+	비숍: 'border-transparent bg-yellow-100 text-yellow-700',
+	썬콜: 'border-transparent bg-pastel-blue-100 text-blue-700',
+	보우마스터: 'border-transparent bg-green-100 text-green-700',
+	신궁: 'border-transparent bg-green-200 text-green-800',
+	나이트로드: 'border-transparent bg-blue-100 text-blue-800',
+	섀도어: 'border-transparent bg-purple-100 text-purple-700',
+	바이퍼: 'border-transparent bg-pastel-red-200 text-red-800',
 	캡틴: 'border-transparent bg-pastel-navy-100 text-pastel-navy-800',
-	소울마스터: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
-	플레임위자드: 'border-transparent bg-pastel-red-100 text-pastel-red-700',
-	윈드브레이커: 'border-transparent bg-pastel-green-100 text-pastel-green-700',
-	나이트워커: 'border-transparent bg-pastel-purple-100 text-pastel-purple-700'
+	소울마스터: 'border-transparent bg-yellow-200 text-yellow-800',
+	플레임위자드: 'border-transparent bg-red-100 text-red-700',
+	윈드브레이커: 'border-transparent bg-pastel-green-100 text-green-700',
+	나이트워커: 'border-transparent bg-pastel-purple-100 text-purple-700'
 } as const satisfies Record<KnownJob, string>
 
 const FALLBACK_JOB_BADGE_CLASS = 'border-transparent bg-grayscale-100 text-grayscale-600'
