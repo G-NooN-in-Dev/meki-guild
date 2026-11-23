@@ -8,7 +8,10 @@ const FOOTER_LINKS = [
 		label: '메키 갤러리',
 		href: 'https://gall.dcinside.com/mgallery/board/lists/?id=maplerpg'
 	},
-	{ label: 'MGF.GG', href: 'https://mgf.gg' }
+	{ label: '메키공카', href: 'https://cafe.naver.com/mekidile' },
+	{ label: '아이템인덱스', href: 'https://mapleidleindex.com/' },
+	{ label: 'MGF.GG', href: 'https://mgf.gg' },
+	{ label: '메키픽', href: 'https://mekipick.com/' }
 ] as const
 
 function Footer() {
