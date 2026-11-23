@@ -6,6 +6,24 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.8.0',
+		date: '2026-11-23',
+		sections: [
+			{
+				title: '길드 정보',
+				items: [{ text: '길드 대시보드 페이지 디자인 리뉴얼' }]
+			},
+			{
+				title: '정보/팁',
+				items: [
+					{ text: '길드 컨텐츠 순위 정보 추가 (토벌, 대항, 현상수배)' },
+					{ text: '월드보스 순위 정보 추가' },
+					{ text: '데스크탑 환경 UI 개선' }
+				]
+			}
+		]
+	},
+	{
 		version: '1.7.0',
 		date: '2026-11-11',
 		sections: [
