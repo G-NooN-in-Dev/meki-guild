@@ -37,14 +37,16 @@
 동작 요약:
 
 1. `apps/web` env를 로드합니다.
-2. (전체) Sheets 탭을 CSV로 fetch → `collectedAt` 기준 최신·직전 스냅샷으로 JSON 재작성  
-   (부분) 해당 탭(+ 필요 시 `guild`)만 fetch → 기존 멤버 목록을 유지한 채 필드·날짜만 갱신
+2. (전체) Sheets 탭을 CSV로 fetch → `collectedAt` 기준 **최근 3주**(older · previous · current) 스냅샷으로 JSON 재작성  
+   (부분) 해당 탭(+ 필요 시 `guild`)만 fetch → 기존 멤버 목록을 유지한 채 **3주 필드·날짜**만 갱신
 3. 갱신 파일:
-   - `apps/web/data/current-week.json`
-   - `apps/web/data/previous-week.json`
-   - `apps/web/data/guild-content-dates.json`
+   - `apps/web/data/current-week.json` (최신)
+   - `apps/web/data/previous-week.json` (직전)
+   - `apps/web/data/older-week.json` (2주 전)
+   - `apps/web/data/guild-content-dates.json` (필드별 `older` / `previous` / `current`)
 
-부분 sync는 기존 JSON이 있어야 합니다. 멤버 추가/삭제(로스터 변경)는 `pnpm guild:sync` 또는 `all`을 사용합니다.
+부분 sync는 세 주차 JSON과 content-dates가 있어야 합니다. 멤버 추가/삭제(로스터 변경)는 `pnpm guild:sync` 또는 `all`을 사용합니다.  
+`/guild`·`/guild/detail` 차트는 older까지 3주를 사용합니다. 상세 어워드·등록 프리필은 current·previous 비교만 사용합니다.
 
 배포 전에 sync한 JSON을 커밋하거나, CI/수동으로 반영한 뒤 빌드합니다.
 
@@ -64,12 +66,15 @@
 | `guild-boss` | 길드보스                                      |
 | `bounty`     | 현상수배 (+ 서버/전체 서버 순위)              |
 
-동작 요약:
+동작 요약 (3단 이월):
 
-1. 지정 필드를 `current` → `previous`로 복사
-2. `current`의 해당 필드 초기화
-3. 토벌전·대항전·수련장·현상수배는 길드 메타(순위·포인트)도 함께 이월·초기화
-4. KST 오늘 날짜로 `guild-content-dates.json` 갱신
+1. 지정 필드를 `previous` → `older`로 복사
+2. 지정 필드를 `current` → `previous`로 복사
+3. `current`의 해당 필드 초기화
+4. 토벌전·대항전·수련장·현상수배는 길드 메타(순위·포인트)도 함께 3단 이월·초기화
+5. `guild-content-dates.json`: `older ← previous`, `previous ← current`, `current ←` KST 오늘
+
+`older-week.json`이 없으면 previous 로스터를 복제해 만든 뒤 이월합니다.
 
 새 주 시작 시 콘텐츠별로 rotate한 뒤, 수집·입력 → `guild:sync` 순서를 권장합니다.
 

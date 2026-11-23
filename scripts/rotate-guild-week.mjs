@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -6,6 +6,7 @@ const scriptDirectory = dirname(fileURLToPath(import.meta.url))
 const dataDirectory = join(scriptDirectory, '../apps/web/data')
 const currentWeekPath = join(dataDirectory, 'current-week.json')
 const previousWeekPath = join(dataDirectory, 'previous-week.json')
+const olderWeekPath = join(dataDirectory, 'older-week.json')
 const contentDatesPath = join(dataDirectory, 'guild-content-dates.json')
 
 /** CLI 인자로 받는 이월 대상 */
@@ -73,14 +74,17 @@ const CLEAR_LABELS = {
 	bounty: '현상수배'
 }
 
+/** 필드 라벨 포맷 */
 function formatFieldLabels(fields, labels) {
 	return fields.map((field) => labels[field]).join(', ')
 }
 
+/** JSON 파일 읽기 */
 function readJson(path) {
 	return JSON.parse(readFileSync(path, 'utf8'))
 }
 
+/** JSON 파일 쓰기 */
 function writeJson(path, data) {
 	writeFileSync(path, `${JSON.stringify(data, null, '\t')}\n`, 'utf8')
 }
@@ -95,47 +99,48 @@ function getToday() {
 	}).format(new Date())
 }
 
+/** 이름별 멤버 찾기 */
 function findMemberByName(members, name) {
 	return members.find((member) => member.name === name)
 }
 
-/** current → previous 로 복사할 필드만 반영합니다. 멤버 구성은 동일하다고 가정합니다. */
-function copyFieldsToPrevious(currentMember, previousMember, fields) {
+/** 소스 멤버의 지정 필드를 대상 멤버로 복사합니다. */
+function copyFieldsBetweenMembers(sourceMember, targetMember, fields) {
 	for (const field of fields) {
 		switch (field) {
 			case 'combatPower':
-				previousMember.level = currentMember.level
-				previousMember.job = currentMember.job
-				previousMember.combatPower = currentMember.combatPower
+				targetMember.level = sourceMember.level
+				targetMember.job = sourceMember.job
+				targetMember.combatPower = sourceMember.combatPower
 				break
 			case 'expedition':
-				previousMember.expedition = {
-					grade: currentMember.expedition.grade,
+				targetMember.expedition = {
+					grade: sourceMember.expedition.grade,
 					placement:
-						typeof currentMember.expedition.placement === 'number' && currentMember.expedition.placement > 0
-							? currentMember.expedition.placement
+						typeof sourceMember.expedition.placement === 'number' && sourceMember.expedition.placement > 0
+							? sourceMember.expedition.placement
 							: null,
-					score: currentMember.expedition.score
+					score: sourceMember.expedition.score
 				}
 				break
 			case 'rivalry':
-				previousMember.rivalry = currentMember.rivalry
+				targetMember.rivalry = sourceMember.rivalry
 				break
 			case 'training':
-				previousMember.training = currentMember.training
+				targetMember.training = sourceMember.training
 				break
 			case 'guildBoss':
-				if (currentMember.guildBoss !== undefined) {
-					previousMember.guildBoss = currentMember.guildBoss
+				if (sourceMember.guildBoss !== undefined) {
+					targetMember.guildBoss = sourceMember.guildBoss
 				} else {
-					delete previousMember.guildBoss
+					delete targetMember.guildBoss
 				}
 				break
 			case 'bounty':
-				if (currentMember.bounty !== undefined && currentMember.bounty !== null) {
-					previousMember.bounty = currentMember.bounty
+				if (sourceMember.bounty !== undefined && sourceMember.bounty !== null) {
+					targetMember.bounty = sourceMember.bounty
 				} else {
-					delete previousMember.bounty
+					delete targetMember.bounty
 				}
 				break
 			default:
@@ -177,10 +182,18 @@ function clearFieldsInCurrent(member, fields) {
 	return nextMember
 }
 
-/** 길드 단위 메타(순위·포인트)를 current → previous 로 밀고, current 는 재입력 대기로 비웁니다. */
-function rotateGuildMetaFields(currentWeek, previousWeek, fieldNames) {
+/**
+ * 길드 메타를 current → previous → older 로 밀고, current 는 재입력 대기로 비웁니다.
+ */
+function rotateGuildMetaFields(currentWeek, previousWeek, olderWeek, fieldNames) {
 	for (const fieldName of fieldNames) {
+		const previousValue = previousWeek.guild?.[fieldName] ?? null
 		const currentValue = currentWeek.guild?.[fieldName] ?? null
+
+		olderWeek.guild = {
+			...(olderWeek.guild ?? {}),
+			[fieldName]: previousValue
+		}
 		previousWeek.guild = {
 			...(previousWeek.guild ?? {}),
 			[fieldName]: currentValue
@@ -192,6 +205,16 @@ function rotateGuildMetaFields(currentWeek, previousWeek, fieldNames) {
 	}
 }
 
+/** older-week 가 없으면 previous 로스터를 복제해 생성합니다 (최초 1회). */
+function ensureOlderWeek(previousWeek) {
+	if (existsSync(olderWeekPath)) {
+		return readJson(olderWeekPath)
+	}
+
+	return structuredClone(previousWeek)
+}
+
+/** 길드 주차 이월 */
 function rotateGuildWeek(mode) {
 	const fields = ROTATION_MODES[mode]
 
@@ -207,8 +230,19 @@ function rotateGuildWeek(mode) {
 
 	const currentWeek = readJson(currentWeekPath)
 	const previousWeek = readJson(previousWeekPath)
+	const olderWeek = ensureOlderWeek(previousWeek)
 	const contentDates = readJson(contentDatesPath)
 	const today = getToday()
+
+	for (const previousMember of previousWeek.members) {
+		const olderMember = findMemberByName(olderWeek.members, previousMember.name)
+
+		if (!olderMember) {
+			throw new Error(`older-week.json 에 "${previousMember.name}" 멤버가 없습니다.`)
+		}
+
+		copyFieldsBetweenMembers(previousMember, olderMember, fields)
+	}
 
 	for (const currentMember of currentWeek.members) {
 		const previousMember = findMemberByName(previousWeek.members, currentMember.name)
@@ -217,7 +251,7 @@ function rotateGuildWeek(mode) {
 			throw new Error(`previous-week.json 에 "${currentMember.name}" 멤버가 없습니다.`)
 		}
 
-		copyFieldsToPrevious(currentMember, previousMember, fields)
+		copyFieldsBetweenMembers(currentMember, previousMember, fields)
 	}
 
 	currentWeek.members = currentWeek.members.map((member) => clearFieldsInCurrent(member, fields))
@@ -226,21 +260,23 @@ function rotateGuildWeek(mode) {
 	for (const field of fields) {
 		const metaFields = GUILD_META_BY_FIELD[field]
 		if (!metaFields) continue
-		rotateGuildMetaFields(currentWeek, previousWeek, metaFields)
+		rotateGuildMetaFields(currentWeek, previousWeek, olderWeek, metaFields)
 		rotatedGuildMetaFields.push(field)
 	}
 
-	// 분야별 수집일: 기존 current → previous 로 밀고, current 는 오늘(새 수집 시작일)
+	// 분야별 수집일: older ← previous ← current, current 는 오늘(새 수집 시작일)
 	for (const field of fields) {
 		const dateKey = CONTENT_DATE_KEYS[field]
-		const existing = contentDates[dateKey] ?? { current: null, previous: null }
+		const existing = contentDates[dateKey] ?? { older: null, previous: null, current: null }
 
 		contentDates[dateKey] = {
+			older: existing.previous ?? null,
 			previous: existing.current ?? null,
 			current: today
 		}
 	}
 
+	writeJson(olderWeekPath, olderWeek)
 	writeJson(previousWeekPath, previousWeek)
 	writeJson(currentWeekPath, currentWeek)
 	writeJson(contentDatesPath, contentDates)
@@ -249,7 +285,8 @@ function rotateGuildWeek(mode) {
 	const cleared = formatFieldLabels(fields, CLEAR_LABELS)
 
 	console.log(`✅ ${MODE_LABELS[mode]} 이월 완료`)
-	console.log(`   previous-week.json ← ${carried} 반영`)
+	console.log(`   older-week.json ← previous 의 ${carried}`)
+	console.log(`   previous-week.json ← current 의 ${carried}`)
 	console.log(`   current-week.json ${cleared} 초기화`)
 	for (const field of rotatedGuildMetaFields) {
 		console.log(`   (${GUILD_META_LOG_LABELS[field]}도 함께 이월)`)
@@ -257,7 +294,7 @@ function rotateGuildWeek(mode) {
 	if (fields.includes('combatPower')) {
 		console.log(`   (레벨·직업은 current 에 유지)`)
 	}
-	console.log(`   guild-content-dates.json 최근→직전 이월, 최근=${today}`)
+	console.log(`   guild-content-dates.json older←previous←current, 최근=${today}`)
 }
 
 const mode = process.argv[2]

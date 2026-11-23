@@ -1,70 +1,52 @@
-import GuildContentSeasonsStatus from '@/features/guild/components/guild-content-seasons-status'
-import GuildMemberTable from '@/features/guild/components/guild-member-table'
-import GuildSheetFormDialog from '@/features/guild/components/guild-sheet-form-dialog'
-import GuildSummaryCards from '@/features/guild/components/guild-summary-cards'
-import { calculateGuildSummaryMetrics } from '@/features/guild/lib/guild-summary'
-import type { GuildDashboardData } from '@/features/guild/types/guild-snapshot.type'
+import { buttonVariants } from '@shared/ui/button'
+import { cn } from '@shared/ui/utils'
+import { PlusIcon } from 'lucide-react'
+import Link from 'next/link'
+
+import GuildDashboardChartCard from '@/features/guild/components/guild-dashboard-chart-card'
+import { buildGuildDetailHref, GUILD_REGISTER_PATH } from '@/features/guild/lib/guild-detail-nav'
+import type { GuildDashboardData } from '@/features/guild/types/guild-dashboard.type'
 
 type GuildDashboardSectionProps = {
 	data: GuildDashboardData
 }
 
+/** 길드 대시보드. 최근 3주 차트 카드 + 인원 변동. */
 function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
-	const metrics = calculateGuildSummaryMetrics(data.comparisons, {
-		expeditionRank: {
-			current: data.currentWeek.guild?.expeditionRank,
-			previous: data.previousWeek.guild?.expeditionRank
-		},
-		rivalryRank: {
-			current: data.currentWeek.guild?.rivalryRank,
-			previous: data.previousWeek.guild?.rivalryRank
-		},
-		rivalryPoints: {
-			current: data.currentWeek.guild?.rivalryPoints,
-			previous: data.previousWeek.guild?.rivalryPoints
-		},
-		trainingRank: {
-			current: data.currentWeek.guild?.trainingRank,
-			previous: data.previousWeek.guild?.trainingRank
-		},
-		bountyRank: {
-			current: data.currentWeek.guild?.bountyRank,
-			previous: data.previousWeek.guild?.bountyRank
-		},
-		allBountyRank: {
-			current: data.currentWeek.guild?.allBountyRank,
-			previous: data.previousWeek.guild?.allBountyRank
-		}
-	})
-
-	const sheetFormMembers = data.comparisons
-		.filter((comparison) => comparison.status !== 'left')
-		.map((comparison) => ({
-			name: comparison.name,
-			job: comparison.job,
-			combatPowerLabel: comparison.combatPower.currentLabel
-		}))
-
 	return (
 		<section className="flex w-full min-w-0 flex-col gap-6">
 			<header className="flex flex-col gap-2">
-				<p className="text-grayscale-500 text-sm">길드 종합 현황</p>
 				<div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-					<h1 className="text-grayscale-900 text-3xl font-semibold">메이플키우기 게임즈 길드</h1>
-					{/* 다음 회차 프리필 = 동기화된 최신 주(current). previousWeek는 대시보드 비교용 */}
-					<GuildSheetFormDialog members={sheetFormMembers} previousMembers={data.currentWeek.members} />
+					<h1 className="text-grayscale-900 text-3xl font-semibold">길드 종합 현황</h1>
+					<div className="flex shrink-0 flex-wrap items-center gap-2">
+						<Link
+							href={GUILD_REGISTER_PATH}
+							className={cn(
+								buttonVariants({ variant: 'default', size: 'default' }),
+								'bg-pastel-navy hover:bg-pastel-navy-700 gap-1.5 rounded-lg'
+							)}
+						>
+							<PlusIcon className="size-4" />
+							데이터 등록
+						</Link>
+						<Link
+							href={buildGuildDetailHref()}
+							className={cn(
+								buttonVariants({ variant: 'outline', size: 'default' }),
+								'border-pastel-navy-300 text-pastel-navy-800 hover:bg-pastel-navy-50 rounded-lg'
+							)}
+						>
+							상세 보기
+						</Link>
+					</div>
 				</div>
 			</header>
 
-			<GuildSummaryCards metrics={metrics} />
-
-			<GuildContentSeasonsStatus />
-
-			<GuildMemberTable
-				comparisons={data.comparisons}
-				rankings={data.rankings}
-				previousRankings={data.previousRankings}
-			/>
+			<div className="grid w-full min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
+				{data.cards.map((card) => (
+					<GuildDashboardChartCard key={card.id} card={card} />
+				))}
+			</div>
 		</section>
 	)
 }

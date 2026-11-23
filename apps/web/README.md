@@ -52,10 +52,13 @@ features/
 
 ## 데이터
 
-| 파일                            | 역할                 |
-| ------------------------------- | -------------------- |
-| `data/current-week.json`        | 금주 스냅샷          |
-| `data/previous-week.json`       | 직전 스냅샷          |
-| `data/guild-content-dates.json` | 콘텐츠별 수집일 메타 |
+| 파일                            | 역할                     |
+| ------------------------------- | ------------------------ |
+| `data/current-week.json`        | 최신 주 스냅샷           |
+| `data/previous-week.json`       | 직전 주 스냅샷           |
+| `data/older-week.json`          | 2주 전 스냅샷 (3주 차트) |
+| `data/guild-content-dates.json` | 콘텐츠별 3주 수집일 메타 |
 
-`libs/guild-snapshot.loader.ts`가 길드 대시보드 진입점입니다.
+`libs/guild-dashboard.loader.ts`가 `/guild` 대시보드 진입점입니다.  
+`libs/guild-detail.loader.ts`가 `/guild/detail` 로스터·직업 탭,  
+`libs/guild-snapshot.loader.ts`가 상세 어워드·`/guild/register` 프리필에 쓰입니다.

@@ -1,25 +1,31 @@
 {
 	"combatPower": {
+		"older": "2026-11-03",
 		"previous": "2026-11-10",
 		"current": "2026-11-17"
 	},
 	"expedition": {
+		"older": "2026-11-01",
 		"previous": "2026-11-08",
 		"current": "2026-11-15"
 	},
 	"rivalry": {
+		"older": "2026-11-02",
 		"previous": "2026-11-09",
 		"current": "2026-11-16"
 	},
 	"training": {
+		"older": "2026-09-09",
 		"previous": "2026-09-16",
 		"current": "2026-09-23"
 	},
 	"guildBoss": {
+		"older": "2026-09-02",
 		"previous": "2026-11-11",
 		"current": "2026-11-18"
 	},
 	"bounty": {
+		"older": null,
 		"previous": "2026-11-07",
 		"current": "2026-11-14"
 	}

@@ -148,7 +148,7 @@ type GuildMemberComparison = {
 	huntingScore: NumericDelta
 }
 
-type GuildDashboardData = {
+type GuildSnapshotData = {
 	currentWeek: GuildWeekSnapshot
 	previousWeek: GuildWeekSnapshot
 	comparisons: GuildMemberComparison[]
@@ -158,9 +158,9 @@ type GuildDashboardData = {
 }
 
 export type {
-	GuildDashboardData,
 	GuildMemberComparison,
 	GuildMemberInput,
+	GuildSnapshotData,
 	GuildWeekSnapshot,
 	LevelDelta,
 	MemberComparisonStatus,

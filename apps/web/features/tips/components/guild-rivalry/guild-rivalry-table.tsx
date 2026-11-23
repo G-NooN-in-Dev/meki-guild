@@ -21,32 +21,6 @@ const HEAD_HINT_CLASS_NAME = 'text-[10px] leading-none font-normal opacity-80 sm
 /** 한 칸 안에서 값을 나누는 기호 */
 const SEPARATOR_CLASS_NAME = 'text-grayscale-400 text-[10px] leading-none font-normal'
 
-type RivalryHitCellProps = {
-	/** 잡몹 등장 직후 필요 명중 */
-	spawnRequiredHit: number
-	/** 잡몹 감소 하한이자 보스 필요 명중 */
-	requiredHit: number
-	className?: string
-}
-
-/**
- * 잡몹은 등장 직후 → 하한, 보스는 고정값을 한 칸에 적습니다.
- * 예: 105 → 85 / 85
- */
-function RivalryHitCell({ spawnRequiredHit, requiredHit, className }: RivalryHitCellProps) {
-	return (
-		<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'px-1', className)}>
-			<span className="flex flex-wrap items-center justify-center gap-x-1 gap-y-0.5">
-				<span>{formatLocaleNumber(spawnRequiredHit)}</span>
-				<span className={SEPARATOR_CLASS_NAME}>→</span>
-				<span>{formatLocaleNumber(requiredHit)}</span>
-				<span className={SEPARATOR_CLASS_NAME}>/</span>
-				<span>{formatLocaleNumber(requiredHit)}</span>
-			</span>
-		</TableCell>
-	)
-}
-
 type RivalryDefenseCellProps = {
 	className?: string
 }
@@ -90,46 +64,42 @@ function RivalryStageCell({ stage }: RivalryStageCellProps) {
 
 /**
  * 길드 대항전 단계별 방어력·명중컷·보스 데미지 증가 스택 표.
- * 방어력은 전 단계 고정이라 같은 값을 반복하고, 필요 명중은 잡몹 감소 구간을 화살표로 보여 줍니다.
+ * 방어력은 전 단계 고정이라 같은 값을 반복하고, 필요 명중은 기준값(보스·잡몹 하한)만 표기합니다.
+ * 잡몹 등장 직후 명중은 요약 카드의 +보너스 규칙으로 안내합니다.
  */
 function GuildRivalryTable() {
 	return (
 		<HitCutTableShell>
 			<TableHeader sticky>
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[16%] md:w-[12%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[14%] md:w-[12%]')}>
 						단계
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-orange-100 text-pastel-orange-900 w-[22%] md:w-[20%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-orange-100 text-pastel-orange-900 w-[32%] md:w-[32%]')}>
 						<span className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-1">
 							<span>방어력</span>
 							<span className={HEAD_HINT_CLASS_NAME}>(잡몹 / 보스)</span>
 						</span>
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-green-100 text-pastel-green-900 w-[22%] md:w-[24%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-green-100 text-pastel-green-900 w-[28%] md:w-[30%]')}>
 						보스 데미지 증가 스택
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900 w-[40%] md:w-[44%]')}>
-						<span className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-1">
-							<span>필요 명중</span>
-							<span className={HEAD_HINT_CLASS_NAME}>(잡몹 / 보스)</span>
-						</span>
+					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900 w-[26%] md:w-[26%]')}>
+						필요 명중
 					</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{GUILD_RIVALRY_ENTRIES.map(({ stage, buffStack, requiredHit, spawnRequiredHit }) => (
+				{GUILD_RIVALRY_ENTRIES.map(({ stage, buffStack, requiredHit }) => (
 					<TableRow key={stage} className="border-grayscale-200 hover:bg-transparent">
 						<RivalryStageCell stage={stage} />
 						<RivalryDefenseCell className="bg-pastel-orange-50 text-grayscale-900" />
 						<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-pastel-green-50 text-grayscale-900')}>
 							{formatLocaleNumber(buffStack)}
 						</TableCell>
-						<RivalryHitCell
-							spawnRequiredHit={spawnRequiredHit}
-							requiredHit={requiredHit}
-							className="bg-pastel-blue-50 text-grayscale-900"
-						/>
+						<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-pastel-blue-50 text-grayscale-900')}>
+							{formatLocaleNumber(requiredHit)}
+						</TableCell>
 					</TableRow>
 				))}
 			</TableBody>

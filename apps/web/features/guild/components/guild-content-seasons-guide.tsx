@@ -22,7 +22,7 @@ import {
 	SEASON_STATUS_BADGE_CLASS,
 	SEASON_STATUS_CARD_CLASS
 } from '@/libs/guild-content-seasons.constants'
-import dayjs, { type Dayjs } from '@/utils/dayjs'
+import dayjs, { DATE_WITH_WEEKDAY_FORMAT, type Dayjs, formatDate } from '@/utils/dayjs'
 
 function SeasonScheduleTable({ seasons, now }: { seasons: readonly GuildContentSeason[]; now: Dayjs }) {
 	if (seasons.length === 0) {
@@ -40,12 +40,17 @@ function SeasonScheduleTable({ seasons, now }: { seasons: readonly GuildContentS
 		: seasons.find((season) => getSeasonStatus(season, now) === 'upcoming')?.label
 
 	return (
-		<Table containerClassName="overflow-visible">
+		// table-fixed: 모바일에서 긴 기간 문자열이 상태 열을 밀어내지 않도록 폭을 고정합니다.
+		<Table className="table-fixed" containerClassName="overflow-visible">
 			<TableHeader sticky className="[&>tr>th]:bg-grayscale-100">
 				<TableRow className="border-grayscale-200 bg-grayscale-100 hover:bg-grayscale-100">
-					<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">시즌</TableHead>
-					<TableHead className="text-grayscale-600 h-11 px-3 text-xs font-semibold tracking-wide">기간</TableHead>
-					<TableHead className="text-grayscale-600 h-11 px-3 text-center text-xs font-semibold tracking-wide">
+					<TableHead className="text-grayscale-600 h-11 w-16 px-2 text-xs font-semibold tracking-wide sm:w-20 sm:px-3">
+						시즌
+					</TableHead>
+					<TableHead className="text-grayscale-600 h-11 px-2 text-xs font-semibold tracking-wide sm:px-3">
+						기간
+					</TableHead>
+					<TableHead className="text-grayscale-600 h-11 w-14 px-2 text-center text-xs font-semibold tracking-wide sm:w-16 sm:px-3">
 						상태
 					</TableHead>
 				</TableRow>
@@ -67,7 +72,7 @@ function SeasonScheduleTable({ seasons, now }: { seasons: readonly GuildContentS
 						>
 							<TableCell
 								className={cn(
-									'px-3 py-2.5 text-sm font-semibold',
+									'px-2 py-2.5 text-sm font-semibold sm:px-3',
 									isDimmed ? 'text-grayscale-400' : 'text-grayscale-900'
 								)}
 							>
@@ -75,13 +80,18 @@ function SeasonScheduleTable({ seasons, now }: { seasons: readonly GuildContentS
 							</TableCell>
 							<TableCell
 								className={cn(
-									'px-3 py-2.5 text-sm tabular-nums',
+									'px-2 py-2.5 text-xs tabular-nums sm:px-3 sm:text-sm',
 									isDimmed ? 'text-grayscale-400' : 'text-grayscale-700'
 								)}
 							>
-								{formatSeasonRange(startsAt, endsAt)}
+								{/* 모바일: 시작·종료를 두 줄로 나눠 가로 overflow·과도한 줄바꿈을 피합니다. */}
+								<span className="flex flex-col sm:hidden">
+									<span>{formatDate(startsAt, DATE_WITH_WEEKDAY_FORMAT)}</span>
+									<span>~ {formatDate(endsAt, DATE_WITH_WEEKDAY_FORMAT)}</span>
+								</span>
+								<span className="hidden sm:inline">{formatSeasonRange(startsAt, endsAt)}</span>
 							</TableCell>
-							<TableCell className="px-3 py-2.5 text-center">
+							<TableCell className="px-2 py-2.5 text-center sm:px-3">
 								<Badge variant="outline" className={cn(SEASON_STATUS_BADGE_CLASS[status])}>
 									{GUILD_CONTENT_SEASON_STATUS_LABEL[status]}
 								</Badge>
@@ -101,8 +111,8 @@ function SeasonTabPanel({ content, now }: { content: GuildSeasonalContentKey; no
 	const { contentLabel, dateLabel, seasonLabel } = summary
 
 	return (
-		<div className="flex flex-col gap-3">
-			<p className="text-grayscale-600 text-sm">
+		<div className="flex min-h-0 flex-1 flex-col gap-3">
+			<p className="text-grayscale-600 shrink-0 text-sm">
 				<span className="text-grayscale-900 font-semibold">{contentLabel}</span>
 				{' · '}
 				<span className="tabular-nums">{dateLabel}</span>
@@ -113,38 +123,59 @@ function SeasonTabPanel({ content, now }: { content: GuildSeasonalContentKey; no
 					</>
 				) : null}
 			</p>
-			<div className="border-grayscale-200 bg-card shadow-soft max-h-[50dvh] overflow-y-auto rounded-xl border sm:max-h-[55dvh]">
+			{/* 고정 dvh 대신 Dialog 남은 높이를 채워, 모바일에서 헤더+탭과 합쳐 90dvh를 넘지 않게 합니다. */}
+			<div className="border-grayscale-200 bg-card shadow-soft min-h-0 flex-1 overflow-auto rounded-xl border">
 				<SeasonScheduleTable seasons={seasons} now={now} />
 			</div>
 		</div>
 	)
 }
 
-function GuildContentSeasonsGuide() {
+type GuildContentSeasonsGuideProps = {
+	/** 제어 모드: 외부에서 Dialog 열림 상태를 관리할 때 */
+	open?: boolean
+	onOpenChange?: (open: boolean) => void
+	/** 열릴 때 보여줄 컨텐츠 탭. 없으면 진행 중 시즌(또는 첫 탭) */
+	defaultContent?: GuildSeasonalContentKey
+	/** false면 트리거 버튼을 숨깁니다. (홈 상태 카드 클릭으로 열 때) */
+	showTrigger?: boolean
+}
+
+function GuildContentSeasonsGuide({
+	open,
+	onOpenChange,
+	defaultContent,
+	showTrigger = true
+}: GuildContentSeasonsGuideProps = {}) {
 	const now = dayjs()
-	const defaultTab =
+	const fallbackTab =
 		getGuildContentSeasonSummaries(now).find((summary) => summary.status === 'active')?.content ??
 		GUILD_SEASONAL_CONTENT_ORDER[0]
+	const initialTab = defaultContent ?? fallbackTab
 
 	return (
-		<Dialog>
-			<DialogTrigger
-				render={
-					<Button variant="outline" size="sm" className="text-grayscale-600 shrink-0 gap-1.5" aria-label="시즌 일정">
-						<CalendarRangeIcon className="size-4" />
-						<span className="lg:hidden">시즌</span>
-						<span className="hidden lg:inline">시즌 일정</span>
-					</Button>
-				}
-			/>
-			<DialogContent className="max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] gap-4 overflow-hidden p-4 sm:max-w-lg sm:gap-6 sm:p-6">
-				<DialogHeader>
+		<Dialog open={open} onOpenChange={onOpenChange}>
+			{showTrigger ? (
+				<DialogTrigger
+					render={
+						<Button variant="outline" size="sm" className="text-grayscale-600 shrink-0 gap-1.5" aria-label="시즌 일정">
+							<CalendarRangeIcon className="size-4" />
+							<span className="lg:hidden">시즌</span>
+							<span className="hidden lg:inline">시즌 일정</span>
+						</Button>
+					}
+				/>
+			) : null}
+			{/* grid→flex: 헤더·탭은 고정, 테이블만 남은 높이에서 스크롤 */}
+			<DialogContent className="flex max-h-[90dvh] max-w-[calc(100%-(--spacing(4)))] flex-col gap-4 overflow-hidden p-4 sm:max-w-lg sm:gap-6 sm:p-6">
+				<DialogHeader className="shrink-0 pr-8">
 					<DialogTitle>길드 컨텐츠 시즌 일정</DialogTitle>
 					<DialogDescription>대항전·수련장·길드보스 시즌 기간입니다. 시간은 한국 기준입니다.</DialogDescription>
 				</DialogHeader>
 
-				<Tabs defaultValue={defaultTab} className="min-h-0 gap-3">
-					<TabsList className="grid w-full grid-cols-3">
+				{/* defaultContent가 바뀔 때마다 해당 탭으로 다시 열리도록 key로 리마운트 */}
+				<Tabs key={initialTab} defaultValue={initialTab} className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
+					<TabsList className="grid w-full shrink-0 grid-cols-3">
 						{GUILD_SEASONAL_CONTENT_ORDER.map((content) => (
 							<TabsTrigger key={content} value={content}>
 								{GUILD_SEASONAL_CONTENT_META[content].label}
@@ -153,7 +184,7 @@ function GuildContentSeasonsGuide() {
 					</TabsList>
 
 					{GUILD_SEASONAL_CONTENT_ORDER.map((content) => (
-						<TabsContent key={content} value={content} className="mt-0">
+						<TabsContent key={content} value={content} className="mt-0 flex min-h-0 flex-1 flex-col overflow-hidden">
 							<SeasonTabPanel content={content} now={now} />
 						</TabsContent>
 					))}
@@ -164,3 +195,4 @@ function GuildContentSeasonsGuide() {
 }
 
 export default GuildContentSeasonsGuide
+export type { GuildContentSeasonsGuideProps }

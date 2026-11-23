@@ -8,6 +8,7 @@ const webAppDirectory = join(scriptDirectory, '../apps/web')
 const dataDirectory = join(webAppDirectory, 'data')
 const currentWeekPath = join(dataDirectory, 'current-week.json')
 const previousWeekPath = join(dataDirectory, 'previous-week.json')
+const olderWeekPath = join(dataDirectory, 'older-week.json')
 const contentDatesPath = join(dataDirectory, 'guild-content-dates.json')
 
 /** Next 앱과 동일하게 .env.local 이 .env 보다 우선 (이미 있는 키는 덮어쓰지 않음) */
@@ -79,6 +80,7 @@ const REQUIRED_HEADERS = {
 	]
 }
 
+/** 시트 CSV URL 생성 */
 function sheetCsvUrl(sheetId, sheetName) {
 	const params = new URLSearchParams({
 		tqx: 'out:csv',
@@ -88,6 +90,7 @@ function sheetCsvUrl(sheetId, sheetName) {
 	return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?${params}`
 }
 
+/** CSV 텍스트를 행 배열로 변환 */
 function parseCsv(text) {
 	const rows = []
 	let row = []
@@ -145,6 +148,7 @@ function parseCsv(text) {
 	return rows.filter((cells) => cells.some((cell) => cell.trim() !== ''))
 }
 
+/** CSV 텍스트를 객체 배열로 변환 */
 function rowsToObjects(csvText, sheetName) {
 	const table = parseCsv(csvText)
 
@@ -172,10 +176,12 @@ function rowsToObjects(csvText, sheetName) {
 	})
 }
 
+/** 행이 비어 있지 않은지 검증 */
 function isFilledRow(row) {
 	return Object.values(row).some((value) => value !== '')
 }
 
+/** 시트 행 가져오기 */
 async function fetchSheetRows(sheetId, sheetName) {
 	const response = await fetch(sheetCsvUrl(sheetId, sheetName), {
 		headers: { 'User-Agent': 'meki-guild-sync' }
@@ -194,20 +200,53 @@ async function fetchSheetRows(sheetId, sheetName) {
 	return rowsToObjects(csvText, sheetName).filter(isFilledRow)
 }
 
+/** 날짜 배열 생성 */
 function uniqueSortedDates(rows) {
 	return [...new Set(rows.map((row) => row.collectedAt).filter(Boolean))].sort()
 }
 
-/** 컨텐츠 탭에서 최근·직전 수집일. 값이 없으면 null */
-function latestTwoDates(rows) {
+/** 컨텐츠 탭에서 최근 3주 수집일(older → previous → current). 값이 없으면 null */
+function latestThreeDates(rows) {
 	const dates = uniqueSortedDates(rows)
 
 	return {
+		older: dates.at(-3) ?? null,
 		previous: dates.at(-2) ?? null,
 		current: dates.at(-1) ?? null
 	}
 }
 
+/** 주차(current/previous/older)별 멤버·길드 메타 lookup */
+function buildLookupsForDate(rowsByContent, datesByField, slot) {
+	return {
+		combat: mapByName(rowsByContent.combatPower, datesByField.combatPower[slot]),
+		expedition: mapByName(rowsByContent.expedition, datesByField.expedition[slot]),
+		rivalry: mapByName(rowsByContent.rivalry, datesByField.rivalry[slot]),
+		training: mapByName(rowsByContent.training, datesByField.training[slot]),
+		guildBoss: mapByName(rowsByContent.guildBoss, datesByField.guildBoss[slot]),
+		bounty: mapByName(rowsByContent.bounty, datesByField.bounty[slot])
+	}
+}
+
+/** 주차 스냅샷 생성. 멤버·길드 메타 포함 */
+function buildWeekSnapshot(combatPowerRows, rowsByContent, datesByField, guildRows, slot) {
+	const combatDate = datesByField.combatPower[slot]
+	const lookups = buildLookupsForDate(rowsByContent, datesByField, slot)
+
+	return buildSnapshot(
+		rowsOnDate(combatPowerRows, combatDate),
+		lookups,
+		buildGuildMeta(
+			guildRows,
+			datesByField.expedition[slot],
+			datesByField.rivalry[slot],
+			datesByField.training[slot],
+			datesByField.bounty[slot]
+		)
+	)
+}
+
+/** 행 중복 여부 검증 */
 function assertUniqueKeys(rows, sheetName, keyFn) {
 	const seen = new Set()
 
@@ -226,10 +265,12 @@ function assertUniqueKeys(rows, sheetName, keyFn) {
 	}
 }
 
+/** 멤버 탭 행 중복 여부 검증 */
 function assertMemberSheetKeys(rows, sheetName) {
 	assertUniqueKeys(rows, sheetName, (row) => (row.collectedAt && row.name ? `${row.collectedAt} / ${row.name}` : ''))
 }
 
+/** 날짜별 행 필터링 */
 function rowsOnDate(rows, date) {
 	if (!date) {
 		return []
@@ -238,10 +279,12 @@ function rowsOnDate(rows, date) {
 	return rows.filter((row) => row.collectedAt === date)
 }
 
+/** 이름별 행 맵핑 */
 function mapByName(rows, date) {
 	return new Map(rowsOnDate(rows, date).map((row) => [row.name, row]))
 }
 
+/** 문자열을 숫자로 변환. 빈 문자열이나 숫자가 아니면 null */
 function toNumberOrNull(value) {
 	if (value === undefined || value === null || value === '') {
 		return null
@@ -256,6 +299,7 @@ function toNumberOrNull(value) {
 	return number
 }
 
+/** 문자열을 레벨로 변환. 빈 문자열이나 숫자가 아니면 0 */
 function toLevel(value) {
 	if (value === undefined || value === null || value === '') {
 		return 0
@@ -264,6 +308,7 @@ function toLevel(value) {
 	return toNumberOrNull(value) ?? 0
 }
 
+/** 길드 메타 생성 */
 function buildGuildMeta(guildRows, expeditionDate, rivalryDate, trainingDate, bountyDate) {
 	const expeditionRow = guildRows.find((row) => row.content === 'expedition' && row.collectedAt === expeditionDate)
 	const rivalryRow = guildRows.find((row) => row.content === 'rivalry' && row.collectedAt === rivalryDate)
@@ -280,6 +325,7 @@ function buildGuildMeta(guildRows, expeditionDate, rivalryDate, trainingDate, bo
 	}
 }
 
+/** 멤버 생성 */
 function buildMember(name, lookups) {
 	const combat = lookups.combat.get(name)
 	const expedition = lookups.expedition.get(name)
@@ -312,6 +358,7 @@ function buildMember(name, lookups) {
 	return member
 }
 
+/** 주차 스냅샷 생성 */
 function buildSnapshot(rosterRows, lookups, guildMeta) {
 	return {
 		guild: guildMeta,
@@ -319,18 +366,22 @@ function buildSnapshot(rosterRows, lookups, guildMeta) {
 	}
 }
 
+/** JSON 파일 읽기 */
 function readJson(path) {
 	return JSON.parse(readFileSync(path, 'utf8'))
 }
 
+/** JSON 파일 쓰기 */
 function writeJson(path, data) {
 	writeFileSync(path, `${JSON.stringify(data, null, '\t')}\n`, 'utf8')
 }
 
+/** 날짜 라벨 포맷 */
 function formatDateLabel(date) {
 	return date ?? '없음'
 }
 
+/** 사용법 출력 후 종료 */
 function printUsageAndExit() {
 	console.error('❌ 사용법: pnpm guild:sync [대상]')
 	console.error('')
@@ -341,7 +392,7 @@ function printUsageAndExit() {
 	process.exit(1)
 }
 
-/** 시트 행 값으로 멤버의 해당 필드만 덮어씁니다. */
+/** 시트 행 값으로 멤버의 해당 필드만 덮어씁니다 */
 function applyFieldFromRow(member, field, row) {
 	switch (field) {
 		case 'combatPower':
@@ -381,12 +432,14 @@ function applyFieldFromRow(member, field, row) {
 	}
 }
 
+/** 멤버 필드 패치 */
 function patchMembersField(members, lookup, field) {
 	for (const member of members) {
 		applyFieldFromRow(member, field, lookup.get(member.name))
 	}
 }
 
+/** 길드 메타 필드 패치 */
 function patchGuildMetaFields(week, guildRows, content, date, fieldNames) {
 	const row = date ? guildRows.find((entry) => entry.content === content && entry.collectedAt === date) : null
 
@@ -397,11 +450,15 @@ function patchGuildMetaFields(week, guildRows, content, date, fieldNames) {
 	}
 }
 
+/** 필드 날짜 로깅 */
 function logFieldDates(field, dates) {
 	const label = FIELD_LABELS[field].padEnd(8)
-	console.log(`   ${label} 직전=${formatDateLabel(dates.previous)}  최신=${formatDateLabel(dates.current)}`)
+	console.log(
+		`   ${label} 2주전=${formatDateLabel(dates.older)}  직전=${formatDateLabel(dates.previous)}  최신=${formatDateLabel(dates.current)}`
+	)
 }
 
+/** 전체 시트 동기화 */
 async function syncAllSheets(sheetId) {
 	const [combatPowerRows, expeditionRows, rivalryRows, trainingRows, guildBossRows, bountyRows, guildRows] =
 		await Promise.all([
@@ -419,61 +476,35 @@ async function syncAllSheets(sheetId) {
 		row.collectedAt && row.content ? `${row.collectedAt} / ${row.content}` : ''
 	)
 
+	const rowsByContent = {
+		combatPower: combatPowerRows,
+		expedition: expeditionRows,
+		rivalry: rivalryRows,
+		training: trainingRows,
+		guildBoss: guildBossRows,
+		bounty: bountyRows
+	}
+
 	const dates = {
-		combatPower: latestTwoDates(combatPowerRows),
-		expedition: latestTwoDates(expeditionRows),
-		rivalry: latestTwoDates(rivalryRows),
-		training: latestTwoDates(trainingRows),
-		guildBoss: latestTwoDates(guildBossRows),
-		bounty: latestTwoDates(bountyRows)
+		combatPower: latestThreeDates(combatPowerRows),
+		expedition: latestThreeDates(expeditionRows),
+		rivalry: latestThreeDates(rivalryRows),
+		training: latestThreeDates(trainingRows),
+		guildBoss: latestThreeDates(guildBossRows),
+		bounty: latestThreeDates(bountyRows)
 	}
 
 	if (!dates.combatPower.current) {
 		throw new Error('combatPower 탭에 collectedAt이 없습니다. 현재 로스터를 만들 수 없습니다.')
 	}
 
-	const currentLookups = {
-		combat: mapByName(combatPowerRows, dates.combatPower.current),
-		expedition: mapByName(expeditionRows, dates.expedition.current),
-		rivalry: mapByName(rivalryRows, dates.rivalry.current),
-		training: mapByName(trainingRows, dates.training.current),
-		guildBoss: mapByName(guildBossRows, dates.guildBoss.current),
-		bounty: mapByName(bountyRows, dates.bounty.current)
-	}
-	const previousLookups = {
-		combat: mapByName(combatPowerRows, dates.combatPower.previous),
-		expedition: mapByName(expeditionRows, dates.expedition.previous),
-		rivalry: mapByName(rivalryRows, dates.rivalry.previous),
-		training: mapByName(trainingRows, dates.training.previous),
-		guildBoss: mapByName(guildBossRows, dates.guildBoss.previous),
-		bounty: mapByName(bountyRows, dates.bounty.previous)
-	}
-
-	const currentWeek = buildSnapshot(
-		rowsOnDate(combatPowerRows, dates.combatPower.current),
-		currentLookups,
-		buildGuildMeta(
-			guildRows,
-			dates.expedition.current,
-			dates.rivalry.current,
-			dates.training.current,
-			dates.bounty.current
-		)
-	)
-	const previousWeek = buildSnapshot(
-		rowsOnDate(combatPowerRows, dates.combatPower.previous),
-		previousLookups,
-		buildGuildMeta(
-			guildRows,
-			dates.expedition.previous,
-			dates.rivalry.previous,
-			dates.training.previous,
-			dates.bounty.previous
-		)
-	)
+	const currentWeek = buildWeekSnapshot(combatPowerRows, rowsByContent, dates, guildRows, 'current')
+	const previousWeek = buildWeekSnapshot(combatPowerRows, rowsByContent, dates, guildRows, 'previous')
+	const olderWeek = buildWeekSnapshot(combatPowerRows, rowsByContent, dates, guildRows, 'older')
 
 	writeJson(currentWeekPath, currentWeek)
 	writeJson(previousWeekPath, previousWeek)
+	writeJson(olderWeekPath, olderWeek)
 	writeJson(contentDatesPath, dates)
 
 	console.log('✅ 시트 → JSON 전체 동기화 완료')
@@ -482,10 +513,12 @@ async function syncAllSheets(sheetId) {
 	}
 	console.log(`   current-week.json 멤버 ${currentWeek.members.length}명`)
 	console.log(`   previous-week.json 멤버 ${previousWeek.members.length}명`)
+	console.log(`   older-week.json 멤버 ${olderWeek.members.length}명`)
 }
 
+/** 부분 시트 동기화 */
 async function syncPartialSheets(sheetId, mode, fields) {
-	for (const path of [currentWeekPath, previousWeekPath, contentDatesPath]) {
+	for (const path of [currentWeekPath, previousWeekPath, olderWeekPath, contentDatesPath]) {
 		if (!existsSync(path)) {
 			throw new Error(
 				'부분 동기화는 기존 JSON이 필요합니다. 먼저 `pnpm guild:sync` 또는 `pnpm guild:sync all`을 실행하세요.'
@@ -510,27 +543,31 @@ async function syncPartialSheets(sheetId, mode, fields) {
 
 	const currentWeek = readJson(currentWeekPath)
 	const previousWeek = readJson(previousWeekPath)
+	const olderWeek = readJson(olderWeekPath)
 	const contentDates = readJson(contentDatesPath)
 	const syncedDates = {}
 
 	for (const field of fields) {
 		const rows = rowsBySheet[field]
-		const dates = latestTwoDates(rows)
+		const dates = latestThreeDates(rows)
 		syncedDates[field] = dates
 		contentDates[field] = dates
 
 		patchMembersField(currentWeek.members, mapByName(rows, dates.current), field)
 		patchMembersField(previousWeek.members, mapByName(rows, dates.previous), field)
+		patchMembersField(olderWeek.members, mapByName(rows, dates.older), field)
 
 		const metaFields = GUILD_META_BY_FIELD[field]
 		if (metaFields) {
 			patchGuildMetaFields(currentWeek, rowsBySheet.guild, field, dates.current, metaFields)
 			patchGuildMetaFields(previousWeek, rowsBySheet.guild, field, dates.previous, metaFields)
+			patchGuildMetaFields(olderWeek, rowsBySheet.guild, field, dates.older, metaFields)
 		}
 	}
 
 	writeJson(currentWeekPath, currentWeek)
 	writeJson(previousWeekPath, previousWeek)
+	writeJson(olderWeekPath, olderWeek)
 	writeJson(contentDatesPath, contentDates)
 
 	console.log(`✅ 시트 → JSON 부분 동기화 완료 (${MODE_LABELS[mode]})`)
@@ -539,8 +576,10 @@ async function syncPartialSheets(sheetId, mode, fields) {
 	}
 	console.log(`   current-week.json 멤버 ${currentWeek.members.length}명 유지`)
 	console.log(`   previous-week.json 멤버 ${previousWeek.members.length}명 유지`)
+	console.log(`   older-week.json 멤버 ${olderWeek.members.length}명 유지`)
 }
 
+/** 길드 시트 동기화 */
 async function syncGuildSheet(modeArg) {
 	const mode = modeArg ?? 'all'
 	const fields = SYNC_MODES[mode]

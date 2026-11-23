@@ -3,6 +3,7 @@
 import { Input } from '@shared/ui/input'
 import { Label } from '@shared/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/select'
+import { cn } from '@shared/ui/utils'
 
 import { GUILD_EXPEDITION_TIERS } from '@/features/guild/lib/guild-expedition-tier.constants'
 import {
@@ -12,6 +13,7 @@ import {
 	type GuildSheetMemberTab,
 	isGuildSheetKoreanNumberField
 } from '@/features/guild/lib/sheet-form.schema'
+import { getContentGradeTextClass } from '@/libs/content-tier-band.constants'
 
 const EXPEDITION_GRADE_OPTIONS = GUILD_EXPEDITION_TIERS.map((tier) => tier.rank)
 
@@ -45,12 +47,15 @@ function GuildSheetTabFieldInputs({ tab, fields, patchField, isLoadingDefaults }
 								}}
 								disabled={isLoadingDefaults}
 							>
-								<SelectTrigger id={fieldId} className="w-full">
+								<SelectTrigger
+									id={fieldId}
+									className={cn('w-full', value ? getContentGradeTextClass(value) : undefined)}
+								>
 									<SelectValue placeholder="등급을 선택하세요" />
 								</SelectTrigger>
 								<SelectContent className="max-h-72">
 									{EXPEDITION_GRADE_OPTIONS.map((grade) => (
-										<SelectItem key={grade} value={grade}>
+										<SelectItem key={grade} value={grade} className={getContentGradeTextClass(grade)}>
 											{grade}
 										</SelectItem>
 									))}

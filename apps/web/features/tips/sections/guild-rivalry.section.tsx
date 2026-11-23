@@ -1,6 +1,7 @@
 import { Badge } from '@shared/ui/badge'
 
 import GuildRivalryBossPatterns from '@/features/tips/components/guild-rivalry/guild-rivalry-boss-patterns'
+import GuildRivalryRankPointsTable from '@/features/tips/components/guild-rivalry/guild-rivalry-rank-points-table'
 import GuildRivalrySummary from '@/features/tips/components/guild-rivalry/guild-rivalry-summary'
 import GuildRivalryTable from '@/features/tips/components/guild-rivalry/guild-rivalry-table'
 import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
@@ -25,13 +26,14 @@ function GuildRivalrySection() {
 					</div>
 					<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 					<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
-						길드 대항전 방어력, 단계별 필요 명중, 보스 데미지 증가 스택과 보스별 공격 패턴을 확인해보세요.
+						길드 대항전 방어력·필요 명중·보스 패턴과 순위별 길드 포인트를 확인해보세요.
 					</p>
 				</header>
 			</div>
 
 			<GuildRivalrySummary />
 			<GuildRivalryBossPatterns />
+			<GuildRivalryRankPointsTable />
 			<GuildRivalryTable />
 		</section>
 	)

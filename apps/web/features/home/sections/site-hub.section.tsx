@@ -3,6 +3,8 @@ import { cn } from '@shared/ui/utils'
 import { BookOpenIcon, ChevronRightIcon, UsersIcon } from 'lucide-react'
 import Link from 'next/link'
 
+import HomeSeasonsSection from '@/features/home/components/home-seasons-section'
+
 const HUB_ENTRIES = [
 	{
 		href: '/guild',
@@ -23,9 +25,12 @@ function SiteHubSection() {
 	return (
 		<section className="flex w-full min-w-0 flex-1 flex-col justify-center gap-8 py-6 md:gap-10 md:py-10">
 			<header className="flex flex-col items-center gap-2 text-center">
-				<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">메이플키우기 1서버 게임즈 길드입니다.</h1>
+				<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">메이플키우기 1서버 게임즈 길드</h1>
 				<p className="text-grayscale-600 max-w-xl text-sm md:text-base">원하시는 공간을 선택해 주세요.</p>
 			</header>
+			<div className="mx-auto w-full max-w-3xl">
+				<HomeSeasonsSection />
+			</div>
 
 			<div className="mx-auto grid w-full max-w-3xl gap-4 md:grid-cols-2 md:gap-6">
 				{HUB_ENTRIES.map((entry) => {

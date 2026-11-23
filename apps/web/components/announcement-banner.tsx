@@ -118,7 +118,8 @@ function AnnouncementBanner() {
 		<div
 			role="region"
 			aria-label="공지"
-			className="border-grayscale-700 z-sticky bg-grayscale-100 text-grayscale-900 fixed inset-x-0 top-14 h-8 overflow-hidden border-b text-sm"
+			// z-40: 본문보다 위, 모바일 Sheet(z-50)·헤더(z-sticky)보다 아래 — 메뉴를 가리지 않음
+			className="border-grayscale-700 bg-grayscale-100 text-grayscale-900 fixed inset-x-0 top-14 z-40 h-8 overflow-hidden border-b text-sm"
 		>
 			<div
 				className={cn(
