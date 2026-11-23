@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import PageShell from '@/components/page-shell'
 import GuildDashboardSection from '@/features/guild/sections/guild-dashboard.section'
-import { loadGuildDashboardData } from '@/libs/guild-snapshot.loader'
+import { loadGuildDashboardData } from '@/libs/guild-dashboard.loader'
 
 export const metadata: Metadata = {
 	title: '길드 정보',

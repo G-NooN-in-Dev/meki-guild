@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import LinkPendingHint from '@/components/link-pending-hint'
+import { GUILD_DETAIL_PATH } from '@/features/guild/lib/guild-detail-nav'
 import { getTipsGroupedByCategory } from '@/features/tips/lib/tips-registry.constants'
 
 type NavChildLink = {
@@ -20,7 +20,8 @@ type NavChildLink = {
 
 /** 모바일 Sheet 하위 메뉴의 카테고리 묶음 (라벨 + 링크 목록) */
 type NavChildGroup = {
-	label: string
+	/** 없으면 카테고리 헤더 없이 링크만 표시합니다 */
+	label?: string
 	items: readonly NavChildLink[]
 }
 
@@ -42,6 +43,19 @@ type NavComingSoonItem = {
 
 type NavItem = NavLinkItem | NavComingSoonItem
 
+/** 길드 정보 — 대시보드·상세·등록 */
+function buildGuildNavChildGroups(): readonly NavChildGroup[] {
+	return [
+		{
+			items: [
+				{ href: '/guild', label: '대시보드' },
+				{ href: GUILD_DETAIL_PATH, label: '상세정보' },
+				{ href: '/guild/register', label: '데이터 등록' }
+			]
+		}
+	]
+}
+
 /** 팁 허브 카테고리 순서·라벨과 동기화된 모바일 하위 메뉴 그룹 */
 function buildTipsNavChildGroups(): readonly NavChildGroup[] {
 	const tipGroups = getTipsGroupedByCategory()
@@ -60,7 +74,12 @@ function buildTipsNavChildGroups(): readonly NavChildGroup[] {
 
 /** 메뉴 추가 시 여기만 확장하면 인라인·모바일 Sheet에 함께 반영됩니다 */
 const NAV_ITEMS: NavItem[] = [
-	{ type: 'link', href: '/guild', label: '길드 정보' },
+	{
+		type: 'link',
+		href: '/guild',
+		label: '길드 정보',
+		children: buildGuildNavChildGroups()
+	},
 	{
 		type: 'link',
 		href: '/tips',
@@ -71,10 +90,6 @@ const NAV_ITEMS: NavItem[] = [
 ]
 
 function isNavActive(pathname: string, href: string) {
-	if (href === '/guild') {
-		return pathname === '/guild'
-	}
-
 	return pathname === href || pathname.startsWith(`${href}/`)
 }
 
@@ -130,7 +145,6 @@ function MobileNavGroup({
 					)}
 				>
 					{item.label}
-					<LinkPendingHint />
 				</Link>
 				<CollapsibleTrigger
 					aria-label={`${item.label} 하위 메뉴 ${open ? '접기' : '펼치기'}`}
@@ -146,11 +160,17 @@ function MobileNavGroup({
 			{/* 중첩 Collapsible 대신 라벨+구분선으로 묶어, 한 번 펼치면 전체를 스캔할 수 있게 합니다 */}
 			<CollapsibleContent className="flex flex-col pb-1 pl-3">
 				{item.children.map((group, groupIndex) => (
-					<div key={group.label} className="flex flex-col gap-0.5">
+					<div key={group.label ?? group.items.map((child) => child.href).join('|')} className="flex flex-col gap-0.5">
 						{groupIndex > 0 ? <Separator className="my-1.5" /> : null}
-						<p className="text-grayscale-400 px-3 pt-1.5 pb-0.5 text-xs font-medium tracking-wide">{group.label}</p>
+						{group.label ? (
+							<p className="text-grayscale-400 px-3 pt-1.5 pb-0.5 text-xs font-medium tracking-wide">{group.label}</p>
+						) : null}
 						{group.items.map((child) => {
-							const childActive = pathname === child.href || pathname.startsWith(`${child.href}/`)
+							// 형제 경로가 서로 중첩될 수 있어(예: /guild vs /guild/detail) 기본은 정확 일치.
+							// 상세만 `/detail/[section]` 세그먼트가 붙으므로 prefix 허용.
+							const childActive =
+								pathname === child.href ||
+								(child.href === GUILD_DETAIL_PATH && pathname.startsWith(`${GUILD_DETAIL_PATH}/`))
 
 							return (
 								<Link
@@ -165,7 +185,6 @@ function MobileNavGroup({
 									)}
 								>
 									{child.label}
-									<LinkPendingHint />
 								</Link>
 							)
 						})}
@@ -237,7 +256,6 @@ function NavItems({ items, orientation, onNavigate }: NavItemsProps) {
 						)}
 					>
 						{item.label}
-						<LinkPendingHint />
 					</Link>
 				)
 			})}
