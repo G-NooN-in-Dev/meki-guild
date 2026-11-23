@@ -19,12 +19,12 @@ const ANNOUNCEMENT_BANNER_ITEMS = [
 	// NOTE - 배너 내용
 	{
 		kind: 'text',
-		label: '사이트 업데이트 주기 (약 2주)'
+		label: '사이트 업데이트 주기 (약 2~3주)'
 	},
 	{
 		kind: 'link',
-		label: '11월 5일 (목) 패치노트',
-		href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3574353&board=6698'
+		label: '11월 26일 (목) 업데이트 미리보기',
+		href: 'https://forum.nexon.com/maplestoryidle-kr/board_view?thread=3583715&board=6633'
 	}
 ] satisfies AnnouncementBannerItem[]
 
