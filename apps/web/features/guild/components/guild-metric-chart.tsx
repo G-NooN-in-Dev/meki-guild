@@ -15,6 +15,18 @@ import {
 import type { GuildMetricSeries, GuildWeekSlot } from '@/features/guild/types/guild-dashboard.type'
 import { getContentGradeTextClass } from '@/libs/content-tier-band.constants'
 
+/** Recharts wrapper·자손 클릭/포커스 시 outline·ring 제거 */
+const RECHARTS_FOCUS_OUTLINE_RESET_CLASS = cn(
+	'[&_.recharts-wrapper]:ring-0 [&_.recharts-wrapper]:outline-hidden',
+	'[&_.recharts-wrapper]:focus:ring-0 [&_.recharts-wrapper]:focus:outline-hidden',
+	'[&_.recharts-wrapper_*]:ring-0 [&_.recharts-wrapper_*]:outline-hidden',
+	'[&_.recharts-wrapper_*]:focus:ring-0 [&_.recharts-wrapper_*]:focus:outline-hidden',
+	'[&_.recharts-surface]:ring-0 [&_.recharts-surface]:outline-hidden',
+	'[&_.recharts-surface]:focus:ring-0 [&_.recharts-surface]:focus:outline-hidden',
+	'[&_svg]:ring-0 [&_svg]:outline-hidden',
+	'[&_svg]:focus:ring-0 [&_svg]:focus:outline-hidden'
+)
+
 type GuildMetricChartProps = {
 	/** 상단 요약에 쓸 전체 지표 */
 	seriesList: GuildMetricSeries[]
@@ -206,7 +218,7 @@ function GuildChartPlot({ plotSeries }: ChartPlotProps): ReactNode {
 	}
 
 	return (
-		<div className="h-52 w-full min-w-0 [&_.recharts-surface]:outline-none [&_.recharts-surface]:focus:outline-none [&_.recharts-wrapper]:outline-none [&_.recharts-wrapper]:focus:outline-none">
+		<div className={cn('h-52 w-full min-w-0', RECHARTS_FOCUS_OUTLINE_RESET_CLASS)}>
 			<ResponsiveContainer width="100%" height="100%">
 				{/* accessibilityLayer : focus 시 ring(border) 출력 여부 */}
 				<LineChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} accessibilityLayer={false}>
