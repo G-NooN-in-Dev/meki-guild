@@ -5,11 +5,8 @@ import { Switch } from '@shared/ui/switch'
 
 import ContentAwards from '@/features/guild/components/content-awards'
 import ContentUpdatedAtGuide from '@/features/guild/components/content-updated-at-guide'
-import GuildBountyStagePointsGuide from '@/features/guild/components/guild-bounty-stage-points-guide'
 import GuildContentSeasonsGuide from '@/features/guild/components/guild-content-seasons-guide'
-import GuildExpeditionTierGuide from '@/features/guild/components/guild-expedition-tier-guide'
 import GuildMemberFilters from '@/features/guild/components/guild-member-filters'
-import GuildRivalryRankPointsGuide from '@/features/guild/components/guild-rivalry-rank-points-guide'
 import JobDistributionGuide from '@/features/guild/components/job-distribution-guide'
 import type { GuildMemberFilterState } from '@/features/guild/lib/filter-guild-members'
 import type { GuildMemberComparison } from '@/features/guild/types/guild-snapshot.type'
@@ -81,9 +78,6 @@ function GuildMemberToolbar({
 				<ContentUpdatedAtGuide />
 				<JobDistributionGuide comparisons={comparisons} />
 				<GuildContentSeasonsGuide />
-				<GuildExpeditionTierGuide />
-				<GuildRivalryRankPointsGuide />
-				<GuildBountyStagePointsGuide />
 			</div>
 		</div>
 	)

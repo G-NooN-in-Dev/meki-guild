@@ -4,6 +4,7 @@ import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import WorldBossSummary from '@/features/tips/components/world-boss/world-boss-summary'
 import WorldBossTable from '@/features/tips/components/world-boss/world-boss-table'
+import WorldBossTierTable from '@/features/tips/components/world-boss/world-boss-tier-table'
 import { getTipBadgeLabelsBySlug, getTipTitleBySlug } from '@/features/tips/lib/tips-registry.constants'
 import { WORLD_BOSS_META } from '@/features/tips/lib/world-boss.constants'
 
@@ -28,7 +29,7 @@ function WorldBossSection() {
 						</div>
 						<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 						<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
-							월드보스 단계별 방어력과 필요 명중을 확인해보세요.
+							월드보스 단계별 방어력·필요 명중과 등급 정보를 확인해보세요.
 						</p>
 					</div>
 					<MonsterLabel src={imageSrc} alt={label} width={imageWidth} height={imageHeight} unoptimized size="header" />
@@ -36,6 +37,7 @@ function WorldBossSection() {
 			</div>
 
 			<WorldBossSummary />
+			<WorldBossTierTable />
 			<WorldBossTable />
 		</section>
 	)

@@ -2,6 +2,7 @@ import { Badge } from '@shared/ui/badge'
 
 import GuildExpeditionSummary from '@/features/tips/components/guild-expedition/guild-expedition-summary'
 import GuildExpeditionTable from '@/features/tips/components/guild-expedition/guild-expedition-table'
+import GuildExpeditionTierTable from '@/features/tips/components/guild-expedition/guild-expedition-tier-table'
 import TipsBackLink from '@/features/tips/components/hub/tips-back-link'
 import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import { GUILD_EXPEDITION_BOSS } from '@/features/tips/lib/guild-expedition.constants'
@@ -28,7 +29,7 @@ function GuildExpeditionSection() {
 						</div>
 						<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 						<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
-							길드 토벌전 단계별 방어력, 필요 명중과 제한시간을 확인해보세요.
+							길드 토벌전 단계별 방어력·필요 명중·제한시간과 등급별 포인트를 확인해보세요.
 						</p>
 					</div>
 					<MonsterLabel src={imageSrc} alt={label} width={imageWidth} height={imageHeight} unoptimized size="header" />
@@ -36,6 +37,7 @@ function GuildExpeditionSection() {
 			</div>
 
 			<GuildExpeditionSummary />
+			<GuildExpeditionTierTable />
 			<GuildExpeditionTable />
 		</section>
 	)

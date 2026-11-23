@@ -28,7 +28,7 @@ function GuildBountySection() {
 						</div>
 						<h1 className="text-grayscale-900 text-2xl font-semibold md:text-3xl">{title}</h1>
 						<p className="text-grayscale-600 max-w-2xl text-sm md:text-base lg:max-w-3xl">
-							길드 현상수배 제한시간, 필요 명중·방어력, 동료·버프 구슬 타이밍과 불꽃늑대 공격 패턴을 확인해보세요.
+							길드 현상수배 제한시간·명중·방어력, 클리어/누적 점수, 동료·버프 구슬과 불꽃늑대 공격 패턴을 확인해보세요.
 						</p>
 					</div>
 					<MonsterLabel src={imageSrc} alt={label} width={imageWidth} height={imageHeight} unoptimized size="header" />
