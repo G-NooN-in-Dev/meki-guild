@@ -55,7 +55,7 @@ const FIELD_LABELS = {
 /** 멤버 탭 sync 시 함께 갱신할 guild 메타 필드 */
 const GUILD_META_BY_FIELD = {
 	expedition: ['expeditionRank'],
-	rivalry: ['rivalryRank', 'rivalryPoints'],
+	rivalry: ['rivalryRank'],
 	training: ['trainingRank'],
 	bounty: ['bountyRank', 'allBountyRank']
 }
@@ -68,16 +68,7 @@ const REQUIRED_HEADERS = {
 	training: ['collectedAt', 'name', 'training'],
 	guildBoss: ['collectedAt', 'name', 'guildBoss'],
 	bounty: ['collectedAt', 'name', 'bounty'],
-	guild: [
-		'collectedAt',
-		'content',
-		'expeditionRank',
-		'rivalryRank',
-		'rivalryPoints',
-		'trainingRank',
-		'bountyRank',
-		'allBountyRank'
-	]
+	guild: ['collectedAt', 'content', 'expeditionRank', 'rivalryRank', 'trainingRank', 'bountyRank', 'allBountyRank']
 }
 
 /** 시트 CSV URL 생성 */
@@ -318,7 +309,6 @@ function buildGuildMeta(guildRows, expeditionDate, rivalryDate, trainingDate, bo
 	return {
 		expeditionRank: toNumberOrNull(expeditionRow?.expeditionRank),
 		rivalryRank: toNumberOrNull(rivalryRow?.rivalryRank),
-		rivalryPoints: toNumberOrNull(rivalryRow?.rivalryPoints),
 		trainingRank: toNumberOrNull(trainingRow?.trainingRank),
 		bountyRank: toNumberOrNull(bountyRow?.bountyRank),
 		allBountyRank: toNumberOrNull(bountyRow?.allBountyRank)

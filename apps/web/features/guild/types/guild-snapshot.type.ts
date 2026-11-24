@@ -23,11 +23,6 @@ type GuildWeekMeta = {
 	expeditionRank?: number | null
 	/** 길드 대항전 순위(1이 최상위). 미입력이면 null/생략 */
 	rivalryRank?: number | null
-	/**
-	 * 길드 대항전 포인트 총합. 멤버 점수 합과 별도로 주간 수집합니다.
-	 * 숫자 또는 한국어 단위 문자열. 미입력이면 null/생략
-	 */
-	rivalryPoints?: number | string | null
 	/** 길드 수련장 순위(1이 최상위). 미입력이면 null/생략 */
 	trainingRank?: number | null
 	/** 현상수배 서버 내 순위(1이 최상위). 미입력이면 null/생략 */

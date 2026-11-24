@@ -32,14 +32,14 @@ const CONTENT_DATE_KEYS = {
 /** 멤버 필드 이월 시 함께 밀 길드 메타 (sync 의 GUILD_META_BY_FIELD 와 동일) */
 const GUILD_META_BY_FIELD = {
 	expedition: ['expeditionRank'],
-	rivalry: ['rivalryRank', 'rivalryPoints'],
+	rivalry: ['rivalryRank'],
 	training: ['trainingRank'],
 	bounty: ['bountyRank', 'allBountyRank']
 }
 
 const GUILD_META_LOG_LABELS = {
 	expedition: '길드 토벌전 순위',
-	rivalry: '길드 대항전 순위·포인트',
+	rivalry: '길드 대항전 순위',
 	training: '길드 수련장 순위',
 	bounty: '길드 현상수배 순위'
 }
