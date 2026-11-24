@@ -1,18 +1,18 @@
 {
 	"combatPower": {
-		"older": "2026-11-03",
-		"previous": "2026-11-10",
-		"current": "2026-11-17"
+		"older": "2026-11-10",
+		"previous": "2026-11-17",
+		"current": "2026-11-24"
 	},
 	"expedition": {
-		"older": "2026-11-01",
-		"previous": "2026-11-08",
-		"current": "2026-11-15"
+		"older": "2026-11-08",
+		"previous": "2026-11-15",
+		"current": "2026-11-22"
 	},
 	"rivalry": {
-		"older": "2026-11-02",
-		"previous": "2026-11-09",
-		"current": "2026-11-16"
+		"older": "2026-11-09",
+		"previous": "2026-11-16",
+		"current": "2026-11-23"
 	},
 	"training": {
 		"older": "2026-09-09",
@@ -25,8 +25,8 @@
 		"current": "2026-11-18"
 	},
 	"bounty": {
-		"older": null,
-		"previous": "2026-11-07",
-		"current": "2026-11-14"
+		"older": "2026-11-07",
+		"previous": "2026-11-14",
+		"current": "2026-11-21"
 	}
 }
