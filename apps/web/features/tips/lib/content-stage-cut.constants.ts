@@ -8,22 +8,26 @@ export const CONTENT_DIFFICULTIES = [
 	{
 		key: 'easy',
 		label: '쉬움',
-		chipClassName: 'bg-pastel-green-200 text-pastel-green-900'
+		chipClassName:
+			'bg-pastel-green-200 text-pastel-green-900 dark:bg-card dark:bg-linear-to-r dark:from-pastel-green-500/45 dark:to-pastel-green-500/45 dark:text-grayscale-900'
 	},
 	{
 		key: 'normal',
 		label: '보통',
-		chipClassName: 'bg-pastel-yellow-200 text-pastel-yellow-900'
+		chipClassName:
+			'bg-pastel-yellow-200 text-pastel-yellow-900 dark:bg-card dark:bg-linear-to-r dark:from-pastel-yellow-500/45 dark:to-pastel-yellow-500/45 dark:text-grayscale-900'
 	},
 	{
 		key: 'hard',
 		label: '어려움',
-		chipClassName: 'bg-pure-red/20 text-danger-700'
+		chipClassName:
+			'bg-red-100 text-danger-700 dark:bg-card dark:bg-linear-to-r dark:from-red-500/20 dark:to-red-500/20 dark:text-red-200'
 	},
 	{
 		key: 'chaos',
 		label: '카오스',
-		chipClassName: 'bg-pastel-purple-200 text-pastel-purple-900'
+		chipClassName:
+			'bg-pastel-purple-200 text-pastel-purple-900 dark:bg-card dark:bg-linear-to-r dark:from-pastel-purple-500/45 dark:to-pastel-purple-500/45 dark:text-grayscale-900'
 	}
 ] as const satisfies readonly {
 	key: ContentDifficulty

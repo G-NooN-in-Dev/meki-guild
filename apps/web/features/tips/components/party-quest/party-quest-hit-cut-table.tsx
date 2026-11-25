@@ -1,7 +1,14 @@
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+	HIT_CUT_PASTEL_CELL_BG_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import { scrollToRewardDetailIfNarrow } from '@/features/tips/utils/scroll-to-reward-detail'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -80,19 +87,30 @@ function PartyQuestDifficultyCell({
 					name="명중"
 					value={requiredHit}
 					className={cn(
-						'text-grayscale-900 group-hover:bg-pastel-blue-200/50',
-						isSelected ? 'bg-pastel-blue-200/80' : 'bg-pastel-blue-50'
+						HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+						isSelected
+							? 'bg-pastel-blue-200 dark:bg-card dark:from-pastel-blue-500/45 dark:to-pastel-blue-500/45 dark:text-grayscale-900 dark:bg-linear-to-r'
+							: cn(
+									HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.blue,
+									'group-hover:bg-pastel-blue-200 dark:group-hover:bg-pastel-blue-500/45'
+								)
 					)}
-					nameClassName="text-pastel-blue-900"
+					nameClassName="text-pastel-blue-900 dark:text-grayscale-900"
 				/>
 				<PartyQuestStatLine
 					name="방어력"
 					value={defense}
 					className={cn(
-						'text-grayscale-900 border-grayscale-200 group-hover:bg-pastel-orange-200/50 border-t',
-						isSelected ? 'bg-pastel-orange-200/80' : 'bg-pastel-orange-50'
+						HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+						'border-grayscale-200 border-t',
+						isSelected
+							? 'bg-pastel-orange-200 dark:bg-card dark:from-pastel-orange-500/45 dark:to-pastel-orange-500/45 dark:text-grayscale-900 dark:bg-linear-to-r'
+							: cn(
+									HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.orange,
+									'group-hover:bg-pastel-orange-200 dark:group-hover:bg-pastel-orange-500/45'
+								)
 					)}
-					nameClassName="text-pastel-orange-900"
+					nameClassName="text-pastel-orange-900 dark:text-grayscale-900"
 				/>
 				{isSelected ? (
 					<span aria-hidden className="ring-grayscale-900 pointer-events-none absolute inset-0 ring-2 ring-inset" />
@@ -115,7 +133,7 @@ function PartyQuestHitCutTable({ selectedQuest, setSelectedQuest }: PartyQuestHi
 			<HitCutTableShell scrollable={false}>
 				<TableHeader sticky>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
-						<TableHead className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[28%] md:w-[22%]')}>
+						<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_NEUTRAL_HEAD_CLASS_NAME, 'w-[28%] md:w-[22%]')}>
 							퀘스트 / 난이도
 						</TableHead>
 						{PARTY_QUEST_DIFFICULTIES.map(({ key, label, chipClassName }) => (
@@ -134,7 +152,8 @@ function PartyQuestHitCutTable({ selectedQuest, setSelectedQuest }: PartyQuestHi
 								<TableCell
 									className={cn(
 										HIT_CUT_CELL_BASE_CLASS_NAME,
-										'bg-grayscale-50 text-grayscale-800 break-keep whitespace-normal'
+										HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+										'break-keep whitespace-normal'
 									)}
 								>
 									{questLabel}

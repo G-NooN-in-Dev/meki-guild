@@ -38,23 +38,23 @@ export const GUILD_BOSS_ATTACK_DIRECTION_LABEL = {
 export const GUILD_BOSS_ATTACK_EFFECT_META = {
 	'hp-down': {
 		label: 'HP 감소',
-		badgeClassName: 'bg-red-100 text-red-900'
+		badgeClassName: 'bg-red-100 dark:bg-red-200 text-red-900'
 	},
 	'mp-down': {
 		label: 'MP 감소',
-		badgeClassName: 'bg-pastel-navy-100 text-pastel-navy-900'
+		badgeClassName: 'bg-pastel-navy-100 dark:bg-pastel-navy-200 text-pastel-navy-900'
 	},
 	'hp-potion-cooldown-up': {
 		label: 'HP 물약 쿨타임 증가',
-		badgeClassName: 'bg-pastel-orange-100 text-pastel-orange-900'
+		badgeClassName: 'bg-pastel-orange-100 dark:bg-pastel-orange-200 text-pastel-orange-900'
 	},
 	'mp-potion-cooldown-up': {
 		label: 'MP 물약 쿨타임 증가',
-		badgeClassName: 'bg-pastel-purple-100 text-pastel-purple-900'
+		badgeClassName: 'bg-pastel-purple-100 dark:bg-pastel-purple-200 text-pastel-purple-900'
 	},
 	'move-speed-down': {
 		label: '이동속도 감소',
-		badgeClassName: 'bg-pastel-green-100 text-pastel-green-900'
+		badgeClassName: 'bg-pastel-green-100 dark:bg-pastel-green-200 text-pastel-green-900'
 	}
 } as const satisfies Record<GuildBossAttackEffectId, { label: string; badgeClassName: string }>
 

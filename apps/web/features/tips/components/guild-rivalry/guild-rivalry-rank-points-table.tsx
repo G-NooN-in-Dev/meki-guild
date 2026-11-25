@@ -12,7 +12,11 @@ import {
 	type GuildRivalryRankPointDisplayBand,
 	type GuildRivalryRankPointEntry
 } from '@/features/guild/lib/guild-rivalry-rank-points.constants'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import TipsReferenceDisclosure from '@/features/tips/components/shared/tips-reference-disclosure'
 import { formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
@@ -47,8 +51,10 @@ function formatGuildRivalryRankPointBandLabel(fromRank: number, toRank: number):
 	return `${fromRank}~${toRank}위`
 }
 
-const HEAD_CLASS_NAME =
-	'bg-grayscale-100 text-grayscale-600 h-auto px-1.5 py-2 text-center text-xs leading-tight xs:px-2 md:px-3 md:text-sm'
+const HEAD_CLASS_NAME = cn(
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	'h-auto px-1.5 py-2 text-center text-xs leading-tight xs:px-2 md:px-3 md:text-sm'
+)
 
 function RankPointsTableBody({ rows }: { rows: readonly RankPointRow[] }) {
 	return (

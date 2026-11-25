@@ -4,7 +4,11 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/
 import { cn } from '@shared/ui/utils'
 
 import { GUILD_EXPEDITION_TIERS, type GuildExpeditionTier } from '@/features/guild/lib/guild-expedition-tier.constants'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import TipsReferenceDisclosure from '@/features/tips/components/shared/tips-reference-disclosure'
 import {
 	CONTENT_TIER_BAND_META,
@@ -39,8 +43,10 @@ function buildTierRows(tiers: readonly GuildExpeditionTier[]): TierRow[] {
 	return rows
 }
 
-const HEAD_CLASS_NAME =
-	'bg-grayscale-100 text-grayscale-600 h-auto px-1.5 py-2 text-center text-xs leading-tight xs:px-2 md:px-3 md:text-sm'
+const HEAD_CLASS_NAME = cn(
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	'h-auto px-1.5 py-2 text-center text-xs leading-tight xs:px-2 md:px-3 md:text-sm'
+)
 
 function TierTableBody({ rows }: { rows: readonly TierRow[] }) {
 	return (

@@ -138,23 +138,23 @@ export const GUILD_RIVALRY_ATTACK_EFFECT_META = {
 	},
 	'hit-rate-down': {
 		label: '명중 감소',
-		badgeClassName: 'bg-pastel-navy-100 text-pastel-navy-900'
+		badgeClassName: 'bg-pastel-navy-100 dark:bg-pastel-navy-200 text-pastel-navy-900'
 	},
 	'move-speed-down': {
 		label: '이동속도 감소',
-		badgeClassName: 'bg-pastel-purple-100 text-pastel-purple-900'
+		badgeClassName: 'bg-pastel-purple-100 dark:bg-pastel-purple-200 text-pastel-purple-900'
 	},
 	stun: {
 		label: '기절',
-		badgeClassName: 'bg-pastel-yellow-100 text-pastel-yellow-900'
+		badgeClassName: 'bg-pastel-yellow-100 dark:bg-pastel-yellow-200 text-pastel-yellow-900'
 	},
 	'incoming-damage-up': {
 		label: '받는 피해 증가',
-		badgeClassName: 'bg-pastel-orange-100 text-pastel-orange-900'
+		badgeClassName: 'bg-pastel-orange-100 dark:bg-pastel-orange-200 text-pastel-orange-900'
 	},
 	burn: {
 		label: '화상',
-		badgeClassName: 'bg-red-100 text-red-900'
+		badgeClassName: 'bg-red-100 dark:bg-red-200 text-red-900'
 	}
 } as const satisfies Record<GuildRivalryAttackEffectId, { label: string; badgeClassName: string }>
 

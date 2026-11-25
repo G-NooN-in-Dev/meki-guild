@@ -18,14 +18,14 @@ const cellBaseClassName =
 /** 티어 헤더 톤 — 노말=회색, 레어=파랑, 에픽=보라 */
 const tierHeadClassName = {
 	normal: 'bg-grayscale-100 text-grayscale-700',
-	rare: 'bg-pastel-blue-100 text-pastel-blue-900',
-	epic: 'bg-pastel-purple-100 text-pastel-purple-900'
+	rare: 'bg-pastel-blue-100 dark:bg-card dark:bg-linear-to-r dark:from-pastel-blue-500/45 dark:to-pastel-blue-500/45 text-pastel-blue-900 dark:text-grayscale-900',
+	epic: 'bg-pastel-purple-100 dark:bg-card dark:bg-linear-to-r dark:from-pastel-purple-500/45 dark:to-pastel-purple-500/45 text-pastel-purple-900 dark:text-grayscale-900'
 } as const
 
 const tierCellClassName = {
 	normal: 'bg-grayscale-50 text-grayscale-900',
-	rare: 'bg-pastel-blue-50 text-grayscale-900',
-	epic: 'bg-pastel-purple-50 text-grayscale-900'
+	rare: 'bg-pastel-blue-50 dark:bg-pastel-blue-500/25 text-grayscale-900 dark:text-grayscale-900',
+	epic: 'bg-pastel-purple-50 dark:bg-pastel-purple-500/25 text-grayscale-900 dark:text-grayscale-900'
 } as const
 
 /** 세부 확률(%) 표시. 불필요한 소수 자리는 잘라냅니다. */

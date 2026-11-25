@@ -5,7 +5,11 @@ import { type ReactNode } from 'react'
 
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import MonsterLabel, { type MonsterLabelProps } from '@/features/tips/components/shared/monster-label'
 import {
 	getGuildBountyCompanionTimings,
@@ -109,7 +113,7 @@ function AttackPatternsTable() {
 						<TableHead
 							className={cn(
 								ATTACK_HEAD_CLASS_NAME,
-								'bg-pastel-blue-100 text-pastel-blue-900',
+								HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue,
 								ATTACK_COLUMN_WIDTH_CLASS_NAME.name
 							)}
 						>
@@ -118,7 +122,7 @@ function AttackPatternsTable() {
 						<TableHead
 							className={cn(
 								ATTACK_HEAD_CLASS_NAME,
-								'bg-pastel-green-100 text-pastel-green-900',
+								HIT_CUT_PASTEL_HEAD_CLASS_NAME.green,
 								ATTACK_COLUMN_WIDTH_CLASS_NAME.effects
 							)}
 						>

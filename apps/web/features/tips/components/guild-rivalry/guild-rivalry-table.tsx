@@ -1,7 +1,15 @@
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+	HIT_CUT_PASTEL_CELL_BG_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import {
 	getGuildRivalryBossByStage,
@@ -53,7 +61,7 @@ function RivalryStageCell({ stage }: RivalryStageCellProps) {
 	const { label, imageSrc, imageWidth, imageHeight } = getGuildRivalryBossByStage(stage)
 
 	return (
-		<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-grayscale-50 text-grayscale-800 px-1')}>
+		<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, HIT_CUT_NEUTRAL_CELL_CLASS_NAME, 'px-1')}>
 			<span className="inline-flex items-center justify-center gap-1 md:gap-1.5">
 				<span>{stage}</span>
 				<MonsterLabel src={imageSrc} alt={label} width={imageWidth} height={imageHeight} unoptimized size="table" />
@@ -72,19 +80,19 @@ function GuildRivalryTable() {
 		<HitCutTableShell>
 			<TableHeader sticky>
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[14%] md:w-[12%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_NEUTRAL_HEAD_CLASS_NAME, 'w-[14%] md:w-[12%]')}>
 						단계
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-orange-100 text-pastel-orange-900 w-[32%] md:w-[32%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.orange, 'w-[32%] md:w-[32%]')}>
 						<span className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-1">
 							<span>방어력</span>
 							<span className={HEAD_HINT_CLASS_NAME}>(잡몹 / 보스)</span>
 						</span>
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-green-100 text-pastel-green-900 w-[28%] md:w-[30%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.green, 'w-[28%] md:w-[30%]')}>
 						보스 데미지 증가 스택
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900 w-[26%] md:w-[26%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue, 'w-[26%] md:w-[26%]')}>
 						필요 명중
 					</TableHead>
 				</TableRow>
@@ -93,11 +101,25 @@ function GuildRivalryTable() {
 				{GUILD_RIVALRY_ENTRIES.map(({ stage, buffStack, requiredHit }) => (
 					<TableRow key={stage} className="border-grayscale-200 hover:bg-transparent">
 						<RivalryStageCell stage={stage} />
-						<RivalryDefenseCell className="bg-pastel-orange-50 text-grayscale-900" />
-						<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-pastel-green-50 text-grayscale-900')}>
+						<RivalryDefenseCell
+							className={cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.orange, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)}
+						/>
+						<TableCell
+							className={cn(
+								HIT_CUT_CELL_BASE_CLASS_NAME,
+								HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.green,
+								HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME
+							)}
+						>
 							{formatLocaleNumber(buffStack)}
 						</TableCell>
-						<TableCell className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-pastel-blue-50 text-grayscale-900')}>
+						<TableCell
+							className={cn(
+								HIT_CUT_CELL_BASE_CLASS_NAME,
+								HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.blue,
+								HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME
+							)}
+						>
 							{formatLocaleNumber(requiredHit)}
 						</TableCell>
 					</TableRow>

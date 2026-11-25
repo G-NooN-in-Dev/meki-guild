@@ -4,7 +4,15 @@ import { type ReactNode } from 'react'
 
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
 import HitCutSummaryCard from '@/features/tips/components/shared/hit-cut-summary-card'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+	HIT_CUT_PASTEL_CELL_BG_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import MonsterLabel, { type MonsterLabelProps } from '@/features/tips/components/shared/monster-label'
 
 import {
@@ -175,21 +183,17 @@ function SpecialMobEffectTable() {
 				<TableHeader>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
 						<TableHead
-							className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600', COLUMN_WIDTH_CLASS_NAME.position)}
+							className={cn(HEAD_CLASS_NAME, HIT_CUT_NEUTRAL_HEAD_CLASS_NAME, COLUMN_WIDTH_CLASS_NAME.position)}
 						>
 							위치
 						</TableHead>
 						<TableHead
-							className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900', COLUMN_WIDTH_CLASS_NAME.name)}
+							className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue, COLUMN_WIDTH_CLASS_NAME.name)}
 						>
 							이름
 						</TableHead>
 						<TableHead
-							className={cn(
-								HEAD_CLASS_NAME,
-								'bg-pastel-green-100 text-pastel-green-900',
-								COLUMN_WIDTH_CLASS_NAME.effect
-							)}
+							className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.green, COLUMN_WIDTH_CLASS_NAME.effect)}
 						>
 							효과
 						</TableHead>
@@ -201,7 +205,8 @@ function SpecialMobEffectTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									'bg-grayscale-50 text-grayscale-800 break-keep whitespace-normal',
+									HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+									'break-keep whitespace-normal',
 									COLUMN_WIDTH_CLASS_NAME.position
 								)}
 							>
@@ -210,7 +215,9 @@ function SpecialMobEffectTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									'bg-pastel-blue-50 text-grayscale-900 xs:px-3 px-2 text-left font-medium',
+									HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.blue,
+									HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+									'xs:px-3 px-2 text-left font-medium',
 									COLUMN_WIDTH_CLASS_NAME.name
 								)}
 							>
@@ -219,7 +226,8 @@ function SpecialMobEffectTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									'bg-pastel-green-50 text-grayscale-700 xs:px-3 px-2 text-left font-normal break-keep whitespace-normal',
+									HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.green,
+									'text-grayscale-700 xs:px-3 px-2 text-left font-normal break-keep whitespace-normal',
 									COLUMN_WIDTH_CLASS_NAME.effect
 								)}
 							>

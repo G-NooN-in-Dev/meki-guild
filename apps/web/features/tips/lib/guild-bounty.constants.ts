@@ -107,11 +107,11 @@ const GUILD_BOUNTY_HARD_MONSTER = {
 const GUILD_BOUNTY_ATTACK_EFFECT_META = {
 	'final-damage-down': {
 		label: '최종 데미지 감소',
-		badgeClassName: 'bg-pastel-purple-100 text-pastel-purple-900'
+		badgeClassName: 'bg-pastel-purple-100 dark:bg-pastel-purple-200 text-pastel-purple-900'
 	},
 	'move-speed-down': {
 		label: '이동속도 감소',
-		badgeClassName: 'bg-pastel-green-100 text-pastel-green-900'
+		badgeClassName: 'bg-pastel-green-100 dark:bg-pastel-green-200 text-pastel-green-900'
 	}
 } as const satisfies Record<GuildBountyAttackEffectId, { label: string; badgeClassName: string }>
 
@@ -132,7 +132,7 @@ const GUILD_BOUNTY_BUFF_ORBS = [
 	{
 		id: 'left',
 		sideLabel: '좌측',
-		badgeClassName: 'bg-red-100 text-red-900'
+		badgeClassName: 'bg-red-100 dark:bg-red-200 text-red-900'
 	},
 	{
 		id: 'right',

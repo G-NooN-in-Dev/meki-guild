@@ -6,7 +6,11 @@ import { cn } from '@shared/ui/utils'
 import { ChevronDownIcon } from 'lucide-react'
 
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import {
 	getGuildBossProgressStepLabel,
@@ -156,20 +160,12 @@ function AttackPatternsBody() {
 						<TableHeader>
 							<TableRow className="border-grayscale-200 hover:bg-transparent">
 								<TableHead
-									className={cn(
-										HEAD_CLASS_NAME,
-										'bg-pastel-blue-100 text-pastel-blue-900',
-										COLUMN_WIDTH_CLASS_NAME.name
-									)}
+									className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue, COLUMN_WIDTH_CLASS_NAME.name)}
 								>
 									공격
 								</TableHead>
 								<TableHead
-									className={cn(
-										HEAD_CLASS_NAME,
-										'bg-pastel-orange-100 text-pastel-orange-900',
-										COLUMN_WIDTH_CLASS_NAME.range
-									)}
+									className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.orange, COLUMN_WIDTH_CLASS_NAME.range)}
 								>
 									<span className="flex flex-col items-center gap-0.5">
 										<span>방향</span>
@@ -177,11 +173,7 @@ function AttackPatternsBody() {
 									</span>
 								</TableHead>
 								<TableHead
-									className={cn(
-										HEAD_CLASS_NAME,
-										'bg-pastel-green-100 text-pastel-green-900',
-										COLUMN_WIDTH_CLASS_NAME.effects
-									)}
+									className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.green, COLUMN_WIDTH_CLASS_NAME.effects)}
 								>
 									효과
 								</TableHead>

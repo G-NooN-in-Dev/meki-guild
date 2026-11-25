@@ -6,7 +6,13 @@ import { cn } from '@shared/ui/utils'
 import { ChevronDownIcon } from 'lucide-react'
 
 import EmphasizedText from '@/features/tips/components/shared/emphasized-text'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import MonsterLabel from '@/features/tips/components/shared/monster-label'
 import {
 	GUILD_RIVALRY_ATTACK_EFFECT_META,
@@ -85,7 +91,7 @@ function BossAttackRow({ attack }: BossAttackRowProps) {
 	return (
 		<TableRow className="border-grayscale-200 hover:bg-transparent">
 			<TableCell
-				className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, 'bg-grayscale-50 text-grayscale-800', COLUMN_WIDTH_CLASS_NAME.hit)}
+				className={cn(HIT_CUT_CELL_BASE_CLASS_NAME, HIT_CUT_NEUTRAL_CELL_CLASS_NAME, COLUMN_WIDTH_CLASS_NAME.hit)}
 			>
 				{hit}타
 			</TableCell>
@@ -137,22 +143,16 @@ function BossPatternCard({ boss, order }: BossPatternCardProps) {
 				<HitCutTableShell scrollable={false} className="rounded-none border-x-0 border-b-0 shadow-none">
 					<TableHeader>
 						<TableRow className="border-grayscale-200 hover:bg-transparent">
-							<TableHead
-								className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600', COLUMN_WIDTH_CLASS_NAME.hit)}
-							>
+							<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_NEUTRAL_HEAD_CLASS_NAME, COLUMN_WIDTH_CLASS_NAME.hit)}>
 								타수
 							</TableHead>
 							<TableHead
-								className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900', COLUMN_WIDTH_CLASS_NAME.name)}
+								className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue, COLUMN_WIDTH_CLASS_NAME.name)}
 							>
 								공격
 							</TableHead>
 							<TableHead
-								className={cn(
-									HEAD_CLASS_NAME,
-									'bg-pastel-orange-100 text-pastel-orange-900',
-									COLUMN_WIDTH_CLASS_NAME.range
-								)}
+								className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.orange, COLUMN_WIDTH_CLASS_NAME.range)}
 							>
 								<span className="flex flex-col items-center gap-0.5">
 									<span>범위</span>
@@ -160,11 +160,7 @@ function BossPatternCard({ boss, order }: BossPatternCardProps) {
 								</span>
 							</TableHead>
 							<TableHead
-								className={cn(
-									HEAD_CLASS_NAME,
-									'bg-pastel-green-100 text-pastel-green-900',
-									COLUMN_WIDTH_CLASS_NAME.effects
-								)}
+								className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.green, COLUMN_WIDTH_CLASS_NAME.effects)}
 							>
 								추가 피해
 							</TableHead>
