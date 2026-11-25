@@ -1,6 +1,5 @@
 import '@/global.css'
 
-import { Toaster } from '@shared/ui/sonner'
 import { cn } from '@shared/ui/utils'
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
@@ -9,6 +8,8 @@ import { PropsWithChildren } from 'react'
 import AnnouncementBanner from '@/components/announcement-banner'
 import Footer from '@/components/footer'
 import Header from '@/components/header'
+import ThemeProvider from '@/components/theme-provider'
+import ThemedToaster from '@/components/themed-toaster'
 import { ANNOUNCEMENT_BANNER_BODY_PADDING_CLASS, hasAnnouncementBanner } from '@/libs/announcement-banner.constants'
 
 // 파비콘·Apple 터치 아이콘·카카오톡 미리보기 모두 public/games.png 사용
@@ -44,25 +45,27 @@ function RootLayout({ children }: PropsWithChildren) {
 	const showAnnouncementBanner = hasAnnouncementBanner()
 
 	return (
-		<html lang="ko" className="h-full antialiased">
+		<html lang="ko" className="h-full antialiased" suppressHydrationWarning>
 			<body
 				className={cn(
 					'relative flex min-h-full w-full min-w-0 flex-col pt-14',
 					showAnnouncementBanner && ANNOUNCEMENT_BANNER_BODY_PADDING_CLASS
 				)}
 			>
-				<div
-					aria-hidden
-					className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-					style={{ backgroundImage: "url('/games.png')" }}
-				/>
-				<div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-white/78 backdrop-blur-[2px]" />
-				<Header />
-				<AnnouncementBanner />
-				{children}
-				<Footer />
-				<Toaster richColors position="top-center" />
-				<Analytics />
+				<ThemeProvider>
+					<div
+						aria-hidden
+						className="pointer-events-none fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+						style={{ backgroundImage: "url('/games.png')" }}
+					/>
+					<div aria-hidden className="bg-grayscale-50/80 pointer-events-none fixed inset-0 -z-10 backdrop-blur-[2px]" />
+					<Header />
+					<AnnouncementBanner />
+					{children}
+					<Footer />
+					<ThemedToaster />
+					<Analytics />
+				</ThemeProvider>
 			</body>
 		</html>
 	)

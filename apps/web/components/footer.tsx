@@ -16,7 +16,7 @@ const FOOTER_LINKS = [
 
 function Footer() {
 	return (
-		<footer className="shadow-soft mt-auto border-t border-white/40 bg-white/85 backdrop-blur-md">
+		<footer className="shadow-soft border-border bg-background/85 mt-auto border-t backdrop-blur-md">
 			<div className="max-w-content container mx-auto flex w-full flex-col gap-4 px-4 py-6 md:px-6">
 				<nav aria-label="관련 링크" className="flex flex-wrap items-center gap-x-6 gap-y-2">
 					{FOOTER_LINKS.map((link) => (
