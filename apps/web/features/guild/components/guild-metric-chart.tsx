@@ -99,7 +99,7 @@ function GuildCombinedTooltip({ active, payload, seriesList }: CombinedTooltipPr
 	const { collectedAt, deltas, label, percents, values } = row
 
 	return (
-		<div className="border-grayscale-200 max-w-72 rounded-lg border bg-white px-3 py-2 text-xs shadow-md">
+		<div className="border-grayscale-200 bg-card max-w-72 rounded-lg border px-3 py-2 text-xs shadow-md">
 			<p className="text-grayscale-500 mb-2">{collectedAt ?? label}</p>
 			<ul className="flex flex-col gap-1.5">
 				{seriesList.map((series) => {

@@ -28,7 +28,9 @@ function GuildDetailSectionTabs() {
 						href={buildGuildDetailHref(id)}
 						className={cn(
 							'rounded-md px-3 py-1.5 text-sm',
-							isActive ? 'bg-grayscale-900 text-white' : 'bg-grayscale-100 text-grayscale-700 hover:bg-grayscale-200'
+							isActive
+								? 'bg-primary text-primary-foreground'
+								: 'bg-grayscale-100 text-grayscale-700 hover:bg-grayscale-200'
 						)}
 						aria-current={isActive ? 'page' : undefined}
 					>

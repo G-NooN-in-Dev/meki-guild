@@ -18,10 +18,10 @@ type GuildGrowthPodiumMarqueeProps = {
 	slots: ReadyAwardSlot[]
 }
 
-/** 순위 숫자 색 — 1·2·3등 구분 */
+/** 순위 숫자 색 */
 const RANK_TEXT_CLASS_NAME = {
-	1: 'text-pastel-orange-700',
-	2: 'text-grayscale-500',
+	1: 'text-pastel-orange-500 dark:text-pastel-orange-400',
+	2: 'text-grayscale-500 dark:text-grayscale-700',
 	3: 'text-pastel-orange-800'
 } as const
 
@@ -68,7 +68,7 @@ function useMarqueeSegmentWidth(segmentRef: RefObject<HTMLDivElement | null>) {
 function PodiumPlace({ winner }: PodiumPlaceProps) {
 	const { job, name, rank, scoreLabel } = winner
 
-	const rankClassName = RANK_TEXT_CLASS_NAME[rank as 1 | 2 | 3] ?? 'text-grayscale-500'
+	const rankClassName = RANK_TEXT_CLASS_NAME[rank as 1 | 2 | 3] ?? 'text-grayscale-500 dark:text-grayscale-700'
 
 	return (
 		<div className="flex w-22 flex-col items-center gap-1 sm:w-24">
@@ -77,7 +77,7 @@ function PodiumPlace({ winner }: PodiumPlaceProps) {
 				<MemberDisplayName name={name} />
 			</p>
 			<JobBadge job={job} className="max-w-full shrink-0 truncate text-[10px]" />
-			<p className="text-success-700 text-xs font-semibold tabular-nums">{scoreLabel}</p>
+			<p className="text-success-700 dark:text-success-500 text-xs font-semibold tabular-nums">{scoreLabel}</p>
 		</div>
 	)
 }
@@ -95,7 +95,9 @@ function PodiumCard({ slot }: PodiumCardProps) {
 			<header className="flex items-baseline justify-between gap-3">
 				<p className="text-grayscale-800 text-sm font-semibold">{label}</p>
 				{criteriaDate ? (
-					<p className="text-grayscale-400 text-xs tabular-nums">기준 {formatDate(criteriaDate, 'MM.DD')}</p>
+					<p className="text-grayscale-400 dark:text-grayscale-700 text-xs tabular-nums">
+						기준 {formatDate(criteriaDate, 'MM.DD')}
+					</p>
 				) : null}
 			</header>
 
@@ -146,7 +148,7 @@ function GuildGrowthPodiumMarquee({ slots }: GuildGrowthPodiumMarqueeProps) {
 		<div
 			role="region"
 			aria-label="주간 성장 상위 포디움"
-			className="border-grayscale-100 w-full min-w-0 overflow-hidden rounded-lg border bg-white"
+			className="border-grayscale-100 bg-card w-full min-w-0 overflow-hidden rounded-lg border"
 		>
 			<div
 				className={cn(

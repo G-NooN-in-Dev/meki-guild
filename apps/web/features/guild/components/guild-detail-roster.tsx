@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@shared/ui/button'
 import { Card, CardContent } from '@shared/ui/card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@shared/ui/collapsible'
 import { Label } from '@shared/ui/label'
@@ -59,7 +60,7 @@ function GuildDetailRoster({ sectionId, roster }: GuildDetailRosterProps) {
 			<div className="flex flex-wrap items-center justify-end gap-2">
 				<Label
 					htmlFor={`detail-sort-by-percent-${sectionId}`}
-					className="border-grayscale-200 bg-card gap-1.5 rounded-md border px-2.5 py-1.5 font-normal whitespace-nowrap text-black shadow-xs"
+					className="border-grayscale-200 bg-card text-grayscale-800 gap-1.5 rounded-md border px-2.5 py-1.5 font-normal whitespace-nowrap shadow-xs"
 				>
 					<span className="text-sm">증감율</span>
 					<Switch
@@ -70,10 +71,12 @@ function GuildDetailRoster({ sectionId, roster }: GuildDetailRosterProps) {
 						aria-label="증감율 기준 정렬"
 					/>
 				</Label>
-				<button
+				<Button
 					type="button"
+					variant="outline"
+					size="sm"
 					onClick={handleToggleSortDirection}
-					className="border-grayscale-200 bg-card text-grayscale-800 hover:bg-grayscale-50 inline-flex items-center gap-1 rounded-md border px-2.5 py-1.5 text-sm shadow-xs"
+					className="border-grayscale-200 bg-card text-grayscale-800 hover:bg-grayscale-50 font-normal"
 					aria-label={
 						sortDirection === 'desc' ? '높은 순 정렬 중, 낮은 순으로 전환' : '낮은 순 정렬 중, 높은 순으로 전환'
 					}
@@ -82,7 +85,7 @@ function GuildDetailRoster({ sectionId, roster }: GuildDetailRosterProps) {
 					<span className="text-[10px]" aria-hidden>
 						{sortDirection === 'desc' ? '▼' : '▲'}
 					</span>
-				</button>
+				</Button>
 			</div>
 
 			{/* 모바일·태블릿: Collapsible 목록 */}
@@ -159,7 +162,7 @@ function MobileMemberCollapsible({ comparison, sectionId, sortByPercent, roster 
 	const charts = roster.chartsByMember[comparison.name]?.[sectionId]
 
 	return (
-		<Collapsible className="border-grayscale-200 bg-card overflow-hidden rounded-xl border shadow-xs">
+		<Collapsible className="border-grayscale-200 bg-card dark:border-grayscale-300 shadow-soft overflow-hidden rounded-xl border">
 			<CollapsibleTrigger className="group hover:bg-grayscale-50 flex w-full cursor-pointer items-center gap-2 p-3 text-left">
 				<div className="min-w-0 flex-1">
 					<GuildDetailMemberSummary comparison={comparison} sectionId={sectionId} sortByPercent={sortByPercent} />

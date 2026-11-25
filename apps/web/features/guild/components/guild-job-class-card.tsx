@@ -87,7 +87,7 @@ function GuildJobClassCard({ card }: GuildJobClassCardProps) {
 		>
 			<header className="flex shrink-0 items-center justify-between gap-2 px-4 pt-3 pb-1">
 				<h3 className="text-grayscale-900 text-base font-semibold">{classLine}</h3>
-				<span className="text-grayscale-600 text-xs tabular-nums">{members.length}명</span>
+				<span className="text-grayscale-600 text-xs tabular-nums dark:text-white">{members.length}명</span>
 			</header>
 
 			<div className="min-h-0 flex-1 overflow-y-auto px-3 pb-3">
