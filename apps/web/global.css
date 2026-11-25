@@ -27,3 +27,214 @@ body {
 @theme inline {
 	--animate-marquee: marquee-distance linear infinite;
 }
+
+/*
+  라이트/다크 전환 시 색상 페이드.
+  .dark에서 바뀌는 색 토큰을 @property로 등록해야 브라우저가 값을 보간한다.
+  등록하지 않은 커스텀 프로퍼티는 값이 즉시 바뀌므로 페이드되지 않는다.
+  html에만 transition을 선언하면 자식은 상속된 값을 따라가므로 요소별 transition이 필요 없다.
+  토큰 목록은 packages/tailwind-config/theme.css의 @theme · .dark 블록과 맞춘다.
+*/
+@property --color-grayscale-50 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f8fafc;
+}
+@property --color-grayscale-100 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f1f5f9;
+}
+@property --color-grayscale-200 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #e2e8f0;
+}
+@property --color-grayscale-300 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #cbd5e1;
+}
+@property --color-grayscale-400 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #94a3b8;
+}
+@property --color-grayscale-500 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #64748b;
+}
+@property --color-grayscale-600 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #475569;
+}
+@property --color-grayscale-700 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #334155;
+}
+@property --color-grayscale-800 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #1e293b;
+}
+@property --color-grayscale-900 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-grayscale-950 {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #020617;
+}
+
+@property --color-background {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f8fafc;
+}
+@property --color-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-primary {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-primary-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #ffffff;
+}
+@property --color-secondary {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f1f5f9;
+}
+@property --color-secondary-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-muted {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f1f5f9;
+}
+@property --color-muted-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #64748b;
+}
+@property --color-border {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #e2e8f0;
+}
+@property --color-input {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #e2e8f0;
+}
+@property --color-ring {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-popover {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #ffffff;
+}
+@property --color-popover-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-card {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #ffffff;
+}
+@property --color-card-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-accent {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f1f5f9;
+}
+@property --color-accent-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+
+@property --color-sidebar {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f8fafc;
+}
+@property --color-sidebar-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-sidebar-primary {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-sidebar-primary-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #ffffff;
+}
+@property --color-sidebar-accent {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #f1f5f9;
+}
+@property --color-sidebar-accent-foreground {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+@property --color-sidebar-border {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #e2e8f0;
+}
+@property --color-sidebar-ring {
+	syntax: '<color>';
+	inherits: true;
+	initial-value: #0f172a;
+}
+
+html {
+	transition-property:
+		--color-grayscale-50, --color-grayscale-100, --color-grayscale-200, --color-grayscale-300, --color-grayscale-400,
+		--color-grayscale-500, --color-grayscale-600, --color-grayscale-700, --color-grayscale-800, --color-grayscale-900,
+		--color-grayscale-950, --color-background, --color-foreground, --color-primary, --color-primary-foreground,
+		--color-secondary, --color-secondary-foreground, --color-muted, --color-muted-foreground, --color-border,
+		--color-input, --color-ring, --color-popover, --color-popover-foreground, --color-card, --color-card-foreground,
+		--color-accent, --color-accent-foreground, --color-sidebar, --color-sidebar-foreground, --color-sidebar-primary,
+		--color-sidebar-primary-foreground, --color-sidebar-accent, --color-sidebar-accent-foreground,
+		--color-sidebar-border, --color-sidebar-ring;
+	transition-duration: 500ms;
+	transition-timing-function: ease-in-out;
+}
+
+/* 모션 감소 설정 사용자는 전환 없이 즉시 변경 */
+@media (prefers-reduced-motion: reduce) {
+	html {
+		transition: none;
+	}
+}
