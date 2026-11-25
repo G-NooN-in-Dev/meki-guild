@@ -279,6 +279,7 @@ const parsed = JSON.parse(value) satisfies RecentLocationCookie // 실질 안전
 - UI가 필요할 때는 직접 마크업을 새로 짜기보다 `@shared/ui`를 최대한 재사용합니다.
 - import: `@shared/ui/<component>` (예: `@shared/ui/card`, `@shared/ui/button`)
 - `cn` 유틸: `@shared/ui/utils`
+- 버튼: 일반 액션 버튼(아이콘 버튼·정렬 토글·닫기 등)은 `@shared/ui/button`을 사용합니다. 카드·슬롯·표 셀처럼 **영역 전체가 클릭되는 요소**나 링크와 같은 모양의 텍스트 메뉴처럼 `Button` 기본 스타일(`h-9`, `justify-center` 등)을 대부분 덮어써야 하는 경우에만 네이티브 `<button type="button">`을 허용합니다. 이때도 `focus-visible` 스타일과 `disabled` 처리는 직접 챙깁니다.
 - 패키지에 없을 때만 앱 로컬 또는 shadcn CLI → `packages/ui` 추가를 검토합니다.
 - 상세: [`packages/ui/README.md`](../packages/ui/README.md)
 

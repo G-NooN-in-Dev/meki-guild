@@ -7,8 +7,10 @@
 ## 다크 모드
 
 - `@custom-variant dark`로 class 기반 다크 모드를 사용합니다.
-- 루트에 `dark` 클래스를 붙여 제어합니다.
-- 예시: `dark:bg-grayscale-900 dark:text-grayscale-100`
+- 루트(`html`)에 `dark` 클래스를 붙여 제어합니다. (앱: `next-themes`, localStorage 키 `meki-theme`)
+- `.dark`에서 `--color-grayscale-*`와 시맨틱 색(`background`, `card`, `foreground` 등)을 재매핑합니다. 기존 `text-grayscale-*` / `bg-grayscale-*`가 파일별 `dark:` 없이 어두워집니다.
+- `bg-white` 등 토큰 밖 색은 `bg-card` / `bg-background`로 바꾸거나 `dark:`를 붙입니다.
+- 예시: `dark:bg-grayscale-900 dark:text-grayscale-100` (필요 시 명시적 오버라이드)
 
 ## container
 
@@ -31,7 +33,7 @@
 
 ## colors (`--color-*`)
 
-- 파스텔 팔레트: `pastel-red`, `pastel-orange`, `pastel-yellow`, `pastel-green`, `pastel-blue`, `pastel-navy`, `pastel-purple`
+- 파스텔 팔레트: `pastel-red`, `pastel-magenta`, `pastel-orange`, `pastel-yellow`, `pastel-green`, `pastel-blue`, `pastel-navy`, `pastel-purple`
   - Tailwind 기본 색상명(`red`, `blue` 등)과 충돌하지 않도록 `pastel-` 접두사 사용
   - 각 팔레트는 기본값(`--color-pastel-red` 등)과 `50..950` 스케일 제공
 - 기본 텍스트/보더: `grayscale`
