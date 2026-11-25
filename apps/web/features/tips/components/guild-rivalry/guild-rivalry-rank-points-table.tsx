@@ -4,6 +4,12 @@ import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/
 import { cn } from '@shared/ui/utils'
 
 import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
+import TipsReferenceDisclosure from '@/features/tips/components/shared/tips-reference-disclosure'
+import {
 	getGuildRivalryRankPointTextClass,
 	getGuildRivalryRankPointTone,
 	GUILD_RIVALRY_RANK_POINT_DISPLAY_BANDS,
@@ -11,13 +17,7 @@ import {
 	GUILD_RIVALRY_RANK_POINT_TONE_META,
 	type GuildRivalryRankPointDisplayBand,
 	type GuildRivalryRankPointEntry
-} from '@/features/guild/lib/guild-rivalry-rank-points.constants'
-import {
-	HIT_CUT_CELL_BASE_CLASS_NAME,
-	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
-	HitCutTableShell
-} from '@/features/tips/components/shared/hit-cut-table-shell'
-import TipsReferenceDisclosure from '@/features/tips/components/shared/tips-reference-disclosure'
+} from '@/features/tips/lib/guild-rivalry-rank-points.constants'
 import { formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
 type RankPointRow =

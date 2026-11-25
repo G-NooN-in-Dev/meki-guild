@@ -3,7 +3,6 @@
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
-import { GUILD_EXPEDITION_TIERS, type GuildExpeditionTier } from '@/features/guild/lib/guild-expedition-tier.constants'
 import {
 	HIT_CUT_CELL_BASE_CLASS_NAME,
 	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
@@ -16,6 +15,7 @@ import {
 	getContentGradeTextClass,
 	getContentTierBand
 } from '@/libs/content-tier-band.constants'
+import { GUILD_EXPEDITION_TIERS, type GuildExpeditionTier } from '@/libs/guild-expedition-tier.constants'
 import { formatKoreanNumber, formatLocaleNumber, formatPlacementRank } from '@/utils/format-korean-number'
 
 type TierRow = { type: 'band'; band: ContentTierBand } | { type: 'tier'; tier: GuildExpeditionTier }
