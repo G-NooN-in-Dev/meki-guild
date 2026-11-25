@@ -8,7 +8,7 @@ import TipCard from '@/features/tips/components/hub/tip-card'
 import type { TipCategory, TipCategoryGroup, TipEntry } from '@/features/tips/types/tip.type'
 
 const triggerClassName = cn(
-	'group border-grayscale-300 shadow-soft flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border-2 bg-white p-3 text-left',
+	'group border-grayscale-300 shadow-soft bg-card flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border-2 p-3 text-left',
 	'text-grayscale-900 text-lg font-semibold md:text-xl',
 	'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:outline-none'
 )

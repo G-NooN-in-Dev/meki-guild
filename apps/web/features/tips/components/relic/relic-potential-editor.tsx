@@ -30,7 +30,7 @@ function isRelicPotentialGrade(value: string | number | null): value is RelicPot
 
 /**
  * 유물에 붙는 잠재옵션 편집 UI.
- * 레전드리 최대 3칸, 유니크·에픽 최대 2칸.
+ * 레전더리 최대 3칸, 유니크·에픽 최대 2칸.
  */
 function RelicPotentialEditor({ relicGrade, potentialIds, onChange }: RelicPotentialEditorProps) {
 	const limit = getRelicPotentialSlotLimit(relicGrade)
@@ -124,17 +124,16 @@ function RelicPotentialEditor({ relicGrade, potentialIds, onChange }: RelicPoten
 									</Badge>
 									<span className="text-grayscale-800 truncate">{option.displayText}</span>
 								</button>
-								<button
+								<Button
 									type="button"
+									variant="ghost"
+									size="icon-sm"
 									aria-label={`${option.displayText} 제거`}
 									onClick={() => handleRemove(index)}
-									className={cn(
-										'text-grayscale-400 hover:text-grayscale-700 hover:bg-grayscale-100 flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-colors',
-										'focus-visible:ring-grayscale-900 focus-visible:ring-2 focus-visible:outline-none'
-									)}
+									className="text-grayscale-400 hover:text-grayscale-700 hover:bg-grayscale-100 rounded-lg"
 								>
 									<XIcon className="size-4" />
-								</button>
+								</Button>
 							</li>
 						)
 					})}
@@ -156,13 +155,15 @@ function RelicPotentialEditor({ relicGrade, potentialIds, onChange }: RelicPoten
 						<p className="text-grayscale-700 text-xs font-medium">
 							{editingIndex !== null ? `${editingIndex + 1}번 잠재 변경` : '잠재 옵션 선택'}
 						</p>
-						<button
+						<Button
 							type="button"
+							variant="ghost"
+							size="xs"
 							onClick={closePicker}
-							className="text-grayscale-500 hover:text-grayscale-800 cursor-pointer text-xs font-medium"
+							className="text-grayscale-500 hover:text-grayscale-800"
 						>
 							닫기
-						</button>
+						</Button>
 					</div>
 
 					<Tabs

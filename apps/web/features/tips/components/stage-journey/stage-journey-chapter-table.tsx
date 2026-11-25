@@ -29,15 +29,18 @@ const COLUMN_CLASS = {
 		cell: 'bg-grayscale-50 text-grayscale-800'
 	},
 	boss: {
-		header: 'bg-pastel-yellow-100 text-pastel-yellow-900',
+		header:
+			'bg-pastel-yellow-100 dark:bg-card dark:bg-linear-to-r dark:from-pastel-yellow-500/45 dark:to-pastel-yellow-500/45 text-pastel-yellow-900 dark:text-grayscale-900',
 		cell: 'text-grayscale-900'
 	},
 	rewards: {
-		header: 'bg-pastel-blue-100 text-pastel-blue-900',
+		header:
+			'bg-pastel-blue-100 dark:bg-card dark:bg-linear-to-r dark:from-pastel-blue-500/45 dark:to-pastel-blue-500/45 text-pastel-blue-900 dark:text-grayscale-900',
 		cell: 'text-grayscale-800'
 	},
 	special: {
-		header: 'bg-pastel-green-100 text-pastel-green-900',
+		header:
+			'bg-pastel-green-100 dark:bg-card dark:bg-linear-to-r dark:from-pastel-green-500/45 dark:to-pastel-green-500/45 text-pastel-green-900 dark:text-grayscale-900',
 		cell: 'text-grayscale-900'
 	}
 } as const
@@ -86,7 +89,9 @@ function StageJourneyChapterTable({ selectedChapter, onSelectChapter }: StageJou
 								aria-selected={isSelected}
 								className={cn(
 									'border-grayscale-200 group cursor-pointer',
-									isSelected ? 'bg-pastel-yellow-50 hover:bg-pastel-yellow-50' : 'hover:bg-grayscale-50/60'
+									isSelected
+										? 'bg-pastel-yellow-50 dark:bg-pastel-yellow-500/25 hover:bg-pastel-yellow-50 dark:hover:bg-pastel-yellow-500/25 dark:text-grayscale-900'
+										: 'hover:bg-grayscale-50/60'
 								)}
 								onClick={() => onSelectChapter(entry.chapter)}
 							>
@@ -95,7 +100,8 @@ function StageJourneyChapterTable({ selectedChapter, onSelectChapter }: StageJou
 										chapterCellClassName,
 										COLUMN_CLASS.chapter.cell,
 										'group-hover:bg-grayscale-100/80',
-										isSelected && 'bg-pastel-yellow-100 text-pastel-yellow-900'
+										isSelected &&
+											'bg-pastel-yellow-100 dark:bg-card dark:from-pastel-yellow-500/45 dark:to-pastel-yellow-500/45 text-pastel-yellow-900 dark:text-grayscale-900 dark:bg-linear-to-r'
 									)}
 								>
 									{entry.chapter}
