@@ -13,6 +13,7 @@ import type {
 	CompanionSetupSlot,
 	CompanionSlotLoadout
 } from '@/features/tips/types/companion.type'
+import { GRADE_LABEL } from '@/libs/grade.constants'
 import { getJobPortraitSrc } from '@/libs/job-portrait.constants'
 
 /** UI·정렬용 등급 순서 — 공통 ITEM_GRADE_ORDER 재사용 */
@@ -21,15 +22,15 @@ export const COMPANION_GRADE_ORDER = ITEM_GRADE_ORDER
 /** 등급 표시 라벨·차수 (동료만 차수 표기) */
 export const COMPANION_GRADE_META = {
 	legendary: {
-		label: '레전더리',
+		label: GRADE_LABEL.legendary,
 		tierLabel: '4차'
 	},
 	unique: {
-		label: '유니크',
+		label: GRADE_LABEL.unique,
 		tierLabel: '3차'
 	},
 	epic: {
-		label: '에픽',
+		label: GRADE_LABEL.epic,
 		tierLabel: '2차'
 	}
 } as const satisfies Record<CompanionGrade, { label: string; tierLabel: string }>

@@ -1,3 +1,4 @@
+import { ITEM_GRADE_BADGE_CLASS, ITEM_GRADE_TAB_CLASS } from '@/features/tips/lib/item-grade.constants'
 import type {
 	RelicGrade,
 	RelicPotentialGrade,
@@ -5,6 +6,7 @@ import type {
 	RelicStatEffect,
 	RelicStatUnit
 } from '@/features/tips/types/relic.type'
+import { GRADE_LABEL } from '@/libs/grade.constants'
 
 /** 표·탭용 잠재 등급 순서 (높은 등급 먼저) */
 export const RELIC_POTENTIAL_GRADE_ORDER = [
@@ -17,11 +19,11 @@ export const RELIC_POTENTIAL_GRADE_ORDER = [
 
 /** 잠재 등급 표시 라벨 */
 export const RELIC_POTENTIAL_GRADE_META = {
-	mystic: { label: '미스틱' },
-	legendary: { label: '레전드리' },
-	unique: { label: '유니크' },
-	epic: { label: '에픽' },
-	rare: { label: '레어' }
+	mystic: { label: GRADE_LABEL.mystic },
+	legendary: { label: GRADE_LABEL.legendary },
+	unique: { label: GRADE_LABEL.unique },
+	epic: { label: GRADE_LABEL.epic },
+	rare: { label: GRADE_LABEL.rare }
 } as const satisfies Record<RelicPotentialGrade, { label: string }>
 
 /**
@@ -29,25 +31,26 @@ export const RELIC_POTENTIAL_GRADE_META = {
  * 미스틱=진한 빨강(pure-red), 레어=파랑. 나머지는 유물 등급과 같은 톤을 씁니다.
  */
 export const RELIC_POTENTIAL_GRADE_BADGE_CLASS = {
-	mystic: 'border-transparent bg-pure-red/15 text-danger-700',
-	legendary: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
-	unique: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800',
-	epic: 'border-transparent bg-pastel-purple-100 text-pastel-purple-800',
-	rare: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800'
+	mystic: 'border-transparent bg-pure-red/15 text-danger-700 dark:bg-pure-red/30 dark:text-danger-700',
+	legendary: ITEM_GRADE_BADGE_CLASS.legendary,
+	unique: ITEM_GRADE_BADGE_CLASS.unique,
+	epic: ITEM_GRADE_BADGE_CLASS.epic,
+	rare: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800 dark:bg-pastel-blue-950 dark:text-pastel-blue-300'
 } as const satisfies Record<RelicPotentialGrade, string>
 
-/** 잠재 등급 탭(에디터) 색상 */
+/** 잠재 등급 탭(에디터) 색상. 레전더리·유니크·에픽은 공통 탭 색을 씁니다. */
 export const RELIC_POTENTIAL_GRADE_TAB_CLASS = {
-	mystic: 'text-danger-700 data-active:bg-pure-red/15 data-active:text-danger-700',
-	legendary: 'text-pastel-green-700 data-active:bg-pastel-green-100 data-active:text-pastel-green-800',
-	unique: 'text-pastel-yellow-700 data-active:bg-pastel-yellow-100 data-active:text-pastel-yellow-800',
-	epic: 'text-pastel-purple-700 data-active:bg-pastel-purple-100 data-active:text-pastel-purple-800',
-	rare: 'text-pastel-blue-700 data-active:bg-pastel-blue-100 data-active:text-pastel-blue-800'
+	mystic:
+		'text-danger-700 data-active:bg-pure-red/15 data-active:text-danger-700 dark:text-danger-500 dark:data-active:bg-pure-red/30 dark:data-active:text-danger-100',
+	legendary: ITEM_GRADE_TAB_CLASS.legendary,
+	unique: ITEM_GRADE_TAB_CLASS.unique,
+	epic: ITEM_GRADE_TAB_CLASS.epic,
+	rare: 'text-pastel-blue-700 data-active:bg-pastel-blue-100 data-active:text-pastel-blue-800 dark:text-pastel-blue-400 dark:data-active:bg-pastel-blue-950 dark:data-active:text-pastel-blue-300'
 } as const satisfies Record<RelicPotentialGrade, string>
 
 /**
  * 유물 등급별 잠재옵션 최대 칸 수.
- * 레전드리 3칸 / 유니크·에픽 2칸
+ * 레전더리 3칸 / 유니크·에픽 2칸
  */
 const RELIC_POTENTIAL_SLOT_LIMIT = {
 	legendary: 3,

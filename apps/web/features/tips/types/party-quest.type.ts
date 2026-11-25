@@ -1,10 +1,11 @@
 import type { ContentDifficulty } from '@/features/tips/types/content-stage-cut.type'
+import type { ItemGrade } from '@/features/tips/types/item-grade.type'
 
 type PartyQuestId = 'ring' | 'necklace' | 'faceAccessory' | 'ring2'
 
 type PartyQuestDifficulty = ContentDifficulty
 
-type PartyQuestRewardGrade = 'epic' | 'unique' | 'legendary'
+type PartyQuestRewardGrade = ItemGrade
 
 type PartyQuestRewardTier = 'top' | 'high' | 'mid' | 'low'
 

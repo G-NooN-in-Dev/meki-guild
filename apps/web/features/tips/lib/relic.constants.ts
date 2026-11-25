@@ -19,21 +19,16 @@ import type {
 	RelicStatEffect,
 	RelicStatUnit
 } from '@/features/tips/types/relic.type'
+import { GRADE_LABEL } from '@/libs/grade.constants'
 
 /** UI·정렬용 등급 순서 — 공통 ITEM_GRADE_ORDER 재사용 */
 export const RELIC_GRADE_ORDER = ITEM_GRADE_ORDER
 
-/** 등급 표시 라벨 — MGF.GG 유물 페이지 표기(레전드리)를 따릅니다. */
+/** 등급 표시 라벨 */
 export const RELIC_GRADE_META = {
-	legendary: {
-		label: '레전드리'
-	},
-	unique: {
-		label: '유니크'
-	},
-	epic: {
-		label: '에픽'
-	}
+	legendary: { label: GRADE_LABEL.legendary },
+	unique: { label: GRADE_LABEL.unique },
+	epic: { label: GRADE_LABEL.epic }
 } as const satisfies Record<RelicGrade, { label: string }>
 
 /** 등급 Badge·탭 색상 — 공통 상수 재사용 */
