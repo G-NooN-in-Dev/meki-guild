@@ -13,6 +13,8 @@ const KOREAN_UNIT_NUMBER_FULL_PATTERN = new RegExp(
 	`^(?:\\d+(?:\\.\\d+)?(?:${KOREAN_UNIT_ALT})?)(?:\\s*\\d+(?:\\.\\d+)?(?:${KOREAN_UNIT_ALT})?)*$`
 )
 const KOREAN_UNIT_CHAR_PATTERN = new RegExp(`[${KOREAN_UNIT_CHARS}]`)
+/** 단위 뒤에 숫자가 바로 붙은 경우 한 칸 띄움. 예: `2099억8256만` → `2099억 8256만` */
+const KOREAN_UNIT_FOLLOWED_BY_DIGIT_PATTERN = new RegExp(`(${KOREAN_UNIT_ALT})(?=\\d)`, 'g')
 
 function parsePlainNumber(value: string): bigint | null {
 	if (!/^\d+(?:\.\d+)?$/.test(value)) {
@@ -107,7 +109,8 @@ function normalizeKoreanUnitNumber(input: string): string {
 		throw new Error('0보다 큰 값이어야 합니다.')
 	}
 
-	return normalized
+	// 단위와 다음 숫자 사이에 공백이 없으면 한 칸 추가 (Sheet·CSV 표기 통일)
+	return normalized.replace(KOREAN_UNIT_FOLLOWED_BY_DIGIT_PATTERN, '$1 ')
 }
 
 /** 수련장 Sheet용: 1,000만 이상은 단위 문자열 */
