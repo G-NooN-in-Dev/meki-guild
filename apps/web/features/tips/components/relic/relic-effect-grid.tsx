@@ -9,8 +9,13 @@ import RelicAwakeningCellControl from '@/features/tips/components/relic/relic-aw
 import RelicEffectLineList from '@/features/tips/components/relic/relic-effect-line-list'
 import RelicIdentity from '@/features/tips/components/relic/relic-identity'
 import GradePortrait from '@/features/tips/components/shared/grade-portrait'
-import { ITEM_GRADE_SLOT_CLASS, ITEM_GRADE_SLOT_HOVER_CLASS } from '@/features/tips/lib/item-grade.constants'
-import { getRelicMaxAwakeningStage } from '@/features/tips/lib/relic.constants'
+import {
+	ITEM_GRADE_CORNER_CHIP_CLASS,
+	ITEM_GRADE_SELECTED_CLASS,
+	ITEM_GRADE_SLOT_CLASS,
+	ITEM_GRADE_SLOT_HOVER_CLASS
+} from '@/features/tips/lib/item-grade.constants'
+import { getRelicMaxAwakeningStage, RELIC_GRADE_META } from '@/features/tips/lib/relic.constants'
 import type { RelicEffectRow } from '@/features/tips/types/relic.type'
 
 type RelicEffectGridProps = {
@@ -47,24 +52,36 @@ function RelicEffectGrid({ rows, onStageChange }: RelicEffectGridProps) {
 			{/* 시트가 그리드를 가리지 않도록 열려 있는 동안 시트 높이만큼 하단 여백을 둡니다. */}
 			<ul className={cn('grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8', sheetOpen && 'pb-[45dvh]')}>
 				{rows.map(({ relic }) => {
-					const selected = open && relic.id === selectedId
+					const selected = sheetOpen && relic.id === selectedId
+					// 시트가 열려 있으면 선택되지 않은 셀을 흐리게 해 선택 셀이 도드라지게 합니다.
+					const dimmed = sheetOpen && !selected
+					const gradeLabel = RELIC_GRADE_META[relic.grade].label
 
 					return (
 						<li key={relic.id}>
 							<Button
 								type="button"
 								variant="ghost"
-								aria-label={`${relic.name} 효과 보기`}
+								aria-label={`${relic.name} ${gradeLabel} 효과 보기`}
 								aria-haspopup="dialog"
+								aria-pressed={selected}
 								onClick={() => handleSelect(relic.id)}
 								className={cn(
-									'aspect-square h-auto w-full rounded-xl p-1',
+									'relative aspect-square h-auto w-full rounded-xl p-1 transition-all duration-200',
 									ITEM_GRADE_SLOT_CLASS[relic.grade],
 									ITEM_GRADE_SLOT_HOVER_CLASS[relic.grade],
-									selected && 'ring-grayscale-900/30 ring-2'
+									dimmed && 'opacity-50',
+									selected && ['z-10 scale-105 shadow-md ring-2', ITEM_GRADE_SELECTED_CLASS[relic.grade]]
 								)}
 							>
 								<GradePortrait src={relic.imageSrc} alt="" grade={relic.grade} className="size-full" />
+								<span
+									aria-hidden
+									className={cn(
+										'absolute top-0 left-0 size-3.5 rounded-tl-xl rounded-br-lg',
+										ITEM_GRADE_CORNER_CHIP_CLASS[relic.grade]
+									)}
+								/>
 							</Button>
 						</li>
 					)

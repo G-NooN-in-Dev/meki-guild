@@ -47,6 +47,22 @@ export const ITEM_GRADE_SLOT_CLASS = {
 	epic: 'border-pastel-purple-300 bg-pastel-purple-50 dark:border-pastel-purple-900 dark:bg-pastel-purple-950'
 } as const satisfies Record<ItemGrade, string>
 
+/**
+ * 그리드 셀 모서리 등급 표식 — 배경이 옅어도 등급이 한눈에 보이도록 진한 단색을 씁니다.
+ */
+export const ITEM_GRADE_CORNER_CHIP_CLASS = {
+	legendary: 'bg-pastel-green-600',
+	unique: 'bg-pastel-yellow-600',
+	epic: 'bg-pastel-purple-600'
+} as const satisfies Record<ItemGrade, string>
+
+/** 그리드에서 선택된 셀 — 등급색 링으로 선택 상태를 강조합니다. */
+export const ITEM_GRADE_SELECTED_CLASS = {
+	legendary: 'ring-pastel-green-600 border-pastel-green-600',
+	unique: 'ring-pastel-yellow-600 border-pastel-yellow-600',
+	epic: 'ring-pastel-purple-600 border-pastel-purple-600'
+} as const satisfies Record<ItemGrade, string>
+
 /** 슬롯 카드 hover — 등급 배경을 덮어쓰지 않도록 톤만 살짝 올립니다. */
 export const ITEM_GRADE_SLOT_HOVER_CLASS = {
 	legendary:
