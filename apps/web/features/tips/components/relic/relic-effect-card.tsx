@@ -10,6 +10,7 @@ import RelicAwakeningCellControl from '@/features/tips/components/relic/relic-aw
 import RelicEffectLineList from '@/features/tips/components/relic/relic-effect-line-list'
 import RelicIdentity from '@/features/tips/components/relic/relic-identity'
 import { ITEM_GRADE_SLOT_CLASS } from '@/features/tips/lib/item-grade.constants'
+import { getRelicMaxAwakeningStage } from '@/features/tips/lib/relic.constants'
 import type { RelicEffectRow } from '@/features/tips/types/relic.type'
 
 type RelicEffectCardProps = RelicEffectRow & {
@@ -37,7 +38,12 @@ function RelicEffectCard({ relic, stage, equipLines, possessionLines, onStageCha
 					>
 						<RelicIdentity relic={relic} />
 					</CollapsibleTrigger>
-					<RelicAwakeningCellControl layout="row" stage={stage} onStageChange={onStageChange} />
+					<RelicAwakeningCellControl
+						layout="row"
+						stage={stage}
+						maxStage={getRelicMaxAwakeningStage(relic.grade)}
+						onStageChange={onStageChange}
+					/>
 					<CollapsibleTrigger
 						aria-label={`${relic.name} 효과 ${open ? '접기' : '펼치기'}`}
 						className={cn(

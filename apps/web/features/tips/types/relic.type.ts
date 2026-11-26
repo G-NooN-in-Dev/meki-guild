@@ -3,8 +3,8 @@ import type { ItemGrade } from '@/features/tips/types/item-grade.type'
 /** 유물 등급. MGF.GG 유물 시뮬레이터 기준 3단계입니다. */
 type RelicGrade = ItemGrade
 
-/** 유물 각성 단계. 0~5 단계(총 6단계) */
-type RelicAwakeningStage = 0 | 1 | 2 | 3 | 4 | 5
+/** 유물 각성 단계. 레전드리는 0~7, 유니크·에픽은 0~5 */
+type RelicAwakeningStage = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
 
 /** 유물 스탯 수치 단위. percent=% / flat=절대값(명중 등) */
 type RelicStatUnit = 'percent' | 'flat'
@@ -83,8 +83,8 @@ type RelicResolvedEffects = {
 	stats: readonly RelicStatEffect[]
 }
 
-/** 각성 0~5단계 수치. 인덱스가 단계와 같습니다. */
-type RelicAwakeningValues = readonly [number, number, number, number, number, number]
+/** 각성 단계별 수치. 인덱스가 단계와 같습니다. (레전드리 8개, 유니크·에픽 6개) */
+type RelicAwakeningValues = readonly number[]
 
 /**
  * 유물 보유 효과 한 줄.

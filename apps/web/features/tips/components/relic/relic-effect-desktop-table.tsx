@@ -5,6 +5,7 @@ import RelicAwakeningCellControl from '@/features/tips/components/relic/relic-aw
 import RelicEffectLineList from '@/features/tips/components/relic/relic-effect-line-list'
 import RelicIdentity from '@/features/tips/components/relic/relic-identity'
 import { ITEM_GRADE_SLOT_CLASS } from '@/features/tips/lib/item-grade.constants'
+import { getRelicMaxAwakeningStage } from '@/features/tips/lib/relic.constants'
 import type { RelicEffectRow } from '@/features/tips/types/relic.type'
 
 /** tab~lg는 촘촘하게, lg부터 여유 있게 */
@@ -52,7 +53,11 @@ function RelicEffectDesktopTable({ rows, onStageChange }: RelicEffectDesktopTabl
 								<RelicIdentity relic={relic} />
 							</TableCell>
 							<TableCell className={stageCellClassName}>
-								<RelicAwakeningCellControl stage={stage} onStageChange={(next) => onStageChange(relic.id, next)} />
+								<RelicAwakeningCellControl
+									stage={stage}
+									maxStage={getRelicMaxAwakeningStage(relic.grade)}
+									onStageChange={(next) => onStageChange(relic.id, next)}
+								/>
 							</TableCell>
 							<TableCell className={effectCellClassName}>
 								<RelicEffectLineList lines={equipLines} lineKeyPrefix={`${relic.id}-equip`} />

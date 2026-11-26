@@ -8,6 +8,8 @@ import { RELIC_EFFECT_DEFINITION_BY_ID } from '@/features/tips/lib/relic-effects
 import {
 	clampRelicAwakeningStage,
 	formatRelicStatValue,
+	getRelicMaxAwakeningStage,
+	RELIC_MAX_AWAKENING_STAGE,
 	roundRelicStatValue
 } from '@/features/tips/lib/relic-stat.helpers'
 import type {
@@ -35,16 +37,14 @@ export const RELIC_GRADE_META = {
 export const RELIC_GRADE_BADGE_CLASS = ITEM_GRADE_BADGE_CLASS
 export const RELIC_GRADE_TAB_CLASS = ITEM_GRADE_TAB_CLASS
 
-/** 유물 슬롯은 총 4칸 */
+/** 유물 슬롯은 총 5칸 */
 export const RELIC_SETUP_SLOTS = [
 	{ id: 'slot-1', label: '유물 슬롯 1' },
 	{ id: 'slot-2', label: '유물 슬롯 2' },
 	{ id: 'slot-3', label: '유물 슬롯 3' },
-	{ id: 'slot-4', label: '유물 슬롯 4' }
+	{ id: 'slot-4', label: '유물 슬롯 4' },
+	{ id: 'slot-5', label: '유물 슬롯 5' }
 ] as const
-
-/** 유물 각성은 0~5 단계 */
-export const RELIC_MAX_AWAKENING_STAGE = 5
 
 const EMPTY_SLOT_LOADOUT: RelicSlotLoadout = { relicId: null, stage: 0, potentialIds: [] }
 
@@ -102,13 +102,15 @@ function resolveRelicEffects(relicId: string, stage: number): RelicResolvedEffec
 		return null
 	}
 
-	const safeStage = clampRelicAwakeningStage(stage)
+	const safeStage = clampRelicAwakeningStage(stage, getRelicMaxAwakeningStage(relic.grade))
+	// 특정 콘텐츠 전용 유물은 모든 효과 문장 앞에 [조건]을 붙여 표시합니다.
+	const conditionPrefix = definition.activationCondition ? `[${definition.activationCondition}] ` : ''
 	return {
 		relicId: relic.id,
 		relicName: relic.name,
 		grade: relic.grade,
 		stage: safeStage,
-		lines: definition.resolveLines(safeStage),
+		lines: definition.resolveLines(safeStage).map((line) => `${conditionPrefix}${line}`),
 		stats: definition.resolveStats(safeStage)
 	}
 }
@@ -149,6 +151,8 @@ export {
 	createEmptyRelicLoadout,
 	getRelicActivationCondition,
 	getRelicById,
+	getRelicMaxAwakeningStage,
 	getRelicsByGrade,
+	RELIC_MAX_AWAKENING_STAGE,
 	resolveRelicEffects
 }

@@ -8,6 +8,8 @@ import { type ChangeEvent, type KeyboardEvent, useState } from 'react'
 
 type RelicAwakeningStepperProps = {
 	stage: number
+	/** 등급별 각성 상한 (레전드리 7, 유니크·에픽 5) */
+	maxStage: number
 	onStageChange: (stage: number) => void
 	/** 보유 각성에 맞춰 슬롯 각성을 고정할 때 */
 	disabled?: boolean
@@ -16,9 +18,7 @@ type RelicAwakeningStepperProps = {
 	className?: string
 }
 
-const MAX_STAGE = 5
-
-function parseStageDraft(raw: string) {
+function parseStageDraft(raw: string, maxStage: number) {
 	const trimmed = raw.trim()
 	if (trimmed === '') {
 		return null
@@ -29,12 +29,13 @@ function parseStageDraft(raw: string) {
 		return null
 	}
 
-	return Math.min(MAX_STAGE, Math.max(0, Math.floor(parsed)))
+	return Math.min(maxStage, Math.max(0, Math.floor(parsed)))
 }
 
-/** 유물 각성 단계(0~5) 조절 UI */
+/** 유물 각성 단계(0~maxStage) 조절 UI */
 function RelicAwakeningStepper({
 	stage,
+	maxStage,
 	onStageChange,
 	disabled = false,
 	compact = false,
@@ -43,11 +44,11 @@ function RelicAwakeningStepper({
 	const [isEditing, setIsEditing] = useState(false)
 	const [draft, setDraft] = useState(String(stage))
 	const canDecrease = !disabled && stage > 0
-	const canIncrease = !disabled && stage < MAX_STAGE
+	const canIncrease = !disabled && stage < maxStage
 	const displayValue = isEditing ? draft : String(stage)
 
 	function commitDraft(raw: string) {
-		const nextStage = parseStageDraft(raw)
+		const nextStage = parseStageDraft(raw, maxStage)
 		setIsEditing(false)
 
 		if (nextStage === null) {
@@ -97,7 +98,7 @@ function RelicAwakeningStepper({
 			</Button>
 
 			<div className="flex items-center gap-0.5">
-				<span className="text-grayscale-500 text-xs">각성</span>
+				<span className="text-grayscale-500 text-xs dark:text-white/50">각성</span>
 				<Input
 					type="text"
 					inputMode="numeric"
@@ -105,14 +106,14 @@ function RelicAwakeningStepper({
 					value={displayValue}
 					disabled={disabled}
 					readOnly={disabled}
-					aria-label="각성 단계 입력 (0-5)"
+					aria-label={`각성 단계 입력 (0-${maxStage})`}
 					onChange={handleInputChange}
 					onFocus={handleInputFocus}
 					onBlur={() => commitDraft(draft)}
 					onKeyDown={handleInputKeyDown}
 					className="text-grayscale-900 h-6 w-9 min-w-0 px-1 text-center text-xs leading-none font-semibold tabular-nums shadow-none"
 				/>
-				<span className="text-grayscale-400 text-xs">/5</span>
+				<span className="text-grayscale-400 text-xs dark:text-white/50">/{maxStage}</span>
 			</div>
 
 			<Button
@@ -130,10 +131,10 @@ function RelicAwakeningStepper({
 				type="button"
 				variant="secondary"
 				size="xs"
-				disabled={disabled || stage >= MAX_STAGE}
+				disabled={disabled || stage >= maxStage}
 				aria-label="최대 각성 단계로 설정"
 				className={cn('px-1.5', compact && 'h-6 min-w-0')}
-				onClick={() => onStageChange(MAX_STAGE)}
+				onClick={() => onStageChange(maxStage)}
 			>
 				MAX
 			</Button>

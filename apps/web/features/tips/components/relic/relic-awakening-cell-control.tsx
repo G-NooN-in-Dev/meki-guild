@@ -5,23 +5,29 @@ import { cn } from '@shared/ui/utils'
 import { MinusIcon, PlusIcon } from 'lucide-react'
 
 import RelicAwakeningStars from '@/features/tips/components/relic/relic-awakening-stars'
-import { RELIC_MAX_AWAKENING_STAGE } from '@/features/tips/lib/relic.constants'
 
 type RelicAwakeningCellControlProps = {
 	stage: number
+	/** 등급별 각성 상한 (레전드리 7, 유니크·에픽 5) */
+	maxStage: number
 	onStageChange: (stage: number) => void
 	/** row: 별과 −/+를 한 줄에 (모바일 카드 헤더) */
 	layout?: 'stack' | 'row'
 }
 
 /** 효과 표·카드 각성 조절 — stack은 별 아래 −/+, row는 한 줄 */
-function RelicAwakeningCellControl({ stage, onStageChange, layout = 'stack' }: RelicAwakeningCellControlProps) {
+function RelicAwakeningCellControl({
+	stage,
+	maxStage,
+	onStageChange,
+	layout = 'stack'
+}: RelicAwakeningCellControlProps) {
 	const canDecrease = stage > 0
-	const canIncrease = stage < RELIC_MAX_AWAKENING_STAGE
+	const canIncrease = stage < maxStage
 
 	return (
 		<div className={cn('flex items-center gap-1.5', layout === 'stack' && 'flex-col')}>
-			<RelicAwakeningStars stage={stage} max={RELIC_MAX_AWAKENING_STAGE} />
+			<RelicAwakeningStars stage={stage} max={maxStage} />
 			<div className="flex items-center gap-1">
 				<Button
 					type="button"

@@ -43,7 +43,10 @@ const RELIC_CATALOG_SOURCE: readonly RelicCatalogEntry[] = [
 	{ name: '저주받은 인형', grade: 'legendary', iconKey: 'cursed-doll' },
 	{ name: '레인디어의 창', grade: 'legendary', iconKey: 'reindeer-spear' },
 	{ name: '비밀 지도', grade: 'legendary', iconKey: 'secret-map' },
-	{ name: '순환의 고리', grade: 'legendary', iconKey: 'circulation-ring' }
+	{ name: '순환의 고리', grade: 'legendary', iconKey: 'circulation-ring' },
+	{ name: '봉인된 항아리', grade: 'legendary', iconKey: 'sealed-bottle' },
+	{ name: '빛나는 손목시계', grade: 'legendary', iconKey: 'shine-watch' },
+	{ name: '머미독의 붕대', grade: 'legendary', iconKey: 'mummy-dog-bandage' }
 ] as const satisfies readonly {
 	name: string
 	grade: RelicGrade

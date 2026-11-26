@@ -7,7 +7,7 @@ import { createEmptyRelicLoadout } from '@/features/tips/lib/relic.constants'
 import type { RelicLoadout } from '@/features/tips/types/relic.type'
 
 /**
- * 4슬롯에 유물·각성·잠재옵션을 올려 장착 효과 합산을 확인합니다.
+ * 5슬롯에 유물·각성·잠재옵션을 올려 장착 효과 합산을 확인합니다.
  */
 function RelicSetupSimulator() {
 	const [loadouts, setLoadouts] = useState<RelicLoadout>(() => createEmptyRelicLoadout())

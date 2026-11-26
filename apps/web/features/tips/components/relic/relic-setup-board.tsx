@@ -12,6 +12,7 @@ import {
 	clampRelicAwakeningStage,
 	getRelicActivationCondition,
 	getRelicById,
+	getRelicMaxAwakeningStage,
 	RELIC_SETUP_SLOTS,
 	resolveRelicEffects
 } from '@/features/tips/lib/relic.constants'
@@ -38,7 +39,7 @@ type RelicSetupBoardProps = {
 const EMPTY_LOADOUT: RelicSlotLoadout = { relicId: null, stage: 0, potentialIds: [] }
 
 /**
- * 유물 4슬롯 세팅 보드 + (편집 시) Sheet.
+ * 유물 5슬롯 세팅 보드 + (편집 시) Sheet.
  * 세팅 보드에서 슬롯·각성·잠재옵션을 조절합니다.
  */
 function RelicSetupBoard({
@@ -112,11 +113,12 @@ function RelicSetupBoard({
 		const previous = loadouts[editingSlotId]
 		const isSameRelic = previous?.relicId === relic.id
 		const ownedStage = stageByRelicId?.get(relic.id)
+		const maxStage = getRelicMaxAwakeningStage(relic.grade)
 		const stage =
 			ownedStage !== undefined
-				? clampRelicAwakeningStage(ownedStage)
+				? clampRelicAwakeningStage(ownedStage, maxStage)
 				: isSameRelic
-					? clampRelicAwakeningStage(previous?.stage ?? 0)
+					? clampRelicAwakeningStage(previous?.stage ?? 0, maxStage)
 					: 0
 
 		updateLoadouts({
@@ -150,11 +152,16 @@ function RelicSetupBoard({
 			return
 		}
 
+		const relic = getRelicById(loadout.relicId)
+		if (!relic) {
+			return
+		}
+
 		updateLoadouts({
 			...loadouts,
 			[editingSlotId]: {
 				...loadout,
-				stage: clampRelicAwakeningStage(stage)
+				stage: clampRelicAwakeningStage(stage, getRelicMaxAwakeningStage(relic.grade))
 			}
 		})
 	}
@@ -200,7 +207,9 @@ function RelicSetupBoard({
 			<div className="flex flex-col gap-3">
 				<div className="flex items-end justify-between gap-2">
 					<h2 className="text-grayscale-900 font-semibold">{title}</h2>
-					<p className="text-grayscale-600 text-sm tabular-nums">{equippedCount}/4 장착</p>
+					<p className="text-grayscale-600 text-sm tabular-nums">
+						{equippedCount}/{RELIC_SETUP_SLOTS.length} 장착
+					</p>
 				</div>
 
 				<div className="grid gap-2 sm:grid-cols-2">

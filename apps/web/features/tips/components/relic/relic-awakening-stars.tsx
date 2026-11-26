@@ -4,7 +4,7 @@ import { StarIcon } from 'lucide-react'
 import { RELIC_MAX_AWAKENING_STAGE } from '@/features/tips/lib/relic.constants'
 
 type RelicAwakeningStarsProps = {
-	/** 표시할 각성 단계(0~5) */
+	/** 표시할 각성 단계(0~7) */
 	stage: number
 	/**
 	 * 항상 이 개수만큼 별을 그리고, stage만큼 왼쪽부터 채웁니다.
