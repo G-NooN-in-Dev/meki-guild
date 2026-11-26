@@ -1,8 +1,20 @@
 import { createRelicStat, stageFlat, stagePercent, stageValue } from '@/features/tips/lib/relic-stat.helpers'
-import type { RelicAwakeningStage, RelicStatEffect } from '@/features/tips/types/relic.type'
+import type {
+	RelicAwakeningStage,
+	RelicContent,
+	RelicEffectCategory,
+	RelicStatEffect,
+	RelicTag
+} from '@/features/tips/types/relic.type'
 
 type RelicEffectDefinition = {
 	activationCondition?: string
+	/** 특수 옵션 필터용. 전용 유물뿐 아니라 일부 효과만 해당 콘텐츠에 걸린 유물도 지정합니다. */
+	contents?: readonly RelicContent[]
+	/** 기타 옵션 필터용. 효과 문장에 근거가 있는 유물만 수동 지정합니다. */
+	tags?: readonly RelicTag[]
+	/** resolveStats에 없는 문장 전용 효과의 카테고리 보강 (예: MP 회복, 디버프 제거) */
+	extraEffectCategories?: readonly RelicEffectCategory[]
 	resolveLines: (stage: RelicAwakeningStage) => readonly string[]
 	/** 사이드바 합산에 쓰는 구조화 수치. lines와 별도로 유지합니다. */
 	resolveStats: (stage: RelicAwakeningStage) => readonly RelicStatEffect[]
@@ -19,6 +31,8 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-old-music-box': {
+		tags: ['cooldown'],
+		extraEffectCategories: ['buff-debuff'],
 		resolveLines: (stage) => [
 			`디버프 피격 시 디버프 1개 제거 + 25초간 공격력 ${stagePercent([25, 30, 35, 40, 45, 50, 55, 60], stage)} 증가 (재사용 대기시간 20초)`
 		],
@@ -27,6 +41,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-silver-pendant': {
+		tags: ['stackable'],
 		resolveLines: (stage) => [
 			`공격 시 15% 확률로 대상 받는 피해 5초간 ${stagePercent([10, 12, 14, 16, 18, 20, 22, 24], stage)} 증가`,
 			`동시에 HP 회복력 30초간 ${stagePercent([5, 6, 7, 8, 9, 10, 11, 12], stage)} 감소, 최대 5중첩(지속시간 개별 적용)`
@@ -57,6 +72,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-will-o-wisp': {
+		tags: ['cooldown'],
 		resolveLines: (stage) => [
 			`피해를 입으면 5% 확률로 HP ${stagePercent([3, 3.6, 4.2, 4.8, 5.4, 6, 6.6, 7.2], stage)} 회복`,
 			`${stageValue([1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4], stage)}초간 피해 면역 (재사용 대기시간 5초)`
@@ -77,6 +93,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'legendary-soul-contract': {
 		activationCondition: '챕터 사냥',
+		contents: ['chapter-hunt'],
 		resolveLines: (stage) => [
 			`전투 시 스킬 재사용 대기시간 ${stagePercent([20, 24, 28, 32, 36, 40, 44, 48], stage)} 감소`
 		],
@@ -86,6 +103,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'legendary-lit-lamp': {
 		activationCondition: '월드보스',
+		contents: ['world-boss'],
 		resolveLines: (stage) => [`전투 시 최종 데미지 ${stagePercent([20, 24, 28, 32, 36, 40, 44, 48], stage)} 증가`],
 		resolveStats: (stage) => [
 			createRelicStat('최종 데미지', [20, 24, 28, 32, 36, 40, 44, 48], stage, 'percent', '월드보스')
@@ -93,6 +111,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'legendary-soul-pouch': {
 		activationCondition: '아레나 / 월드 아레나',
+		contents: ['arena'],
 		resolveLines: (stage) => [`전투 시 최종 데미지 ${stagePercent([20, 24, 28, 32, 36, 40, 44, 48], stage)} 증가`],
 		resolveStats: (stage) => [
 			createRelicStat('최종 데미지', [20, 24, 28, 32, 36, 40, 44, 48], stage, 'percent', '아레나 / 월드 아레나')
@@ -100,12 +119,14 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'legendary-ancient-document-fragment': {
 		activationCondition: '길드 토벌전',
+		contents: ['guild-raid'],
 		resolveLines: (stage) => [`전투 시 최종 데미지 ${stagePercent([20, 24, 28, 32, 36, 40, 44, 48], stage)} 증가`],
 		resolveStats: (stage) => [
 			createRelicStat('최종 데미지', [20, 24, 28, 32, 36, 40, 44, 48], stage, 'percent', '길드 토벌전')
 		]
 	},
 	'legendary-ice-soul-stone': {
+		extraEffectCategories: ['recovery'],
 		resolveLines: (stage) => [
 			'2초마다 MP 1% 회복',
 			`MP 50% 이상일 때 크리티컬 데미지 ${stagePercent([20, 24, 28, 32, 36, 40, 44, 48], stage)} 증가`,
@@ -117,6 +138,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-burning-lava': {
+		extraEffectCategories: ['buff-debuff'],
 		resolveLines: (stage) => [
 			`대상이 보호막 보유 시 최종 데미지 ${stagePercent([60, 72, 84, 96, 108, 120, 132, 144], stage)} 증가`,
 			`대상이 디버프 보유 시 최종 데미지 ${stagePercent([8, 9.6, 11.2, 12.8, 14.4, 16, 17.6, 19.2], stage)} 증가`,
@@ -151,6 +173,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-celestial-dragon-elixir': {
+		extraEffectCategories: ['buff-debuff'],
 		resolveLines: (stage) => [
 			`공격 시 20% 확률로 5초간 대상 받는 피해 ${stagePercent([15, 18, 21, 24, 27, 30, 33, 36], stage)} 증가`,
 			`전투 중 1회: 대상 버프 1개 제거 후 5초간 추가로 받는 피해 ${stagePercent([15, 18, 21, 24, 27, 30, 33, 36], stage)} 증가`
@@ -179,13 +202,15 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		resolveStats: (stage) => [createRelicStat('아군 공격력', [10, 12, 14, 16, 18, 20, 22, 24], stage, 'percent')]
 	},
 	'legendary-horn-flute': {
+		contents: ['chapter-boss'],
+		tags: ['companion'],
 		resolveLines: (stage) => [
 			`동료 소환 중 자신/동료 최종 데미지 ${stagePercent([10, 12, 14, 16, 18, 20, 22, 24], stage)} 증가`,
-			`[챕터 보스 전장] 자신의 최종 데미지 ${stagePercent([20, 24, 28, 32, 36, 40, 44, 48], stage)} 증가`
+			`[챕터 보스] 자신의 최종 데미지 ${stagePercent([20, 24, 28, 32, 36, 40, 44, 48], stage)} 증가`
 		],
 		resolveStats: (stage) => [
 			createRelicStat('최종 데미지', [10, 12, 14, 16, 18, 20, 22, 24], stage, 'percent', '동료 소환 중'),
-			createRelicStat('최종 데미지', [20, 24, 28, 32, 36, 40, 44, 48], stage, 'percent', '챕터 보스 전장')
+			createRelicStat('최종 데미지', [20, 24, 28, 32, 36, 40, 44, 48], stage, 'percent', '챕터 보스')
 		]
 	},
 	'legendary-cursed-doll': {
@@ -213,6 +238,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-secret-map': {
+		contents: ['growth-dungeon'],
 		resolveLines: (stage) => [
 			`공격력 ${stagePercent([5, 6, 7, 8, 9, 10, 11, 12], stage)} 증가`,
 			`적이 10명 이상일 때 최종 데미지 ${stagePercent([5, 6, 7, 8, 9, 10, 11, 12], stage)} 증가`,
@@ -245,6 +271,8 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-sealed-bottle': {
+		contents: ['chapter-challenge'],
+		tags: ['companion', 'stackable'],
 		resolveLines: (stage) => [
 			`최종 데미지 ${stagePercent([6, 7.2, 8.4, 9.6, 10.8, 12, 13.2, 14.4], stage)} 증가`,
 			`자신 또는 동료가 적을 처치할 때마다 일반 몬스터 데미지 ${stagePercent([1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4], stage)}, 보스 몬스터 데미지 ${stagePercent([2, 2.4, 2.8, 3.2, 3.6, 4, 4.4, 4.8], stage)} 증가`,
@@ -273,6 +301,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'legendary-shine-watch': {
+		tags: ['companion', 'stackable'],
 		resolveLines: (stage) => [
 			`공격력 ${stagePercent([10, 12, 14, 16, 18, 20, 22, 24], stage)} 증가`,
 			`동료 소환 후 3초마다 해당 동료의 최종 데미지 ${stagePercent([4, 4.8, 5.6, 6.4, 7.2, 8, 8.8, 9.6], stage)}씩 증가`,
@@ -307,6 +336,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'unique-hex-crystal-necklace': {
+		tags: ['stackable'],
 		resolveLines: (stage) => [
 			`20초마다 30초간 현재 데미지의 ${stagePercent([15, 18, 21, 24, 27, 30], stage)}만큼 증가`,
 			'효과 최대 3중첩'
@@ -317,6 +347,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		]
 	},
 	'unique-arwen-glass-slipper': {
+		tags: ['companion'],
 		resolveLines: (stage) => [`동료 소환 지속시간 ${stagePercent([20, 24, 28, 32, 36, 40], stage)} 증가`],
 		resolveStats: (stage) => [createRelicStat('동료 소환 지속시간', [20, 24, 28, 32, 36, 40], stage, 'percent')]
 	},
@@ -334,6 +365,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'unique-clear-spring-water': {
 		activationCondition: '성장 던전',
+		contents: ['growth-dungeon'],
 		resolveLines: (stage) => [`전투 시 최종 데미지 ${stagePercent([10, 12, 14, 16, 18, 20], stage)} 증가`],
 		resolveStats: (stage) => [createRelicStat('최종 데미지', [10, 12, 14, 16, 18, 20], stage, 'percent', '성장 던전')]
 	},
@@ -349,6 +381,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'unique-zakum-stone-fragment': {
 		activationCondition: '자쿰',
+		contents: ['zakum'],
 		resolveLines: (stage) => [
 			`전투 시 최종 데미지 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 증가`,
 			`HP 물약 재사용 대기시간 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 감소`,
@@ -362,6 +395,8 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'unique-horntail-scale': {
 		activationCondition: '혼테일',
+		contents: ['horntail'],
+		tags: ['cooldown'],
 		resolveLines: (stage) => [
 			`전투 시 최종 데미지 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 증가`,
 			`HP 물약 재사용 대기시간 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 감소`,
@@ -375,6 +410,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 	},
 	'unique-pink-bean-rib': {
 		activationCondition: '핑크빈',
+		contents: ['pink-bean'],
 		resolveLines: (stage) => [
 			`전투 시 최종 데미지 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 증가`,
 			`HP 물약 재사용 대기시간 ${stagePercent([20, 28, 36, 44, 52, 60], stage)} 감소`,
@@ -391,6 +427,7 @@ const RELIC_EFFECT_DEFINITION_BY_ID: Record<string, RelicEffectDefinition> = {
 		resolveStats: (stage) => [createRelicStat('공격력', [10, 12, 14, 16, 18, 20], stage, 'percent', '10초마다 5초')]
 	},
 	'epic-pig-ribbon': {
+		tags: ['cooldown'],
 		resolveLines: (stage) => [
 			`공격 시 20% 확률로 HP/MP ${stagePercent([1, 1.2, 1.4, 1.6, 1.8, 2], stage)} 회복 (재사용 대기시간 5초)`
 		],

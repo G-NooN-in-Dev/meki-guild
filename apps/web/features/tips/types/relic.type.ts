@@ -104,11 +104,66 @@ type RelicEffectRow = {
 	possessionLines: readonly string[]
 }
 
+/**
+ * 특수 옵션 필터용 콘텐츠.
+ * 유물 전체가 해당 콘텐츠 전용이거나, 일부 효과만 해당 콘텐츠에서 달라지는 경우 모두 포함합니다.
+ */
+type RelicContent =
+	| 'chapter-hunt'
+	| 'chapter-challenge'
+	| 'chapter-boss'
+	| 'world-boss'
+	| 'arena'
+	| 'guild-raid'
+	| 'growth-dungeon'
+	| 'zakum'
+	| 'horntail'
+	| 'pink-bean'
+
+/** 효과 종류 필터용 카테고리. 장착 효과 라벨을 묶은 단위이며, 나열 순서는 필터 칩과 같습니다. */
+type RelicEffectCategory =
+	| 'final-damage'
+	| 'damage'
+	| 'normal-monster-damage'
+	| 'boss-monster-damage'
+	| 'skill-basic-damage'
+	| 'max-damage-multiplier'
+	| 'min-damage-multiplier'
+	| 'critical-rate'
+	| 'critical-damage'
+	| 'attack'
+	| 'attack-speed'
+	| 'penetration'
+	| 'accuracy'
+	| 'taken-damage-increase'
+	| 'taken-damage-reduction'
+	| 'buff-debuff'
+	| 'recovery'
+	| 'cooldown-reduction'
+	| 'duration'
+
+/** 기타 옵션 필터용 태그 (동료 적용 / 중첩 / 재사용 대기시간) */
+type RelicTag = 'companion' | 'stackable' | 'cooldown'
+
+/**
+ * 유물 필터 선택 상태.
+ * 그룹 안은 OR, 그룹 사이는 AND. 빈 배열은 "전체"입니다.
+ */
+type RelicFilterState = {
+	grades: readonly RelicGrade[]
+	contents: readonly RelicContent[]
+	categories: readonly RelicEffectCategory[]
+	tags: readonly RelicTag[]
+}
+
 export type {
 	Relic,
 	RelicAwakeningStage,
 	RelicAwakeningValues,
+	RelicContent,
+	RelicEffectCategory,
 	RelicEffectRow,
+	RelicFilterState,
 	RelicGrade,
 	RelicLoadout,
 	RelicPossessionStatLine,
@@ -117,5 +172,6 @@ export type {
 	RelicResolvedEffects,
 	RelicSlotLoadout,
 	RelicStatEffect,
-	RelicStatUnit
+	RelicStatUnit,
+	RelicTag
 }
