@@ -5,8 +5,8 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@s
 import { SearchXIcon } from 'lucide-react'
 import { useState } from 'react'
 
-import RelicEffectCard from '@/features/tips/components/relic/relic-effect-card'
 import RelicEffectDesktopTable from '@/features/tips/components/relic/relic-effect-desktop-table'
+import RelicEffectGrid from '@/features/tips/components/relic/relic-effect-grid'
 import RelicFilterPopover from '@/features/tips/components/relic/relic-filter-popover'
 import RelicPotentialTable from '@/features/tips/components/relic/relic-potential-table'
 import { RELICS, resolveRelicEffects } from '@/features/tips/lib/relic.constants'
@@ -21,7 +21,7 @@ function createInitialStageByRelicId() {
 
 /**
  * 유물별 장착·보유 효과.
- * tab(896px) 미만은 카드, 이상은 4열 표. 각성 상태는 둘 다 같습니다.
+ * tab(896px) 미만은 이미지 그리드 + 바텀시트, 이상은 4열 표.
  */
 function RelicEffectTable() {
 	const [stageByRelicId, setStageByRelicId] = useState(createInitialStageByRelicId)
@@ -52,7 +52,8 @@ function RelicEffectTable() {
 				<div className="flex min-w-0 flex-col gap-1">
 					<h3 className="text-grayscale-900 text-base font-semibold">유물 효과</h3>
 					<p className="text-grayscale-600 text-sm">
-						각성 단계를 바꾸면 장착 효과와 보유 효과가 같이 바뀝니다. 모바일에서는 유물을 눌러 효과를 펼칠 수 있습니다.
+						각성 단계를 바꾸면 장착 효과와 보유 효과가 같이 바뀝니다. 모바일에서는 유물을 눌러 효과를 확인할 수
+						있습니다.
 					</p>
 				</div>
 				<div className="flex shrink-0 items-center gap-2">
@@ -76,14 +77,8 @@ function RelicEffectTable() {
 				</Empty>
 			) : (
 				<>
-					<div className="tab:hidden flex flex-col gap-2">
-						{rows.map((row) => (
-							<RelicEffectCard
-								key={row.relic.id}
-								{...row}
-								onStageChange={(stage) => handleStageChange(row.relic.id, stage)}
-							/>
-						))}
+					<div className="tab:hidden">
+						<RelicEffectGrid rows={rows} onStageChange={handleStageChange} />
 					</div>
 
 					<div className="tab:block hidden">
