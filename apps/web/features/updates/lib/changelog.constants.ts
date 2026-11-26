@@ -6,6 +6,29 @@ import type { ChangelogEntry } from '@/features/updates/types/changelog.type'
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
 	{
+		version: '1.8.1',
+		date: '2026-11-26',
+		sections: [
+			{
+				title: '공통',
+				items: [{ text: '다크 모드 추가' }, { text: '길드 컨텐츠 시즌 일정 추가' }]
+			},
+			{
+				title: '정보/팁',
+				items: [
+					{
+						text: '유물 정보',
+						children: [
+							{ text: '신규 유물 3종 추가' },
+							{ text: '유물 필터링 기능 추가' },
+							{ text: '모바일 환경 UI 변경' }
+						]
+					}
+				]
+			}
+		]
+	},
+	{
 		version: '1.8.0',
 		date: '2026-11-23',
 		sections: [
