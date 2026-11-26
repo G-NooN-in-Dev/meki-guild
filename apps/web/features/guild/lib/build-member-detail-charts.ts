@@ -2,7 +2,6 @@ import { WEEK_SLOTS } from '@/features/guild/lib/aggregate-week-metrics'
 import { getDetailMetricColorIndex, getDetailRankColorIndex } from '@/features/guild/lib/chart-series-colors'
 import { computeMemberRankings, type MemberRankings } from '@/features/guild/lib/compute-member-rankings'
 import { enrichMetricSeries } from '@/features/guild/lib/format-metric-series'
-import { getGuildExpeditionGradeRank } from '@/features/guild/lib/guild-expedition-tier.constants'
 import { parseGuildMember } from '@/features/guild/lib/parse-guild-member'
 import type {
 	GuildMetricFormat,
@@ -18,6 +17,7 @@ import type {
 } from '@/features/guild/types/guild-detail-roster.type'
 import type { GuildWeekSnapshot, ParsedGuildMember } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_CONTENT_UPDATED_AT, type GuildContentDateRange } from '@/libs/guild-content-dates.constants'
+import { getGuildExpeditionGradeRank } from '@/libs/guild-expedition-tier.constants'
 
 type RankingMetricKey = keyof MemberRankings
 

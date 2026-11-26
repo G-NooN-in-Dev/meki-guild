@@ -1,4 +1,3 @@
-import { getGuildExpeditionGradeDiff } from '@/features/guild/lib/guild-expedition-tier.constants'
 import type {
 	GuildMemberComparison,
 	LevelDelta,
@@ -7,6 +6,7 @@ import type {
 	ParsedGuildMember
 } from '@/features/guild/types/guild-snapshot.type'
 import { GUILD_EMPTY_VALUE_LABEL } from '@/features/guild/types/guild-snapshot.type'
+import { getGuildExpeditionGradeDiff } from '@/libs/guild-expedition-tier.constants'
 import { formatArrowDelta, formatRankArrowDelta } from '@/utils/format-delta-label'
 import { formatDeltaPercent, formatKoreanDelta, formatTrainingDelta } from '@/utils/format-korean-number'
 

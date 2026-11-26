@@ -7,27 +7,13 @@ import type {
 	GuildBountyStageEntry,
 	GuildBountyTipsEntry
 } from '@/features/tips/types/guild-bounty.type'
-
-/** 현상수배(불꽃늑대) 최대 클리어 단계 */
-const GUILD_BOUNTY_MAX_STAGE = 100
-
-/** 1단계 클리어 점수 */
-const GUILD_BOUNTY_STAGE_CLEAR_SCORE_BASE = 100
-
-/** 어려운 단계가 반복되는 간격 */
-const GUILD_BOUNTY_HARD_STAGE_INTERVAL = 5
-
-/** 1~15단계 일반 증가폭 */
-const GUILD_BOUNTY_EARLY_NORMAL_STEP = 10
-
-/**
- * 16단계부터 15단계 블록마다 일반 증가폭이 +10씩 커집니다.
- * 16~30 → 20, 31~45 → 30, …
- */
-const GUILD_BOUNTY_BLOCK_SIZE = 15
-
-/** 어려운 단계 증가폭 = 해당 구간 일반 증가폭 × 배수 (16단계 이후) */
-const GUILD_BOUNTY_HARD_STEP_MULTIPLIER = 6
+import {
+	getGuildBountyStageClearScoreStep,
+	GUILD_BOUNTY_HARD_STAGE_INTERVAL,
+	GUILD_BOUNTY_MAX_STAGE,
+	GUILD_BOUNTY_STAGE_CLEAR_SCORE_BASE,
+	isGuildBountyHardStage
+} from '@/libs/guild-bounty-score.constants'
 
 /** Dialog·표기용 10단계 밴드 */
 const GUILD_BOUNTY_STAGE_BANDS = Array.from({ length: GUILD_BOUNTY_MAX_STAGE / 10 }, (_, index) => {
@@ -107,11 +93,11 @@ const GUILD_BOUNTY_HARD_MONSTER = {
 const GUILD_BOUNTY_ATTACK_EFFECT_META = {
 	'final-damage-down': {
 		label: '최종 데미지 감소',
-		badgeClassName: 'bg-pastel-purple-100 text-pastel-purple-900'
+		badgeClassName: 'bg-pastel-purple-100 dark:bg-pastel-purple-200 text-pastel-purple-900'
 	},
 	'move-speed-down': {
 		label: '이동속도 감소',
-		badgeClassName: 'bg-pastel-green-100 text-pastel-green-900'
+		badgeClassName: 'bg-pastel-green-100 dark:bg-pastel-green-200 text-pastel-green-900'
 	}
 } as const satisfies Record<GuildBountyAttackEffectId, { label: string; badgeClassName: string }>
 
@@ -132,7 +118,7 @@ const GUILD_BOUNTY_BUFF_ORBS = [
 	{
 		id: 'left',
 		sideLabel: '좌측',
-		badgeClassName: 'bg-red-100 text-red-900'
+		badgeClassName: 'bg-red-100 dark:bg-red-200 text-red-900'
 	},
 	{
 		id: 'right',
@@ -140,77 +126,6 @@ const GUILD_BOUNTY_BUFF_ORBS = [
 		badgeClassName: 'bg-yellow-100 text-yellow-900'
 	}
 ] as const satisfies readonly GuildBountyBuffOrb[]
-
-function isValidGuildBountyStage(stage: number): boolean {
-	return Number.isInteger(stage) && stage >= 1 && stage <= GUILD_BOUNTY_MAX_STAGE
-}
-
-/** 5의 배수 단계는 어려운 단계 */
-function isGuildBountyHardStage(stage: number): boolean {
-	return stage > 0 && stage % GUILD_BOUNTY_HARD_STAGE_INTERVAL === 0
-}
-
-/**
- * stage 점수 = (stage−1) 점수 + 이 증가폭.
- * - 1~15: 일반 +10, 어려운 단계(5/10/15)는 +20/+30/+40
- * - 16~: 15단계 블록마다 일반 증가폭 +10, 어려운 단계는 일반×6
- */
-function getGuildBountyStageClearScoreStep(stage: number): number {
-	if (stage <= 1) {
-		return 0
-	}
-
-	if (stage <= GUILD_BOUNTY_BLOCK_SIZE) {
-		if (isGuildBountyHardStage(stage)) {
-			return (
-				GUILD_BOUNTY_EARLY_NORMAL_STEP + GUILD_BOUNTY_EARLY_NORMAL_STEP * (stage / GUILD_BOUNTY_HARD_STAGE_INTERVAL)
-			)
-		}
-
-		return GUILD_BOUNTY_EARLY_NORMAL_STEP
-	}
-
-	const block = Math.ceil((stage - GUILD_BOUNTY_BLOCK_SIZE) / GUILD_BOUNTY_BLOCK_SIZE)
-	const normalStep = GUILD_BOUNTY_EARLY_NORMAL_STEP + GUILD_BOUNTY_EARLY_NORMAL_STEP * block
-
-	return isGuildBountyHardStage(stage) ? normalStep * GUILD_BOUNTY_HARD_STEP_MULTIPLIER : normalStep
-}
-
-/** 해당 단계의 클리어 점수. 범위 밖이면 null */
-function getGuildBountyStageClearScore(stage: number): number | null {
-	if (!isValidGuildBountyStage(stage)) {
-		return null
-	}
-
-	let score = GUILD_BOUNTY_STAGE_CLEAR_SCORE_BASE
-
-	for (let current = 2; current <= stage; current += 1) {
-		score += getGuildBountyStageClearScoreStep(current)
-	}
-
-	return score
-}
-
-/** 1~N단계 클리어 점수 누적 합(사냥 실적). 범위 밖이면 null */
-function getGuildBountyHuntingScore(clearedStage: number): number | null {
-	if (!isValidGuildBountyStage(clearedStage)) {
-		return null
-	}
-
-	let sum = 0
-
-	for (let stage = 1; stage <= clearedStage; stage += 1) {
-		const clearScore = getGuildBountyStageClearScore(stage)
-
-		if (clearScore === null) {
-			return null
-		}
-
-		sum += clearScore
-	}
-
-	return sum
-}
 
 /** 1~maxStage 각 단계의 클리어·누적 점수 목록 */
 function getGuildBountyStageEntries(maxStage: number = GUILD_BOUNTY_MAX_STAGE): readonly GuildBountyStageEntry[] {
@@ -286,8 +201,6 @@ const GUILD_BOUNTY_TIPS_ENTRIES = buildGuildBountyTipsEntries()
 export {
 	getGuildBountyCompanionTimings,
 	getGuildBountyDefense,
-	getGuildBountyHuntingScore,
-	getGuildBountyStageClearScore,
 	getGuildBountyStageEntries,
 	GUILD_BOUNTY_ATTACK_EFFECT_META,
 	GUILD_BOUNTY_ATTACKS,
@@ -310,8 +223,6 @@ export {
 	GUILD_BOUNTY_REQUIRED_HIT,
 	GUILD_BOUNTY_STAGE_BANDS,
 	GUILD_BOUNTY_TIME_LIMIT_SEC,
-	GUILD_BOUNTY_TIPS_ENTRIES,
-	isGuildBountyHardStage,
-	isValidGuildBountyStage
+	GUILD_BOUNTY_TIPS_ENTRIES
 }
 export type { GuildBountyStageBand, GuildBountyStageEntry }

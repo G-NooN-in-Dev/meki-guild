@@ -58,51 +58,184 @@ function getJobClassLine(job: string): JobClassLine | null {
 }
 
 /**
- * 직업 분포 UI용 계열 Badge 클래스.
- * 셀 전체를 칠하지 않고, 디자인 토큰 pastel-* 로 은은하게 구분합니다.
+ * 계열 색의 단일 기준 (@theme pastel).
+ * 배지·차트·카드가 같은 톤을 쓰고, 역할마다 단계만 나눕니다.
+ * 라이트 배지는 100 배경·800 글자입니다.
+ * 다크 배지는 950 배경에 차트 면(200) 글자입니다. 선(700) 배경 위 면 색은 10px에서 묻힙니다.
  */
-const JOB_CLASS_LINE_BADGE_CLASS = {
-	전사: 'border-transparent bg-pastel-orange-100 text-pastel-orange-800',
-	마법사: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800',
-	궁수: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
-	도적: 'border-transparent bg-pastel-purple-100 text-pastel-purple-800',
-	해적: 'border-transparent bg-pastel-red-100 text-pastel-red-800',
-	미분류: 'border-transparent bg-grayscale-100 text-grayscale-600'
-} as const satisfies Record<JobClassLine | '미분류', string>
+const JOB_CLASS_LINE_COLOR = {
+	전사: {
+		badgeClass:
+			'border-transparent bg-pastel-orange-100 text-pastel-orange-800 dark:bg-pastel-orange-950 dark:text-pastel-orange-200',
+		chartStroke: 'var(--color-pastel-orange-700)',
+		chartFill: 'var(--color-pastel-orange-200)',
+		cardBgClass: 'bg-pastel-orange-100 dark:bg-pastel-orange-900'
+	},
+	마법사: {
+		badgeClass:
+			'border-transparent bg-pastel-blue-100 text-pastel-blue-800 dark:bg-pastel-blue-950 dark:text-pastel-blue-200',
+		chartStroke: 'var(--color-pastel-blue-700)',
+		chartFill: 'var(--color-pastel-blue-200)',
+		cardBgClass: 'bg-pastel-blue-100 dark:bg-pastel-blue-900'
+	},
+	궁수: {
+		badgeClass:
+			'border-transparent bg-pastel-green-100 text-pastel-green-800 dark:bg-pastel-green-950 dark:text-pastel-green-200',
+		chartStroke: 'var(--color-pastel-green-700)',
+		chartFill: 'var(--color-pastel-green-200)',
+		cardBgClass: 'bg-pastel-green-100 dark:bg-pastel-green-900'
+	},
+	도적: {
+		badgeClass:
+			'border-transparent bg-pastel-purple-100 text-pastel-purple-800 dark:bg-pastel-purple-950 dark:text-pastel-purple-200',
+		chartStroke: 'var(--color-pastel-purple-700)',
+		chartFill: 'var(--color-pastel-purple-200)',
+		cardBgClass: 'bg-pastel-purple-100 dark:bg-pastel-purple-900'
+	},
+	해적: {
+		badgeClass:
+			'border-transparent bg-pastel-red-100 text-pastel-red-800 dark:bg-pastel-red-950 dark:text-pastel-red-200',
+		chartStroke: 'var(--color-pastel-red-700)',
+		chartFill: 'var(--color-pastel-red-200)',
+		cardBgClass: 'bg-pastel-red-100 dark:bg-pastel-red-900'
+	}
+} as const satisfies Record<
+	JobClassLine,
+	{ badgeClass: string; chartStroke: string; chartFill: string; cardBgClass: string }
+>
+
+const UNCLASSIFIED_BADGE_CLASS = 'border-transparent bg-grayscale-100 text-grayscale-600'
+
+function getJobClassLineColor(classLine: JobClassLine): (typeof JOB_CLASS_LINE_COLOR)[JobClassLine] {
+	return JOB_CLASS_LINE_COLOR[classLine]
+}
 
 function getJobClassLineBadgeClass(classLine: JobClassLine | '미분류'): string {
-	return JOB_CLASS_LINE_BADGE_CLASS[classLine]
+	if (classLine === '미분류') return UNCLASSIFIED_BADGE_CLASS
+	return JOB_CLASS_LINE_COLOR[classLine].badgeClass
 }
 
 /**
- * 직업명 Badge 클래스.
- * 배경(100) + 글자색으로 테이블·상세에서 한눈에 구분합니다.
- * 캡틴은 총기·제복 톤에 맞춰 pastel-navy를 씁니다.
+ * 직업 색의 단일 기준 (@theme pastel·grayscale).
+ * 라이트 배지 배경은 차트 fill, 글자는 950입니다.
+ * 다크 배지 배경은 950, 글자는 차트 fill입니다. 선 배경 위에서는 면 색 글자가 묻힙니다.
+ * 다크나이트만 grayscale이라 토큰이 뒤집혀 차트 선·면과 이미 맞으므로 dark:를 두지 않습니다.
+ * 같은 직업군 안에서는 fill·stroke 단계로 구분합니다.
  */
-const JOB_BADGE_CLASS = {
-	히어로: 'border-transparent bg-orange-100 text-orange-700',
-	다크나이트: 'border-transparent bg-grayscale-200 text-grayscale-700',
-	팔라딘: 'border-transparent bg-pastel-yellow-200 text-yellow-800',
-	불독: 'border-transparent bg-red-100 text-red-700',
-	비숍: 'border-transparent bg-yellow-100 text-yellow-700',
-	썬콜: 'border-transparent bg-pastel-blue-100 text-blue-700',
-	보우마스터: 'border-transparent bg-green-100 text-green-700',
-	신궁: 'border-transparent bg-green-200 text-green-800',
-	나이트로드: 'border-transparent bg-blue-100 text-blue-800',
-	섀도어: 'border-transparent bg-purple-100 text-purple-700',
-	바이퍼: 'border-transparent bg-pastel-red-200 text-red-800',
-	캡틴: 'border-transparent bg-pastel-navy-100 text-pastel-navy-800',
-	소울마스터: 'border-transparent bg-yellow-200 text-yellow-800',
-	플레임위자드: 'border-transparent bg-red-100 text-red-700',
-	윈드브레이커: 'border-transparent bg-pastel-green-100 text-green-700',
-	나이트워커: 'border-transparent bg-pastel-purple-100 text-purple-700'
-} as const satisfies Record<KnownJob, string>
+const JOB_COLOR = {
+	히어로: {
+		badgeClass:
+			'border-transparent bg-pastel-orange-200 text-pastel-orange-950 dark:bg-pastel-orange-950 dark:text-pastel-orange-200',
+		chartStroke: 'var(--color-pastel-orange-700)',
+		chartFill: 'var(--color-pastel-orange-200)'
+	},
+	다크나이트: {
+		badgeClass: 'border-transparent bg-grayscale-200 text-grayscale-700',
+		chartStroke: 'var(--color-grayscale-700)',
+		chartFill: 'var(--color-grayscale-200)'
+	},
+	팔라딘: {
+		badgeClass:
+			'border-transparent bg-pastel-yellow-200 text-pastel-yellow-950 dark:bg-pastel-yellow-950 dark:text-pastel-yellow-200',
+		chartStroke: 'var(--color-pastel-yellow-700)',
+		chartFill: 'var(--color-pastel-yellow-200)'
+	},
+	소울마스터: {
+		badgeClass:
+			'border-transparent bg-pastel-yellow-300 text-pastel-yellow-950 dark:bg-pastel-yellow-950 dark:text-pastel-yellow-300',
+		chartStroke: 'var(--color-pastel-yellow-800)',
+		chartFill: 'var(--color-pastel-yellow-300)'
+	},
+	불독: {
+		badgeClass:
+			'border-transparent bg-pastel-red-200 text-pastel-red-950 dark:bg-pastel-red-950 dark:text-pastel-red-200',
+		chartStroke: 'var(--color-pastel-red-700)',
+		chartFill: 'var(--color-pastel-red-200)'
+	},
+	썬콜: {
+		badgeClass:
+			'border-transparent bg-pastel-blue-200 text-pastel-blue-950 dark:bg-pastel-blue-950 dark:text-pastel-blue-200',
+		chartStroke: 'var(--color-pastel-blue-700)',
+		chartFill: 'var(--color-pastel-blue-200)'
+	},
+	비숍: {
+		badgeClass:
+			'border-transparent bg-pastel-yellow-200 text-pastel-yellow-950 dark:bg-pastel-yellow-950 dark:text-pastel-yellow-200',
+		chartStroke: 'var(--color-pastel-yellow-700)',
+		chartFill: 'var(--color-pastel-yellow-200)'
+	},
+	플레임위자드: {
+		badgeClass:
+			'border-transparent bg-pastel-red-100 text-pastel-red-950 dark:bg-pastel-red-950 dark:text-pastel-red-100',
+		chartStroke: 'var(--color-pastel-red-600)',
+		chartFill: 'var(--color-pastel-red-100)'
+	},
+	보우마스터: {
+		badgeClass:
+			'border-transparent bg-pastel-green-200 text-pastel-green-950 dark:bg-pastel-green-950 dark:text-pastel-green-200',
+		chartStroke: 'var(--color-pastel-green-700)',
+		chartFill: 'var(--color-pastel-green-200)'
+	},
+	신궁: {
+		badgeClass:
+			'border-transparent bg-pastel-green-300 text-pastel-green-950 dark:bg-pastel-green-950 dark:text-pastel-green-300',
+		chartStroke: 'var(--color-pastel-green-800)',
+		chartFill: 'var(--color-pastel-green-300)'
+	},
+	윈드브레이커: {
+		badgeClass:
+			'border-transparent bg-pastel-green-100 text-pastel-green-950 dark:bg-pastel-green-950 dark:text-pastel-green-100',
+		chartStroke: 'var(--color-pastel-green-600)',
+		chartFill: 'var(--color-pastel-green-100)'
+	},
+	나이트로드: {
+		badgeClass:
+			'border-transparent bg-pastel-navy-200 text-pastel-navy-950 dark:bg-pastel-navy-950 dark:text-pastel-navy-200',
+		chartStroke: 'var(--color-pastel-navy-700)',
+		chartFill: 'var(--color-pastel-navy-200)'
+	},
+	섀도어: {
+		badgeClass:
+			'border-transparent bg-pastel-purple-200 text-pastel-purple-950 dark:bg-pastel-purple-950 dark:text-pastel-purple-200',
+		chartStroke: 'var(--color-pastel-purple-700)',
+		chartFill: 'var(--color-pastel-purple-200)'
+	},
+	나이트워커: {
+		badgeClass:
+			'border-transparent bg-pastel-purple-300 text-pastel-purple-950 dark:bg-pastel-purple-950 dark:text-pastel-purple-300',
+		chartStroke: 'var(--color-pastel-purple-800)',
+		chartFill: 'var(--color-pastel-purple-300)'
+	},
+	바이퍼: {
+		badgeClass:
+			'border-transparent bg-pastel-red-200 text-pastel-red-950 dark:bg-pastel-red-950 dark:text-pastel-red-200',
+		chartStroke: 'var(--color-pastel-red-700)',
+		chartFill: 'var(--color-pastel-red-200)'
+	},
+	캡틴: {
+		badgeClass:
+			'border-transparent bg-pastel-navy-200 text-pastel-navy-950 dark:bg-pastel-navy-950 dark:text-pastel-navy-200',
+		chartStroke: 'var(--color-pastel-navy-700)',
+		chartFill: 'var(--color-pastel-navy-200)'
+	}
+} as const satisfies Record<KnownJob, { badgeClass: string; chartStroke: string; chartFill: string }>
 
 const FALLBACK_JOB_BADGE_CLASS = 'border-transparent bg-grayscale-100 text-grayscale-600'
 
-function getJobBadgeClass(job: string): string {
-	return lookupByJobKey(job, JOB_BADGE_CLASS, FALLBACK_JOB_BADGE_CLASS)
+function getJobColor(job: string): (typeof JOB_COLOR)[KnownJob] | null {
+	return lookupByJobKey(job, JOB_COLOR, null)
 }
 
-export { getJobBadgeClass, getJobClassLine, getJobClassLineBadgeClass, resolveJobKey }
+function getJobBadgeClass(job: string): string {
+	return getJobColor(job)?.badgeClass ?? FALLBACK_JOB_BADGE_CLASS
+}
+
+export {
+	getJobBadgeClass,
+	getJobClassLine,
+	getJobClassLineBadgeClass,
+	getJobClassLineColor,
+	getJobColor,
+	resolveJobKey
+}
 export type { JobClassLine }

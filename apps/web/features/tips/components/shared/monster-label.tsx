@@ -44,9 +44,9 @@ type MonsterLabelProps = {
 
 const IMAGE_SIZE_CLASS_NAME = {
 	inline: 'my-[calc((1lh-1.75rem)/2)] h-7 w-auto shrink-0 self-center',
-	table: 'h-6 w-auto shrink-0 object-contain mix-blend-darken md:h-7',
-	card: 'h-14 w-auto shrink-0 object-contain mix-blend-darken md:h-16',
-	header: 'xs:h-20 h-16 w-auto shrink-0 object-contain mix-blend-darken md:h-28',
+	table: 'h-6 w-auto shrink-0 object-contain mix-blend-darken dark:mix-blend-lighten md:h-7',
+	card: 'h-14 w-auto shrink-0 object-contain mix-blend-darken dark:mix-blend-lighten md:h-16',
+	header: 'xs:h-20 h-16 w-auto shrink-0 object-contain mix-blend-darken dark:mix-blend-lighten md:h-28',
 	panel:
 		'h-auto max-h-16 w-auto max-w-24 min-w-6 shrink rounded-lg object-contain md:max-h-24 md:max-w-40 md:min-w-0 md:shrink-0'
 } as const satisfies Record<MonsterLabelSize, string>

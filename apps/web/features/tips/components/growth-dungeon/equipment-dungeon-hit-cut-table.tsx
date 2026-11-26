@@ -1,8 +1,18 @@
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_HARD_CELL_CLASS_NAME,
+	HIT_CUT_HARD_STAGE_LABEL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+	HIT_CUT_PASTEL_CELL_BG_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import HitPairCell from '@/features/tips/components/shared/hit-pair-cell'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
 import { EQUIPMENT_DUNGEON_HIT_CUT_ENTRIES } from '@/features/tips/lib/growth-dungeon.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -22,17 +32,17 @@ function EquipmentDungeonHitCutTable() {
 		<HitCutTableShell>
 			<TableHeader sticky>
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[11%]')}>단계</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-yellow-100 text-pastel-yellow-900 w-[16%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_NEUTRAL_HEAD_CLASS_NAME, 'w-[11%]')}>단계</TableHead>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.yellow, 'w-[16%]')}>
 						제한 시간 <span className={HEAD_HINT_CLASS_NAME}>(초)</span>
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-green-100 text-pastel-green-900 w-[20%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.green, 'w-[20%]')}>
 						필요 처치 수 <span className={HEAD_HINT_CLASS_NAME}>(마리)</span>
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-orange-100 text-pastel-orange-900 w-[18%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.orange, 'w-[18%]')}>
 						방어력
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900 w-[35%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue, 'w-[35%]')}>
 						<span className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-1">
 							<span>필요 명중</span>
 							<span className={HEAD_HINT_CLASS_NAME}>(일반 / 포이즌 푸퍼)</span>
@@ -47,7 +57,7 @@ function EquipmentDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-100 text-red-900' : 'bg-grayscale-50 text-grayscale-800'
+									isHardStage ? HIT_CUT_HARD_STAGE_LABEL_CLASS_NAME : HIT_CUT_NEUTRAL_CELL_CLASS_NAME
 								)}
 							>
 								{stage}
@@ -55,7 +65,9 @@ function EquipmentDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-yellow-50 text-grayscale-900'
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.yellow, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
 								)}
 							>
 								{formatLocaleNumber(timeLimitSec)}
@@ -63,7 +75,9 @@ function EquipmentDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-green-50 text-grayscale-900'
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.green, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
 								)}
 							>
 								{formatLocaleNumber(requiredKillCount)}
@@ -71,7 +85,9 @@ function EquipmentDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-orange-50 text-grayscale-900'
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.orange, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
 								)}
 							>
 								{formatLocaleNumber(defense)}
@@ -79,7 +95,11 @@ function EquipmentDungeonHitCutTable() {
 							<HitPairCell
 								requiredHit={requiredHit}
 								pairedRequiredHit={poisonPufferRequiredHit}
-								className={isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-blue-50 text-grayscale-900'}
+								className={
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.blue, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
+								}
 							/>
 						</TableRow>
 					)

@@ -27,7 +27,7 @@ function SeasonStatusItem({ summary, onSelect }: SeasonStatusItemProps) {
 		<>
 			<div className="flex items-center justify-between gap-3">
 				<div className="flex items-center gap-1">
-					<p className="text-grayscale-500 text-sm">{contentLabel}</p>
+					<p className="text-grayscale-700 text-sm">{contentLabel}</p>
 					{seasonLabel ? <p className="text-grayscale-400 text-xs">({seasonLabel})</p> : null}
 				</div>
 				<Badge variant="outline" className={cn(SEASON_STATUS_BADGE_CLASS[status])}>

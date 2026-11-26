@@ -33,7 +33,7 @@ function ChangelogSection() {
 								<div className="relative flex w-3 shrink-0 flex-col items-center md:w-4" aria-hidden>
 									<span
 										className={cn(
-											'border-grayscale-300 mt-5 size-2.5 shrink-0 rounded-full border-2 bg-white md:mt-6 md:size-3',
+											'border-grayscale-300 bg-card mt-5 size-2.5 shrink-0 rounded-full border-2 md:mt-6 md:size-3',
 											isLatest && 'border-grayscale-900 bg-grayscale-900'
 										)}
 									/>

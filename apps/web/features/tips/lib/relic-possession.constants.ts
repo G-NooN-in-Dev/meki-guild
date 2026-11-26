@@ -33,7 +33,7 @@ function flatLine(label: string, values: RelicAwakeningValues): RelicPossessionS
 	return { label, unit: 'flat', values }
 }
 
-/** 레전드리·특수 유니크만 명시. 나머지 유니크/에픽은 등급 공통값을 씁니다. */
+/** 레전더리·특수 유니크만 명시. 나머지 유니크/에픽은 등급 공통값을 씁니다. */
 const RELIC_POSSESSION_STATS_BY_ID: Record<string, readonly RelicPossessionStatLine[]> = {
 	'legendary-holy-grail': [percentLine('데미지', [30, 36, 42, 48, 54, 60])],
 	'legendary-old-music-box': [flatLine('디버프 내성', [10, 12, 14, 16, 18, 20])],

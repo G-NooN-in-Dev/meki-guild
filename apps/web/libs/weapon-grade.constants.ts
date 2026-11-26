@@ -1,141 +1,68 @@
 /**
  * 무기 등급 기준표.
- * 상위 밴드(에인션트→노말) × 세부(최상급→하급).
+ * 상위 밴드(eternity→normal) × 세부(최상급→하급).
+ * 키는 영문이고, 화면 표기는 label입니다.
  */
 
-import {
-	getBandByPrefix,
-	getGradeDiffFromRanks,
-	getGradeRankFromList,
-	getGradeTextClassFromBand,
-	type GradeBandMeta
-} from '@/libs/grade-tier.helpers'
+import { GRADE_LABEL } from '@/libs/grade.constants'
+import type { GradeBandMeta } from '@/libs/grade-tier.helpers'
 
-const WEAPON_GRADE_BANDS = ['에인션트', '미스틱', '레전드리', '유니크', '에픽', '레어', '노말'] as const
+const WEAPON_GRADE_BANDS = ['eternity', 'ancient', 'mystic', 'legendary', 'unique', 'epic', 'rare', 'normal'] as const
 
-/** 세부 등급. 최상급을 상급보다 먼저 둬야 파싱 시 부분 일치가 꼬이지 않습니다. */
+/** 세부 등급. 높은 등급부터입니다. */
 const WEAPON_GRADE_LEVELS = ['최상급', '상급', '중급', '하급'] as const
 
 type WeaponGradeBand = (typeof WEAPON_GRADE_BANDS)[number]
 
-/** 정규 표기: `에인션트 최상급` … `노말 하급` (상위부터) */
-const WEAPON_GRADES = WEAPON_GRADE_BANDS.flatMap((band) =>
-	WEAPON_GRADE_LEVELS.map((level) => `${band} ${level}`)
-) as readonly string[]
-
-const WEAPON_GRADE_BAND_PREFIXES = WEAPON_GRADE_BANDS.map((band) => ({ prefix: band, band }))
-
 /**
  * 밴드별 UI 톤.
  * 헤더·등급명 텍스트색에 사용합니다.
+ * 다크: 밴드 헤더는 파스텔을 한 단계 어둡게, 등급명은 카드 바탕 위 가독용으로 밝힌다.
  */
 const WEAPON_GRADE_BAND_META = {
-	에인션트: {
-		label: '에인션트',
-		headerClassName: 'bg-pastel-navy-50 text-pastel-navy-800',
-		textClassName: 'font-semibold text-pastel-navy-800'
+	eternity: {
+		label: GRADE_LABEL.eternity,
+		headerClassName:
+			'bg-pastel-magenta-50 text-pastel-magenta-800 dark:bg-pastel-magenta-200 dark:text-pastel-magenta-900',
+		textClassName: 'font-semibold text-pastel-magenta-800 dark:text-pastel-magenta-300'
 	},
-	미스틱: {
-		label: '미스틱',
-		headerClassName: 'bg-pastel-red-50 text-pastel-red-800',
-		textClassName: 'font-semibold text-pastel-red-800'
+	ancient: {
+		label: GRADE_LABEL.ancient,
+		headerClassName: 'bg-pastel-navy-50 text-pastel-navy-800 dark:bg-pastel-navy-200 dark:text-pastel-navy-900',
+		textClassName: 'font-semibold text-pastel-navy-800 dark:text-pastel-navy-300'
 	},
-	레전드리: {
-		label: '레전드리',
-		headerClassName: 'bg-pastel-green-50 text-pastel-green-800',
-		textClassName: 'font-semibold text-pastel-green-800'
+	mystic: {
+		label: GRADE_LABEL.mystic,
+		headerClassName: 'bg-pastel-red-50 text-pastel-red-800 dark:bg-pastel-red-200 dark:text-pastel-red-900',
+		textClassName: 'font-semibold text-pastel-red-800 dark:text-pastel-red-300'
 	},
-	유니크: {
-		label: '유니크',
-		headerClassName: 'bg-pastel-yellow-50 text-pastel-yellow-800',
-		textClassName: 'font-semibold text-pastel-yellow-800'
+	legendary: {
+		label: GRADE_LABEL.legendary,
+		headerClassName: 'bg-pastel-green-50 text-pastel-green-800 dark:bg-pastel-green-200 dark:text-pastel-green-900',
+		textClassName: 'font-semibold text-pastel-green-800 dark:text-pastel-green-300'
 	},
-	에픽: {
-		label: '에픽',
-		headerClassName: 'bg-pastel-purple-100 text-pastel-purple-700',
-		textClassName: 'font-semibold text-pastel-purple-700'
+	unique: {
+		label: GRADE_LABEL.unique,
+		headerClassName: 'bg-pastel-yellow-50 text-pastel-yellow-800 dark:bg-pastel-yellow-200 dark:text-pastel-yellow-900',
+		textClassName: 'font-semibold text-pastel-yellow-800 dark:text-pastel-yellow-300'
 	},
-	레어: {
-		label: '레어',
-		headerClassName: 'bg-pastel-blue-50 text-pastel-blue-800',
-		textClassName: 'font-semibold text-pastel-blue-800'
+	epic: {
+		label: GRADE_LABEL.epic,
+		headerClassName:
+			'bg-pastel-purple-100 text-pastel-purple-700 dark:bg-pastel-purple-200 dark:text-pastel-purple-900',
+		textClassName: 'font-semibold text-pastel-purple-700 dark:text-pastel-purple-300'
 	},
-	노말: {
-		label: '노말',
-		headerClassName: 'bg-grayscale-100 text-grayscale-600',
-		textClassName: 'font-semibold text-grayscale-600'
+	rare: {
+		label: GRADE_LABEL.rare,
+		headerClassName: 'bg-pastel-blue-50 text-pastel-blue-800 dark:bg-pastel-blue-200 dark:text-pastel-blue-900',
+		textClassName: 'font-semibold text-pastel-blue-800 dark:text-pastel-blue-300'
+	},
+	normal: {
+		label: GRADE_LABEL.normal,
+		headerClassName: 'bg-grayscale-100 text-grayscale-600 dark:bg-grayscale-300 dark:text-grayscale-800',
+		textClassName: 'font-semibold text-grayscale-600 dark:text-grayscale-700'
 	}
 } as const satisfies Record<WeaponGradeBand, GradeBandMeta>
 
-/** 공백·구분자 제거 후 비교용 키 */
-function toWeaponGradeKey(value: string): string {
-	return value
-		.replace(/레전더리/g, '레전드리')
-		.replace(/[\s/·・\-_|]+/g, '')
-		.trim()
-}
-
-/**
- * mgf 무기 라벨 → 정규 등급명.
- * `에인션트 최상급`, `에인션트/최상급`, `에인션트최상급` 등 허용.
- */
-function parseWeaponGrade(raw: string | null | undefined): string | null {
-	if (!raw) {
-		return null
-	}
-
-	const trimmed = raw.replace(/\s+/g, ' ').trim()
-	if (!trimmed || trimmed === '-') {
-		return null
-	}
-
-	const compact = toWeaponGradeKey(trimmed)
-
-	for (const grade of WEAPON_GRADES) {
-		if (toWeaponGradeKey(grade) === compact) {
-			return grade
-		}
-	}
-
-	// 밴드·세부만 포함돼 있어도 매칭 (순서 무관)
-	for (const band of WEAPON_GRADE_BANDS) {
-		if (!compact.includes(band)) {
-			continue
-		}
-
-		for (const level of WEAPON_GRADE_LEVELS) {
-			if (compact.includes(level)) {
-				return `${band} ${level}`
-			}
-		}
-	}
-
-	return null
-}
-
-/** 등급명 → 밴드. 빈 값·미매칭은 null */
-function getWeaponGradeBand(grade: string): WeaponGradeBand | null {
-	return getBandByPrefix(grade, WEAPON_GRADE_BAND_PREFIXES)
-}
-
-/** 무기 등급 텍스트 색·두께 */
-function getWeaponGradeTextClass(grade: string): string {
-	return getGradeTextClassFromBand(grade, getWeaponGradeBand, WEAPON_GRADE_BAND_META)
-}
-
-/** 등급명 → 순위(1=에인션트 최상급 … N=노말 하급) */
-function getWeaponGradeRank(grade: string): number | null {
-	const canonical = parseWeaponGrade(grade) ?? grade
-
-	return getGradeRankFromList(WEAPON_GRADES, canonical)
-}
-
-/**
- * 등급 변화 단계.
- * 양수=상승(에인션트 최상급 방향), 음수=하락, 0=동일.
- */
-function getWeaponGradeDiff(previous: string, current: string): number | null {
-	return getGradeDiffFromRanks(getWeaponGradeRank, previous, current)
-}
-
-export { getWeaponGradeDiff, getWeaponGradeTextClass, parseWeaponGrade }
+export { WEAPON_GRADE_BAND_META, WEAPON_GRADE_BANDS, WEAPON_GRADE_LEVELS }
+export type { WeaponGradeBand }

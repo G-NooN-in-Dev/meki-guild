@@ -33,7 +33,8 @@ function GuildDashboardSection({ data }: GuildDashboardSectionProps) {
 							href={buildGuildDetailHref()}
 							className={cn(
 								buttonVariants({ variant: 'outline', size: 'default' }),
-								'border-pastel-navy-300 text-pastel-navy-800 hover:bg-pastel-navy-50 rounded-lg'
+								'border-pastel-navy-300 text-pastel-navy-800 hover:bg-pastel-navy-50 rounded-lg',
+								'dark:border-pastel-navy-500 dark:bg-pastel-navy-950 dark:text-pastel-navy-100 dark:hover:bg-pastel-navy-900'
 							)}
 						>
 							상세 보기

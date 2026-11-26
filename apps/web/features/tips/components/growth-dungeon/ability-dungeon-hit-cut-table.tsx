@@ -1,8 +1,18 @@
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_HARD_CELL_CLASS_NAME,
+	HIT_CUT_HARD_STAGE_LABEL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+	HIT_CUT_PASTEL_CELL_BG_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import HitPairCell from '@/features/tips/components/shared/hit-pair-cell'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
 import { ABILITY_DUNGEON_HIT_CUT_ENTRIES } from '@/features/tips/lib/growth-dungeon.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -51,14 +61,14 @@ function AbilityDungeonHitCutTable() {
 		<HitCutTableShell>
 			<TableHeader sticky>
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[12%]')}>단계</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-orange-100 text-pastel-orange-900 w-[58%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_NEUTRAL_HEAD_CLASS_NAME, 'w-[12%]')}>단계</TableHead>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.orange, 'w-[58%]')}>
 						<span className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-1">
 							<span>방어력</span>
 							<span className={HEAD_HINT_CLASS_NAME}>(일반 / 라이오너·샐리온 / 엘리쟈)</span>
 						</span>
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900 w-[30%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue, 'w-[30%]')}>
 						<span className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-1">
 							<span>필요 명중</span>
 							<span className={HEAD_HINT_CLASS_NAME}>(일반 / 나머지)</span>
@@ -73,7 +83,7 @@ function AbilityDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-100 text-red-900' : 'bg-grayscale-50 text-grayscale-800'
+									isHardStage ? HIT_CUT_HARD_STAGE_LABEL_CLASS_NAME : HIT_CUT_NEUTRAL_CELL_CLASS_NAME
 								)}
 							>
 								{stage}
@@ -82,12 +92,20 @@ function AbilityDungeonHitCutTable() {
 								defense={defense}
 								buffDefense={buffDefense}
 								bossDefense={bossDefense}
-								className={isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-orange-50 text-grayscale-900'}
+								className={
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.orange, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
+								}
 							/>
 							<HitPairCell
 								requiredHit={requiredHit}
 								pairedRequiredHit={buffRequiredHit}
-								className={isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-blue-50 text-grayscale-900'}
+								className={
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.blue, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
+								}
 							/>
 						</TableRow>
 					)

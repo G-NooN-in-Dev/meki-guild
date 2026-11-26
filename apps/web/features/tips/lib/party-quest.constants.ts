@@ -12,6 +12,7 @@ import type {
 	PartyQuestRewardGrade,
 	PartyQuestRewardTier
 } from '@/features/tips/types/party-quest.type'
+import { GRADE_LABEL } from '@/libs/grade.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 /** 파티퀘스트 난이도 — 컨텐츠 공통 4단계 */
@@ -35,15 +36,15 @@ export const PARTY_QUEST_META = {
 /** 장비 등급 Badge — ItemGrade 톤 재사용 */
 export const PARTY_QUEST_REWARD_GRADE_META = {
 	epic: {
-		label: '에픽',
+		label: GRADE_LABEL.epic,
 		badgeClassName: ITEM_GRADE_BADGE_CLASS.epic
 	},
 	unique: {
-		label: '유니크',
+		label: GRADE_LABEL.unique,
 		badgeClassName: ITEM_GRADE_BADGE_CLASS.unique
 	},
 	legendary: {
-		label: '레전더리',
+		label: GRADE_LABEL.legendary,
 		badgeClassName: ITEM_GRADE_BADGE_CLASS.legendary
 	}
 } as const satisfies Record<PartyQuestRewardGrade, { label: string; badgeClassName: string }>

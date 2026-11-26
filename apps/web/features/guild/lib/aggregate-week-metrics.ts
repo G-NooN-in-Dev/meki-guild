@@ -1,8 +1,8 @@
-import { sumGuildExpeditionGradePoints } from '@/features/guild/lib/guild-expedition-tier.constants'
 import { parseGuildMember } from '@/features/guild/lib/parse-guild-member'
 import type { GuildMetricPoint, GuildWeekSlot } from '@/features/guild/types/guild-dashboard.type'
 import type { GuildWeekSnapshot, ParsedGuildMember } from '@/features/guild/types/guild-snapshot.type'
 import type { GuildContentDateRange } from '@/libs/guild-content-dates.constants'
+import { sumGuildExpeditionGradePoints } from '@/libs/guild-expedition-tier.constants'
 
 const WEEK_SLOTS: GuildWeekSlot[] = ['older', 'previous', 'current']
 

@@ -25,24 +25,25 @@ type GuildRivalryRankPointTone = 'top' | 'high' | 'mid' | 'low' | 'bottom'
  */
 const GUILD_RIVALRY_RANK_POINT_TONE_META = {
 	top: {
-		headerClassName: 'bg-pastel-red-50 text-pastel-red-800',
-		textClassName: 'font-semibold text-pastel-red-800'
+		headerClassName: 'bg-pastel-red-50 text-pastel-red-800 dark:bg-pastel-red-200 dark:text-pastel-red-900',
+		textClassName: 'font-semibold text-pastel-red-800 dark:text-pastel-red-300'
 	},
 	high: {
-		headerClassName: 'bg-pastel-orange-50 text-pastel-orange-800',
-		textClassName: 'font-semibold text-pastel-orange-800'
+		headerClassName: 'bg-pastel-orange-50 text-pastel-orange-800 dark:bg-pastel-orange-200 dark:text-pastel-orange-900',
+		textClassName: 'font-semibold text-pastel-orange-800 dark:text-pastel-orange-300'
 	},
 	mid: {
-		headerClassName: 'bg-pastel-green-50 text-pastel-green-800',
-		textClassName: 'font-semibold text-pastel-green-800'
+		headerClassName: 'bg-pastel-green-50 text-pastel-green-800 dark:bg-pastel-green-200 dark:text-pastel-green-900',
+		textClassName: 'font-semibold text-pastel-green-800 dark:text-pastel-green-300'
 	},
 	low: {
-		headerClassName: 'bg-pastel-blue-50 text-pastel-blue-800',
-		textClassName: 'font-semibold text-pastel-blue-800'
+		headerClassName: 'bg-pastel-blue-50 text-pastel-blue-800 dark:bg-pastel-blue-200 dark:text-pastel-blue-900',
+		textClassName: 'font-semibold text-pastel-blue-800 dark:text-pastel-blue-300'
 	},
 	bottom: {
-		headerClassName: 'bg-pastel-purple-100 text-pastel-purple-600',
-		textClassName: 'font-semibold text-pastel-purple-700'
+		headerClassName:
+			'bg-pastel-purple-100 text-pastel-purple-600 dark:bg-pastel-purple-200 dark:text-pastel-purple-900',
+		textClassName: 'font-semibold text-pastel-purple-700 dark:text-pastel-purple-300'
 	}
 } as const satisfies Record<GuildRivalryRankPointTone, { headerClassName: string; textClassName: string }>
 

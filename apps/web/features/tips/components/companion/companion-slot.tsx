@@ -55,7 +55,9 @@ function CompanionSlot({
 		<>
 			<div className="flex items-center justify-between gap-2">
 				<p className="text-grayscale-500 text-xs font-medium">{slot.label}</p>
-				{companion ? <span className="text-grayscale-400 text-xs tabular-nums">Lv.{level}</span> : null}
+				{companion ? (
+					<span className="text-grayscale-400 text-xs tabular-nums dark:text-white/50">Lv.{level}</span>
+				) : null}
 			</div>
 
 			{companion && gradeMeta && primaryEffect ? (

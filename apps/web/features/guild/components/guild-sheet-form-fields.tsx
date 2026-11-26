@@ -5,7 +5,6 @@ import { Label } from '@shared/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared/ui/select'
 import { cn } from '@shared/ui/utils'
 
-import { GUILD_EXPEDITION_TIERS } from '@/features/guild/lib/guild-expedition-tier.constants'
 import {
 	GUILD_SHEET_FIELD_LABELS,
 	GUILD_SHEET_KOREAN_NUMBER_PLACEHOLDERS,
@@ -14,6 +13,7 @@ import {
 	isGuildSheetKoreanNumberField
 } from '@/features/guild/lib/sheet-form.schema'
 import { getContentGradeTextClass } from '@/libs/content-tier-band.constants'
+import { GUILD_EXPEDITION_TIERS } from '@/libs/guild-expedition-tier.constants'
 
 const EXPEDITION_GRADE_OPTIONS = GUILD_EXPEDITION_TIERS.map((tier) => tier.rank)
 

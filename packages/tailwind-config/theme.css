@@ -60,6 +60,19 @@
 	--color-pastel-red-900: #9f3f6d;
 	--color-pastel-red-950: #6a2a48;
 
+	--color-pastel-magenta: #f58af5;
+	--color-pastel-magenta-50: #fff5ff;
+	--color-pastel-magenta-100: #ffebff;
+	--color-pastel-magenta-200: #ffd6ff;
+	--color-pastel-magenta-300: #ffbdff;
+	--color-pastel-magenta-400: #ff9eff;
+	--color-pastel-magenta-500: #f58af5;
+	--color-pastel-magenta-600: #f476f4;
+	--color-pastel-magenta-700: #d959d9;
+	--color-pastel-magenta-800: #be4bbe;
+	--color-pastel-magenta-900: #a040a0;
+	--color-pastel-magenta-950: #6a2a6a;
+
 	--color-pastel-orange: #ffb784;
 	--color-pastel-orange-50: #fff9f3;
 	--color-pastel-orange-100: #fff0e2;
@@ -161,7 +174,6 @@
 	--color-warning-100: #fef3c7;
 	--color-warning-500: #f59e0b;
 	--color-warning-700: #b45309;
-
 	--color-danger: #ef4444;
 	--color-danger-50: #fef2f2;
 	--color-danger-100: #fee2e2;
@@ -279,4 +291,55 @@
 
 	--animate-accordion-down: accordion-down 0.2s ease-out;
 	--animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+/*
+  다크 모드: html.dark에서 grayscale·시맨틱 CSS 변수를 재매핑한다.
+  기존 text-grayscale-* / bg-grayscale-* 유틸이 파일별 dark: 없이 어두워진다.
+  파스텔·상태색은 라이트 값을 유지한다.
+*/
+.dark {
+	--color-grayscale-50: #020617;
+	--color-grayscale-100: #0f172a;
+	--color-grayscale-200: #1e293b;
+	--color-grayscale-300: #334155;
+	--color-grayscale-400: #475569;
+	--color-grayscale-500: #64748b;
+	--color-grayscale-600: #94a3b8;
+	--color-grayscale-700: #cbd5e1;
+	--color-grayscale-800: #e2e8f0;
+	--color-grayscale-900: #f1f5f9;
+	--color-grayscale-950: #f8fafc;
+
+	--color-background: var(--color-grayscale-50);
+	--color-foreground: var(--color-grayscale-900);
+	--color-primary: var(--color-grayscale-900);
+	--color-primary-foreground: var(--color-grayscale-50);
+	--color-secondary: var(--color-grayscale-100);
+	--color-secondary-foreground: var(--color-grayscale-900);
+	--color-muted: var(--color-grayscale-100);
+	--color-muted-foreground: var(--color-grayscale-500);
+	--color-border: var(--color-grayscale-200);
+	--color-input: var(--color-grayscale-200);
+	--color-ring: var(--color-grayscale-700);
+
+	--color-popover: var(--color-grayscale-100);
+	--color-popover-foreground: var(--color-grayscale-900);
+	--color-card: var(--color-grayscale-100);
+	--color-card-foreground: var(--color-grayscale-900);
+	--color-accent: var(--color-grayscale-200);
+	--color-accent-foreground: var(--color-grayscale-900);
+
+	--color-sidebar: var(--color-grayscale-50);
+	--color-sidebar-foreground: var(--color-grayscale-900);
+	--color-sidebar-primary: var(--color-grayscale-900);
+	--color-sidebar-primary-foreground: var(--color-grayscale-50);
+	--color-sidebar-accent: var(--color-grayscale-100);
+	--color-sidebar-accent-foreground: var(--color-grayscale-900);
+	--color-sidebar-border: var(--color-grayscale-200);
+	--color-sidebar-ring: var(--color-grayscale-700);
+
+	--shadow-soft: 0 2px 12px rgb(0 0 0 / 0.4);
+	--shadow-card: 0 8px 30px rgb(0 0 0 / 0.45);
+	--shadow-xs: 0 1px 2px rgb(0 0 0 / 0.3);
 }

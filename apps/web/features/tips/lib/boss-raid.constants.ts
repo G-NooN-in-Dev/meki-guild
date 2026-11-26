@@ -11,6 +11,7 @@ import type {
 	BossRaidRewardGrade,
 	BossRaidRewardTier
 } from '@/features/tips/types/boss-raid.type'
+import { GRADE_LABEL } from '@/libs/grade.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
 /** 보스레이드 난이도 — 일반 4단계 + 길드레이드 */
@@ -19,7 +20,8 @@ export const BOSS_RAID_DIFFICULTIES = [
 	{
 		key: 'guild',
 		label: '길드레이드',
-		chipClassName: 'bg-pastel-blue-200 text-pastel-blue-900'
+		chipClassName:
+			'bg-pastel-blue-200 text-pastel-blue-900 dark:bg-card dark:bg-linear-to-r dark:from-pastel-blue-500/45 dark:to-pastel-blue-500/45 dark:text-grayscale-900'
 	}
 ] as const satisfies readonly { key: BossRaidDifficulty; label: string; chipClassName: string }[]
 
@@ -52,18 +54,18 @@ export const BOSS_RAID_BOSS_META = {
 	{ label: string; defense: number; imageSrc: string; imageWidth: number; imageHeight: number }
 >
 
-/** 장비 등급 Badge */
+/** 장비 등급 Badge. 라벨만 공통 표기를 쓰고, 색은 이 표 전용 톤을 유지합니다. */
 export const BOSS_RAID_REWARD_GRADE_META = {
 	unique: {
-		label: '유니크',
-		badgeClassName: 'border-transparent bg-pastel-yellow-100 text-pastel-yellow-800'
+		label: GRADE_LABEL.unique,
+		badgeClassName: 'border-transparent bg-pastel-yellow-100 dark:bg-pastel-yellow-200 text-pastel-yellow-800'
 	},
 	legendary: {
-		label: '레전더리',
-		badgeClassName: 'border-transparent bg-pastel-green-100 text-pastel-green-800'
+		label: GRADE_LABEL.legendary,
+		badgeClassName: 'border-transparent bg-pastel-green-100 dark:bg-pastel-green-200 text-pastel-green-800'
 	},
 	legendaryPlus: {
-		label: '레전더리+',
+		label: GRADE_LABEL.legendaryPlus,
 		badgeClassName: 'border-transparent bg-pastel-green-300 text-pastel-green-900'
 	}
 } as const satisfies Record<BossRaidRewardGrade, { label: string; badgeClassName: string }>

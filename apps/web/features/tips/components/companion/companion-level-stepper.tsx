@@ -96,10 +96,10 @@ function CompanionLevelStepper({
 				onKeyDown={(event) => event.stopPropagation()}
 			>
 				<p className="text-grayscale-800 flex items-baseline gap-1 text-[11px] leading-none font-semibold tabular-nums">
-					<span className="text-grayscale-500 font-medium">Lv.</span>
+					<span className="text-grayscale-500 font-medium dark:text-white/50">Lv.</span>
 					<span>
 						{level}
-						<span className="text-grayscale-400 font-medium"> / {maxLevel}</span>
+						<span className="text-grayscale-400 font-medium dark:text-white/50"> / {maxLevel}</span>
 					</span>
 				</p>
 				<div className="flex items-center justify-center gap-0.5">
@@ -159,7 +159,7 @@ function CompanionLevelStepper({
 			</Button>
 
 			<div className="flex items-center gap-0.5">
-				<span className="text-grayscale-500 text-xs">Lv.</span>
+				<span className="text-grayscale-500 text-xs dark:text-white/50">Lv.</span>
 				{/* type=number 스피너가 글자를 가려서 text + inputMode로 처리 */}
 				<Input
 					type="text"
@@ -173,7 +173,7 @@ function CompanionLevelStepper({
 					onKeyDown={handleInputKeyDown}
 					className="text-grayscale-900 h-6 w-9 min-w-0 px-1 text-center text-xs leading-none font-semibold tabular-nums shadow-none md:text-xs"
 				/>
-				<span className="text-grayscale-400 text-xs tabular-nums">/{maxLevel}</span>
+				<span className="text-grayscale-400 text-xs tabular-nums dark:text-white/50">/{maxLevel}</span>
 			</div>
 
 			<Button

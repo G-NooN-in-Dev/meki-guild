@@ -11,7 +11,7 @@ type RelicStatUnit = 'percent' | 'flat'
 
 /**
  * 잠재옵션 등급.
- * 미스틱(빨강) > 레전드리 > 유니크 > 에픽 > 레어(파랑)
+ * 미스틱(빨강) > 레전더리 > 유니크 > 에픽 > 레어(파랑)
  */
 type RelicPotentialGrade = 'mystic' | 'legendary' | 'unique' | 'epic' | 'rare'
 

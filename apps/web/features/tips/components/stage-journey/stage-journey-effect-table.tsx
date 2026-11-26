@@ -45,7 +45,7 @@ const gradeHeaderClassName =
 	'min-w-0 overflow-hidden px-1 py-2 text-center text-[11px] leading-tight whitespace-normal sm:px-1.5 sm:text-xs lg:px-2 lg:text-sm'
 const gradeCellClassName = 'min-w-0 overflow-hidden px-1 py-2.5 text-center align-middle sm:px-1.5 sm:py-3 lg:px-2'
 const gradeValueClassName =
-	'text-grayscale-900 text-[11px] leading-snug font-semibold tabular-nums sm:text-xs lg:text-sm'
+	'text-grayscale-900 dark:text-grayscale-900 text-[11px] leading-snug font-semibold tabular-nums sm:text-xs lg:text-sm'
 
 const mobileGradeHeaderClassName =
 	'bg-grayscale-100 text-grayscale-600 sticky left-0 z-30 w-[28%] min-w-0 px-2 text-center text-xs'
@@ -54,15 +54,14 @@ const mobileEffectHeaderClassName =
 	'bg-grayscale-100 text-grayscale-600 h-auto min-w-0 px-1 py-2 text-center text-[11px] leading-tight font-medium break-keep whitespace-normal'
 const mobileEffectCellClassName = 'min-w-0 overflow-hidden px-1 py-2 text-center align-middle'
 
-/** 테스트용: 등급 열 배경색 (헤더보다 한 톤 옅게) */
 const STAGE_JOURNEY_GRADE_CELL_CLASS = {
 	normal: 'bg-grayscale-100',
-	rare: 'bg-pastel-blue-50',
-	epic: 'bg-pastel-purple-50',
-	unique: 'bg-pastel-yellow-50',
-	legendary: 'bg-pastel-green-50',
-	mystic: 'bg-pure-red/5',
-	mysticPlus: 'bg-pure-red/10'
+	rare: 'bg-pastel-blue-50 dark:bg-pastel-blue-500/25 dark:text-grayscale-900',
+	epic: 'bg-pastel-purple-50 dark:bg-pastel-purple-500/25 dark:text-grayscale-900',
+	unique: 'bg-pastel-yellow-50 dark:bg-pastel-yellow-500/25 dark:text-grayscale-900',
+	legendary: 'bg-pastel-green-50 dark:bg-pastel-green-500/25 dark:text-grayscale-900',
+	mystic: 'bg-pure-red/5 dark:bg-red-500/15',
+	mysticPlus: 'bg-pure-red/10 dark:bg-red-500/30'
 } as const
 
 function toDisplaySlots(slots: readonly StageJourneyEffectSlot[]) {

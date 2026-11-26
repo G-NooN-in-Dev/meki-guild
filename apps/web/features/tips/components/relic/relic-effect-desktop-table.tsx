@@ -14,8 +14,9 @@ const nameCellClassName =
 	'bg-grayscale-50 sticky left-0 z-[1] w-[22%] min-w-0 px-2 py-2.5 align-middle lg:w-[20%] lg:px-3 lg:py-3'
 /** 각성 열 — 별(warning) 톤으로 구분. 7.5rem = w-30 */
 const stageHeaderClassName =
-	'bg-warning-100 text-warning-700 w-30 min-w-30 px-1.5 py-2 text-center text-xs lg:w-32 lg:min-w-32 lg:text-sm'
-const stageCellClassName = 'bg-warning-50 w-30 min-w-30 px-1.5 py-2.5 text-center align-middle lg:w-32 lg:min-w-32'
+	'bg-warning-100 text-warning-700 dark:bg-pastel-yellow-950 dark:text-pastel-yellow-300 w-30 min-w-30 px-1.5 py-2 text-center text-xs lg:w-32 lg:min-w-32 lg:text-sm'
+const stageCellClassName =
+	'bg-warning-50 dark:bg-pastel-yellow-950/40 w-30 min-w-30 px-1.5 py-2.5 text-center align-middle lg:w-32 lg:min-w-32'
 const effectHeaderClassName =
 	'bg-grayscale-100 text-grayscale-600 min-w-0 px-2 py-2 text-left text-xs lg:px-3 lg:text-sm'
 const effectCellClassName = 'min-w-0 px-2 py-2.5 align-middle lg:px-3 lg:py-3'

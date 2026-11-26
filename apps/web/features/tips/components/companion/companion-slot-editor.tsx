@@ -144,7 +144,9 @@ function CompanionSlotEditor({
 										{COMPANION_GRADE_META[companion.grade].tierLabel} ({COMPANION_GRADE_META[companion.grade].label})
 									</Badge>
 									<p className="text-grayscale-900 font-semibold">{companion.name}</p>
-									{lockLevel ? <p className="text-grayscale-600 text-sm tabular-nums">Lv.{level}</p> : null}
+									{lockLevel ? (
+										<p className="text-grayscale-600 text-sm tabular-nums dark:text-white/50">Lv.{level}</p>
+									) : null}
 								</div>
 							</div>
 							{!lockLevel ? (

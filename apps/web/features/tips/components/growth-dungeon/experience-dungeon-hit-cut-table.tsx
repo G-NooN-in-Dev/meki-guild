@@ -1,8 +1,18 @@
 import { TableBody, TableCell, TableHead, TableHeader, TableRow } from '@shared/ui/table'
 import { cn } from '@shared/ui/utils'
 
+import {
+	HIT_CUT_CELL_BASE_CLASS_NAME,
+	HIT_CUT_HARD_CELL_CLASS_NAME,
+	HIT_CUT_HARD_STAGE_LABEL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_CELL_CLASS_NAME,
+	HIT_CUT_NEUTRAL_HEAD_CLASS_NAME,
+	HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME,
+	HIT_CUT_PASTEL_CELL_BG_CLASS_NAME,
+	HIT_CUT_PASTEL_HEAD_CLASS_NAME,
+	HitCutTableShell
+} from '@/features/tips/components/shared/hit-cut-table-shell'
 import HitPairCell from '@/features/tips/components/shared/hit-pair-cell'
-import { HIT_CUT_CELL_BASE_CLASS_NAME, HitCutTableShell } from '@/features/tips/components/shared/hit-cut-table-shell'
 import { EXPERIENCE_DUNGEON_HIT_CUT_ENTRIES } from '@/features/tips/lib/growth-dungeon.constants'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -19,16 +29,16 @@ function ExperienceDungeonHitCutTable() {
 		<HitCutTableShell>
 			<TableHeader sticky>
 				<TableRow className="border-grayscale-200 hover:bg-transparent">
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-grayscale-100 text-grayscale-600 w-[13%] md:w-[12%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_NEUTRAL_HEAD_CLASS_NAME, 'w-[13%] md:w-[12%]')}>
 						단계
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-green-100 text-pastel-green-900 w-[23%] md:w-[24%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.green, 'w-[23%] md:w-[24%]')}>
 						필요 처치 수 <span className="text-[10px] leading-none font-normal opacity-80 sm:text-xs">(마리)</span>
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-orange-100 text-pastel-orange-900 w-[22%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.orange, 'w-[22%]')}>
 						방어력
 					</TableHead>
-					<TableHead className={cn(HEAD_CLASS_NAME, 'bg-pastel-blue-100 text-pastel-blue-900 w-[42%]')}>
+					<TableHead className={cn(HEAD_CLASS_NAME, HIT_CUT_PASTEL_HEAD_CLASS_NAME.blue, 'w-[42%]')}>
 						<span className="flex flex-col items-center gap-0.5 sm:flex-row sm:justify-center sm:gap-1">
 							<span>필요 명중</span>
 							<span className="text-[10px] leading-none font-normal opacity-80 sm:text-xs">(일반 / 주니어 부기)</span>
@@ -43,7 +53,7 @@ function ExperienceDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-100 text-red-900' : 'bg-grayscale-50 text-grayscale-800'
+									isHardStage ? HIT_CUT_HARD_STAGE_LABEL_CLASS_NAME : HIT_CUT_NEUTRAL_CELL_CLASS_NAME
 								)}
 							>
 								{stage}
@@ -51,7 +61,9 @@ function ExperienceDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-green-50 text-grayscale-900'
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.green, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
 								)}
 							>
 								{formatLocaleNumber(requiredKillCount)}
@@ -59,7 +71,9 @@ function ExperienceDungeonHitCutTable() {
 							<TableCell
 								className={cn(
 									HIT_CUT_CELL_BASE_CLASS_NAME,
-									isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-orange-50 text-grayscale-900'
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.orange, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
 								)}
 							>
 								{formatLocaleNumber(defense)}
@@ -67,7 +81,11 @@ function ExperienceDungeonHitCutTable() {
 							<HitPairCell
 								requiredHit={requiredHit}
 								pairedRequiredHit={juniorBoogieRequiredHit}
-								className={isHardStage ? 'bg-red-50 text-red-900' : 'bg-pastel-blue-50 text-grayscale-900'}
+								className={
+									isHardStage
+										? HIT_CUT_HARD_CELL_CLASS_NAME
+										: cn(HIT_CUT_PASTEL_CELL_BG_CLASS_NAME.blue, HIT_CUT_ON_LIGHT_SURFACE_TEXT_CLASS_NAME)
+								}
 							/>
 						</TableRow>
 					)

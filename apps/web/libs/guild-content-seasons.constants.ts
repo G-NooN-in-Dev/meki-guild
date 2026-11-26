@@ -29,21 +29,25 @@ type GuildContentSeasonSummary = {
 	dateLabel: string
 }
 
+/** 시즌 상태 카드·테이블 row 표면 */
 const SEASON_STATUS_CARD_CLASS: Record<GuildContentSeasonStatus, string> = {
-	active: 'border-pastel-green-200 bg-pastel-green-50',
-	upcoming: 'border-pastel-blue-200 bg-pastel-blue-50',
+	active: 'border-pastel-green-200 bg-pastel-green-50 dark:border-pastel-green-800 dark:bg-pastel-green-950',
+	upcoming: 'border-pastel-blue-200 bg-pastel-blue-50 dark:border-pastel-blue-800 dark:bg-pastel-blue-950',
 	ended: 'border-grayscale-200 bg-grayscale-50'
 }
 
 const SEASON_STATUS_BADGE_CLASS: Record<GuildContentSeasonStatus, string> = {
-	active: 'border-transparent bg-pastel-green-100 text-pastel-green-800',
-	upcoming: 'border-transparent bg-pastel-blue-100 text-pastel-blue-800',
+	active:
+		'border-transparent bg-pastel-green-100 text-pastel-green-800 dark:bg-pastel-green-900 dark:text-pastel-green-100',
+	upcoming:
+		'border-transparent bg-pastel-blue-100 text-pastel-blue-800 dark:bg-pastel-blue-900 dark:text-pastel-blue-100',
 	ended: 'border-transparent bg-grayscale-100 text-grayscale-500'
 }
 
+/** 시즌 카드 날짜 색 */
 const DATE_CLASSNAME: Record<GuildContentSeasonStatus, string> = {
 	active: 'text-grayscale-900',
-	upcoming: 'text-pastel-blue-800',
+	upcoming: 'text-pastel-blue-800 dark:text-pastel-blue-100',
 	ended: 'text-grayscale-500'
 }
 

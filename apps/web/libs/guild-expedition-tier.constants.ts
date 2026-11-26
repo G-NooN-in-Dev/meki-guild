@@ -1,3 +1,9 @@
+/**
+ * 토벌전 등급·포인트 기준표.
+ * 길드 집계·입력 폼과 팁 등급표가 같이 씁니다.
+ * 구간 색은 `content-tier-band`를 사용합니다.
+ */
+
 import {
 	getGradeDiffFromRanks,
 	getGradeFromPlacementScore,

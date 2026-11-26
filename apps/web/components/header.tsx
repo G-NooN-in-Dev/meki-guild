@@ -1,11 +1,12 @@
 import Link from 'next/link'
 
 import { MobileNav, Nav } from '@/components/nav'
+import ThemeToggle from '@/components/theme-toggle'
 import { formatAppVersionLabel } from '@/libs/app-version.constants'
 
 function Header() {
 	return (
-		<header className="shadow-soft z-sticky fixed inset-x-0 top-0 border-b border-white/40 bg-white/85 backdrop-blur-md">
+		<header className="shadow-soft z-sticky border-border bg-background/85 fixed inset-x-0 top-0 border-b backdrop-blur-md">
 			{/* min-w-0: 좁은 화면에서 브랜드+메뉴가 뷰포트를 넘기지 않도록 */}
 			<div className="max-w-content container mx-auto flex h-14 w-full min-w-0 items-center gap-3 px-4 md:px-6 lg:gap-8">
 				<div className="flex min-w-0 flex-1 items-center gap-2 lg:gap-8">
@@ -17,6 +18,7 @@ function Header() {
 					<Nav />
 				</div>
 				<div className="flex shrink-0 items-center gap-2 md:gap-3">
+					<ThemeToggle />
 					<Link
 						href="/updates"
 						className="text-grayscale-400 hover:text-grayscale-600 shrink-0 text-xs font-medium tabular-nums transition-colors md:text-sm"
