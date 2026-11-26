@@ -5,7 +5,11 @@ import RelicAwakeningCellControl from '@/features/tips/components/relic/relic-aw
 import RelicEffectLineList from '@/features/tips/components/relic/relic-effect-line-list'
 import RelicIdentity from '@/features/tips/components/relic/relic-identity'
 import { ITEM_GRADE_SLOT_CLASS } from '@/features/tips/lib/item-grade.constants'
+import { getRelicMaxAwakeningStage } from '@/features/tips/lib/relic.constants'
 import type { RelicEffectRow } from '@/features/tips/types/relic.type'
+
+/** 열 구분선 — 좌우 1px만 약하게. 표는 border-collapse라 인접 열 경계선이 하나로 합쳐집니다. */
+const columnBorderClassName = 'border-x border-grayscale-200'
 
 /** tab~lg는 촘촘하게, lg부터 여유 있게 */
 const nameHeaderClassName =
@@ -39,25 +43,30 @@ function RelicEffectDesktopTable({ rows, onStageChange }: RelicEffectDesktopTabl
 			<Table className="w-full min-w-3xl" containerClassName="overflow-visible">
 				<TableHeader sticky>
 					<TableRow className="border-grayscale-200 hover:bg-transparent">
-						<TableHead className={nameHeaderClassName}>유물</TableHead>
-						<TableHead className={stageHeaderClassName}>각성</TableHead>
-						<TableHead className={effectHeaderClassName}>장착 효과</TableHead>
-						<TableHead className={possessionHeaderClassName}>보유 효과</TableHead>
+						<TableHead className={cn(nameHeaderClassName, columnBorderClassName)}>유물</TableHead>
+						<TableHead className={cn(stageHeaderClassName, columnBorderClassName)}>각성</TableHead>
+						<TableHead className={cn(effectHeaderClassName, columnBorderClassName)}>장착 효과</TableHead>
+						<TableHead className={cn(possessionHeaderClassName, columnBorderClassName)}>보유 효과</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
 					{rows.map(({ relic, stage, equipLines, possessionLines }) => (
 						<TableRow key={relic.id} className="border-grayscale-200 hover:bg-transparent">
-							<TableCell className={cn(nameCellClassName, ITEM_GRADE_SLOT_CLASS[relic.grade])}>
+							{/* 등급 색(border-color)보다 열 구분선 색이 우선되도록 columnBorderClassName을 마지막에 둡니다. */}
+							<TableCell className={cn(nameCellClassName, ITEM_GRADE_SLOT_CLASS[relic.grade], columnBorderClassName)}>
 								<RelicIdentity relic={relic} />
 							</TableCell>
-							<TableCell className={stageCellClassName}>
-								<RelicAwakeningCellControl stage={stage} onStageChange={(next) => onStageChange(relic.id, next)} />
+							<TableCell className={cn(stageCellClassName, columnBorderClassName)}>
+								<RelicAwakeningCellControl
+									stage={stage}
+									maxStage={getRelicMaxAwakeningStage(relic.grade)}
+									onStageChange={(next) => onStageChange(relic.id, next)}
+								/>
 							</TableCell>
-							<TableCell className={effectCellClassName}>
+							<TableCell className={cn(effectCellClassName, columnBorderClassName)}>
 								<RelicEffectLineList lines={equipLines} lineKeyPrefix={`${relic.id}-equip`} />
 							</TableCell>
-							<TableCell className={possessionCellClassName}>
+							<TableCell className={cn(possessionCellClassName, columnBorderClassName)}>
 								<RelicEffectLineList lines={possessionLines} lineKeyPrefix={`${relic.id}-possession`} />
 							</TableCell>
 						</TableRow>

@@ -3,8 +3,8 @@ import type { ItemGrade } from '@/features/tips/types/item-grade.type'
 /** 유물 등급. MGF.GG 유물 시뮬레이터 기준 3단계입니다. */
 type RelicGrade = ItemGrade
 
-/** 유물 각성 단계. 0~5 단계(총 6단계) */
-type RelicAwakeningStage = 0 | 1 | 2 | 3 | 4 | 5
+/** 유물 각성 단계. 레전드리는 0~7, 유니크·에픽은 0~5 */
+type RelicAwakeningStage = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
 
 /** 유물 스탯 수치 단위. percent=% / flat=절대값(명중 등) */
 type RelicStatUnit = 'percent' | 'flat'
@@ -83,8 +83,8 @@ type RelicResolvedEffects = {
 	stats: readonly RelicStatEffect[]
 }
 
-/** 각성 0~5단계 수치. 인덱스가 단계와 같습니다. */
-type RelicAwakeningValues = readonly [number, number, number, number, number, number]
+/** 각성 단계별 수치. 인덱스가 단계와 같습니다. (레전드리 8개, 유니크·에픽 6개) */
+type RelicAwakeningValues = readonly number[]
 
 /**
  * 유물 보유 효과 한 줄.
@@ -104,11 +104,66 @@ type RelicEffectRow = {
 	possessionLines: readonly string[]
 }
 
+/**
+ * 특수 옵션 필터용 콘텐츠.
+ * 유물 전체가 해당 콘텐츠 전용이거나, 일부 효과만 해당 콘텐츠에서 달라지는 경우 모두 포함합니다.
+ */
+type RelicContent =
+	| 'chapter-hunt'
+	| 'chapter-challenge'
+	| 'chapter-boss'
+	| 'world-boss'
+	| 'arena'
+	| 'guild-raid'
+	| 'growth-dungeon'
+	| 'zakum'
+	| 'horntail'
+	| 'pink-bean'
+
+/** 효과 종류 필터용 카테고리. 장착 효과 라벨을 묶은 단위이며, 나열 순서는 필터 칩과 같습니다. */
+type RelicEffectCategory =
+	| 'final-damage'
+	| 'damage'
+	| 'normal-monster-damage'
+	| 'boss-monster-damage'
+	| 'skill-basic-damage'
+	| 'max-damage-multiplier'
+	| 'min-damage-multiplier'
+	| 'critical-rate'
+	| 'critical-damage'
+	| 'attack'
+	| 'attack-speed'
+	| 'penetration'
+	| 'accuracy'
+	| 'taken-damage-increase'
+	| 'taken-damage-reduction'
+	| 'buff-debuff'
+	| 'recovery'
+	| 'cooldown-reduction'
+	| 'duration'
+
+/** 기타 옵션 필터용 태그 (동료 적용 / 중첩 / 재사용 대기시간) */
+type RelicTag = 'companion' | 'stackable' | 'cooldown'
+
+/**
+ * 유물 필터 선택 상태.
+ * 그룹 안은 OR, 그룹 사이는 AND. 빈 배열은 "전체"입니다.
+ */
+type RelicFilterState = {
+	grades: readonly RelicGrade[]
+	contents: readonly RelicContent[]
+	categories: readonly RelicEffectCategory[]
+	tags: readonly RelicTag[]
+}
+
 export type {
 	Relic,
 	RelicAwakeningStage,
 	RelicAwakeningValues,
+	RelicContent,
+	RelicEffectCategory,
 	RelicEffectRow,
+	RelicFilterState,
 	RelicGrade,
 	RelicLoadout,
 	RelicPossessionStatLine,
@@ -117,5 +172,6 @@ export type {
 	RelicResolvedEffects,
 	RelicSlotLoadout,
 	RelicStatEffect,
-	RelicStatUnit
+	RelicStatUnit,
+	RelicTag
 }

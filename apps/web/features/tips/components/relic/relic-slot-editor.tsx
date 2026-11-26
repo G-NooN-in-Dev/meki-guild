@@ -13,6 +13,7 @@ import GradePortrait from '@/features/tips/components/shared/grade-portrait'
 import { ITEM_GRADE_SLOT_CLASS, ITEM_GRADE_SLOT_HOVER_CLASS } from '@/features/tips/lib/item-grade.constants'
 import {
 	getRelicActivationCondition,
+	getRelicMaxAwakeningStage,
 	getRelicsByGrade,
 	RELIC_GRADE_BADGE_CLASS,
 	RELIC_GRADE_META,
@@ -142,7 +143,12 @@ function RelicSlotEditor({
 								</div>
 							</div>
 
-							<RelicAwakeningStepper stage={stage} onStageChange={onStageChange} disabled={lockStage} />
+							<RelicAwakeningStepper
+								stage={stage}
+								maxStage={getRelicMaxAwakeningStage(relic.grade)}
+								onStageChange={onStageChange}
+								disabled={lockStage}
+							/>
 
 							<ul className="text-grayscale-700 list-inside list-disc text-sm">
 								{resolved?.lines.map((line) => (

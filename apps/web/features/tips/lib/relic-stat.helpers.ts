@@ -1,7 +1,18 @@
-import type { RelicAwakeningStage, RelicStatEffect, RelicStatUnit } from '@/features/tips/types/relic.type'
+import type { RelicAwakeningStage, RelicGrade, RelicStatEffect, RelicStatUnit } from '@/features/tips/types/relic.type'
 
-/** 유물 각성 상한 — constants의 RELIC_MAX_AWAKENING_STAGE와 동일 */
-const RELIC_MAX_AWAKENING_STAGE = 5
+/** 전체 유물 중 가장 높은 각성 상한 (레전드리 기준) */
+const RELIC_MAX_AWAKENING_STAGE: RelicAwakeningStage = 7
+
+/** 등급별 각성 상한. 레전드리만 7단계까지 확장됐습니다. */
+const RELIC_MAX_AWAKENING_STAGE_BY_GRADE = {
+	legendary: 7,
+	unique: 5,
+	epic: 5
+} as const satisfies Record<RelicGrade, RelicAwakeningStage>
+
+function getRelicMaxAwakeningStage(grade: RelicGrade): RelicAwakeningStage {
+	return RELIC_MAX_AWAKENING_STAGE_BY_GRADE[grade]
+}
 
 function stageValue<T>(values: readonly T[], stage: RelicAwakeningStage): T {
 	const value = values[stage]
@@ -19,9 +30,12 @@ function stageFlat(values: readonly number[], stage: RelicAwakeningStage): strin
 	return `${stageValue(values, stage)}`
 }
 
-/** 입력 단계가 범위를 벗어나면 0~5로 보정 */
-function clampRelicAwakeningStage(stage: number): RelicAwakeningStage {
-	const clamped = Math.min(RELIC_MAX_AWAKENING_STAGE, Math.max(0, Math.floor(stage)))
+/** 입력 단계가 범위를 벗어나면 0~maxStage로 보정 (maxStage 기본값은 전체 상한) */
+function clampRelicAwakeningStage(
+	stage: number,
+	maxStage: RelicAwakeningStage = RELIC_MAX_AWAKENING_STAGE
+): RelicAwakeningStage {
+	const clamped = Math.min(maxStage, Math.max(0, Math.floor(stage)))
 	return clamped as RelicAwakeningStage
 }
 
@@ -64,6 +78,9 @@ export {
 	clampRelicAwakeningStage,
 	createRelicStat,
 	formatRelicStatValue,
+	getRelicMaxAwakeningStage,
+	RELIC_MAX_AWAKENING_STAGE,
+	RELIC_MAX_AWAKENING_STAGE_BY_GRADE,
 	roundRelicStatValue,
 	stageFlat,
 	stagePercent,

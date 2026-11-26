@@ -1,4 +1,5 @@
-import { clampRelicAwakeningStage, getRelicById } from '@/features/tips/lib/relic.constants'
+import { clampRelicAwakeningStage, getRelicById, getRelicMaxAwakeningStage } from '@/features/tips/lib/relic.constants'
+import { stageValue } from '@/features/tips/lib/relic-stat.helpers'
 import type { RelicAwakeningValues, RelicPossessionStatLine, RelicStatUnit } from '@/features/tips/types/relic.type'
 import { formatLocaleNumber } from '@/utils/format-korean-number'
 
@@ -35,29 +36,32 @@ function flatLine(label: string, values: RelicAwakeningValues): RelicPossessionS
 
 /** 레전더리·특수 유니크만 명시. 나머지 유니크/에픽은 등급 공통값을 씁니다. */
 const RELIC_POSSESSION_STATS_BY_ID: Record<string, readonly RelicPossessionStatLine[]> = {
-	'legendary-holy-grail': [percentLine('데미지', [30, 36, 42, 48, 54, 60])],
-	'legendary-old-music-box': [flatLine('디버프 내성', [10, 12, 14, 16, 18, 20])],
-	'legendary-silver-pendant': [percentLine('방어 관통력', [5, 6, 7, 8, 9, 10])],
-	'legendary-star-stone': [percentLine('방어력', [10, 12, 14, 16, 18, 20])],
-	'legendary-ancient-book': [percentLine('크리티컬 확률', [5, 6, 7, 8, 9, 10])],
-	'legendary-will-o-wisp': [percentLine('받는 피해 감소', [5, 6, 7, 8, 9, 10])],
-	'legendary-flame-grass': [percentLine('일반 몬스터 데미지', [15, 18, 21, 24, 27, 30])],
-	'legendary-soul-contract': [percentLine('스킬 데미지', [15, 18, 21, 24, 27, 30])],
-	'legendary-lit-lamp': [percentLine('보스 몬스터 데미지', [15, 18, 21, 24, 27, 30])],
-	'legendary-soul-pouch': [flatLine('회피', [20, 24, 28, 32, 36, 40])],
-	'legendary-ancient-document-fragment': [percentLine('최대 데미지 배율', [15, 18, 21, 24, 27, 30])],
-	'legendary-ice-soul-stone': [percentLine('크리티컬 데미지', [10, 12, 14, 16, 18, 20])],
-	'legendary-burning-lava': [flatLine('명중', [10, 12, 14, 16, 18, 20])],
-	'legendary-cygnus-necklace': [percentLine('기본 공격 데미지', [15, 18, 21, 24, 27, 30])],
-	'legendary-bottle-of-emotions': [percentLine('최소 데미지 배율', [15, 18, 21, 24, 27, 30])],
-	'legendary-celestial-dragon-elixir': [percentLine('공격 속도', [5, 6, 7, 8, 9, 10])],
-	'legendary-candle': [percentLine('데미지', [30, 36, 42, 48, 54, 60])],
-	'legendary-alliance-emblem': [percentLine('최대 데미지 배율', [15, 18, 21, 24, 27, 30])],
-	'legendary-horn-flute': [percentLine('보스 몬스터 데미지', [15, 18, 21, 24, 27, 30])],
-	'legendary-cursed-doll': [flatLine('명중', [10, 12, 14, 16, 18, 20])],
-	'legendary-reindeer-spear': [percentLine('데미지', [30, 36, 42, 48, 54, 60])],
-	'legendary-secret-map': [percentLine('최종 데미지', [2, 2.4, 2.8, 3.2, 3.6, 4])],
-	'legendary-circulation-ring': [percentLine('크리티컬 데미지', [10, 12, 14, 16, 18, 20])],
+	'legendary-holy-grail': [percentLine('데미지', [30, 36, 42, 48, 54, 60, 66, 72])],
+	'legendary-old-music-box': [flatLine('디버프 내성', [10, 12, 14, 16, 18, 20, 22, 24])],
+	'legendary-silver-pendant': [percentLine('방어 관통력', [5, 6, 7, 8, 9, 10, 11, 12])],
+	'legendary-star-stone': [percentLine('방어력', [10, 12, 14, 16, 18, 20, 22, 24])],
+	'legendary-ancient-book': [percentLine('크리티컬 확률', [5, 6, 7, 8, 9, 10, 11, 12])],
+	'legendary-will-o-wisp': [percentLine('받는 피해 감소', [5, 6, 7, 8, 9, 10, 11, 12])],
+	'legendary-flame-grass': [percentLine('일반 몬스터 데미지', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-soul-contract': [percentLine('스킬 데미지', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-lit-lamp': [percentLine('보스 몬스터 데미지', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-soul-pouch': [flatLine('회피', [20, 24, 28, 32, 36, 40, 44, 48])],
+	'legendary-ancient-document-fragment': [percentLine('최대 데미지 배율', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-ice-soul-stone': [percentLine('크리티컬 데미지', [10, 12, 14, 16, 18, 20, 22, 24])],
+	'legendary-burning-lava': [flatLine('명중', [10, 12, 14, 16, 18, 20, 22, 24])],
+	'legendary-cygnus-necklace': [percentLine('기본 공격 데미지', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-bottle-of-emotions': [percentLine('최소 데미지 배율', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-celestial-dragon-elixir': [percentLine('공격 속도', [5, 6, 7, 8, 9, 10, 11, 12])],
+	'legendary-candle': [percentLine('데미지', [30, 36, 42, 48, 54, 60, 66, 72])],
+	'legendary-alliance-emblem': [percentLine('최대 데미지 배율', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-horn-flute': [percentLine('보스 몬스터 데미지', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-cursed-doll': [flatLine('명중', [10, 12, 14, 16, 18, 20, 22, 24])],
+	'legendary-reindeer-spear': [percentLine('데미지', [30, 36, 42, 48, 54, 60, 66, 72])],
+	'legendary-secret-map': [percentLine('최종 데미지', [2, 2.4, 2.8, 3.2, 3.6, 4, 4.4, 4.8])],
+	'legendary-circulation-ring': [percentLine('크리티컬 데미지', [10, 12, 14, 16, 18, 20, 22, 24])],
+	'legendary-sealed-bottle': [percentLine('일반 몬스터 데미지', [15, 18, 21, 24, 27, 30, 33, 36])],
+	'legendary-shine-watch': [percentLine('최종 데미지', [2, 2.4, 2.8, 3.2, 3.6, 4, 4.4, 4.8])],
+	'legendary-mummy-dog-bandage': [percentLine('방어력', [10, 12, 14, 16, 18, 20, 22, 24])],
 	'unique-zakum-stone-fragment': RAID_UNIQUE_POSSESSION,
 	'unique-horntail-scale': RAID_UNIQUE_POSSESSION,
 	'unique-pink-bean-rib': RAID_UNIQUE_POSSESSION
@@ -101,8 +105,12 @@ function resolveRelicPossessionLines(relicId: string, stage: number): readonly s
 		return []
 	}
 
-	const safeStage = clampRelicAwakeningStage(stage)
-	return stats.map(({ label, unit, values }) => `${label} ${formatRelicPossessionValue(values[safeStage], unit)}`)
+	const relic = getRelicById(relicId)
+	const maxStage = relic ? getRelicMaxAwakeningStage(relic.grade) : undefined
+	const safeStage = clampRelicAwakeningStage(stage, maxStage)
+	return stats.map(
+		({ label, unit, values }) => `${label} ${formatRelicPossessionValue(stageValue(values, safeStage), unit)}`
+	)
 }
 
 export { resolveRelicPossessionLines }
