@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { cn } from '@shared/ui/utils'
 import { CalendarRangeIcon } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 import {
 	formatSeasonRange,
@@ -38,6 +39,10 @@ function SeasonScheduleTable({ seasons, now }: { seasons: readonly GuildContentS
 	const nearestUpcomingLabel = hasActiveSeason
 		? undefined
 		: seasons.find((season) => getSeasonStatus(season, now) === 'upcoming')?.label
+	// Dialog를 열 때 미리 스크롤할 행: 진행 중 시즌 → 없으면 가장 가까운 예정 시즌
+	const scrollTargetSeason =
+		seasons.find((season) => getSeasonStatus(season, now) === 'active') ??
+		seasons.find((season) => getSeasonStatus(season, now) === 'upcoming')
 
 	return (
 		// table-fixed: 모바일에서 긴 기간 문자열이 상태 열을 밀어내지 않도록 폭을 고정합니다.
@@ -68,6 +73,7 @@ function SeasonScheduleTable({ seasons, now }: { seasons: readonly GuildContentS
 					return (
 						<TableRow
 							key={`${content}-${label}`}
+							data-scroll-target={season === scrollTargetSeason ? '' : undefined}
 							className={cn('border-grayscale-100', showCardClass && SEASON_STATUS_CARD_CLASS[status])}
 						>
 							<TableCell
@@ -107,8 +113,28 @@ function SeasonScheduleTable({ seasons, now }: { seasons: readonly GuildContentS
 function SeasonTabPanel({ content, now }: { content: GuildSeasonalContentKey; now: Dayjs }) {
 	const seasons = getSeasonsByContent(content)
 	const summary = getContentSeasonSummary(content, now)
+	const scrollContainerRef = useRef<HTMLDivElement>(null)
 
 	const { contentLabel, dateLabel, seasonLabel } = summary
+
+	// 탭 패널은 활성화될 때 마운트되므로, Dialog를 열거나 탭을 바꿀 때마다 진행·예정 시즌이 보이도록 스크롤합니다.
+	useEffect(() => {
+		const container = scrollContainerRef.current
+		const target = container?.querySelector<HTMLElement>('[data-scroll-target]')
+
+		if (!container || !target) {
+			return
+		}
+
+		// Dialog 열림 애니메이션(scale) 중에도 정확하도록 transform 배율로 보정한 뒤 대상 행을 세로 중앙에 맞춥니다.
+		const containerRect = container.getBoundingClientRect()
+		const targetRect = target.getBoundingClientRect()
+		const scale = container.clientHeight > 0 ? containerRect.height / container.clientHeight : 1
+		const offsetTop = (targetRect.top - containerRect.top) / scale
+		const targetHeight = targetRect.height / scale
+
+		container.scrollTop += offsetTop - (container.clientHeight - targetHeight) / 2
+	}, [])
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col gap-3">
@@ -124,7 +150,10 @@ function SeasonTabPanel({ content, now }: { content: GuildSeasonalContentKey; no
 				) : null}
 			</p>
 			{/* 고정 dvh 대신 Dialog 남은 높이를 채워, 모바일에서 헤더+탭과 합쳐 90dvh를 넘지 않게 합니다. */}
-			<div className="border-grayscale-200 bg-card shadow-soft min-h-0 flex-1 overflow-auto rounded-xl border">
+			<div
+				ref={scrollContainerRef}
+				className="border-grayscale-200 bg-card shadow-soft min-h-0 flex-1 overflow-auto rounded-xl border"
+			>
 				<SeasonScheduleTable seasons={seasons} now={now} />
 			</div>
 		</div>
